@@ -8,7 +8,7 @@ import ContactList from "./ContactList";
 import { useQuery } from "@tanstack/react-query";
 import { getContacts, getProfile } from "./chat-config";
 import { useTranslate } from "@/config/useTranslation";
-import UserList from "./userList";
+import UserList from "./UserList";
 
 interface TextProps {
   setSelectedChatId: (id: string) => void;
