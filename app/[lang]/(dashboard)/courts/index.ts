@@ -1,0 +1,58 @@
+export const data = [
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+  {
+    id: "TASK-8782",
+    Court_Name: "Court1",
+    Court_Category: "Criminal",
+    Email : "Abc@gmail.com",
+    Address: "Egypt , Cairo",
+  },
+];
