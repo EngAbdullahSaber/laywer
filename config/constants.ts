@@ -1,1 +1,1 @@
-export const websiteName = "Venuat";
+export const websiteName = "msaatylaw dashboard";

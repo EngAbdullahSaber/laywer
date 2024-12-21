@@ -17,18 +17,18 @@ const page = () => {
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
         <div>
           <div className=" text-default-900 text-2xl font-bold my-2">
-            Case List
+            {t("Case List")}
           </div>{" "}
           <BreadcrumbComponent header={"Cases"} body={"Case List"} />
         </div>
         <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
           <Button color="secondary" variant="outline">
             <Icon icon="lets-icons:export" className="h-5 w-5" />
-            Export Excel
+            {t("Export Excel")}
           </Button>
           <Button color="secondary" variant="outline">
             <Icon icon="lets-icons:export" className="h-5 w-5" />
-            Export PDF
+            {t("Export PDF")}
           </Button>
           <CreateCase />
         </div>
@@ -36,7 +36,7 @@ const page = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle> Case List Details</CardTitle>
+          <CardTitle> {t("Case List Details")}</CardTitle>
         </CardHeader>
         <CardContent>
           <TableData />

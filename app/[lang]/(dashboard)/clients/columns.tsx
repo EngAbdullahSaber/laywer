@@ -9,6 +9,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import Actions from "@/components/common/Actions/Actions";
 import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../tables/advanced/components/data-table";
+import View from "./View";
+import DeleteButton from "./Delete";
 
 interface Task {
   id: string;
@@ -49,7 +51,8 @@ const TableData = () => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <Actions title={"Contact List"} row={row} />
+          <View />
+          <DeleteButton />{" "}
         </div>
       ),
     },

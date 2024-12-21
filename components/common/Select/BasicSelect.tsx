@@ -1,5 +1,6 @@
 import React from "react";
 import Select, { StylesConfig } from "react-select";
+import { Controller } from "react-hook-form";
 
 // Define the shape of the option items
 interface OptionType {
@@ -10,6 +11,9 @@ interface OptionType {
 // Define the props for the BasicSelect component
 interface BasicSelectProps {
   menu: OptionType[];
+  control: any;
+  name: string;
+  errors: any;
 }
 
 const styles: StylesConfig<OptionType> = {
@@ -19,18 +23,30 @@ const styles: StylesConfig<OptionType> = {
   }),
 };
 
-const BasicSelect: React.FC<BasicSelectProps> = ({ menu }) => {
+const BasicSelect: React.FC<BasicSelectProps> = ({
+  menu,
+  control,
+  name,
+  errors,
+}) => {
   return (
     <div>
-      <Select
-        className="react-select"
-        classNamePrefix="select"
-        defaultValue={menu.length > 0 ? menu[0] : null} // Ensure defaultValue is safe
-        styles={styles}
-        name="clear"
-        options={menu}
-        isClearable
+      <Controller
+        name={name}
+        control={control}
+        rules={{ required: "Role is required" }} // Add validation rule for role
+        render={({ field }) => (
+          <Select
+            {...field}
+            className="react-select"
+            classNamePrefix="select"
+            options={menu}
+            isClearable
+            styles={styles}
+          />
+        )}
       />
+      {/* {errors[name] && <p className="text-xs text-destructive">{errors[name]?.message}</p>} */}
     </div>
   );
 };

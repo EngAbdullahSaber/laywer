@@ -34,16 +34,16 @@ export const menusConfig = {
         href: "/dashboard",
       },
      
-      {
-        title: "Contact List",
-        icon: ContactList,
-        href: "/contact-list",
-      },
-      {
-        title: "Contact Category",
-        icon: ContactCategory,
-        href: "/contact-category",
-      },
+      // {
+      //   title: "Contact List",
+      //   icon: ContactList,
+      //   href: "/contact-list",
+      // },
+      // {
+      //   title: "Contact Category",
+      //   icon: ContactCategory,
+      //   href: "/contact-category",
+      // },
       {
         title: "Client List",
         icon: ClientList,
@@ -103,16 +103,16 @@ export const menusConfig = {
         href: "/dashboard",
       },
      
-      {
-        title: "Contact List",
-        icon: ContactList,
-        href: "/contact-list",
-      },
-      {
-        title: "Contact Category",
-        icon: ContactCategory,
-        href: "/contact-category",
-      },
+      // {
+      //   title: "Contact List",
+      //   icon: ContactList,
+      //   href: "/contact-list",
+      // },
+      // {
+      //   title: "Contact Category",
+      //   icon: ContactCategory,
+      //   href: "/contact-category",
+      // },
       {
         title: "Client List",
         icon: ClientList,

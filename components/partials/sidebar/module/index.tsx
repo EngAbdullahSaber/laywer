@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { cn, isLocationMatch, getDynamicPath, translate } from "@/lib/utils";
-import { menusConfig, ModernNavType, } from "@/config/menus";
+import { menusConfig, ModernNavType } from "@/config/menus";
 import SingleIconMenu from "./single-icon-menu";
 import { useRouter, usePathname } from "next/navigation";
 import { useSidebar, useThemeStore } from "@/store";
@@ -9,7 +9,7 @@ import NestedMenus from "./nested-menus";
 import Image from "next/image";
 import Link from "next/link";
 import FooterMenu from "./footer-menu";
-import { SiteLogo } from "@/components/svg";
+import Logo from "@/public/images/auth/LawyerLogo.png";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import LogoutFooter from "./logout-footer";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -82,7 +82,11 @@ const ModuleSidebar = ({ trans }: { trans: any }) => {
     setSubmenu(false);
     setCollapsed(false);
   }
-  function setActiveNestedMenu(menuIndex: number, nestedMenuIndex: number, childMenu: any) {
+  function setActiveNestedMenu(
+    menuIndex: number,
+    nestedMenuIndex: number,
+    childMenu: any
+  ) {
     setActiveIndex(menuIndex);
     setNestedIndex(nestedMenuIndex);
     setCurrentSubMenu(childMenu);
@@ -135,7 +139,6 @@ const ModuleSidebar = ({ trans }: { trans: any }) => {
           });
         }
       });
-
     });
     if (!isMenuMatched) {
       setSubmenu(false);
@@ -145,7 +148,7 @@ const ModuleSidebar = ({ trans }: { trans: any }) => {
     }
   }, [locationName, isDesktop]);
 
-  const {Navigate} = useTranslate()
+  const { Navigate } = useTranslate();
   return (
     <>
       <div className="main-sidebar  pointer-events-none fixed start-0 top-0 z-[60] flex h-full xl:z-10 print:hidden">
@@ -161,7 +164,14 @@ const ModuleSidebar = ({ trans }: { trans: any }) => {
         >
           <div className=" pt-4 ">
             <Link href={Navigate("/dashboard")}>
-              <SiteLogo className=" mx-auto text-primary h-8 w-8" />
+              <Image
+                src={Logo}
+                height={32}
+                width={32}
+                alt="logo"
+                className="w-8 h-8"
+                priority={true}
+              />
             </Link>
           </div>
           {/* end logo */}

@@ -16,6 +16,7 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
+import { useTranslate } from "@/config/useTranslation";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -43,6 +44,7 @@ const FileRequest = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
+  const { t } = useTranslate();
 
   // Handle Flatpickr change event and set value in react-hook-form
 
@@ -55,13 +57,13 @@ const FileRequest = () => {
           className=" h-7 w-7"
           color="secondary"
         >
-          <Icon icon="fluent-mdl2:file-request" width="20" height="20" />{" "}
+          <Icon icon="fluent-mdl2:file-request" className="h-4 w-4" />{" "}
         </Button>
       </DialogTrigger>
       <DialogContent size="md" className="gap-3 h-[55%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Ask Client About File
+            {t("Ask Client About File")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -74,12 +76,12 @@ const FileRequest = () => {
                     "text-destructive": errors.Title,
                   })}
                 >
-                  Title
+                  {t("Title")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Title")}
-                  placeholder="Enter Title"
+                  placeholder={t("Enter Title")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Title,
                   })}
@@ -90,34 +92,7 @@ const FileRequest = () => {
                       "text-destructive": errors.Title,
                     })}
                   >
-                    {errors.Title.message}
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="Email"
-                  className={cn("", {
-                    "text-destructive": errors.Email,
-                  })}
-                >
-                  Email
-                </Label>
-                <Input
-                  type="email"
-                  {...register("Email")}
-                  placeholder="Enter Email"
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Email,
-                  })}
-                />
-                {errors.Email && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Email,
-                    })}
-                  >
-                    {errors.Email.message}
+                    {t(errors.Title.message)}
                   </p>
                 )}
               </div>
@@ -127,10 +102,10 @@ const FileRequest = () => {
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
-                  Cancel
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Send To Client</Button>
+              <Button type="submit">{t("Ask Client")}</Button>
             </div>
           </form>
         </div>

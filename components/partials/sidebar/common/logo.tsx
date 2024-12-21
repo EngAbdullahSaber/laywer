@@ -1,7 +1,8 @@
 import { websiteName } from "@/config/constants";
 import { useSidebar } from "@/store";
 import React from "react";
-import { SiteLogo } from "@/components/svg";
+import Logo from "@/public/images/auth/LawyerLogo.png";
+import Image from "next/image";
 
 const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
   const { sidebarType, setCollapsed, collapsed } = useSidebar();
@@ -9,7 +10,14 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
     <div className="px-4 py-4 ">
       <div className=" flex items-center">
         <div className="flex flex-1 items-center gap-x-3  ">
-          <SiteLogo className="text-primary " />
+          <Image
+            src={Logo}
+            height={32}
+            width={32}
+            alt="logo"
+            className="w-8 h-8"
+            priority={true}
+          />{" "}
           {/* {(!collapsed || hovered) && (
             // <div className="flex-1 block  text-xl text-primary  font-semibold">
             //   {websiteName}

@@ -2,7 +2,7 @@ export const data = [
   {
     id: "TASK-8782",
     Name: "mohamed",
-    Address: "Egypt ,Cairo",
+    Address: "Saudi Arabia ,Riyadh",
     Mobile_Number: "+201122334455",
     Email: "mohamedabdelghany937@gmail.com",
     Current_Case_Name: "Ali",
@@ -10,7 +10,7 @@ export const data = [
   {
     id: "TASK-8782",
     Name: "mohamed",
-    Address: "Egypt ,Cairo",
+    Address: "Saudi Arabia ,Riyadh",
     Mobile_Number: "+201122334455",
     Email: "mohamedabdelghany937@gmail.com",
     Current_Case_Name: "Ali",
@@ -18,7 +18,7 @@ export const data = [
   {
     id: "TASK-8782",
     Name: "mohamed",
-    Address: "Egypt ,Cairo",
+    Address: "Saudi Arabia ,Riyadh",
     Mobile_Number: "+201122334455",
     Email: "mohamedabdelghany937@gmail.com",
     Current_Case_Name: "Ali",
@@ -26,7 +26,7 @@ export const data = [
   {
     id: "TASK-8782",
     Name: "mohamed",
-    Address: "Egypt ,Cairo",
+    Address: "Saudi Arabia ,Riyadh",
     Mobile_Number: "+201122334455",
     Email: "mohamedabdelghany937@gmail.com",
     Current_Case_Name: "Ali",
@@ -34,7 +34,7 @@ export const data = [
   {
     id: "TASK-8782",
     Name: "mohamed",
-    Address: "Egypt ,Cairo",
+    Address: "Saudi Arabia ,Riyadh",
     Mobile_Number: "+201122334455",
     Email: "mohamedabdelghany937@gmail.com",
     Current_Case_Name: "Ali",
@@ -42,7 +42,7 @@ export const data = [
   {
     id: "TASK-8782",
     Name: "mohamed",
-    Address: "Egypt ,Cairo",
+    Address: "Saudi Arabia ,Riyadh",
     Mobile_Number: "+201122334455",
     Email: "mohamedabdelghany937@gmail.com",
     Current_Case_Name: "Ali",

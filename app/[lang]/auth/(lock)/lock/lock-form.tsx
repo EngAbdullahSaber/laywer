@@ -6,9 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 import Link from "next/link";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { SiteLogo } from "@/components/svg";
+import Logo from "@/public/images/auth/LawyerLogo.png";
 const LockForm = () => {
   const [passwordType, setPasswordType] = useState("password");
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
@@ -23,7 +25,15 @@ const LockForm = () => {
     <div className="w-full">
       <div className="flex justify-center">
         <Link href="/dashboard" className="inline-block">
-          <SiteLogo className="h-10 w-10 2xl:w-14 2xl:h-14 text-primary" />
+          {/* <SiteLogo className="h-10 w-10 2xl:w-14 2xl:h-14 text-primary" /> */}
+          <Image
+            src={Logo}
+            height={32}
+            width={32}
+            alt="logo"
+            className="w-8 h-8"
+            priority={true}
+          />{" "}
         </Link>
       </div>
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900 text-center">

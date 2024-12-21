@@ -2,15 +2,36 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 import Link from "next/link";
-import { SiteLogo } from "@/components/svg";
+import Image from "next/image";
+import Logo from "@/public/images/auth/LawyerLogo.png";
 import { ScrollArea } from "@/components/ui/scroll-area";
-export default function SubmitFormInDrawer({ nameBtn, className }: { nameBtn?: string; className?: string }) {
+export default function SubmitFormInDrawer({
+  nameBtn,
+  className,
+}: {
+  nameBtn?: string;
+  className?: string;
+}) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -26,17 +47,34 @@ export default function SubmitFormInDrawer({ nameBtn, className }: { nameBtn?: s
             <div className=" text-center py-2">
               <div className="flex justify-center">
                 <Link href="#">
-                  <SiteLogo className="w-12 h-12 mb-2 text-primary" />
+                  {/* <SiteLogo className="w-12 h-12 mb-2 text-primary" /> */}
+                  <Image
+                    src={Logo}
+                    height={32}
+                    width={32}
+                    alt="logo"
+                    className="w-8 h-8"
+                    priority={true}
+                  />{" "}
                 </Link>
               </div>
-              <h3 className="text-2xl font-bold text-default-700 ">Create a new account</h3>
-              <p className="text-default-600  mt-1">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis quod delectus amet.</p>
+              <h3 className="text-2xl font-bold text-default-700 ">
+                Create a new account
+              </h3>
+              <p className="text-default-600  mt-1">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis
+                quod delectus amet.
+              </p>
             </div>
             {/* form */}
             <div className="md:grid md:grid-cols-2 gap-6 mt-6 space-y-6 md:space-y-0">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="username">Name</Label>
-                <Input type="text" placeholder="Please enter user name" id="username" />
+                <Input
+                  type="text"
+                  placeholder="Please enter user name"
+                  id="username"
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="url">URL</Label>

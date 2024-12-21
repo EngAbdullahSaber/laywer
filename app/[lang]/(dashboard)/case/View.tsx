@@ -38,68 +38,100 @@ const View = () => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>Case Details</SheetTitle>
+          <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
+            {t("Case Details")}
+          </SheetTitle>
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li>
-              <span className="text-sm text-default-600 ">Case Name :</span>{" "}
-              <span className="text-default-500 "> Ahmed</span>
-            </li>
-            <li>
-              <span className="text-sm text-default-600 ">Category :</span>
-              <span className="text-default-500 "> Admin</span>
+              <span className="text-sm text-default-600 ">
+                {t("Case Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Ahmed</span>
             </li>
             <li>
               <span className="text-sm text-default-600 ">
-                Next Appointment Date :
-              </span>{" "}
-              <span className="text-default-500 "> 12/03/2004</span>
+                {t("Category")} :{" "}
+              </span>
+              <span className="text-default-900 font-semibold "> Admin</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Status :</span>{" "}
-              <span className="text-default-500 "> Criminal</span>
+              <span className="text-sm text-default-600 ">
+                {t("Next Appointment Date")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                12/03/2004
+              </span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Status")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Criminal</span>
             </li>
           </ul>
           <hr className="my-8" />
-          <h3 className="font-semibold  text-base my-3">Client Information</h3>
+          <h3 className="font-semibold  text-lg my-3">
+            {t("Client Information")}
+          </h3>
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li>
-              <span className="text-sm text-default-600 ">Name :</span>{" "}
-              <span className="text-default-500 "> Ahmed</span>
+              <span className="text-sm text-default-600 ">{t("Name")} : </span>{" "}
+              <span className="text-default-900 font-semibold "> Ahmed</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Phone Number : </span>{" "}
-              <span className="text-default-500">011223344555</span>
+              <span className="text-sm text-default-600 ">
+                {t("Phone Number")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold">
+                011223344555
+              </span>
             </li>
             <li className="col-span-2">
               <span className="text-sm text-default-600 ">
-                Email Address :{" "}
+                {t("Email Address")} :{" "}
               </span>{" "}
-              <span className="text-default-500 "> abc@gmail.com</span>
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                abc@gmail.com
+              </span>
             </li>
           </ul>
           <hr className="my-8" />
-          <h3 className="font-semibold  text-base my-3">Court Details</h3>
+          <h3 className="font-semibold  text-lg my-3">{t("Court Details")}</h3>
 
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li>
-              <span className="text-sm text-default-600 ">Court Name : </span>{" "}
-              <span className="text-default-500 "> Aswan Court</span>
-            </li>
-            <li>
-              <span className="text-sm text-default-600 ">Room Number : </span>
-              <span className="text-default-500 ">22</span>
-            </li>
-            <li>
-              <span className="text-sm text-default-600 ">Address : </span>{" "}
-              <span className="text-default-500 "> In Vacation</span>
+              <span className="text-sm text-default-600 ">
+                {t("Court Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                Riyadh Court
+              </span>
             </li>
             <li>
               <span className="text-sm text-default-600 ">
-                Court Category :
+                {t("Room Number")} :{" "}
+              </span>
+              <span className="text-default-900 font-semibold ">22</span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Address")} :{" "}
               </span>{" "}
-              <span className="text-default-500"> Criminals</span>
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                Saudi Arabia ,Riyadh
+              </span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Court Category")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold"> Criminals</span>
             </li>
           </ul>
         </div>

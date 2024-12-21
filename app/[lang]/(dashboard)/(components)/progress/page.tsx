@@ -1,4 +1,3 @@
-
 import Card from "@/components/ui/card-snippet";
 import DefaultSizeProgress from "./default-size-progress";
 import ColorProgress from "./color-progress";
@@ -92,7 +91,7 @@ const ProgressPage = () => {
           <CircleColorProgress />
         </div>
       </Card>
-      <Card title="Striped"  code={strippedProgressbar}>
+      <Card title="Striped" code={strippedProgressbar}>
         <p className="text-sm text-default-400 dark:text-default-600  mb-4">
           In Progress component <code className="text-primary">isStripe</code>{" "}
           props shows striped in linier progress.
@@ -102,7 +101,7 @@ const ProgressPage = () => {
         </div>
       </Card>
       <Card title="With Label" code={withLabelProgressbar}>
-        <p className="text-sm text-default-400 dark:text-default-600  mb-4">
+        <p className="text-sm text-default-400 dark:text-default-600   mb-4">
           In Progress component <code className="text-primary">Label</code>{" "}
           component used with Progress component to show label for Progress.
         </p>

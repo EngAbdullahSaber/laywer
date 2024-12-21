@@ -86,7 +86,7 @@ const FooterContent = () => {
 
   return (
     <div className="block md:flex md:justify-between text-muted-foreground">
-      <p className="sm:mb-0 text-xs md:text-sm">
+      {/* <p className="sm:mb-0 text-xs md:text-sm">
         {t("COPYRIGHT ©")}
         {new Date().getFullYear()} {websiteName} {t("All rights Reserved")}
       </p>
@@ -95,7 +95,7 @@ const FooterContent = () => {
         <a className="text-primary" target="__blank" href="">
           {t("JOE 13 Team")}
         </a>
-      </p>
+      </p> */}
     </div>
   );
 };

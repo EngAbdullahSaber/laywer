@@ -12,7 +12,9 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { SiteLogo } from "@/components/svg";
+import Logo from "@/public/images/auth/LawyerLogo.png";
+import Image from "next/image";
+
 const schema = z.object({
   email: z.string().email({ message: "Your email is invalid." }),
 });
@@ -42,9 +44,14 @@ const ForgotForm = () => {
   };
   return (
     <div className="w-full">
-      <Link href="/dashboard" className="inline-block">
-        <SiteLogo className="h-10 w-10 2xl:w-14 2xl:h-14 text-primary" />
-      </Link>
+      <Image
+        src={Logo}
+        height={56}
+        width={56}
+        alt="logo"
+        className="w-14 h-14"
+        priority={true}
+      />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
         Forget Your Password?
       </div>
@@ -67,7 +74,9 @@ const ForgotForm = () => {
             size={!isDesktop2xl ? "xl" : "lg"}
           />
           {errors.email && (
-            <div className=" text-destructive mt-2">{errors.email.message as string}</div>
+            <div className=" text-destructive mt-2">
+              {errors.email.message as string}
+            </div>
           )}
         </div>
 

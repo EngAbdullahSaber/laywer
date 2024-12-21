@@ -2,9 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
-import { SiteLogo } from "../svg";
-import Link from "next/link";
+
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Logo from "@/public/images/auth/LawyerLogo.png";
 
 const VerfiyForm = () => {
   const totalOtpField = 6;
@@ -54,9 +55,14 @@ const VerfiyForm = () => {
 
   return (
     <div className="w-full md:w-[480px] py-5">
-      <Link href="/dashboard" className="inline-block">
-        <SiteLogo className="h-10 w-10 2xl:h-14 2xl:w-14 text-primary" />
-      </Link>
+      <Image
+        src={Logo}
+        height={56}
+        width={56}
+        alt="logo"
+        className="w-14 h-14"
+        priority={true}
+      />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
         Two Factor Verification
       </div>

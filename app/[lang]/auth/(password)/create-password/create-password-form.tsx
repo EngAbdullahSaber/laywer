@@ -13,8 +13,10 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
-import { SiteLogo } from "@/components/svg";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import Logo from "@/public/images/auth/LawyerLogo.png";
+import Image from "next/image";
+
 const schema = z.object({
   password: z
     .string()
@@ -53,9 +55,14 @@ const CreatePasswordForm = () => {
   };
   return (
     <div className="w-full">
-      <Link href="/dashboard" className="inline-block">
-        <SiteLogo className="h-10 w-10 2xl:w-14 2xl:h-14 text-primary" />
-      </Link>
+      <Image
+        src={Logo}
+        height={56}
+        width={56}
+        alt="logo"
+        className="w-14 h-14"
+        priority={true}
+      />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl lg:text-2xl text-xl font-bold text-default-900">
         Create New Password
       </div>
@@ -149,7 +156,7 @@ const CreatePasswordForm = () => {
           </div>
         </div>
 
-        <div className="flex-1 flex  items-center gap-1.5 mt-5 ">
+        {/* <div className="flex-1 flex  items-center gap-1.5 mt-5 ">
           <Checkbox
             size="sm"
             className="border-default-300 mt-[1px]"
@@ -161,7 +168,7 @@ const CreatePasswordForm = () => {
           >
             You accept our Terms & Conditions
           </Label>
-        </div>
+        </div> */}
         <Button className="w-full mt-8" size="lg">
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isPending ? "Resetting..." : "Reset Password"}

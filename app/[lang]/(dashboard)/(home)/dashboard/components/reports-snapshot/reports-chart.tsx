@@ -9,6 +9,7 @@ import {
   getXAxisConfig,
   getYAxisConfig,
 } from "@/lib/appex-chart-options";
+import { useTranslate } from "@/config/useTranslation";
 
 interface ReportsChartProps {
   series: ApexAxisChartSeries;
@@ -16,11 +17,16 @@ interface ReportsChartProps {
   height?: number;
 }
 
-const ReportsChart = ({ series, chartColor, height = 300 }: ReportsChartProps) => {
+const ReportsChart = ({
+  series,
+  chartColor,
+  height = 300,
+}: ReportsChartProps) => {
   const { theme: config, setTheme: setConfig } = useThemeStore();
   const { theme: mode } = useTheme();
 
   const theme = themes.find((theme) => theme.name === config);
+  const { t } = useTranslate();
 
   const options: any = {
     chart: {
@@ -66,25 +72,24 @@ const ReportsChart = ({ series, chartColor, height = 300 }: ReportsChartProps) =
     },
   };
   return (
-   <>
-    <div className="flex items-center gap-2 flex-wrap p-4 ">
-    <div className="flex-1">
-      <div className="text-xl font-semibold text-default-900 whitespace-nowrap">
-       Reports Snapshot
+    <>
+      <div className="flex items-center gap-2 flex-wrap p-4 ">
+        <div className="flex-1">
+          <div className="text-xl font-semibold text-default-900 whitespace-nowrap">
+            {t("Number of Cases This Month")}
+          </div>
+        </div>
+        <div className="flex-none"></div>
       </div>
-      
-    </div>
-    <div className="flex-none">
-    </div>
-  </div>
-    <Chart
-      options={options}
-      series={series}
-      type="area"
-      height={height}
-      width={"100%"}
-    /></>
-  )
-}
+      <Chart
+        options={options}
+        series={series}
+        type="area"
+        height={height}
+        width={"100%"}
+      />
+    </>
+  );
+};
 
 export default ReportsChart;

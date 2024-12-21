@@ -22,23 +22,31 @@ import { toast } from "sonner";
 import { Radio } from "@/components/common/atoms/Radio";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
-import { Icon } from "@iconify/react";
+import { useTranslate } from "@/config/useTranslation";
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "Client name must be at least 3 characters." })
-    .max(20, { message: "Client name must not exceed 20 characters." }),
-  phone: z.string().refine((value) => value.length === 11, {
-    message: "Phone number must be exactly 11 characters.",
-  }),
-  email: z
+    .min(3, { message: "errorCase.CasenameMin" })
+    .max(20, { message: "errorCase.CasenameMax" }),
+  PartyName: z
     .string()
-    .min(8, { message: "Client Email must be at least 8 characters." })
-    .max(20, { message: "Client Email must not exceed 20 characters." }),
-  Address: z
+    .min(3, { message: "errorCase.PartynameMin" })
+    .max(20, { message: "errorCase.PartynameMax" }),
+  LawyerName: z
     .string()
-    .min(8, { message: "Client Address must be at least 8 characters." })
-    .max(25, { message: "Client Address must not exceed 25 characters." }),
+    .min(3, { message: "errorCase.LawyernameMin" })
+    .max(20, { message: "errorCase.LawyernameMax" }),
+  CaseDescription: z
+    .string()
+    .min(3, { message: "errorCase.CaseDescriptionMin" })
+    .max(20, {
+      message: "errorCase.CaseDescriptionMax",
+    }),
+  CaseNumber: z
+    .string()
+    .min(3, { message: "errorCase.CaseNumberMin" })
+    .max(20, { message: "errorCase.CaseNumberMax" }),
+
   case: z
     .string()
     .min(8, {
@@ -47,15 +55,78 @@ const schema = z.object({
     .max(25, {
       message: "Client Current Case Name must not exceed 25 characters.",
     }),
+  Client: z.string().min(8, { message: "error.clientAddressMin" }),
+  category: z.string().min(8, { message: "error.clientAddressMin" }),
+  Court: z.string().min(8, { message: "error.clientAddressMin" }),
+  CourtCategory: z.string().min(8, { message: "error.clientAddressMin" }),
+  LawyerSelection: z.string().min(8, { message: "error.clientAddressMin" }),
+
   password: z
     .string()
     .min(8, { message: "Client Password must be at least 8 characters." })
     .max(25, { message: "Client Password must not exceed 25 characters." }),
+
+  date1: z
+    .string()
+    .min(1, { message: "Date is required." })
+    .refine(
+      (value) => {
+        // Check if the value is a valid date format
+        const date = new Date(value);
+        return !isNaN(date.getTime());
+      },
+      {
+        message: "Please select a valid date.",
+      }
+    ),
+
+  date2: z
+    .string()
+    .min(1, { message: "Date is required." })
+    .refine(
+      (value) => {
+        // Check if the value is a valid date format
+        const date = new Date(value);
+        return !isNaN(date.getTime());
+      },
+      {
+        message: "Please select a valid date.",
+      }
+    ),
+
+  date3: z
+    .string()
+    .min(1, { message: "Date is required." })
+    .refine(
+      (value) => {
+        // Check if the value is a valid date format
+        const date = new Date(value);
+        return !isNaN(date.getTime());
+      },
+      {
+        message: "Please select a valid date.",
+      }
+    ),
+  date4: z
+    .string()
+    .min(1, { message: "Date is required." })
+    .refine(
+      (value) => {
+        // Check if the value is a valid date format
+        const date = new Date(value);
+        return !isNaN(date.getTime());
+      },
+      {
+        message: "Please select a valid date.",
+      }
+    ),
 });
 
 const CreateCase = () => {
   const {
     register,
+    control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
@@ -70,123 +141,287 @@ const CreateCase = () => {
     { value: "S Admin", label: "S Admin" },
     { value: "Client", label: "Client" },
   ];
+  const handleDateChange = (dates: Date[]) => {
+    const selectedDate = dates[0] || null;
+    setPicker(selectedDate);
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  };
+  const { t } = useTranslate();
+
   const [picker, setPicker] = useState<Date>(new Date());
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create Case</Button>
+        <Button>{t("Create Case")}</Button>
       </DialogTrigger>
       <DialogContent size="2xl">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Create a New Case
+          <DialogTitle className="text-2xl font-bold text-default-700">
+            {t("Create a New Case")}
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[100%]">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 px-3 gap-4">
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="Client ">Client Selection</Label>
-                <BasicSelect menu={category} />
+            <div className="flex flex-row justify-between items-center  gap-4">
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="Client">{t("Client Selection")}</Label>
+                <BasicSelect
+                  name="Client"
+                  menu={category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.Client && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.Client.message)}
+                  </p>
+                )}{" "}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Case Category </Label>
-                <BasicSelect menu={category} />{" "}
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Case Category")} </Label>
+                <BasicSelect
+                  name="category"
+                  menu={category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.category && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.category.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Case Name </Label>
-                <Input type="text" placeholder="Enter User Case Name" />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label
+                  htmlFor="Name"
+                  className={cn("", { "text-destructive": errors.Name })}
+                >
+                  {t("Case Name")}
+                </Label>
+                <Input
+                  type="text"
+                  {...register("Name")}
+                  placeholder={t("Enter User Case Name")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive": errors.Name,
+                  })}
+                />
+                {errors.Name && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.Name.message)}
+                  </p>
+                )}
               </div>
-
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="Court">Court Selection </Label>
-                <BasicSelect menu={category} />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="Court">{t("Court Selection")} </Label>
+                <BasicSelect
+                  name="Court"
+                  menu={category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.Court && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.Court.message)}
+                  </p>
+                )}
               </div>
-
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Court Category</Label>
-
-                <BasicSelect menu={category} />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="CourtCategory">{t("Court Category")}</Label>
+                <BasicSelect
+                  name="CourtCategory"
+                  menu={category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.CourtCategory && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.CourtCategory.message)}
+                  </p>
+                )}{" "}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Status </Label>
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Status")} </Label>
                 <Radio text1={"Plaintiff"} text2={"Defendant"} />
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Opposing Party Name </Label>
-                <Input type="text" placeholder="Enter Opposing Party Name" />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label
+                  htmlFor="PartyName"
+                  className={cn("", { "text-destructive": errors.PartyName })}
+                >
+                  {t("Opposing Party Name")}{" "}
+                </Label>
+                <Input
+                  type="text"
+                  {...register("PartyName")}
+                  placeholder={t("Enter Opposing Party Name")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.PartyName,
+                  })}
+                />
+                {errors.PartyName && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.PartyName.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Lawyer Name</Label>
-                <Input type="text" placeholder="Enter Lawyer Name" />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label
+                  htmlFor="LawyerName"
+                  className={cn("", { "text-destructive": errors.LawyerName })}
+                >
+                  {t("Lawyer Name")}
+                </Label>
+                <Input
+                  type="text"
+                  {...register("LawyerName")}
+                  placeholder={t("Enter Lawyer Name")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.LawyerName,
+                  })}
+                />
+                {errors.LawyerName && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.LawyerName.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Case Number </Label>
-                <Input type="number" placeholder="Enter Case Number" />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label
+                  htmlFor="CaseNumber"
+                  className={cn("", { "text-destructive": errors.CaseNumber })}
+                >
+                  {t("Case Number")}
+                </Label>
+                <Input
+                  type="number"
+                  {...register("CaseNumber")}
+                  placeholder={t("Enter Case Number")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.CaseNumber,
+                  })}
+                />
+                {errors.CaseNumber && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.CaseNumber.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Lawyer Selection </Label>
-                <BasicSelect menu={category} />
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Lawyer Selection")} </Label>
+                <BasicSelect
+                  name="LawyerSelection"
+                  menu={category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.LawyerSelection && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.LawyerSelection.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Receipt Date </Label>
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Receipt Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder="Enter Receipt Date"
+                  placeholder={t("Select Receipt Date")}
                   value={picker}
-                  onChange={(dates: Date[]) => {
-                    setPicker(dates[0] || null);
-                  }}
-                />{" "}
+                  onChange={handleDateChange}
+                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
+                  id="default-picker"
+                />
+                {errors.date1 && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.date1.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Submission Date </Label>
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Submission Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder="Enter Submission Date"
+                  placeholder={t("Select Submission Date")}
                   value={picker}
-                  onChange={(dates: Date[]) => {
-                    setPicker(dates[0] || null);
-                  }}
-                />{" "}
+                  onChange={handleDateChange}
+                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
+                  id="default-picker"
+                />
+                {errors.date2 && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.date2.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Judgment Date </Label>
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Judgment Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder="Enter Judgment  Date"
+                  placeholder={t("Select Judgment Date")}
                   value={picker}
-                  onChange={(dates: Date[]) => {
-                    setPicker(dates[0] || null);
-                  }}
-                />{" "}
+                  onChange={handleDateChange}
+                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
+                  id="default-picker"
+                />
+                {errors.date3 && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.date3.message)}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Hearing Date </Label>
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <Label htmlFor="category">{t("Hearing Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder="Enter Hearing   Date"
+                  placeholder={t("Select Hearing Date")}
                   value={picker}
-                  onChange={(dates: Date[]) => {
-                    setPicker(dates[0] || null);
-                  }}
-                />{" "}
+                  onChange={handleDateChange}
+                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
+                  id="default-picker"
+                />
+                {errors.date4 && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.date4.message)}
+                  </p>
+                )}
               </div>
             </div>
             <div className="grid grid-cols-1 px-3 my-2 lg:grid-cols-1 gap-4">
               <div className="flex flex-col gap-2 my-2">
-                <Label htmlFor="category">Case Description </Label>
-                <Textarea placeholder="Type Here.." rows={7} />
+                <Label
+                  htmlFor="CaseDescription"
+                  className={cn("", {
+                    "text-destructive": errors.CaseDescription,
+                  })}
+                >
+                  {t("Case Description")}
+                </Label>
+                <Textarea
+                  {...register("CaseDescription")}
+                  placeholder={t("Type Here")}
+                  rows={7}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.CaseDescription,
+                  })}
+                />
+                {errors.CaseDescription && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.CaseDescription.message)}
+                  </p>
+                )}
               </div>
             </div>
-            {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
-                  Cancel
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Create Client</Button>
+              <Button type="submit">{t("Create Client")}</Button>
             </div>
           </form>
         </ScrollArea>
