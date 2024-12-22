@@ -52,15 +52,16 @@ const ProfileInfo = () => {
             <div className="text-sm font-medium text-default-800 capitalize ">
               {session?.user?.name ?? "Mcc Callem"}
             </div>
-            <Link
+            {/* profile */}
+            {/* <Link
               href="/dashboard"
               className="text-xs text-default-600 hover:text-primary"
             >
               @uxuidesigner
-            </Link>
+            </Link> */}
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           {[
             {
               name: t("Profile"),
@@ -94,7 +95,7 @@ const ProfileInfo = () => {
               </DropdownMenuItem>
             </Link>
           ))}
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         {/* <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link href="/dashboard" className="cursor-pointer">
