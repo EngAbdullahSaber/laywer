@@ -21,13 +21,12 @@ const schema = z.object({
   password: z.string().min(4),
 });
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useRouter } from "next/navigation";
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
   const [passwordType, setPasswordType] = React.useState("password");
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
-  const router = useRouter();
+
   const togglePasswordType = () => {
     if (passwordType === "text") {
       setPasswordType("password");
@@ -44,7 +43,7 @@ const LogInForm = () => {
     resolver: zodResolver(schema),
     mode: "all",
     defaultValues: {
-      email: "msaatylaw@gmail.com",
+      email: "dashtail@codeshaper.net",
       password: "password",
     },
   });
@@ -53,8 +52,20 @@ const LogInForm = () => {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const onSubmit = (data: { email: string; password: string }) => {
-    toast.success("Login Successful");
-    router.push("/dashboard");
+    startTransition(async () => {
+      let response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+      if (response?.ok) {
+        toast.success("Login Successful");
+        window.location.assign("/dashboard");
+        reset();
+      } else if (response?.error) {
+        toast.error(response?.error);
+      }
+    });
   };
   return (
     <div className="w-full py-10">
