@@ -21,12 +21,13 @@ const schema = z.object({
   password: z.string().min(4),
 });
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useRouter } from "next/navigation";
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
   const [passwordType, setPasswordType] = React.useState("password");
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
-
+  const router = useRouter();
   const togglePasswordType = () => {
     if (passwordType === "text") {
       setPasswordType("password");
@@ -53,7 +54,7 @@ const LogInForm = () => {
 
   const onSubmit = (data: { email: string; password: string }) => {
     toast.success("Login Successful");
-    window.location.assign("/dashboard");
+    router.push("/dashboard");
   };
   return (
     <div className="w-full py-10">
