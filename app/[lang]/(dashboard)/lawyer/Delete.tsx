@@ -49,7 +49,9 @@ const Delete = () => {
             </Button>
           </DialogClose>
 
-          <Button type="submit" color="primary">
+          <Button type="submit"  
+            className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+            color="primary">
             {t("Agree")}
           </Button>
         </DialogFooter>

@@ -141,11 +141,16 @@ const Add = () => {
 
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline" className="w-28">
+                <Button type="button" 
+                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                variant="outline" className="w-28">
                   {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit" className="w-28">
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
                 {t("Create Date")}
               </Button>
             </div>

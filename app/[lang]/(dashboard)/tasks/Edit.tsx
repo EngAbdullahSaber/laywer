@@ -1,9 +1,7 @@
 "use client";
-import React from "react";
 import BasicSelect from "@/components/common/Select/BasicSelect";
-import { Icon } from "@iconify/react";
-
 import { Button } from "@/components/ui/button";
+import { Icon } from "@iconify/react";
 import {
   Dialog,
   DialogClose,
@@ -12,58 +10,47 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useTranslate } from "@/config/useTranslation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
+import { useTranslate } from "@/config/useTranslation";
+
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "Task name must be at least 3 charecters." })
-    .max(20, { message: "Task name must not exceed 20 characters." }),
-
-  Importance_Level: z
-    .string()
-    .min(8, { message: "Task Email must be at least 8 charecters." })
-    .max(20, { message: "Task Email must not exceed 20 characters." }),
-  Assigned_To: z
-    .string()
-    .min(8, { message: "Client Address must be at least 8 charecters." })
-    .max(25, { message: "Client Address must not exceed 25 characters." }),
-  Task_Status: z
-    .string()
-    .min(8, {
-      message: "Client Current Case Name must be at least 8 charecters.",
-    })
-    .max(25, {
-      message: "Client Current Case Name must not exceed 25 characters.",
-    }),
+    .min(3, { message: "errorTask.TaskNameMin" })
+    .max(20, { message: "errorTask.TaskNameMax" }),
   Case_Name: z
     .string()
     .min(8, {
-      message: "Client Current Case Name must be at least 8 charecters.",
+      message: "errorTask.CaseNameMin",
     })
     .max(25, {
-      message: "Client Current Case Name must not exceed 25 characters.",
+      message: "errorTask.CaseNameMax",
     }),
+  AssignedTo: z.string().min(8, { message: "errorTask.clientAddressMin" }),
+  ImportanceLevel: z.string().min(8, { message: "errorTask.clientAddressMin" }),
+  TaskStatus: z.string().min(8, { message: "errorTask.clientAddressMin" }),
 });
 
 const Edit = () => {
-  const { t, loading, error } = useTranslate();
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
   const [picker, setPicker] = useState<Date>(new Date());
+  const { t, loading, error } = useTranslate();
 
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
@@ -83,6 +70,11 @@ const Edit = () => {
     { value: "Progress", label: "Progress" },
     { value: "Completed", label: "Completed" },
   ];
+  const handleDateChange = (dates: Date[]) => {
+    const selectedDate = dates[0] || null;
+    setPicker(selectedDate);
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  };
   return (
     <Dialog>
       <DialogTrigger>
@@ -95,11 +87,10 @@ const Edit = () => {
           <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
         </Button>{" "}
       </DialogTrigger>
-
       <DialogContent size="2xl" className="gap-3 h-[70%] ">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Update Task
+          <DialogTitle className="text-2xl font-bold text-default-700">
+            {t("Edit Task")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -115,12 +106,12 @@ const Edit = () => {
                     "text-destructive": errors.Name,
                   })}
                 >
-                  Lawyer Name
+                  {t("Task Name")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Name")}
-                  placeholder="Enter Lawyer Name"
+                  placeholder={t("Enter Task Name")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Name,
                   })}
@@ -131,7 +122,7 @@ const Edit = () => {
                       "text-destructive": errors.Name,
                     })}
                   >
-                    {errors.Name.message}
+                    {t(errors.Name.message)}
                   </p>
                 )}
               </div>
@@ -142,12 +133,18 @@ const Edit = () => {
                     "text-destructive": errors.Importance_Level,
                   })}
                 >
-                  Importance Level
+                  {t("Importance Level")}
                 </Label>
-                <BasicSelect menu={Importance_Level} />{" "}
-                {errors.Importance_Level && (
+
+                <BasicSelect
+                  name="ImportanceLevel"
+                  menu={Importance_Level}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.ImportanceLevel && (
                   <p className="text-xs text-destructive">
-                    {errors.Importance_Level.message}
+                    {t(errors.ImportanceLevel.message)}
                   </p>
                 )}
               </div>{" "}
@@ -158,12 +155,17 @@ const Edit = () => {
                     "text-destructive": errors.Assigned_To,
                   })}
                 >
-                  Assigned To
+                  {t("Assigned To")}
                 </Label>
-                <BasicSelect menu={Assigned_To} />{" "}
-                {errors.Assigned_To && (
+                <BasicSelect
+                  name="AssignedTo"
+                  menu={Assigned_To}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.AssignedTo && (
                   <p className="text-xs text-destructive">
-                    {errors.Assigned_To.message}
+                    {t(errors.AssignedTo.message)}
                   </p>
                 )}
               </div>
@@ -174,7 +176,7 @@ const Edit = () => {
                     "text-destructive": errors.Case_Name,
                   })}
                 >
-                  Case Name
+                  {t("Due Date")}
                 </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -192,12 +194,12 @@ const Edit = () => {
                     "text-destructive": errors.Case_Name,
                   })}
                 >
-                  Case Name
+                  {t("Case Name")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Case_Name")}
-                  placeholder="Enter Case Name"
+                  placeholder={t("Enter Case Name")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
                       errors.Case_Name,
@@ -209,7 +211,7 @@ const Edit = () => {
                       "text-destructive": errors.Case_Name,
                     })}
                   >
-                    {errors.Case_Name.message}
+                    {t(errors.Case_Name.message)}
                   </p>
                 )}
               </div>
@@ -220,12 +222,18 @@ const Edit = () => {
                     "text-destructive": errors.Task_Status,
                   })}
                 >
-                  Task Status
+                  {t("Task Status")}
                 </Label>
-                <BasicSelect menu={Task_Status} />{" "}
-                {errors.Task_Status && (
+
+                <BasicSelect
+                  name="TaskStatus"
+                  menu={Task_Status}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.TaskStatus && (
                   <p className="text-xs text-destructive">
-                    {errors.Task_Status.message}
+                    {t(errors.TaskStatus.message)}
                   </p>
                 )}
               </div>
@@ -233,11 +241,20 @@ const Edit = () => {
             {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancel
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Update Task</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Task")}
+              </Button>
             </div>
           </form>
         </div>

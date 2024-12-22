@@ -2,7 +2,7 @@ export const data = [
   {
     id: "TASK-8782",
     Task_Name: "TASK1",
-    Importance_Level: "high",
+    Importance_Level: "High",
     Assigned_To: "Ahmed",
     Due_Date: "September 12, 2024 12:11 PM",
     Case_Name: "Ali",
@@ -11,7 +11,7 @@ export const data = [
   {
     id: "TASK-8782",
     Task_Name: "TASK2",
-    Importance_Level: "meduim",
+    Importance_Level: "Meduim",
     Assigned_To: "Mohamed",
     Due_Date: "September 12, 2024 12:11 PM",
     Case_Name: "Abdullah",
@@ -20,7 +20,7 @@ export const data = [
   {
     id: "TASK-8782",
     Task_Name: "TASK2",
-    Importance_Level: "low",
+    Importance_Level: "Low",
     Assigned_To: "Abdullah",
     Due_Date: "September 12, 2024 12:11 PM",
     Case_Name: "Abdullah",
@@ -29,7 +29,7 @@ export const data = [
   {
     id: "TASK-8782",
     Task_Name: "TASK1",
-    Importance_Level: "high",
+    Importance_Level: "High",
     Assigned_To: "Ahmed",
     Due_Date: "September 12, 2024 12:11 PM",
     Case_Name: "Ali",
@@ -38,7 +38,7 @@ export const data = [
   {
     id: "TASK-8782",
     Task_Name: "TASK2",
-    Importance_Level: "meduim",
+    Importance_Level: "Meduim",
     Assigned_To: "Mohamed",
     Due_Date: "September 12, 2024 12:11 PM",
     Case_Name: "Abdullah",
@@ -47,7 +47,7 @@ export const data = [
   {
     id: "TASK-8782",
     Task_Name: "TASK2",
-    Importance_Level: "low",
+    Importance_Level: "Low",
     Assigned_To: "Abdullah",
     Due_Date: "September 12, 2024 12:11 PM",
     Case_Name: "Abdullah",

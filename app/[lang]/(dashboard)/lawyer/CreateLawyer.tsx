@@ -20,38 +20,32 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Radio } from "@/components/common/atoms/Radio";
+import { useTranslate } from "@/config/useTranslation";
 
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "Client name must be at least 3 charecters." })
-    .max(20, { message: "Client name must not exceed 20 characters." }),
+    .min(3, { message: "errorLawyer.LawyerNameMin" })
+    .max(20, { message: "errorLawyer.LawyerNameMax" }),
   phone: z.string().refine((value) => value.length === 11, {
-    message: "Phone number must be exactly 11 characters.",
+    message: "errorLawyer.Phone",
   }),
   email: z
     .string()
-    .min(8, { message: "Client Email must be at least 8 charecters." })
-    .max(20, { message: "Client Email must not exceed 20 characters." }),
+    .min(8, { message: "errorLawyer.LawyerEmailMin" })
+    .max(20, { message: "errorLawyer.LawyerEmailMax" }),
   Address: z
     .string()
-    .min(8, { message: "Client Address must be at least 8 charecters." })
-    .max(25, { message: "Client Address must not exceed 25 characters." }),
-  case: z
-    .string()
-    .min(8, {
-      message: "Client Current Case Name must be at least 8 charecters.",
-    })
-    .max(25, {
-      message: "Client Current Case Name must not exceed 25 characters.",
-    }),
+    .min(8, { message: "errorLawyer.LawyerAddressMin" })
+    .max(25, { message: "errorLawyer.LawyerAddressMax" }),
+
   password: z
     .string()
     .min(8, {
-      message: "Client Current Case Name must be at least 8 charecters.",
+      message: "errorLawyer.CasepasswordMin",
     })
     .max(25, {
-      message: "Client Current Case Name must not exceed 25 characters.",
+      message: "errorLawyer.CasepasswordMax",
     }),
 });
 
@@ -72,16 +66,19 @@ const CreateLawyer = () => {
     { value: "S Admin", label: "S Admin" },
     { value: "Client", label: "Client" },
   ];
+  const { t } = useTranslate();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create Lawyer</Button>
+        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {t("Create Lawyer")}
+        </Button>
       </DialogTrigger>
       <DialogContent size="2xl" className="gap-3 h-[70%] ">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Create a New Lawyer
+          <DialogTitle className="text-2xl font-bold text-default-700">
+            {t("Create a New Lawyer")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -97,12 +94,12 @@ const CreateLawyer = () => {
                     "text-destructive": errors.Name,
                   })}
                 >
-                  Lawyer Name
+                  {t("Lawyer Name")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Name")}
-                  placeholder="Enter Lawyer Name"
+                  placeholder={t("Enter Lawyer Name")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Name,
                   })}
@@ -113,7 +110,7 @@ const CreateLawyer = () => {
                       "text-destructive": errors.Name,
                     })}
                   >
-                    {errors.Name.message}
+                    {t(errors.Name.message)}
                   </p>
                 )}
               </div>
@@ -125,11 +122,11 @@ const CreateLawyer = () => {
                     "text-destructive": errors.phone,
                   })}
                 >
-                  Mobile Number
+                  {t("Mobile Number")}
                 </Label>
                 <Input
                   type="number"
-                  placeholder="Enter Client Mobile Number"
+                  placeholder={t("Enter Mobile Number")}
                   {...register("phone")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.phone,
@@ -137,7 +134,7 @@ const CreateLawyer = () => {
                 />
                 {errors.phone && (
                   <p className="text-xs text-destructive">
-                    {errors.phone.message}
+                    {t(errors.phone.message)}
                   </p>
                 )}
               </div>
@@ -148,12 +145,12 @@ const CreateLawyer = () => {
                     "text-destructive": errors.Address,
                   })}
                 >
-                  Client Address
+                  {t("Address")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Address")}
-                  placeholder="Enter Client Address"
+                  placeholder={t("Enter Address")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
                       errors.Address,
@@ -161,7 +158,7 @@ const CreateLawyer = () => {
                 />
                 {errors.Address && (
                   <p className="text-xs text-destructive">
-                    {errors.Address.message}
+                    {t(errors.Address.message)}
                   </p>
                 )}
               </div>
@@ -173,19 +170,19 @@ const CreateLawyer = () => {
                     "text-destructive": errors.email,
                   })}
                 >
-                  Email
+                  {t("Email")}
                 </Label>
                 <Input
                   type="email"
                   {...register("email")}
-                  placeholder="Enter Email"
+                  placeholder={t("Enter Email")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.email,
                   })}
                 />
                 {errors.email && (
                   <p className="text-xs text-destructive">
-                    {errors.email.message}
+                    {t(errors.email.message)}
                   </p>
                 )}
               </div>
@@ -196,12 +193,12 @@ const CreateLawyer = () => {
                     "text-destructive": errors.password,
                   })}
                 >
-                  Password
+                  {t("Password")}
                 </Label>
                 <Input
                   type="password"
                   {...register("password")}
-                  placeholder="Enter Password"
+                  placeholder={t("Enter Password")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
                       errors.password,
@@ -209,7 +206,7 @@ const CreateLawyer = () => {
                 />
                 {errors.password && (
                   <p className="text-xs text-destructive">
-                    {errors.password.message}
+                    {t(errors.password.message)}
                   </p>
                 )}
               </div>
@@ -217,11 +214,20 @@ const CreateLawyer = () => {
             {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancel
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Create Lawyer</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Lawyer")}
+              </Button>
             </div>
           </form>
         </div>

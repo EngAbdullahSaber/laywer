@@ -171,10 +171,39 @@
     "CaseNumberMin": "Case Number must be at least 3 characters.",
     "CaseNumberMax": "Case Number must not exceed 20 characters.",
     "CasenameMin": "Case name must be at least 3 characters.",
-    "CasenameMax": "Case name must not exceed 20 characters."
+    "CasenameMax": "Case name must not exceed 20 characters."  
+},  
+"errorLawyer": {
+  "LawyerNameMin": "Lawyer name must be at least 3 charecters.",
+  "LawyerNameMax": "Lawyer name must not exceed 20 characters.",
+  "Phone": "Phone number must be exactly 11 characters.",
+  "LawyerEmailMin": "Lawyer Email must be at least 8 charecters.",
+  "LawyerEmailMax": "Lawyer Email must not exceed 20 characters.",
+  "LawyerAddressMin": "Lawyer Address must be at least 8 charecters.",
+  "LawyerAddressMax": "Lawyer Address must not exceed 25 characters.", 
+  "CasepasswordMin": "Lawyer Name must be at least 8 charecters.",
+  "CasepasswordMax": "Lawyer Name must not exceed 25 characters."
 
-
-  
+},
+"errorTask": {
+  "TaskNameMin": "Task name must be at least 3 charecters.",
+  "TaskNameMax": "Task name must not exceed 20 characters.",
+  "CaseNameMin": "Case Name must be at least 8 charecters.",
+  "CaseNameMax": "Case Name must not exceed 25 characters."
+},
+"errorCourt": {
+  "CourtNameMin": "Court name must be at least 3 charecters.",
+  "CourtNameMax": "Court name must not exceed 20 characters.",
+  "CourtEmailMin": "Court Email must be at least 8 charecters.",
+  "CourtEmailMax": "Court Email must not exceed 25 characters.",
+  "CourtAddressMin": "Address must be at least 8 charecters.",
+  "CourtAddressMax": "Address must not exceed 25 characters.",
+  "CourtRoomNumberMin": "Room Number must be at least 1 charecters.",
+  "CourtRoomNumberMax": "Room Number must not exceed 6 characters.",
+  "CityMin": "City must be at least 3 charecters.",
+  "CityMax": "City must not exceed 15 characters.",
+  "RegionMin": "Region must be at least 3 charecters.",
+  "RegionMax": "Region must not exceed 15 characters."
 },
 
   "Create New Date With Client": "Create New Date With Client",
@@ -208,6 +237,38 @@
   "Select Hearing Date": "Select Hearing Date",
   "Hearing Date": "Hearing Date",
   "Type Here": "Type Here..",
-  "Case Description": "Case Description"
+  "Choose File": "Choose File",
+  "Case Description": "Case Description",
+  "Lawyer Details": "Lawyer Details",
+  "Create a New Lawyer": "Create a New Lawyer",
+  "Enter Mobile Number": "Enter Mobile Number",
+  "Enter Address": "Enter Address",
+  "Enter Email": "Enter Email",
+  "Create Lawyer": "Create Lawyer",
+  "Lawyers List": "Lawyers List",
+  "Task Details": "Task Details",
+  "Task Name": "Task Name",
+  "Importance Level": "Importance Level",
+  "Assigned To": "Assigned To",
+  "Due Date": "Due Date",
+  "Task Status": "Task Status",
+  "Enter Task Name": "Enter Task Name",
+  "Create a New Task": "Create a New Task",
+  "Create Task": "Create Task",
+  "Enter Case Name": "Enter Case Name",
+  "Task List": "Task List",
+  "Lawyers": "Lawyers",
+  "Edit Task": "Edit Task",
+  "Courts Details": "Courts Details",
+  "Create Court": "Create Court",
+  "Create a New Court": "Create a New Court",
+  "Enter Court Name": "Enter Court Name",
+  "Court Category Level": "Court Category Level",
+  "Enter Room Number": "Enter Room Number",
+  "Enter Region": "Enter Region",
+  "Region": "Region",
+  "Update Court": "Update Court",
+  "Enter City": "Enter City",
+  "City": "City"
 
 }

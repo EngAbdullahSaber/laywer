@@ -18,6 +18,8 @@ import { toast } from "sonner";
 import { useTranslate } from "@/config/useTranslation";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { Upload } from "lucide-react";
+import { Radio } from "@/components/common/atoms/Radio";
 
 // Zod validation schema
 const schema = z.object({
@@ -71,9 +73,11 @@ const CreateContact = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{t("Create Client")}</Button>
+        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {t("Create Client")}
+        </Button>
       </DialogTrigger>
-      <DialogContent size="2xl" className="gap-3 !h-[480px]">
+      <DialogContent size="2xl" className="gap-3 !h-[90%]">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Client")}
@@ -124,7 +128,10 @@ const CreateContact = () => {
                 </p>
               )}
             </div>
-
+            <div className="flex flex-col gap-2 my-2 w-[48%]">
+              <Label htmlFor="category">{t("Status")} </Label>
+              <Radio text1={"Plaintiff"} text2={"Defendant"} />
+            </div>
             <div className="flex flex-col gap-2 w-[48%]">
               <Label
                 htmlFor="Address"
@@ -149,17 +156,7 @@ const CreateContact = () => {
 
             <div className="flex flex-col gap-2 w-[48%]">
               <Label htmlFor="Role">{t("Role")}</Label>
-              <BasicSelect
-                name="Role"
-                menu={category}
-                control={control}
-                errors={errors}
-              />
-              {errors.rrole && (
-                <p className="text-xs text-destructive">
-                  {t(errors.rrole.message)}
-                </p>
-              )}
+              <Radio text1={"Company"} text2={"Personal"} />
             </div>
 
             <div className="flex flex-col gap-2 w-[48%]">
@@ -189,7 +186,23 @@ const CreateContact = () => {
               <Label htmlFor="Identity Number">{t("Identity Number *")}</Label>
               <Input type="text" placeholder={t("Enter Identity Number")} />
             </div>
-
+            <div className="flex flex-col gap-2 w-[48%]">
+              <Label>
+                <div>
+                  <Button
+                    asChild
+                    color="info"
+                    className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                    variant="outline"
+                  >
+                    <div className="mt-5">
+                      {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
+                    </div>
+                  </Button>
+                </div>
+                <Input type="file" className="hidden" />
+              </Label>
+            </div>
             <div className="flex flex-col gap-2 w-[100%]">
               <Label htmlFor="Details">{t("Details *")}</Label>
               <Textarea placeholder={t("Enter Details")} />
@@ -198,11 +211,18 @@ const CreateContact = () => {
 
           <div className="flex justify-center gap-3 mt-4">
             <DialogClose asChild>
-              <Button type="button" variant="outline" className="w-28">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+              >
                 {t("Cancel")}
               </Button>
             </DialogClose>
-            <Button type="submit" className="w-28">
+            <Button
+              type="submit"
+              className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+            >
               {t("Create Client")}
             </Button>
           </div>

@@ -17,58 +17,58 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useTranslate } from "@/config/useTranslation";
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "Court name must be at least 3 charecters." })
-    .max(20, { message: "Court name must not exceed 20 characters." }),
+    .min(3, { message: "errorCourt.CourtNameMin" })
+    .max(20, { message: "errorCourt.CourtNameMax" }),
 
-  Court_Category: z
-    .string()
-    .min(8, { message: "Court Category must be at least 8 charecters." })
-    .max(20, { message: "Court Category must not exceed 20 characters." }),
   Email: z
     .string()
-    .min(8, { message: "Email Address must be at least 8 charecters." })
-    .max(25, { message: "Email Address must not exceed 25 characters." }),
+    .min(8, { message: "errorCourt.CourtEmailMin" })
+    .max(25, { message: "errorCourt.CourtEmailMax" }),
   Address: z
     .string()
     .min(8, {
-      message: "Address must be at least 8 charecters.",
+      message: "errorCourt.CourtAddressMin",
     })
     .max(25, {
-      message: "Address must not exceed 25 characters.",
+      message: "errorCourt.CourtAddressMax",
     }),
   Room_Number: z
     .string()
     .min(1, {
-      message: "Room Number must be at least 1 charecters.",
+      message: "errorCourt.CourtRoomNumberMin",
     })
     .max(6, {
-      message: "Room Number must not exceed 6 characters.",
+      message: "errorCourt.CourtRoomNumberMax",
     }),
   City: z
     .string()
-    .min(1, {
-      message: "City must be at least 1 charecters.",
+    .min(3, {
+      message: "errorCourt.CityMin",
     })
-    .max(20, {
-      message: "City must not exceed 6 characters.",
+    .max(15, {
+      message: "errorCourt.CityMax",
     }),
   Region: z
     .string()
-    .min(1, {
-      message: "Region must be at least 1 charecters.",
+    .min(3, {
+      message: "errorCourt.RegionMin",
     })
-    .max(20, {
-      message: "Region must not exceed 6 characters.",
+    .max(15, {
+      message: "errorCourt.RegionMax",
     }),
+  CourtCategory: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
 });
 
 const CreateCourt = () => {
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -82,16 +82,19 @@ const CreateCourt = () => {
     { value: "Criminal", label: "Criminal" },
     { value: "Civil", label: "Civil" },
   ];
+  const { t, loading, error } = useTranslate();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create Court</Button>
+        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {t("Create Court")}
+        </Button>
       </DialogTrigger>
-      <DialogContent size="2xl" className="gap-3 h-[70%] ">
+      <DialogContent size="2xl" className="gap-3 h-[80%] ">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Create a New Court
+          <DialogTitle className="text-2xl font-bold text-default-700">
+            {t("Create a New Court")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -107,7 +110,7 @@ const CreateCourt = () => {
                     "text-destructive": errors.Name,
                   })}
                 >
-                  Court Name
+                  {t("Court Name")}
                 </Label>
                 <Input
                   type="text"
@@ -123,7 +126,7 @@ const CreateCourt = () => {
                       "text-destructive": errors.Name,
                     })}
                   >
-                    {errors.Name.message}
+                    {t(errors.Name.message)}
                   </p>
                 )}
               </div>
@@ -131,31 +134,36 @@ const CreateCourt = () => {
                 <Label
                   htmlFor="Court_Category"
                   className={cn("", {
-                    "text-destructive": errors.Court_Category,
+                    "text-destructive": errors.CourtCategory,
                   })}
                 >
-                  Court Category Level
+                  {t("Court Category Level")}
                 </Label>
-                <BasicSelect menu={Court_Category} />{" "}
-                {errors.Court_Category && (
+                <BasicSelect
+                  name="CourtCategory"
+                  menu={Court_Category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.CourtCategory && (
                   <p className="text-xs text-destructive">
-                    {errors.Court_Category.message}
+                    {t(errors.CourtCategory.message)}
                   </p>
                 )}
               </div>{" "}
               <div className="flex flex-col gap-2">
                 <Label
-                  htmlFor="Email "
+                  htmlFor="Email"
                   className={cn("", {
                     "text-destructive": errors.Email,
                   })}
                 >
-                  Email
+                  {t("Email")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Name")}
-                  placeholder="Enter Email "
+                  placeholder={t("Enter Email")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Email,
                   })}
@@ -166,23 +174,23 @@ const CreateCourt = () => {
                       "text-destructive": errors.Email,
                     })}
                   >
-                    {errors.Email.message}
+                    {t(errors.Email.message)}
                   </p>
                 )}
               </div>
               <div className="flex flex-col gap-2">
                 <Label
-                  htmlFor="Address "
+                  htmlFor="Address"
                   className={cn("", {
                     "text-destructive": errors.Address,
                   })}
                 >
-                  Address
+                  {t("Address")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Name")}
-                  placeholder="Enter Address "
+                  placeholder={t("Enter Address")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
                       errors.Address,
@@ -194,7 +202,7 @@ const CreateCourt = () => {
                       "text-destructive": errors.Address,
                     })}
                   >
-                    {errors.Address.message}
+                    {t(errors.Address.message)}
                   </p>
                 )}
               </div>
@@ -205,12 +213,12 @@ const CreateCourt = () => {
                     "text-destructive": errors.Room_Number,
                   })}
                 >
-                  Room Number
+                  {t("Room Number")}
                 </Label>
                 <Input
                   type="number"
                   {...register("Room_Number")}
-                  placeholder="Enter Room Number "
+                  placeholder={t("Enter Room Number")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
                       errors.Room_Number,
@@ -222,35 +230,7 @@ const CreateCourt = () => {
                       "text-destructive": errors.Room_Number,
                     })}
                   >
-                    {errors.Room_Number.message}
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="Room_Number"
-                  className={cn("", {
-                    "text-destructive": errors.Room_Number,
-                  })}
-                >
-                  Room Number
-                </Label>
-                <Input
-                  type="number"
-                  {...register("Room_Number")}
-                  placeholder="Enter Room Number "
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.Room_Number,
-                  })}
-                />
-                {errors.Room_Number && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Room_Number,
-                    })}
-                  >
-                    {errors.Room_Number.message}
+                    {t(errors.Room_Number.message)}
                   </p>
                 )}
               </div>
@@ -261,12 +241,12 @@ const CreateCourt = () => {
                     "text-destructive": errors.Region,
                   })}
                 >
-                  Region
+                  {t("Region")}
                 </Label>
                 <Input
                   type="number"
                   {...register("Region")}
-                  placeholder="Enter Room Number "
+                  placeholder={t("Enter Region")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
                       errors.Region,
@@ -278,7 +258,7 @@ const CreateCourt = () => {
                       "text-destructive": errors.Region,
                     })}
                   >
-                    {errors.Region.message}
+                    {t(errors.Region.message)}
                   </p>
                 )}
               </div>
@@ -289,12 +269,12 @@ const CreateCourt = () => {
                     "text-destructive": errors.City,
                   })}
                 >
-                  City
+                  {t("City")}
                 </Label>
                 <Input
                   type="number"
                   {...register("City")}
-                  placeholder="Enter Room Number "
+                  placeholder={t("Enter City")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.City,
                   })}
@@ -305,7 +285,7 @@ const CreateCourt = () => {
                       "text-destructive": errors.City,
                     })}
                   >
-                    {errors.City.message}
+                    {t(errors.City.message)}
                   </p>
                 )}
               </div>
@@ -313,11 +293,20 @@ const CreateCourt = () => {
             {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancel
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Create Court</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Court")}
+              </Button>
             </div>
           </form>
         </div>

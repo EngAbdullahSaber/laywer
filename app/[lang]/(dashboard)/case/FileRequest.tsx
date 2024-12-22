@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
+import { Upload } from "lucide-react";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -96,16 +97,42 @@ const FileRequest = () => {
                   </p>
                 )}
               </div>
+              <div className="flex flex-col gap-2 w-[48%]">
+                <Label>
+                  <div>
+                    <Button
+                      asChild
+                      color="info"
+                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                      variant="outline"
+                    >
+                      <div>
+                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
+                      </div>
+                    </Button>
+                  </div>
+                  <Input type="file" className="hidden" />
+                </Label>
+              </div>
             </div>
 
             {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
                   {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">{t("Ask Client")}</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Ask Client")}
+              </Button>
             </div>
           </form>
         </div>

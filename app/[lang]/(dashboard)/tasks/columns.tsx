@@ -95,9 +95,9 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Importance_Level === "high" && "destructive") ||
-                (row.original.Importance_Level === "meduim" && "info") ||
-                (row.original.Importance_Level === "low" && "warning") ||
+                (row.original.Importance_Level == "High" && "destructive") ||
+                (row.original.Importance_Level == "Meduim" && "warning") ||
+                (row.original.Importance_Level == "Low" && "secondary") ||
                 "default"
               }
             >
@@ -178,8 +178,8 @@ const TableData = () => {
               className="!text-center"
               color={
                 (row.original.Task_Status === "Progress" && "destructive") ||
-                (row.original.Task_Status === "Pending" && "info") ||
-                (row.original.Task_Status === "Completed" && "warning") ||
+                (row.original.Task_Status === "Pending" && "warning") ||
+                (row.original.Task_Status === "Completed" && "success") ||
                 "default"
               }
             >

@@ -62,38 +62,38 @@ export const menusConfig = {
       {
         title: "Tasks",
         icon: Tasks,
-        href: "/task ",
+        href: "/tasks",
       },
       {
         title: "Courts",
         icon: Courts,
-        href: "/courts ",
+        href: "/courts",
       },
-      {
-        title: "Lawyer Cases",
-        icon: Case,
-        href: "/lawyer-cases",
-      },
-      {
-        title: "Lawyer Tasks",
-        icon: Tasks,
-        href: "/lawyer-tasks ",
-      },
-      {
-        title: "Lawyer Appointments",
-        icon: Appointments,
-        href: "/lawyer-appointments ",
-      },
-      {
-        title: "Clients Cases",
-        icon: Case,
-        href: "/client-cases",
-      },
-      {
-        title: "Clients Requests",
-        icon: Requests,
-        href: "/client-requests",
-      },
+      // {
+      //   title: "Lawyer Cases",
+      //   icon: Case,
+      //   href: "/lawyer-cases",
+      // },
+      // {
+      //   title: "Lawyer Tasks",
+      //   icon: Tasks,
+      //   href: "/lawyer-tasks ",
+      // },
+      // {
+      //   title: "Lawyer Appointments",
+      //   icon: Appointments,
+      //   href: "/lawyer-appointments ",
+      // },
+      // {
+      //   title: "Clients Cases",
+      //   icon: Case,
+      //   href: "/client-cases",
+      // },
+      // {
+      //   title: "Clients Requests",
+      //   icon: Requests,
+      //   href: "/client-requests",
+      // },
     
     ],
     classic: [
@@ -131,38 +131,38 @@ export const menusConfig = {
       {
         title: "Tasks",
         icon: Tasks,
-        href: "/task ",
+        href: "/tasks",
       },
       {
         title: "Courts",
         icon: Courts,
-        href: "/courts ",
+        href: "/courts",
       },
-      {
-        title: "Lawyer Cases",
-        icon: Case,
-        href: "/lawyer-cases",
-      },
-      {
-        title: "Lawyer Tasks",
-        icon: Tasks,
-        href: "/lawyer-tasks ",
-      },
-      {
-        title: "Lawyer Appointments",
-        icon: Appointments,
-        href: "/lawyer-appointments ",
-      },
-      {
-        title: "Clients Cases",
-        icon: Case,
-        href: "/client-cases",
-      },
-         {
-        title: "Clients Requests",
-        icon: Requests,
-        href: "/client-requests",
-      },
+      // {
+      //   title: "Lawyer Cases",
+      //   icon: Case,
+      //   href: "/lawyer-cases",
+      // },
+      // {
+      //   title: "Lawyer Tasks",
+      //   icon: Tasks,
+      //   href: "/lawyer-tasks ",
+      // },
+      // {
+      //   title: "Lawyer Appointments",
+      //   icon: Appointments,
+      //   href: "/lawyer-appointments ",
+      // },
+      // {
+      //   title: "Clients Cases",
+      //   icon: Case,
+      //   href: "/client-cases",
+      // },
+      //    {
+      //   title: "Clients Requests",
+      //   icon: Requests,
+      //   href: "/client-requests",
+      // },
     ],
   },
 };

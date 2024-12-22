@@ -1,7 +1,6 @@
 "use client";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -23,6 +22,8 @@ import { Radio } from "@/components/common/atoms/Radio";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
+import { Upload } from "lucide-react";
+
 const schema = z.object({
   Name: z
     .string()
@@ -152,7 +153,9 @@ const CreateCase = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{t("Create Case")}</Button>
+        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {t("Create Case")}
+        </Button>
       </DialogTrigger>
       <DialogContent size="2xl">
         <DialogHeader className="p-0">
@@ -310,6 +313,23 @@ const CreateCase = () => {
                   </p>
                 )}
               </div>
+              <div className="flex flex-col gap-2 w-[48%]">
+                <Label>
+                  <div>
+                    <Button
+                      asChild
+                      color="info"
+                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                      variant="outline"
+                    >
+                      <div className="mt-5">
+                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
+                      </div>
+                    </Button>
+                  </div>
+                  <Input type="file" className="hidden" />
+                </Label>
+              </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <Label htmlFor="category">{t("Lawyer Selection")} </Label>
                 <BasicSelect
@@ -324,6 +344,7 @@ const CreateCase = () => {
                   </p>
                 )}
               </div>
+
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <Label htmlFor="category">{t("Receipt Date")} </Label>
                 <Flatpickr
@@ -417,11 +438,20 @@ const CreateCase = () => {
             </div>
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
                   {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">{t("Create Client")}</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Client")}
+              </Button>
             </div>
           </form>
         </ScrollArea>

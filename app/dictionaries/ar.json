@@ -10,7 +10,7 @@
   "Search": "بحث",
   "Contact": "اتصال",
   "view": "عرض",
-  "Dashboard": "لوحة القيادة",
+  "Dashboard": "لوحة التحكم",
   "User_Name": "اسم المستخدم",
   "user_name": "اسم المستخدم",
   "Mobile_Number": "رقم الهاتف المحمول",
@@ -135,7 +135,7 @@
   "Client Address": "عنوان العميل",
   "Client Type": "نوع العميل",
   "Password": "كلمة المرور",
-  "Role": "الدور",
+  "Role": "الفئة",
   "Client password must not exceed 25 characters.": "يجب أن لا تتجاوز كلمة مرور العميل 25 حرفًا.",
   "Client password must be at least 8 characters.": "يجب أن لا تقل كلمة مرور العميل عن 8 حروف.",
   "Client Address must be at least 8 characters.": "يجب أن لا يقل عنوان العميل عن 8 حروف.",
@@ -185,8 +185,40 @@
     "CasenameMax": "يجب ألا يتجاوز اسم القضية 20 حرفًا."
 
   
+   
 },
-  
+"errorLawyer": {
+  "LawyerNameMin": "يجب أن يكون اسم المحامي على الأقل 3 أحرف.",
+"LawyerNameMax": "يجب أن لا يتجاوز اسم المحامي 20 حرفًا.",
+"Phone": "يجب أن يتكون رقم الهاتف من 11 حرفًا بالضبط.",
+"LawyerEmailMin": "يجب أن يكون بريد المحامي الإلكتروني على الأقل 8 أحرف.",
+"LawyerEmailMax": "يجب أن لا يتجاوز بريد المحامي الإلكتروني 20 حرفًا.",
+"LawyerAddressMin": "يجب أن يكون عنوان المحامي على الأقل 8 أحرف.",
+"LawyerAddressMax": "يجب أن لا يتجاوز عنوان المحامي 25 حرفًا.",
+"CasepasswordMin": "يجب أن يكون اسم المحامي على الأقل 8 أحرف.",
+"CasepasswordMax": "يجب أن لا يتجاوز اسم المحامي 25 حرفًا."    
+},
+  "errorTask": {
+    "TaskNameMin": "يجب أن يتكون اسم المهمة من 3 أحرف على الأقل.",
+    "TaskNameMax": "يجب أن لا يتجاوز اسم المهمة 20 حرفًا.",
+    "CaseNameMin": "يجب أن يتكون اسم القضية من 8 أحرف على الأقل.",
+    "CaseNameMax": "يجب أن لا يتجاوز اسم القضية 25 حرفًا."   
+  }  ,
+  "errorCourt": {
+    "CourtNameMin": "يجب أن يتكون اسم المحكمة من 3 أحرف على الأقل.",
+    "CourtNameMax": "يجب أن لا يتجاوز اسم المحكمة 20 حرفًا.",
+    "CourtEmailMin": "يجب أن يكون بريد المحكمة الإلكتروني على الأقل 8 أحرف.",
+    "CourtEmailMax": "يجب أن لا يتجاوز بريد المحكمة الإلكتروني 25 حرفًا.",
+    "CourtAddressMin": "يجب أن يكون العنوان على الأقل 8 أحرف.",
+    "CourtAddressMax": "يجب أن لا يتجاوز العنوان 25 حرفًا.",
+    "CourtRoomNumberMin": "يجب أن يتكون رقم الغرفة من حرف واحد على الأقل.",
+    "CourtRoomNumberMax": "يجب أن لا يتجاوز رقم الغرفة 6 أحرف.",
+    "CityMin": "يجب أن يتكون اسم المدينة من 3 أحرف على الأقل.",
+    "CityMax": "يجب أن لا يتجاوز اسم المدينة 15 حرفًا.",
+    "RegionMin": "يجب أن يتكون اسم المنطقة من 3 أحرف على الأقل.",
+    "RegionMax": "يجب أن لا يتجاوز اسم المنطقة 15 حرفًا."  
+  }  ,
+
   "Create New Date With Client": "إنشاء تاريخ جديد مع العميل",
   "Title": "العنوان",
   "Date": "التاريخ",
@@ -218,7 +250,41 @@
 "Select Hearing Date": "اختيار تاريخ الجلسة",
 "Hearing Date": "تاريخ الجلسة",
 "Type Here": "اكتب هنا..",
-"Case Description": "وصف القضية"
+"Choose File": " الملف",
+"Case Description": "وصف القضية",
+"Lawyer Details": "تفاصيل المحامي",
+"Create a New Lawyer": "إنشاء محامي جديد",
+"Enter Mobile Number": "أدخل رقم الهاتف المحمول",
+"Enter Address": "أدخل العنوان",
+"Enter Email": "أدخل البريد الإلكتروني",
+"Create Lawyer": "إنشاء محامي",
+"Lawyers List": "قائمة المحامين",
+"Lawyers": "المحامون",
+"Task Details": "تفاصيل المهمة",
+"Task Name": "اسم المهمة",
+"Importance Level": "مستوى الأهمية",
+"Assigned To": "مخصص لـ",
+"Due Date": "تاريخ الاستحقاق",
+"Task Status": "حالة المهمة",
+"Enter Task Name": "أدخل اسم المهمة",
+"Create a New Task": "إنشاء مهمة جديدة",
+"Create Task": "إنشاء مهمة",
+"Task List": "قائمة المهام",
+"Enter Case Name": "أدخل اسم القضية",
+"Edit Task": "تحرير المهمة",
+"Courts Details": "تفاصيل المحاكم",
+"Create Court": "إنشاء محكمة",
+"Create a New Court": "إنشاء محكمة جديدة",
+"Enter Court Name": "أدخل اسم المحكمة",
+"Court Category Level": "مستوى تصنيف المحكمة",
+"Enter Room Number": "أدخل رقم الغرفة",
+"Enter Region": "أدخل المنطقة",
+"Region": "المنطقة",
+"Enter City": "أدخل المدينة",
+"Update Court": "تحديث المحكمة",
+"City": "المدينة"
+
+
 }
 
 
