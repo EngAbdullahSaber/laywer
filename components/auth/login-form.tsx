@@ -163,17 +163,14 @@ const LogInForm = () => {
             Forget Password?
           </Link>
         </div>
-        <Link href={"/dashboard"}>
-          {" "}
-          <Button
-            className="w-full"
-            disabled={isPending}
-            size={!isDesktop2xl ? "lg" : "md"}
-          >
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isPending ? "Loading..." : "Sign In"}
-          </Button>
-        </Link>
+        <Button
+          className="w-full"
+          disabled={isPending}
+          size={!isDesktop2xl ? "lg" : "md"}
+        >
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isPending ? "Loading..." : "Sign In"}
+        </Button>
       </form>
       {/* <div className="mt-6 xl:mt-8 flex flex-wrap justify-center gap-4">
         <Button
