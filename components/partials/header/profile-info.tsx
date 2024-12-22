@@ -50,7 +50,7 @@ const ProfileInfo = () => {
           )}
           <div>
             <div className="text-sm font-medium text-default-800 capitalize ">
-              {session?.user?.name ?? "Mcc Callem"}
+              {session?.user?.name ?? "msaatylaw"}
             </div>
             {/* profile */}
             {/* <Link
