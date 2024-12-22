@@ -269,7 +269,28 @@
   "Region": "Region",
   "Update Court": "Update Court",
   "Enter City": "Enter City",
+  "Contact Category Details": "Contact Category Details",
+  "Contacts": "Contacts",
+  "Contact List Details": "Contact List Details",
+  "Create Contact": "Create Contact",
+  "Create a New Contact": "Create a New Contact",
+  "Enter User Name": "Enter User Name",
+  "User Name": "User Name",
+  "Phone Number": "Phone Number",
+  "Your phone number": "Your phone number",
+  "Enter Category": "Enter Category",
+  "Male": "Male",
+  "Female": "Female",
+  "Select Gender": "Select Gender",
+  
+  "Create Contact Category": "Create Contact Category",
+  "Create a New Contact Category": "Create a New Contact Category",
+  "Enter email address": "Enter email address",
+  "Description": "Description",
+  "Enter Name": "Enter Name",
   "City": "City",
+  "City": "City",
+ 
   "Log Out": "Log Out"
 
 }

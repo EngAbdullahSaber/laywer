@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import { Radio } from "@/components/common/atoms/Radio";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslate } from "@/config/useTranslation";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
 const CreateContact = () => {
@@ -25,15 +26,19 @@ const CreateContact = () => {
     { value: "S Admin", label: "S Admin" },
     { value: "Client", label: "Client" },
   ];
+  const { t, loading, error } = useTranslate();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create Contact</Button>
+        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {t("Create Contact")}
+        </Button>
       </DialogTrigger>
       <DialogContent size="2xl">
         <DialogHeader className="p-0">
           <DialogTitle className="text-base font-medium text-default-700 ">
-            Create a New Contact
+            {t("Create a New Contact")}
           </DialogTitle>
         </DialogHeader>
         <div>
@@ -41,30 +46,26 @@ const CreateContact = () => {
             <ScrollArea className="h-full">
               <div className="sm:grid  sm:grid-cols-2 sm:gap-5 space-y-4 sm:space-y-0">
                 <div className="flex flex-col gap-2">
-                  <Label>User Name</Label>
-                  <Input type="text" placeholder="Enter User Name" />
+                  <Label>{t("User Name")}</Label>
+                  <Input type="text" placeholder={t("Enter User Name")} />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Label>Email Address</Label>
-                  <Input type="email" placeholder="Enter email address" />
+                  <Label>{t("Email Address")}</Label>
+                  <Input type="email" placeholder={t("Enter email address")} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Label>Phone Number</Label>
-                  <Input type="number" placeholder="Your phone number" />
+                  <Label>{t("Phone Number")}</Label>
+                  <Input type="number" placeholder={t("Your phone number")} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Label>Select Category</Label>
-                  <BasicSelect menu={category} />{" "}
+                  <Label> {t("Category")}</Label>
+                  <Input type="text" placeholder={t("Enter Category")} />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Label>Mobile Number</Label>
-                  <Input type="number" placeholder="Enter Mobile Number" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label>Select Gender</Label>
-                  <BasicSelect menu={gender} />{" "}
+                  <Label>{t("Select Gender")}</Label>
+                  <Radio text1={"Female"} text2={"Male"} />
                 </div>
               </div>
             </ScrollArea>
@@ -72,11 +73,20 @@ const CreateContact = () => {
 
           <div className=" flex justify-center gap-3 mt-4">
             <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
+              <Button
+                type="button"
+                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                variant="outline"
+              >
+                {t("Cancel")}
               </Button>
             </DialogClose>
-            <Button type="button">Create Contact </Button>
+            <Button
+              type="button"
+              className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+            >
+              {t("Create Contact")}{" "}
+            </Button>
           </div>
         </div>
       </DialogContent>

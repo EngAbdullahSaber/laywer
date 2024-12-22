@@ -282,8 +282,24 @@
 "Region": "المنطقة",
 "Enter City": "أدخل المدينة",
 "Update Court": "تحديث المحكمة",
+"Contact Category Details": "تفاصيل فئة الاتصال",
+"Contacts": "جهات الاتصال",
+"Contact List Details": "تفاصيل قائمة الاتصال",
+"Create Contact": "إنشاء اتصال",
+"Create a New Contact": "إنشاء اتصال جديد",
+"Enter User Name": "أدخل اسم المستخدم",
+"User Name": "اسم المستخدم",
+"Your phone number": "رقم هاتفك",
+"Enter Category": "أدخل الفئة",
+"Male": "ذكر",
+"Female": "أنثى",
+"Select Gender": "اختر الجنس",
 "City": "المدينة",
-
+"Create Contact Category": "إنشاء فئة الاتصال",
+"Create a New Contact Category": "إنشاء فئة اتصال جديدة",
+"Enter email address": "أدخل عنوان البريد الإلكتروني",
+"Description": "وصف",
+"Enter Name": "أدخل الاسم",
 "Log Out": "تسجيل الخروج"
 
 }

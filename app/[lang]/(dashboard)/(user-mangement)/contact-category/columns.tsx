@@ -42,14 +42,14 @@ const TableData = () => {
       enableHiding: false,
     },
 
-    {
-      id: "actions",
-      cell: ({ row }) => (
-        <div className="flex flex-row gap-2 items-center justify-center">
-          <Actions title={"Contact List"} row={row} />
-        </div>
-      ),
-    },
+    // {
+    //   id: "actions",
+    //   cell: ({ row }) => (
+    //     <div className="flex flex-row gap-2 items-center justify-center">
+    //       <Actions title={"Contact List"} row={row} />
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "id",
       header: ({ column }) => (

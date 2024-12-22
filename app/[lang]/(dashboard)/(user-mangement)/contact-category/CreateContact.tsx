@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslate } from "@/config/useTranslation";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
 const CreateContact = () => {
@@ -26,15 +27,20 @@ const CreateContact = () => {
     { value: "S Admin", label: "S Admin" },
     { value: "Client", label: "Client" },
   ];
+  const { t, loading, error } = useTranslate();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create Contact Category</Button>
+        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {" "}
+          {t("Create Contact Category")}
+        </Button>
       </DialogTrigger>
       <DialogContent size="2xl">
         <DialogHeader className="p-0">
           <DialogTitle className="text-base font-medium text-default-700 ">
-            Create a New Contact Category
+            {t("Create a New Contact Category")}
           </DialogTitle>
         </DialogHeader>
         <div>
@@ -42,13 +48,13 @@ const CreateContact = () => {
             <ScrollArea className="h-full">
               <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
                 <div className="flex flex-col gap-2">
-                  <Label>Name</Label>
-                  <Input type="text" placeholder="Enter Name" />
+                  <Label>{t("Name")}</Label>
+                  <Input type="text" placeholder={t("Enter Name")} />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Label>Description</Label>
-                  <Textarea placeholder="Type Here.." rows={7} />
+                  <Label>{t("Description")}</Label>
+                  <Textarea placeholder={t("Type Here")} rows={7} />
                 </div>
               </div>
             </ScrollArea>
@@ -56,11 +62,20 @@ const CreateContact = () => {
 
           <div className=" flex justify-center gap-3 mt-4">
             <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
+              <Button
+                type="button"
+                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                variant="outline"
+              >
+                {t("Cancel")}
               </Button>
             </DialogClose>
-            <Button type="button">Create Contact Category </Button>
+            <Button
+              type="button"
+              className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+            >
+              {t("Create Contact Category")}{" "}
+            </Button>
           </div>
         </div>
       </DialogContent>
