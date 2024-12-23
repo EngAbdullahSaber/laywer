@@ -93,6 +93,11 @@ const adminMenu = [
 ];
 const lawyerMenu = [
   {
+    title: "Pending Cases",
+    icon: Case,
+    href: "/pending-cases",
+  },
+  {
           title: "Cases",
           icon: Case,
           href: "/lawyer-cases",

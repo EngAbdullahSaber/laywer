@@ -1,8 +1,4 @@
-import {
-  ChevronsLeft,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react";
+import { ChevronsLeft, ChevronRight, ChevronLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,9 +15,8 @@ interface DataTablePaginationProps {
   table: Table<any>;
 }
 
-
 export function DataTablePagination({ table }: DataTablePaginationProps) {
-  const {t} = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <div className="flex items-center flex-wrap gap-2 justify-between px-2">
@@ -31,7 +26,7 @@ export function DataTablePagination({ table }: DataTablePaginationProps) {
       </div>
       <div className="flex flex-wrap items-center gap-6 lg:gap-8">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-medium text-muted-foreground whitespace-nowrap"> {t("Rows per page")} </p>
+          {/* <p className="text-sm font-medium text-muted-foreground whitespace-nowrap"> {t("Rows per page")} </p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
@@ -48,10 +43,10 @@ export function DataTablePagination({ table }: DataTablePaginationProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium text-muted-foreground">
-           {t("Page")}  {table.getState().pagination.pageIndex + 1}  {t("of")} 
+          {t("Page")} {table.getState().pagination.pageIndex + 1} {t("of")}
           {table.getPageCount()}
         </div>
         <div className="flex items-center gap-2">

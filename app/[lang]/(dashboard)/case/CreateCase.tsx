@@ -210,19 +210,30 @@ const CreateCase = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                {" "}
-                <Label htmlFor="category">{t("Case Category")} </Label>
-                <BasicSelect
-                  name="category"
-                  menu={category}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.category && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.category.message)}
-                  </p>
-                )}
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                    <Label htmlFor="category">{t("Case Category")} </Label>
+                    <BasicSelect
+                      name="category"
+                      menu={category}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.category && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.category.message)}
+                      </p>
+                    )}
+                  </div>
+                  <Link href={"/cases-category"} className="w-[8%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
 
               <div className="flex flex-col gap-2 my-2 w-[48%]">
@@ -273,18 +284,30 @@ const CreateCase = () => {
                 )}
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <Label htmlFor="CourtCategory">{t("Court Category")}</Label>
-                <BasicSelect
-                  name="CourtCategory"
-                  menu={category}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.CourtCategory && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.CourtCategory.message)}
-                  </p>
-                )}{" "}
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                    <Label htmlFor="CourtCategory">{t("Court Category")}</Label>
+                    <BasicSelect
+                      name="CourtCategory"
+                      menu={category}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.CourtCategory && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.CourtCategory.message)}
+                      </p>
+                    )}{" "}
+                  </div>
+                  <Link href={"/court-category"} className="w-[8%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <Label htmlFor="category">{t("Status")} </Label>
@@ -505,7 +528,7 @@ const CreateCase = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Client")}
+                {t("Create Case")}
               </Button>
             </div>
           </form>

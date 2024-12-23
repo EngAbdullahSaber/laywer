@@ -48,7 +48,6 @@ const CalendarPage = () => {
         <Calendar
           mode="multiple" // Use 'multiple' mode to select multiple dates
           selected={dates}
-          onSelect={handleSelect}
           className="rounded-md border"
         />
       </Card>

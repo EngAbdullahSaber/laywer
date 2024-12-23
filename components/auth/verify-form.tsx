@@ -9,7 +9,7 @@ import Logo from "@/public/images/auth/LawyerLogo.png";
 import { useTranslate } from "@/config/useTranslation";
 
 const VerfiyForm = () => {
-  const totalOtpField = 6;
+  const totalOtpField = 4;
   const otpArray: string[] = Array.from({ length: totalOtpField }, () => "");
   const [otp, setOtp] = useState<string[]>(otpArray);
   const otpFields = Array.from({ length: totalOtpField }, (_, index) => index);

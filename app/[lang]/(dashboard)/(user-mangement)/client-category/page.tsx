@@ -18,9 +18,9 @@ const page = () => {
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
         <div>
           <div className=" text-default-900 text-2xl font-bold my-2">
-            {t("Contact Category")}
+            {t("Contact Client")}
           </div>{" "}
-          <BreadcrumbComponent header={"Contacts"} body={"Contact Category"} />
+          <BreadcrumbComponent header={"Contacts"} body={"Contact Client"} />
         </div>
         <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
           <Button color="secondary" variant="outline">
@@ -37,7 +37,7 @@ const page = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle> {t("Contact Category Details")}</CardTitle>
+          <CardTitle> {t("Contact Category Detail")}</CardTitle>
         </CardHeader>
         <CardContent>
           <TableData />

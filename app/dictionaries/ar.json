@@ -287,6 +287,7 @@
 "Enter City": "أدخل المدينة",
 "Update Court": "تحديث المحكمة",
 "Contact Category Details": "تفاصيل فئة الاتصال",
+"Contact Category Detail": "تفاصيل فئة العميل",
 "Contacts": "جهات الاتصال",
 "Contact List Details": "تفاصيل قائمة الاتصال",
 "Create Contact": "إنشاء اتصال",
@@ -374,8 +375,13 @@
   "Enter your email & instructions will be sent to you!": "أدخل بريدك الإلكتروني وسيتم إرسال التعليمات إليك!",
   "Forget it Send me back to": "انسَ الأمر. أعدني إلى",
   "Forget Your Password?": "هل نسيت كلمة المرور؟",
-  "Reason for Rejection": "سبب الرفض"
-
+  "Reason for Rejection": "سبب الرفض",
+  "Contact Client": "اتصل بالعميل",
+  "Order List": "قائمة الطلبات",
+  "Pending Cases": "القضايا المعلقة",
+  "Case Pending List Details": "تفاصيل قائمة القضايا المعلقة",
+  "Case Pending List": "قائمة القضايا المعلقة",
+  "Agree of Cases": "الموافقة القضايا"
 
 
 }

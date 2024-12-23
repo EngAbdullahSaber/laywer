@@ -137,21 +137,7 @@ const DashboardPageView = () => {
       <Card title="Analysis">
         <ReportsChart series={allUsersSeries} chartColor={primary} />
       </Card>
-      <div className="flex flex-row justify-between items-center">
-        <div className="w-[48%]">
-          <CalendarPage />
-        </div>
-        <div className="w-[48%]">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex">{t("Courts Locations")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <PopupMarkerMap />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <CalendarPage />
     </div>
   );
 };

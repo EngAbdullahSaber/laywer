@@ -276,6 +276,7 @@
   "Update Court": "Update Court",
   "Enter City": "Enter City",
   "Contact Category Details": "Contact Category Details",
+  "Contact Category Detail": "Contact Category Details",
   "Contacts": "Contacts",
   "Contact List Details": "Contact List Details",
   "Create Contact": "Create Contact",
@@ -363,6 +364,13 @@
   "Two Factor Verification": "Two Factor Verification",
   "Hey, Hello": "Hey, Hello 👋",
   "Enter the information you entered while registering": "Enter the information you entered while registering.",
+  "Contact Client": "Contact Client",
+  "Order List": "Order List",
+  "Pending Cases": "Pending Cases",
+  "Case Pending List Details": "Case Pending List Details",
+  "Case Pending List": "Case Pending List",
+  "Agree of Cases": "Agree of Cases",
+  "Orders": "Orders",
 
   "Log Out": "Log Out"
 

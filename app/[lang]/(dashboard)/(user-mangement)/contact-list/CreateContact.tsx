@@ -67,7 +67,7 @@ const CreateContact = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-          {t("Create Client")}
+          {t("Create Contact")}
         </Button>
       </DialogTrigger>
       <DialogContent size="2xl" className="gap-3 h-[55%]">
@@ -161,7 +161,7 @@ const CreateContact = () => {
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              {/* <div className="flex flex-col gap-2 w-[48%]">
                 <Label
                   htmlFor="Category"
                   className={cn("", {
@@ -181,7 +181,7 @@ const CreateContact = () => {
                     {t(errors.Category.message)}
                   </p>
                 )}{" "}
-              </div>
+              </div> */}
 
               {/* <div className="flex flex-col gap-2">
                   <Label>{t("Select Gender")}</Label>
