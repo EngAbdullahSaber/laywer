@@ -6,6 +6,7 @@ import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/public/images/auth/LawyerLogo.png";
+import { useTranslate } from "@/config/useTranslation";
 
 const VerfiyForm = () => {
   const totalOtpField = 6;
@@ -52,6 +53,7 @@ const VerfiyForm = () => {
   };
 
   const isOtpComplete = otp.every((digit) => digit !== "");
+  const { t, loading, error } = useTranslate();
 
   return (
     <div className="w-full md:w-[480px] py-5">
@@ -64,10 +66,10 @@ const VerfiyForm = () => {
         priority={true}
       />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
-        Two Factor Verification
+        {t("Two Factor Verification")}
       </div>
       <div className="2xl:text-lg text-base text-default-600 mt-2 leading-6">
-        Enter the 6 figure confirmation code shown on the email
+        {t("Enter the 6 figure confirmation code shown on the email")}
       </div>
       <form className="mt-8">
         <div className="flex flex-wrap  gap-1 lg:gap-6">
@@ -94,7 +96,7 @@ const VerfiyForm = () => {
             onClick={handleSubmit}
             disabled={!isOtpComplete}
           >
-            Verify Now
+            {t("Verify Now")}
           </Button>
         </div>
       </form>

@@ -21,6 +21,7 @@ const schema = z.object({
   password: z.string().min(4),
 });
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useTranslate } from "@/config/useTranslation";
 
 const LogInForm = () => {
   const [isPending, startTransition] = React.useTransition();
@@ -79,6 +80,7 @@ const LogInForm = () => {
     });
   };
   handleLogin();
+  const { t, loading, error } = useTranslate();
 
   return (
     <div className="w-full py-10">
@@ -91,15 +93,15 @@ const LogInForm = () => {
         priority={true}
       />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
-        Hey, Hello 👋
+        {t("Hey, Hello")}
       </div>
       <div className="2xl:text-lg text-base text-default-600 2xl:mt-2 leading-6">
-        Enter the information you entered while registering.
+        {t("Enter the information you entered while registering")}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5 2xl:mt-7">
         <div>
           <Label htmlFor="email" className="mb-2 font-medium text-default-600">
-            Email{" "}
+            {t("Email")}{" "}
           </Label>
           <Input
             disabled={isPending}
@@ -123,7 +125,7 @@ const LogInForm = () => {
             htmlFor="password"
             className="mb-2 font-medium text-default-600"
           >
-            Password{" "}
+            {t("Password")}{" "}
           </Label>
           <div className="relative">
             <Input
@@ -177,7 +179,7 @@ const LogInForm = () => {
             </Label> */}
           </div>
           <Link href="/auth/forgot" className="flex-none text-sm text-primary">
-            Forget Password?
+            {t("Forget Password?")}
           </Link>
         </div>
         <Button
@@ -186,7 +188,7 @@ const LogInForm = () => {
           size={!isDesktop2xl ? "lg" : "md"}
         >
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isPending ? "Loading..." : "Sign In"}
+          {isPending ? t("Loading...") : t("Sign In")}
         </Button>
       </form>
       {/* <div className="mt-6 xl:mt-8 flex flex-wrap justify-center gap-4">

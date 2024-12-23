@@ -94,7 +94,7 @@
   "request_status": "حالة الطلب",
   "required_action": "الإجراء المطلوب",
   "associated_case": "القضية المرتبطة",
-  "Clients Requests": "طلبات العملاء",
+  "Requests": "الطلبات ",
   "Location": "الموقع",
   "Court Category": "فئة المحكمة",
   "Court Name": "اسم المحكمة",
@@ -359,7 +359,24 @@
   "Order Details": "تفاصيل الطلب",
   "Show File": "عرض الملف",
   "order title": "عنوان الطلب",
-  "Order Title": "عنوان الطلب"
+  "Order Title": "عنوان الطلب",
+  "Loading...": "جاري التحميل...",
+  "Sign In": "تسجيل الدخول",
+  "Forget Password?": "هل نسيت كلمة المرور؟",
+  "Enter the 6 figure confirmation code shown on the email": "أدخل رمز التأكيد المكون من 6 أرقام الموضح في البريد الإلكتروني",
+  "Two Factor Verification": "التحقق  من المستخدم",
+  "Hey, Hello": "مرحباً، أهلاً 👋",
+  "Enter the information you entered while registering": "أدخل المعلومات لتسجيل الدخول.",
+  "Verify Now": "تحقق الآن",
+  "Send Recovery Email": "أرسل بريد استرداد",
+  "sending": "جاري الإرسال...",
+  "Forget it. Send me back to": "انسَ الأمر. أعدني إلى",
+  "Enter your email & instructions will be sent to you!": "أدخل بريدك الإلكتروني وسيتم إرسال التعليمات إليك!",
+  "Forget it Send me back to": "انسَ الأمر. أعدني إلى",
+  "Forget Your Password?": "هل نسيت كلمة المرور؟"
+
+
+
 }
 
 

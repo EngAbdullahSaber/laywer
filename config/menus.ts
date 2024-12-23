@@ -93,29 +93,29 @@ const adminMenu = [
 ];
 const lawyerMenu = [
   {
-          title: "Lawyer Cases",
+          title: "Cases",
           icon: Case,
           href: "/lawyer-cases",
         },
         {
-          title: "Lawyer Tasks",
+          title: "Tasks",
           icon: Tasks,
           href: "/lawyer-tasks",
         },
         {
-          title: "Lawyer Appointments",
+          title: "Appointments",
           icon: Appointments,
           href: "/lawyer-appointments",
         },
 ];
 const clientMenu = [
   {
-          title: "Clients Cases",
+          title: "Cases",
           icon: Case,
           href: "/client-cases",
         },
         {
-          title: "Clients Requests",
+          title: "Requests",
           icon: Requests,
           href: "/client-requests",
         },

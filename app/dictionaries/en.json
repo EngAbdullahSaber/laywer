@@ -348,6 +348,20 @@
   "order title": "Order Title",
   "title": "Title",
   "order_status": "Order Status",
+  "Loading...": "Loading...",
+  "Sign In": "Sign In",
+  "Requests": "Requests",
+  "Send Recovery Email": "Send Recovery Email",
+  "sending": "sending...",
+  "Forget it Send me back to": "Forget it. Send me back to",
+  "Forget Your Password?": "Forget Your Password?",
+  "Enter your email & instructions will be sent to you!": "Enter your email & instructions will be sent to you!",
+  "Verify Now": "Verify Now",
+  "Forget Password?": "Forget Password?",
+  "Enter the 6 figure confirmation code shown on the email": "Enter the 6 figure confirmation code shown on the email",
+  "Two Factor Verification": "Two Factor Verification",
+  "Hey, Hello": "Hey, Hello 👋",
+  "Enter the information you entered while registering": "Enter the information you entered while registering.",
 
   "Log Out": "Log Out"
 

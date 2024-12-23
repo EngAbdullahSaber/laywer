@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import Image from "next/image";
+import { useTranslate } from "@/config/useTranslation";
 
 const schema = z.object({
   email: z.string().email({ message: "Your email is invalid." }),
@@ -37,11 +38,15 @@ const ForgotForm = () => {
 
   const onSubmit = (data: any) => {
     startTransition(async () => {
-      toast.success("Password Reset code has been sent to your email");
+      toast.success(
+        "تم إرسال رمز إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+      );
       reset();
       router.push("/auth/verify");
     });
   };
+  const { t, loading, error } = useTranslate();
+
   return (
     <div className="w-full">
       <Image
@@ -53,15 +58,15 @@ const ForgotForm = () => {
         priority={true}
       />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
-        Forget Your Password?
+        {t("Forget Your Password?")}
       </div>
       <div className="2xl:text-lg text-base text-default-600 mt-2 leading-6">
-        Enter your email & instructions will be sent to you!
+        {t("Enter your email & instructions will be sent to you!")}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5 xl:mt-7">
         <div>
           <Label htmlFor="email" className="mb-2 font-medium text-default-600">
-            Email{" "}
+            {t("Email")}{" "}
           </Label>
           <Input
             disabled={isPending}
@@ -82,13 +87,13 @@ const ForgotForm = () => {
 
         <Button className="w-full mt-6" size={!isDesktop2xl ? "lg" : "md"}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isPending ? "sending..." : "Send Recovery Email"}
+          {isPending ? t("sending") : t("Send Recovery Email")}
         </Button>
       </form>
       <div className="mt-5 2xl:mt-8  text-center text-base text-default-600">
-        Forget it. Send me back to{" "}
+        {t("Forget it Send me back to")}{" "}
         <Link href="/auth/login" className="text-primary">
-          Sign In
+          {t("Sign In")}
         </Link>
       </div>
     </div>
