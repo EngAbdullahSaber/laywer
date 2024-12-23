@@ -39,7 +39,7 @@ const View = () => {
       >
         <SheetHeader>
           <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
-            {t("Court Details")}
+            {t("Client Details")}
           </SheetTitle>
         </SheetHeader>
         <div className="py-6">

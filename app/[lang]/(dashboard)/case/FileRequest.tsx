@@ -61,7 +61,7 @@ const FileRequest = () => {
           <Icon icon="fluent-mdl2:file-request" className="h-4 w-4" />{" "}
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[55%] ">
+      <DialogContent size="md" className="gap-3 h-[50%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-lg font-semibold text-default-700 ">
             {t("Ask Client About File")}

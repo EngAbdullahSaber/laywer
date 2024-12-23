@@ -1,7 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -12,14 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Radio } from "@/components/common/atoms/Radio";
 import { useTranslate } from "@/config/useTranslation";
 
 const schema = z.object({
@@ -61,11 +56,7 @@ const CreateLawyer = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
-  const category: { value: string; label: string }[] = [
-    { value: "Admin", label: "Admin" },
-    { value: "S Admin", label: "S Admin" },
-    { value: "Client", label: "Client" },
-  ];
+
   const { t } = useTranslate();
 
   return (
@@ -75,7 +66,7 @@ const CreateLawyer = () => {
           {t("Create Lawyer")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="2xl" className="gap-3 h-[70%] ">
+      <DialogContent size="2xl" className="gap-3 h-[65%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Lawyer")}

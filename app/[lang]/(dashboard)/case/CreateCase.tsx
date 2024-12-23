@@ -23,6 +23,8 @@ import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
 import { Upload } from "lucide-react";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 const schema = z.object({
   Name: z
@@ -138,9 +140,24 @@ const CreateCase = () => {
     toast.message(JSON.stringify(data, null, 2));
   }
   const category: { value: string; label: string }[] = [
-    { value: "Admin", label: "Admin" },
-    { value: "S Admin", label: "S Admin" },
-    { value: "Client", label: "Client" },
+    { value: "جنائي", label: "جنائي" },
+    { value: "عائلى", label: "عائلى" },
+    { value: "مدنى", label: "مدنى" },
+  ];
+  const Name: { value: string; label: string }[] = [
+    { value: "على عبدالله", label: "على عبدالله" },
+    { value: "محمد احمد", label: "محمد احمد" },
+    { value: "احمد محمد", label: "احمد محمد" },
+  ];
+  const courts: { value: string; label: string }[] = [
+    { value: "محكمة الرياض", label: "محكمة الرياض" },
+    { value: "محكمة مكة", label: "محكمة مكة" },
+    { value: "محكمة جدة", label: "محكمة جدة" },
+  ];
+  const lawyer: { value: string; label: string }[] = [
+    { value: "المحامى احمد على", label: "المحامى احمد على" },
+    { value: "المحامى احمد عبدالله", label: "المحامى احمد عبدالله" },
+    { value: "المحامى فهد ", label: "المحامى فهد " },
   ];
   const handleDateChange = (dates: Date[]) => {
     const selectedDate = dates[0] || null;
@@ -153,7 +170,7 @@ const CreateCase = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+        <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
           {t("Create Case")}
         </Button>
       </DialogTrigger>
@@ -163,24 +180,37 @@ const CreateCase = () => {
             {t("Create a New Case")}
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-[100%]">
+        <ScrollArea className="h-[100%] p-3">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-row justify-between items-center  gap-4">
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <Label htmlFor="Client">{t("Client Selection")}</Label>
-                <BasicSelect
-                  name="Client"
-                  menu={category}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.Client && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Client.message)}
-                  </p>
-                )}{" "}
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                    <Label htmlFor="Client">{t("Client Selection")}</Label>
+                    <BasicSelect
+                      name="Client"
+                      menu={Name}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.Client && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.Client.message)}
+                      </p>
+                    )}{" "}
+                  </div>
+                  <Link href={"/clients"} className="w-[8%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
+                {" "}
                 <Label htmlFor="category">{t("Case Category")} </Label>
                 <BasicSelect
                   name="category"
@@ -193,6 +223,33 @@ const CreateCase = () => {
                     {t(errors.category.message)}
                   </p>
                 )}
+              </div>
+
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                    <Label htmlFor="Court">{t("Court Selection")} </Label>
+                    <BasicSelect
+                      name="Court"
+                      menu={courts}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.Court && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.Court.message)}
+                      </p>
+                    )}{" "}
+                  </div>
+                  <Link href={"/courts"} className="w-[8%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <Label
@@ -212,20 +269,6 @@ const CreateCase = () => {
                 {errors.Name && (
                   <p className="text-xs text-destructive">
                     {t(errors.Name.message)}
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <Label htmlFor="Court">{t("Court Selection")} </Label>
-                <BasicSelect
-                  name="Court"
-                  menu={category}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.Court && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Court.message)}
                   </p>
                 )}
               </div>
@@ -331,18 +374,30 @@ const CreateCase = () => {
                 </Label>
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <Label htmlFor="category">{t("Lawyer Selection")} </Label>
-                <BasicSelect
-                  name="LawyerSelection"
-                  menu={category}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.LawyerSelection && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.LawyerSelection.message)}
-                  </p>
-                )}
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                    <Label htmlFor="category">{t("Lawyer Selection")} </Label>
+                    <BasicSelect
+                      name="LawyerSelection"
+                      menu={lawyer}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.LawyerSelection && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.LawyerSelection.message)}
+                      </p>
+                    )}{" "}
+                  </div>
+                  <Link href={"/lawyer"} className="w-[8%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
 
               <div className="flex flex-col gap-2 my-2 w-[48%]">
@@ -410,7 +465,7 @@ const CreateCase = () => {
                 )}
               </div>
             </div>
-            <div className="grid grid-cols-1 px-3 my-2 lg:grid-cols-1 gap-4">
+            <div className="grid grid-cols-1  my-2 lg:grid-cols-1 gap-4">
               <div className="flex flex-col gap-2 my-2">
                 <Label
                   htmlFor="CaseDescription"
@@ -440,7 +495,7 @@ const CreateCase = () => {
               <DialogClose asChild>
                 <Button
                   type="button"
-                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  className=" border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
                   variant="outline"
                 >
                   {t("Cancel")}

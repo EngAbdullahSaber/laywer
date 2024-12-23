@@ -2,7 +2,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Pending",
+    Case_Status: "قيدالانتظار",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",
@@ -11,7 +11,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Progress",
+    Case_Status: "قيد التنفيذ",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",
@@ -20,7 +20,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Pending",
+    Case_Status: "قيدالانتظار",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",
@@ -29,7 +29,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Completed",
+    Case_Status: "مكتملة",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",
@@ -38,7 +38,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Progress",
+    Case_Status: "قيد التنفيذ",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",
@@ -47,7 +47,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Pending",
+    Case_Status: "قيدالانتظار",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",
@@ -56,7 +56,7 @@ export const data = [
   {
     id: "TASK-8782",
     Case_Name: "mohamed",
-    Case_Status: "Completed",
+    Case_Status: "مكتملة",
     Client_Name: "mohamed",
     Court_Name: "Court 1",
     Case_Number: "12311",

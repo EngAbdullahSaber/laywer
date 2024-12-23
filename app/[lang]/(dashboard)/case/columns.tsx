@@ -16,6 +16,7 @@ import FileRequest from "./FileRequest";
 interface Task {
   id: string;
   Case_Name?: string;
+  Client_Name?: string;
   Category?: string;
   Next_Appointment_Date?: string;
   Status?: string;
@@ -66,15 +67,15 @@ const TableData = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "Case_Name",
+      accessorKey: "Client_Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Case_Name"} />
+        <DataTableColumnHeader column={column} title={"Client_Name"} />
       ),
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original.Case_Name}
+              {row.original.Client_Name}
             </span>
           </div>
         );
@@ -89,9 +90,17 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Category === "جنائي" && "destructive") ||
+                (row.original.Category === "مدنى" && "warning") ||
+                (row.original.Category === "عائلى" && "info") ||
+                "default"
+              }
+            >
               {row.original.Category}
-            </span>
+            </Badge>
           </div>
         );
       },
@@ -130,9 +139,17 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Status === "قيد التنفيذ" && "destructive") ||
+                (row.original.Status === "قيدالانتظار" && "warning") ||
+                (row.original.Status === "مكتملة" && "success") ||
+                "default"
+              }
+            >
               {row.original.Status}
-            </span>
+            </Badge>
           </div>
         );
       },

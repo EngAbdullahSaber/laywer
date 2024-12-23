@@ -23,18 +23,18 @@ const page = () => {
         <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
           <Button color="secondary" variant="outline">
             <Icon icon="lets-icons:export" className="h-5 w-5" />
-            Export Excel
+            {t("Export Excel")}
           </Button>
           <Button color="secondary" variant="outline">
             <Icon icon="lets-icons:export" className="h-5 w-5" />
-            Export PDF
+            {t("Export PDF")}
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle> Case List Details</CardTitle>
+          <CardTitle> {t("Case List Details")}</CardTitle>
         </CardHeader>
         <CardContent>
           <TableData />

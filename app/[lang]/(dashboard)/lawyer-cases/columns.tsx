@@ -97,9 +97,9 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Case_Status === "Progress" && "destructive") ||
-                (row.original.Case_Status === "Pending" && "info") ||
-                (row.original.Case_Status === "Completed" && "warning") ||
+                (row.original.Case_Status === "قيد التنفيذ" && "destructive") ||
+                (row.original.Case_Status === "قيدالانتظار" && "warning") ||
+                (row.original.Case_Status === "مكتملة" && "success") ||
                 "default"
               }
             >

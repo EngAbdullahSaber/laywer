@@ -63,9 +63,9 @@ const TableData = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "User Name",
+      accessorKey: "Userss",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"User Name"} />
+        <DataTableColumnHeader column={column} title={"Userss"} />
       ),
       cell: ({ row }) => {
         return (
@@ -89,8 +89,8 @@ const TableData = () => {
               className="!text-center"
               color={
                 (row.original.Categories === "S Admin" && "destructive") ||
-                (row.original.Categories === "Lawyer" && "info") ||
-                (row.original.Categories === "Client" && "warning") ||
+                (row.original.Categories === "محامى" && "info") ||
+                (row.original.Categories === "عميل" && "warning") ||
                 "default"
               }
             >
@@ -141,31 +141,31 @@ const TableData = () => {
       },
     },
 
-    {
-      accessorKey: "Gender",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Gender"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Gender === "Male" && "success") ||
-                (row.original.Gender === "Female" && "warning") ||
-                "default"
-              }
-            >
-              {row.original.Gender}
-            </Badge>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
+    // {
+    //   accessorKey: "Gender",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={"Gender"} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex  items-center justify-center gap-2 mx-auto">
+    //         <Badge
+    //           className="!text-center"
+    //           color={
+    //             (row.original.Gender === "Male" && "success") ||
+    //             (row.original.Gender === "Female" && "warning") ||
+    //             "default"
+    //           }
+    //         >
+    //           {row.original.Gender}
+    //         </Badge>
+    //       </div>
+    //     );
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return value.includes(row.getValue(id));
+    //   },
+    // },
   ];
   return (
     <div>

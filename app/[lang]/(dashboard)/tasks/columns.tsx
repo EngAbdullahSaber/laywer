@@ -95,9 +95,12 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Importance_Level == "High" && "destructive") ||
-                (row.original.Importance_Level == "Meduim" && "warning") ||
-                (row.original.Importance_Level == "Low" && "secondary") ||
+                (row.original.Importance_Level == "مهمة جدا" &&
+                  "destructive") ||
+                (row.original.Importance_Level == "متوسطة الاهمية" &&
+                  "warning") ||
+                (row.original.Importance_Level == "ذات اهمية ضعيفة" &&
+                  "secondary") ||
                 "default"
               }
             >
@@ -177,9 +180,9 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Task_Status === "Progress" && "destructive") ||
-                (row.original.Task_Status === "Pending" && "warning") ||
-                (row.original.Task_Status === "Completed" && "success") ||
+                (row.original.Task_Status === "قيد التنفيذ" && "destructive") ||
+                (row.original.Task_Status === "قيد التنفيذ" && "warning") ||
+                (row.original.Task_Status === "مكتملة" && "success") ||
                 "default"
               }
             >

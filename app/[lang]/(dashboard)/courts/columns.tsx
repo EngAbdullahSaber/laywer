@@ -89,9 +89,17 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Court_Category === "جنائي" && "destructive") ||
+                (row.original.Court_Category === "مدنى" && "warning") ||
+                (row.original.Court_Category === "عائلى" && "info") ||
+                "default"
+              }
+            >
               {row.original.Court_Category}
-            </span>
+            </Badge>
           </div>
         );
       },

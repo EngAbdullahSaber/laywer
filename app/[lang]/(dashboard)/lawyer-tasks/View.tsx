@@ -38,45 +38,53 @@ const View = () => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>Task Details</SheetTitle>
+          <SheetTitle>{t("Task Details")}</SheetTitle>
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li>
-              <span className="text-sm text-default-600 ">Task Name :</span>{" "}
-              <span className="text-default-500 "> Task 1</span>
-            </li>
-            <li>
-              <span className="text-sm text-default-600 ">Case Name :</span>{" "}
-              <span className="text-default-500 "> Abdullah</span>
+              <span className="text-sm text-default-600 ">
+                {t("Task Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Task 1</span>
             </li>
             <li>
               <span className="text-sm text-default-600 ">
-                Importance Level :
+                {t("Case Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Abdullah</span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Importance Level")} :
               </span>
-              <span className="text-warning-700 "> High</span>
+              <span className="text-warning-700 font-semibold"> High</span>
             </li>
 
             <li>
-              <span className="text-sm text-default-600 ">Due Date :</span>{" "}
-              <span className="text-default-500 ">
+              <span className="text-sm text-default-600 ">
+                {t("Due Date")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
                 {" "}
                 September 12, 2024 12:11 PM
               </span>
             </li>
 
             <li>
-              <span className="text-sm text-default-600 ">Task Status :</span>{" "}
-              <span className="text-success-700 "> Progress</span>
+              <span className="text-sm text-default-600 ">
+                {t("Task Status")} :
+              </span>{" "}
+              <span className="text-success-700 font-semibold"> Progress</span>
             </li>
           </ul>
           <hr className="my-8" />
           <ul className="md:grid grid-cols-1  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Task Description :{" "}
+                {t("Task Description")} :{" "}
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit
@@ -85,9 +93,9 @@ const View = () => {
             </li>
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Associated Case Details :
+                {t("Associated Case Details")} :
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit

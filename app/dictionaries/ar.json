@@ -3,9 +3,10 @@
   "select": "اختيار",
   "id": "الرقم التعريفي",
   "user name": "اسم المستخدم",
+  "userss": "الاسم ",
   "categories": "الفئات",
   "gender": "الجنس",
-  "mobile number": "رقم الهاتف المحمول",
+  "mobile number": "رقم الجوال ",
   "email": "البريد الإلكتروني",
   "Search": "بحث",
   "Contact": "اتصال",
@@ -13,8 +14,8 @@
   "Dashboard": "لوحة التحكم",
   "User_Name": "اسم المستخدم",
   "user_name": "اسم المستخدم",
-  "Mobile_Number": "رقم الهاتف المحمول",
-  "mobile_number": "رقم الهاتف المحمول",
+  "Mobile_Number": "رقم الجوال",
+  "mobile_number": "رقم الجوال",
   "Contact List": "قائمة الاتصالات",
   "Filters": "الفلاتر",
   "Rows per page": "الصفوف لكل صفحة",
@@ -71,11 +72,8 @@
   "Analytics Dashboard": "لوحة تحليلات البيانات",
   "Total Laywer": "إجمالي المحامون",
   "Total Clients": "إجمالي العملاء",
-  "Waiting Case": "القضايا المنتظرة",
-  "Running Case": "القضايا الجارية",
-  "Closed Case": "القضايا المغلقة",
-  "Staff": "الطاقم",
-  "Pending Task": "المهام المعلقة",
+  "Total Case": "إجمالي القضايا ",
+  "Total Task": "إجمالي المهام ",
    "location": "الموقع",
   "date": "التاريخ",
   "appointment_title": "عنوان الموعد",
@@ -117,7 +115,7 @@
   "Create Client": "إنشاء عميل",
   "Export Excel": "تصدير Excel",
   "Room Number": "رقم الغرفة",
-  "Email Address": "عنوان البريد الإلكتروني",
+  "Email Address": " البريد الإلكتروني",
   "Phone Number": "رقم الهاتف",
   "Name": "الاسم",
   "Client Information": "معلومات العميل",
@@ -184,8 +182,6 @@
     "CasenameMin": "يجب أن يتكون اسم القضية من 3 أحرف على الأقل.",
     "CasenameMax": "يجب ألا يتجاوز اسم القضية 20 حرفًا."
 
-  
-   
 },
 "errorLawyer": {
   "LawyerNameMin": "يجب أن يكون اسم المحامي على الأقل 3 أحرف.",
@@ -204,6 +200,14 @@
     "CaseNameMin": "يجب أن يتكون اسم القضية من 8 أحرف على الأقل.",
     "CaseNameMax": "يجب أن لا يتجاوز اسم القضية 25 حرفًا."   
   }  ,
+  "errorContact": {
+    "CourtNameMin": "يجب أن يكون اسم العميل مكونًا من 3 أحرف على الأقل.",
+    "CourtNameMax": "يجب ألا يتجاوز اسم العميل 20 حرفًا.",
+    "CourtEmailMin": "يجب أن تكون بريد العميل الإلكتروني مكونًا من 8 أحرف على الأقل.",
+    "CourtEmailMax": "يجب ألا يتجاوز بريد العميل الإلكتروني 25 حرفًا.",
+    "Phone": "يجب أن يكون رقم الهاتف مكونًا من 11 حرفًا بالضبط."
+  
+  },
   "errorCourt": {
     "CourtNameMin": "يجب أن يتكون اسم المحكمة من 3 أحرف على الأقل.",
     "CourtNameMax": "يجب أن لا يتجاوز اسم المحكمة 20 حرفًا.",
@@ -300,7 +304,27 @@
 "Enter email address": "أدخل عنوان البريد الإلكتروني",
 "Description": "وصف",
 "Enter Name": "أدخل الاسم",
-"Log Out": "تسجيل الخروج"
+"Log Out": "تسجيل الخروج",
+"Enter User": "أدخل الاسم",  
+"Client Details": "تفاصيل العميل",
+"Enter Email Address": "أدخل عنوان البريد الإلكتروني",
+"Casess": "القضية",
+"Task Description": "وصف القضية",
+  "Key Dates": "التواريخ الرئيسية",
+  "Case Status": "حالة القضية",
+  "Associated Case Details": "تفاصيل القضية المرتبطة",
+"Admin": "المسؤول",
+"Change Case Status": "تغيير حالة القضية",
+"Change Task Status": "تغيير حالة المهمة",
+"Task Staus of Cases": "حالة المهمة ",
+  "Change Staus": "تغيير الحالة",
+  "Change Staus of Cases": "تغيير حالة القضايا",
+  "Appointment_Title": "عنوان الموعد",
+  "Time": "الوقت",
+  "Case_Name": "اسم القضية",
+  "Preparation Required": "التحضير المطلوب",
+  "Appointment Description": "وصف الموعد",
+  "Appointment Details": "تفاصيل الموعد"
 
 }
 

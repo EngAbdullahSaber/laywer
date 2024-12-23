@@ -59,11 +59,9 @@ const LogInForm = () => {
         redirect: false,
       });
       if (response?.ok) {
-        toast.success("Login Successful");
-        window.location.assign("/dashboard");
+        window.location.assign("/auth/verify");
         reset();
       } else if (response?.error) {
-        toast.error(response?.error);
       }
     });
   };

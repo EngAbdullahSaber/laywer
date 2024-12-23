@@ -20,6 +20,8 @@ import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 const schema = z.object({
   Name: z
@@ -56,19 +58,24 @@ const CreateTasks = () => {
     toast.message(JSON.stringify(data, null, 2));
   }
   const Importance_Level: { value: string; label: string }[] = [
-    { value: "High", label: "High" },
-    { value: "Meduim", label: "Meduim" },
-    { value: "Low", label: "Low" },
+    { value: "مهمة جدا", label: "مهمة جدا" },
+    { value: "متوسطة الاهمية", label: "متوسطة الاهمية" },
+    { value: "ذات اهمية ضعيفة", label: "ذات اهمية ضعيفة" },
   ];
   const Assigned_To: { value: string; label: string }[] = [
-    { value: "Ahmed", label: "Ahmed" },
-    { value: "Abdullah", label: "Abdullah" },
-    { value: "Ali", label: "Ali" },
+    { value: "احمد محمد", label: "احمد محمد" },
+    { value: "فهد عبدالله", label: "فهد عبدالله" },
+    { value: "محمد على احمد", label: "محمد على احمد" },
   ];
   const Task_Status: { value: string; label: string }[] = [
-    { value: "Pending", label: "Pending" },
-    { value: "Progress", label: "Progress" },
-    { value: "Completed", label: "Completed" },
+    { value: "قيدالانتظار", label: "قيدالانتظار" },
+    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
+    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
+  ];
+  const Case_Name: { value: string; label: string }[] = [
+    { value: "القضية 1", label: "القضية 1" },
+    { value: "القضية 2", label: "القضية 2" },
+    { value: "القضية 3", label: "القضية 3" },
   ];
   const handleDateChange = (dates: Date[]) => {
     const selectedDate = dates[0] || null;
@@ -144,25 +151,37 @@ const CreateTasks = () => {
                 )}
               </div>{" "}
               <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="Assigned_To"
-                  className={cn("", {
-                    "text-destructive": errors.Assigned_To,
-                  })}
-                >
-                  {t("Assigned To")}
-                </Label>
-                <BasicSelect
-                  name="AssignedTo"
-                  menu={Assigned_To}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.AssignedTo && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.AssignedTo.message)}
-                  </p>
-                )}
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[85%]" style={{ width: "85%" }}>
+                    <Label
+                      htmlFor="Assigned_To"
+                      className={cn("", {
+                        "text-destructive": errors.Assigned_To,
+                      })}
+                    >
+                      {t("Assigned To")}
+                    </Label>
+                    <BasicSelect
+                      name="AssignedTo"
+                      menu={Assigned_To}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.AssignedTo && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.AssignedTo.message)}
+                      </p>
+                    )}
+                  </div>
+                  <Link href={"/lawyer"} className="w-[16%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
               <div className="flex flex-col gap-2">
                 <Label
@@ -183,32 +202,38 @@ const CreateTasks = () => {
                 />{" "}
               </div>
               <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="Case_Name"
-                  className={cn("", {
-                    "text-destructive": errors.Case_Name,
-                  })}
-                >
-                  {t("Case Name")}
-                </Label>
-                <Input
-                  type="text"
-                  {...register("Case_Name")}
-                  placeholder={t("Enter Case Name")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.Case_Name,
-                  })}
-                />
-                {errors.Case_Name && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Case_Name,
-                    })}
-                  >
-                    {t(errors.Case_Name.message)}
-                  </p>
-                )}
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[85%]" style={{ width: "85%" }}>
+                    <Label
+                      htmlFor="Case_Name"
+                      className={cn("", {
+                        "text-destructive": errors.Case_Name,
+                      })}
+                    >
+                      {t("Casess")}
+                    </Label>
+
+                    <BasicSelect
+                      name="Case_Name"
+                      menu={Case_Name}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.TaskStatus && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.Case_Name.message)}
+                      </p>
+                    )}
+                  </div>
+                  <Link href={"/case"} className="w-[16%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
               </div>
               <div className="flex flex-col gap-2">
                 <Label

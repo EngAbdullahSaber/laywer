@@ -15,17 +15,19 @@ const page = () => {
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
         <div>
           <div className=" text-default-900 text-2xl font-bold my-2">
-            Lawyer Appoinments
+            {t("Lawyer Appoinments")}
           </div>{" "}
-          <BreadcrumbComponent header={"Appoinments"} body={"Lawyer Appoinments"} />
+          <BreadcrumbComponent
+            header={"Appoinments"}
+            body={"Lawyer Appoinments"}
+          />
         </div>
-        <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
-        </div>
+        <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"></div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle> Lawyer Appoinments</CardTitle>
+          <CardTitle> {t("Lawyer Appoinments")}</CardTitle>
         </CardHeader>
         <CardContent>
           <TableData />

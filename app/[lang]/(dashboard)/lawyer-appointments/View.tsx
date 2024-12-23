@@ -38,36 +38,42 @@ const View = () => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>Appointment Details</SheetTitle>
+          <SheetTitle>{t("Appointment Details")}</SheetTitle>
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li>
               <span className="text-sm text-default-600 ">
-                Appointment_Title :
+                {t("Appointment_Title")} :
               </span>{" "}
               <span className="text-default-500 "> TASK1</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Date :</span>{" "}
+              <span className="text-sm text-default-600 ">{t("Date")} : </span>{" "}
               <span className="text-default-500 "> September 12, 2024</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Time :</span>
+              <span className="text-sm text-default-600 ">{t("Time")} : </span>
               <span className="text-warning-700 "> 12:11 PM</span>
             </li>
 
             <li>
-              <span className="text-sm text-default-600 ">Case_Name :</span>{" "}
+              <span className="text-sm text-default-600 ">
+                {t("Case_Name")} :
+              </span>{" "}
               <span className="text-default-500 "> Ahmed</span>
             </li>
 
             <li>
-              <span className="text-sm text-default-600 ">Location :</span>{" "}
+              <span className="text-sm text-default-600 ">
+                {t("Location")} :
+              </span>{" "}
               <span className="text-success-700 "> Egypt , Cairo</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Client_Name :</span>{" "}
+              <span className="text-sm text-default-600 ">
+                {t("Client_Name")} :
+              </span>{" "}
               <span className="text-success-700 "> Ali</span>
             </li>
           </ul>
@@ -75,7 +81,7 @@ const View = () => {
           <ul className="md:grid grid-cols-1  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Appointment Description :{" "}
+                {t("Appointment Description")} :{" "}
               </span>{" "}
               <span className="text-default-500 w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
@@ -86,7 +92,7 @@ const View = () => {
             </li>
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Associated Case Details :
+                {t("Associated Case Details")} :
               </span>{" "}
               <span className="text-default-500 w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
@@ -97,7 +103,7 @@ const View = () => {
             </li>
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Preparation Required :
+                {t("Preparation Required")} :
               </span>{" "}
               <span className="text-default-500 w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,

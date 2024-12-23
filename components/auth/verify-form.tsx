@@ -48,7 +48,7 @@ const VerfiyForm = () => {
     console.log("Entered OTP:", enteredOtp);
     setOtp(otpArray);
     inputRefs.current[0]?.focus();
-    router.push("/auth/create-password");
+    router.push("/dashboard");
   };
 
   const isOtpComplete = otp.every((digit) => digit !== "");

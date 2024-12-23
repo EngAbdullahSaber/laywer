@@ -78,20 +78,20 @@ const CreateCourt = () => {
     toast.message(JSON.stringify(data, null, 2));
   }
   const Court_Category: { value: string; label: string }[] = [
-    { value: "Family", label: "Family" },
-    { value: "Criminal", label: "Criminal" },
-    { value: "Civil", label: "Civil" },
+    { value: "عائلى", label: "عائلى" },
+    { value: "جنائي", label: "جنائي" },
+    { value: "مدنى", label: "مدنى" },
   ];
   const { t, loading, error } = useTranslate();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+        <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
           {t("Create Court")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="2xl" className="gap-3 h-[80%] ">
+      <DialogContent size="2xl" className="gap-3 h-[75%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Court")}
@@ -115,7 +115,7 @@ const CreateCourt = () => {
                 <Input
                   type="text"
                   {...register("Name")}
-                  placeholder="Enter Court Name"
+                  placeholder={t("Enter Court Name")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Name,
                   })}
@@ -244,7 +244,7 @@ const CreateCourt = () => {
                   {t("Region")}
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   {...register("Region")}
                   placeholder={t("Enter Region")}
                   className={cn("", {
@@ -272,7 +272,7 @@ const CreateCourt = () => {
                   {t("City")}
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   {...register("City")}
                   placeholder={t("Enter City")}
                   className={cn("", {
@@ -303,7 +303,7 @@ const CreateCourt = () => {
               </DialogClose>
               <Button
                 type="submit"
-                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
                 {t("Create Court")}
               </Button>

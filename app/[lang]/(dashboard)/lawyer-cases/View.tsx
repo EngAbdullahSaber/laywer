@@ -38,33 +38,47 @@ const View = () => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>Case Details</SheetTitle>
+          <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
+            {t("Case Details")}
+          </SheetTitle>
         </SheetHeader>
         <div className="py-6" dir={lang === "ar" ? "rtl" : "ltr"}>
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li>
-              <span className="text-sm text-default-600 ">Case Name :</span>{" "}
-              <span className="text-default-500 "> Ahmed</span>
+              <span className="text-sm text-default-600 ">
+                {t("Case Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Ahmed</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Case Status :</span>
-              <span className="text-default-500 "> Pending</span>
+              <span className="text-sm text-default-600 ">
+                {t("Case Status")} :{" "}
+              </span>
+              <span className="text-default-900 font-semibold "> Pending</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Client Name :</span>{" "}
-              <span className="text-default-500 "> mohamed</span>
+              <span className="text-sm text-default-600 ">
+                {t("Client Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> mohamed</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Court_Name :</span>{" "}
-              <span className="text-default-500 "> Court 1</span>
+              <span className="text-sm text-default-600 ">
+                {t("Court Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Court 1</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Case_Number :</span>{" "}
-              <span className="text-default-500 "> 21231</span>
+              <span className="text-sm text-default-600 ">
+                {t("Case Number")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> 21231</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">Key_Dates :</span>{" "}
-              <span className="text-default-500 ">
+              <span className="text-sm text-default-600 ">
+                {t("Key Dates")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
                 {" "}
                 September 12, 2024 12:11 PM
               </span>
@@ -74,9 +88,9 @@ const View = () => {
           <ul className="md:grid grid-cols-1  !mt-5 gap-2 space-y-2 md:space-y-0">
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Task Description :{" "}
+                {t("Task Description")} :{" "}
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit
@@ -85,9 +99,9 @@ const View = () => {
             </li>
             <li className="flex flex-row justify-between items-center">
               <span className="text-sm text-default-600  w-[30%]">
-                Associated Case Details :
+                {t("Associated Case Details")} :
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit

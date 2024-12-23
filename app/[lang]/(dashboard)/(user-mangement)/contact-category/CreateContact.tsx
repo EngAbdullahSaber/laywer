@@ -32,14 +32,14 @@ const CreateContact = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+        <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
           {" "}
           {t("Create Contact Category")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="2xl">
+      <DialogContent size="2xl" className="h-[75%]">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-base font-medium text-default-700 ">
+          <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Contact Category")}
           </DialogTitle>
         </DialogHeader>
@@ -72,7 +72,7 @@ const CreateContact = () => {
             </DialogClose>
             <Button
               type="button"
-              className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
               {t("Create Contact Category")}{" "}
             </Button>

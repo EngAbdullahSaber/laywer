@@ -18,13 +18,14 @@ import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
+import { useTranslate } from "@/config/useTranslation";
 
 // Update the schema to validate date properly
 const schema = z.object({
   Title: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(20, { message: "Title must not exceed 20 characters." }),
+    .min(3, { message: "errorCase.caseTitleMin" })
+    .max(20, { message: "errorCase.caseTitleMin" }),
 
   date: z
     .string()
@@ -46,22 +47,22 @@ const CreateDate = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue, // Add setValue to update the date field in react-hook-form
+    setValue,
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
 
   const [picker, setPicker] = useState<Date>(new Date());
+  const { t } = useTranslate();
 
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
 
-  // Handle Flatpickr change event and set value in react-hook-form
   const handleDateChange = (dates: Date[]) => {
     const selectedDate = dates[0] || null;
     setPicker(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : ""); // Update react-hook-form state
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
   };
 
   return (
@@ -70,16 +71,16 @@ const CreateDate = () => {
         <Button
           size="icon"
           variant="outline"
-          className=" h-7 w-7"
+          className="h-7 w-7"
           color="secondary"
         >
-          <Icon icon="ic:outline-add" className="h-4 w-4" />{" "}
+          <Icon icon="ic:outline-add" className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[60%] ">
+      <DialogContent size="md" className="gap-3 h-[50%]">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Create New Date With Client
+          <DialogTitle className="text-2xl font-bold text-default-700">
+            {t("Create New Date With Client")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -92,12 +93,12 @@ const CreateDate = () => {
                     "text-destructive": errors.Title,
                   })}
                 >
-                  Title
+                  {t("Title")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Title")}
-                  placeholder="Enter Title"
+                  placeholder={t("Enter Title About Date")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Title,
                   })}
@@ -108,7 +109,7 @@ const CreateDate = () => {
                       "text-destructive": errors.Title,
                     })}
                   >
-                    {errors.Title.message}
+                    {t(errors.Title.message)}
                   </p>
                 )}
               </div>
@@ -120,31 +121,40 @@ const CreateDate = () => {
                     "text-destructive": errors.date,
                   })}
                 >
-                  Date
+                  {t("Date")}
                 </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder="Select Date"
+                  placeholder={t("Select Date About Meeting")}
                   value={picker}
                   onChange={handleDateChange}
+                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
                   id="default-picker"
                 />
                 {errors.date && (
                   <p className="text-xs text-destructive">
-                    {errors.date.message}
+                    {t(errors.date.message)}
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancel
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Create Date</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Date")}
+              </Button>
             </div>
           </form>
         </div>

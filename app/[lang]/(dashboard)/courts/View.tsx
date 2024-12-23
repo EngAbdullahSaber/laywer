@@ -39,29 +39,42 @@ const View = () => {
       >
         <SheetHeader>
           <SheetTitle className="mt-5 font-bold text-xl">
-            Court Details
+            {t("Court Details")}
           </SheetTitle>
         </SheetHeader>
         <div className="py-6">
           <hr className="my-8" />
-          <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li className="my-3">
-              <span className="text-sm text-default-600 ">Court Name :</span>{" "}
-              <span className="text-default-500 "> Court 1</span>
-            </li>
-            <li className="my-3">
+          <ul className="flex flex-row justify-between items-center">
+            <li className="my-3 w-[48%]">
               <span className="text-sm text-default-600 ">
-                Court Category :
+                {t("Court Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> Court 1</span>
+            </li>
+            <li className="my-3 w-[48%]">
+              <span className="text-sm text-default-600 ">
+                {t("Court Category")} :
               </span>
-              <span className="text-default-500 "> Criminal</span>
+              <span className="text-warning-700 font-semibold  ">
+                {" "}
+                Criminal
+              </span>
             </li>
-            <li className="my-3">
-              <span className="text-sm text-default-600 ">Email :</span>{" "}
-              <span className="text-default-500 "> abc@gmail.com</span>
+            <li className="my-3 w-[48%]">
+              <span className="text-sm text-default-600 ">{t("Email")} : </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                abc@gmail.com
+              </span>
             </li>
-            <li className="my-3">
-              <span className="text-sm text-default-600 ">Address :</span>{" "}
-              <span className="text-default-500 "> Egypt , Cairo</span>
+            <li className="my-3 w-[48%]">
+              <span className="text-sm text-default-600 ">
+                {t("Address")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                Egypt , Cairo
+              </span>
             </li>
           </ul>
         </div>

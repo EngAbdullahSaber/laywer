@@ -16,6 +16,8 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
+import { useTranslate } from "@/config/useTranslation";
+import { Upload } from "lucide-react";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -43,6 +45,7 @@ const FileRequest = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
+  const { t } = useTranslate();
 
   // Handle Flatpickr change event and set value in react-hook-form
 
@@ -58,10 +61,10 @@ const FileRequest = () => {
           <Icon icon="fluent-mdl2:file-request" className="h-4 w-4" />{" "}
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[55%] ">
+      <DialogContent size="md" className="gap-3 h-[50%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-lg font-semibold text-default-700 ">
-            Ask Client About File
+            {t("Ask Client About File")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -74,12 +77,12 @@ const FileRequest = () => {
                     "text-destructive": errors.Title,
                   })}
                 >
-                  Title
+                  {t("Title")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Title")}
-                  placeholder="Enter Title"
+                  placeholder={t("Enter Title")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Title,
                   })}
@@ -90,47 +93,46 @@ const FileRequest = () => {
                       "text-destructive": errors.Title,
                     })}
                   >
-                    {errors.Title.message}
+                    {t(errors.Title.message)}
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="Email"
-                  className={cn("", {
-                    "text-destructive": errors.Email,
-                  })}
-                >
-                  Email
+              <div className="flex flex-col gap-2 w-[48%]">
+                <Label>
+                  <div>
+                    <Button
+                      asChild
+                      color="info"
+                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                      variant="outline"
+                    >
+                      <div>
+                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
+                      </div>
+                    </Button>
+                  </div>
+                  <Input type="file" className="hidden" />
                 </Label>
-                <Input
-                  type="email"
-                  {...register("Email")}
-                  placeholder="Enter Email"
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Email,
-                  })}
-                />
-                {errors.Email && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Email,
-                    })}
-                  >
-                    {errors.Email.message}
-                  </p>
-                )}
               </div>
             </div>
 
             {/* Submit Button inside form */}
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancel
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
-              <Button type="submit">Send To Client</Button>
+              <Button
+                type="submit"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Ask Client")}
+              </Button>
             </div>
           </form>
         </div>

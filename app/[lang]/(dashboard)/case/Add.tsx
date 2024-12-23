@@ -77,7 +77,7 @@ const Add = () => {
           <Icon icon="ic:outline-add" className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[60%]">
+      <DialogContent size="md" className="gap-3 h-[50%]">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create New Date With Client")}
@@ -141,9 +141,11 @@ const Add = () => {
 
             <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
-                <Button type="button" 
-                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                variant="outline" className="w-28">
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
                   {t("Cancel")}
                 </Button>
               </DialogClose>

@@ -5,7 +5,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   {
@@ -14,7 +14,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   {
@@ -23,7 +23,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   {
@@ -32,7 +32,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   {
@@ -41,7 +41,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   {
@@ -50,7 +50,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   {
@@ -59,7 +59,7 @@ export const data = [
     Date : "September 12, 2024",
     Time: "12:11 PM",
     Case_Name: "Ahmed",
-    Location: "Egypt , Cairo",
+    Location: "Saudi Arabia ,Riyadh",
     Client_Name: "Ali",
   },
   
