@@ -48,8 +48,19 @@ const LogInForm = () => {
     },
   });
   const [isVisible, setIsVisible] = React.useState(false);
-
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const handleLogin = () => {
+    if (email == "msaatylaw@gmail.com") {
+      localStorage.setItem("role", "admin");
+    } else if (email == "client@gmail.com") {
+      localStorage.setItem("role", "client");
+    }
+    if (email == "lawyer@gmail.com") {
+      localStorage.setItem("role", "lawyer");
+    }
+  };
 
   const onSubmit = (data: { email: string; password: string }) => {
     startTransition(async () => {
@@ -59,12 +70,16 @@ const LogInForm = () => {
         redirect: false,
       });
       if (response?.ok) {
+        toast.success("Login Successful");
         window.location.assign("/auth/verify");
         reset();
       } else if (response?.error) {
+        toast.error(response?.error);
       }
     });
   };
+  handleLogin();
+
   return (
     <div className="w-full py-10">
       <Image
@@ -95,6 +110,8 @@ const LogInForm = () => {
               "border-destructive": errors.email,
             })}
             size={!isDesktop2xl ? "xl" : "lg"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         {errors.email && (
@@ -117,6 +134,8 @@ const LogInForm = () => {
               className="peer "
               size={!isDesktop2xl ? "xl" : "lg"}
               placeholder=" "
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <div

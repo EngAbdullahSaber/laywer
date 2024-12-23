@@ -6,6 +6,8 @@ import { useTranslate } from "@/config/useTranslation";
 
 import TableData from "./columns";
 import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@iconify/react";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -22,7 +24,16 @@ const page = () => {
             body={"Lawyer Appoinments"}
           />
         </div>
-        <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"></div>
+        <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
+          <Button color="secondary" variant="outline">
+            <Icon icon="lets-icons:export" className="h-5 w-5" />
+            {t("Export Excel")}
+          </Button>
+          <Button color="secondary" variant="outline">
+            <Icon icon="lets-icons:export" className="h-5 w-5" />
+            {t("Export PDF")}
+          </Button>
+        </div>
       </div>
 
       <Card>

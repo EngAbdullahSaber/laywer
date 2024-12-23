@@ -22,6 +22,14 @@ const page = () => {
           <BreadcrumbComponent header={"Lawyers"} body={"Lawyers List"} />
         </div>
         <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
+          <Button color="secondary" variant="outline">
+            <Icon icon="lets-icons:export" className="h-5 w-5" />
+            {t("Export Excel")}
+          </Button>
+          <Button color="secondary" variant="outline">
+            <Icon icon="lets-icons:export" className="h-5 w-5" />
+            {t("Export PDF")}
+          </Button>
           <CreateLawyer />
         </div>
       </div>

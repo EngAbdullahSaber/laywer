@@ -33,7 +33,7 @@ export function DataTableToolbar({
       <Input placeholder={t("Search")} className="h-8 min-w-[200px] max-w-sm" />
 
       <DataTableViewOptions table={table} />
-      {/* <LayoutFilter table={table}  /> */}
+      <LayoutFilter />
     </div>
   );
 }

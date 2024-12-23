@@ -1,16 +1,16 @@
 export const data = [
   {
     id: "TASK-8782",
-    Case_Name: "Mustafa",
-    Client_Name: "Mustafa",
+   
+    Client_Name: "مصطفى",
     Category: "جنائي",
     Next_Appointment_Date: "September 12, 2024 ",
     Status: "قيد التنفيذ",
   },
   {
     id: "TASK-8782",
-    Case_Name: "Abdullah",
-    Client_Name: "Mustafa",
+
+    Client_Name: "احمد",
 
     Category: "مدنى",
     Next_Appointment_Date: "September 22, 2024 ",
@@ -18,8 +18,8 @@ export const data = [
   },
   {
     id: "TASK-8782",
-    Case_Name: "mohamed",
-    Client_Name: "Mustafa",
+
+    Client_Name: "حمد",
 
     Category: "مدنى",
     Next_Appointment_Date: "September 2, 2024 ",
@@ -27,32 +27,32 @@ export const data = [
   },
   {
     id: "TASK-8782",
-    Client_Name: "Mustafa",
-    Case_Name: "mohamed",
+    Client_Name: "احمد",
+
     Category: "عائلى",
     Next_Appointment_Date: "September 12, 2024 ",
     Status: "قيدالانتظار",
   },
   {
     id: "TASK-8782",
-    Client_Name: "Mustafa",
-    Case_Name: "Mustafa",
+    Client_Name: "محمد",
+ 
     Category: "جنائي",
     Next_Appointment_Date: "September 10, 2024 ",
     Status: "مكتملة",
   },
   {
     id: "TASK-8782",
-    Client_Name: "Mustafa",
-    Case_Name: "mohamed",
+    Client_Name: "على",
+
     Category: "عائلى",
     Next_Appointment_Date: "September 12, 2024 ",
     Status: "مكتملة",
   },
   {
     id: "TASK-8782",
-    Client_Name: "Mustafa",
-    Case_Name: "Abdullah",
+    Client_Name: "فهد",
+
     Category: "جنائي",
     Next_Appointment_Date: "September 17, 2024 ",
     Status: "قيدالانتظار",

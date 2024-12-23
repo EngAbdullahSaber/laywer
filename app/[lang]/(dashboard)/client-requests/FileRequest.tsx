@@ -15,11 +15,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import Flatpickr from "react-flatpickr";
-import { useState } from "react";
 import { Icon } from "@iconify/react";
-import BasicSelect from "@/components/common/Select/BasicSelect";
 import { useTranslate } from "@/config/useTranslation";
+import { Upload } from "lucide-react";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -28,37 +26,28 @@ const schema = z.object({
     .min(3, { message: "Title must be at least 3 characters." })
     .max(20, { message: "Title must not exceed 20 characters." }),
 
-  Case_Status: z
+  Email: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(20, { message: "Title must not exceed 20 characters." }),
+    .min(7, { message: "Email must be at least 7 characters." })
+    .max(20, { message: "Email must not exceed 20 characters." }),
 });
 
-const RequestStatus = () => {
+const FileRequest = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
     setValue, // Add setValue to update the date field in react-hook-form
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
 
-  const [picker, setPicker] = useState<Date>(new Date());
-
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
+  const { t } = useTranslate();
 
   // Handle Flatpickr change event and set value in react-hook-form
-
-  const Case_Status: { value: string; label: string }[] = [
-    { value: "موافق", label: "موافق" },
-    { value: "غير موافق", label: "غير موافق" },
-    { value: "المزيد", label: "المزيد" },
-  ];
-  const { t, loading, error } = useTranslate();
 
   return (
     <Dialog>
@@ -69,31 +58,61 @@ const RequestStatus = () => {
           className=" h-7 w-7"
           color="secondary"
         >
-          <Icon icon="fluent-mdl2:responses-menu" className="h-4 w-4" />
+          <Icon icon="fluent-mdl2:file-request" className="h-4 w-4" />{" "}
         </Button>
       </DialogTrigger>
       <DialogContent size="md" className="gap-3 h-[50%] ">
         <DialogHeader className="p-0">
-          <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Responding to Requests")}
+          <DialogTitle className="text-lg font-semibold text-default-700 ">
+            {t("Response to the lawyer")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="Title">{t("Change Case Status")}</Label>
-                <BasicSelect
-                  name="Case_Status"
-                  menu={Case_Status}
-                  control={control}
-                  errors={errors}
+                <Label
+                  htmlFor="Title"
+                  className={cn("", {
+                    "text-destructive": errors.Title,
+                  })}
+                >
+                  {t("Title")}
+                </Label>
+                <Input
+                  type="text"
+                  {...register("Title")}
+                  placeholder={t("Enter Title")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive": errors.Title,
+                  })}
                 />
-                {errors.Case_Status && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Case_Status.message)}
+                {errors.Title && (
+                  <p
+                    className={cn("text-xs", {
+                      "text-destructive": errors.Title,
+                    })}
+                  >
+                    {t(errors.Title.message)}
                   </p>
-                )}{" "}
+                )}
+              </div>
+              <div className="flex flex-col gap-2 w-[48%]">
+                <Label>
+                  <div>
+                    <Button
+                      asChild
+                      color="info"
+                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                      variant="outline"
+                    >
+                      <div>
+                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
+                      </div>
+                    </Button>
+                  </div>
+                  <Input type="file" className="hidden" />
+                </Label>
               </div>
             </div>
 
@@ -105,14 +124,14 @@ const RequestStatus = () => {
                   className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
                   variant="outline"
                 >
-                  Cancel
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
               <Button
                 type="submit"
-                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Responding to Requests")}
+                {t("Send Response")}
               </Button>
             </div>
           </form>
@@ -122,4 +141,4 @@ const RequestStatus = () => {
   );
 };
 
-export default RequestStatus;
+export default FileRequest;

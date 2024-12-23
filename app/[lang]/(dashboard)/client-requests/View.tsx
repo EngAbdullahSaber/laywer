@@ -39,7 +39,9 @@ const View = () => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>Case Details</SheetTitle>
+          <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
+            {t("Case Details")}
+          </SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[100%]">
           {" "}
@@ -47,45 +49,51 @@ const View = () => {
             <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
               <li>
                 <span className="text-sm text-default-600 ">
-                  Request_Title :
+                  {t("Request_Title")} :
                 </span>{" "}
-                <span className="text-default-500 "> Ahmed</span>
+                <span className="text-default-900 font-semibold  "> Ahmed</span>
               </li>
               <li>
                 <span className="text-sm text-default-600 ">
-                  Request_Date :
+                  {t("Request_Date")} :
                 </span>{" "}
-                <span className="text-default-500 ">
+                <span className="text-default-900 font-semibold  ">
                   {" "}
                   September 12, 2024 12:11 PM
                 </span>
               </li>
               <li>
                 <span className="text-sm text-default-600 ">
-                  Request_Status :
+                  {t("Request_Status")} :
                 </span>{" "}
-                <span className="text-default-500 "> Responded</span>
-              </li>
-              <li>
-                <span className="text-sm text-default-600 ">
-                  Required_Action :
-                </span>{" "}
-                <span className="text-default-500 ">Agree</span>
-              </li>
-              <li>
-                <span className="text-sm text-default-600 ">
-                  Associated_Case :
+                <span className="text-default-900 font-semibold  ">
+                  {" "}
+                  Responded
                 </span>
-                <span className="text-default-500 "> mohamed</span>
+              </li>
+              <li>
+                <span className="text-sm text-default-600 ">
+                  {t("Required_Action")} :
+                </span>{" "}
+                <span className="text-default-900 font-semibold  ">Agree</span>
+              </li>
+              <li>
+                <span className="text-sm text-default-600 ">
+                  {t("Associated_Case")} :
+                </span>
+                <span className="text-default-900 font-semibold  ">
+                  {" "}
+                  mohamed
+                </span>
               </li>
             </ul>
             <hr className="my-8" />
             <ul className="md:grid grid-cols-1  !mt-5 gap-2 space-y-2 md:space-y-0">
               <li className="flex flex-row justify-between items-center">
                 <span className="text-sm text-default-600  w-[30%]">
-                  Description :{" "}
+                  {t("Description")} :
                 </span>{" "}
-                <span className="text-default-500 w-[67%]">
+                <span className="text-default-900 font-semibold  w-[67%]">
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                   Nulla, veritatis dolor obcaecati voluptas ullam commodi?
                   Perferendis quae doloribus unde commodi voluptates totam magni

@@ -28,13 +28,10 @@ const schema = z.object({
     .min(3, { message: "Title must be at least 3 characters." })
     .max(20, { message: "Title must not exceed 20 characters." }),
 
-  Case_Status: z
-    .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(20, { message: "Title must not exceed 20 characters." }),
+  Task_Status: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
 });
 
-const RequestStatus = () => {
+const TaskStatus = () => {
   const {
     register,
     handleSubmit,
@@ -52,14 +49,12 @@ const RequestStatus = () => {
   }
 
   // Handle Flatpickr change event and set value in react-hook-form
-
-  const Case_Status: { value: string; label: string }[] = [
-    { value: "موافق", label: "موافق" },
-    { value: "غير موافق", label: "غير موافق" },
-    { value: "المزيد", label: "المزيد" },
+  const Task_Status: { value: string; label: string }[] = [
+    { value: "قيدالانتظار", label: "قيدالانتظار" },
+    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
+    { value: "مكتملة", label: "مكتملة" },
   ];
   const { t, loading, error } = useTranslate();
-
   return (
     <Dialog>
       <DialogTrigger>
@@ -69,29 +64,29 @@ const RequestStatus = () => {
           className=" h-7 w-7"
           color="secondary"
         >
-          <Icon icon="fluent-mdl2:responses-menu" className="h-4 w-4" />
+          <Icon icon="fluent:status-32-regular" className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent size="md" className="gap-3 h-[50%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Responding to Requests")}
+            {t("Task Staus of Cases")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="Title">{t("Change Case Status")}</Label>
+                <Label htmlFor="Task_Status">{t("Change Task Status")}</Label>
                 <BasicSelect
-                  name="Case_Status"
-                  menu={Case_Status}
+                  name="Task_Status"
+                  menu={Task_Status}
                   control={control}
                   errors={errors}
                 />
-                {errors.Case_Status && (
+                {errors.Task_Status && (
                   <p className="text-xs text-destructive">
-                    {t(errors.Case_Status.message)}
+                    {t(errors.Task_Status.message)}
                   </p>
                 )}{" "}
               </div>
@@ -105,14 +100,14 @@ const RequestStatus = () => {
                   className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
                   variant="outline"
                 >
-                  Cancel
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
               <Button
                 type="submit"
-                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Responding to Requests")}
+                {t("Change Staus")}
               </Button>
             </div>
           </form>
@@ -122,4 +117,4 @@ const RequestStatus = () => {
   );
 };
 
-export default RequestStatus;
+export default TaskStatus;

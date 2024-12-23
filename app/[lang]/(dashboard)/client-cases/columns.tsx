@@ -11,7 +11,6 @@ import { DataTableColumnHeader } from "../tables/advanced/components/data-table-
 import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 
-
 interface Task {
   id: string;
   Case_Name?: string;
@@ -124,9 +123,17 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Court_Category === "جنائي" && "destructive") ||
+                (row.original.Court_Category === "عائلى " && "info") ||
+                (row.original.Court_Category === "مدنى" && "warning") ||
+                "default"
+              }
+            >
               {row.original.Court_Category}
-            </span>
+            </Badge>
           </div>
         );
       },
@@ -145,9 +152,9 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Case_Status === "Progress" && "destructive") ||
-                (row.original.Case_Status === "Pending" && "info") ||
-                (row.original.Case_Status === "Completed" && "warning") ||
+                (row.original.Case_Status === "قيد التنفيذ" && "destructive") ||
+                (row.original.Case_Status === "قيد التنفيذ" && "info") ||
+                (row.original.Case_Status === "مكتملة" && "warning") ||
                 "default"
               }
             >

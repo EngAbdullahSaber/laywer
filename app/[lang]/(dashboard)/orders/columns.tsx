@@ -5,15 +5,19 @@ import { Badge } from "@/components/ui/badge";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
-import { DataTable } from "../../tables/advanced/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import Actions from "@/components/common/Actions/Actions";
+import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
+import { DataTable } from "../tables/advanced/components/data-table";
+import View from "./View";
+import TaskStatus from "./TaskStatus";
 
 interface Task {
   id: string;
-  Contact?: string;
-  Describtion?: string;
+  Client_Name?: string;
+  Order_Status?: string;
+  Date?: string;
+  Title?: string;
 }
 const TableData = () => {
   const columns: ColumnDef<Task>[] = [
@@ -42,14 +46,14 @@ const TableData = () => {
       enableHiding: false,
     },
 
-    // {
-    //   id: "actions",
-    //   cell: ({ row }) => (
-    //     <div className="flex flex-row gap-2 items-center justify-center">
-    //       <Actions title={"Contact List"} row={row} />
-    //     </div>
-    //   ),
-    // },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="flex flex-row gap-2 items-center justify-center">
+          <View />
+        </div>
+      ),
+    },
     {
       accessorKey: "id",
       header: ({ column }) => (
@@ -60,31 +64,75 @@ const TableData = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "Contact",
+      accessorKey: "Order Title",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Contact"} />
+        <DataTableColumnHeader column={column} title={"Order Title"} />
       ),
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original.Contact}
+              {row.original.Title}
             </span>
           </div>
         );
       },
     },
-
     {
-      accessorKey: "Describtion",
+      accessorKey: "Client_Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Describtion"} />
+        <DataTableColumnHeader column={column} title={"Client_Name"} />
       ),
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original.Describtion}
+              {row.original.Client_Name}
+            </span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "Order_Status",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Order_Status"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Order_Status === "تم الرد" && "success") ||
+                (row.original.Order_Status === "لم يتم الرد" &&
+                  "destructive") ||
+                "default"
+              }
+            >
+              {row.original.Order_Status}
+            </Badge>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+
+    {
+      accessorKey: "Date",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Date"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <span className="max-w-[500px] truncate font-medium">
+              {row.original.Date}
             </span>
           </div>
         );

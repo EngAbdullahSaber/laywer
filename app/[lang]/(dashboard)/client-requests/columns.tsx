@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 import RequestStatus from "./RequestStatus";
+import FileRequest from "./FileRequest";
 
 interface Task {
   id: string;
@@ -51,7 +51,8 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View />
-          <RequestStatus />
+          <FileRequest />
+          {/* <RequestStatus /> */}
         </div>
       ),
     },
@@ -108,9 +109,11 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Request_Status === "Pending" && "destructive") ||
-                (row.original.Request_Status === "Completed" && "info") ||
-                (row.original.Request_Status === "Responded" && "warning") ||
+                (row.original.Request_Status === "قيدالانتظار" &&
+                  "destructive") ||
+                (row.original.Request_Status === "مكتمل" && "info") ||
+                (row.original.Request_Status === "تمت الاجابة عليه" &&
+                  "warning") ||
                 "default"
               }
             >
@@ -134,9 +137,11 @@ const TableData = () => {
             <Badge
               className="!text-center"
               color={
-                (row.original.Required_Action === "Agree" && "destructive") ||
-                (row.original.Required_Action === "Disagree" && "info") ||
-                (row.original.Required_Action === "More " && "warning") ||
+                (row.original.Required_Action === "ارسال ملف" &&
+                  "destructive") ||
+                (row.original.Required_Action === "ارسال المعلومات" &&
+                  "info") ||
+                (row.original.Required_Action === "المزيد" && "warning") ||
                 "default"
               }
             >

@@ -38,7 +38,9 @@ const View = () => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>{t("Appointment Details")}</SheetTitle>
+          <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
+            {t("Appointment Details")}
+          </SheetTitle>
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
@@ -46,11 +48,14 @@ const View = () => {
               <span className="text-sm text-default-600 ">
                 {t("Appointment_Title")} :
               </span>{" "}
-              <span className="text-default-500 "> TASK1</span>
+              <span className="text-default-900 font-semibold "> TASK1</span>
             </li>
             <li>
               <span className="text-sm text-default-600 ">{t("Date")} : </span>{" "}
-              <span className="text-default-500 "> September 12, 2024</span>
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                September 12, 2024
+              </span>
             </li>
             <li>
               <span className="text-sm text-default-600 ">{t("Time")} : </span>
@@ -61,20 +66,23 @@ const View = () => {
               <span className="text-sm text-default-600 ">
                 {t("Case_Name")} :
               </span>{" "}
-              <span className="text-default-500 "> Ahmed</span>
+              <span className="text-default-900 font-semibold "> Ahmed</span>
             </li>
 
             <li>
               <span className="text-sm text-default-600 ">
                 {t("Location")} :
               </span>{" "}
-              <span className="text-success-700 "> Egypt , Cairo</span>
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                Saudi Arabia ,Riyadh
+              </span>
             </li>
             <li>
               <span className="text-sm text-default-600 ">
                 {t("Client_Name")} :
               </span>{" "}
-              <span className="text-success-700 "> Ali</span>
+              <span className="text-default-900 font-semibold "> Ali</span>
             </li>
           </ul>
           <hr className="my-8" />
@@ -83,7 +91,7 @@ const View = () => {
               <span className="text-sm text-default-600  w-[30%]">
                 {t("Appointment Description")} :{" "}
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit
@@ -94,7 +102,7 @@ const View = () => {
               <span className="text-sm text-default-600  w-[30%]">
                 {t("Associated Case Details")} :
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit
@@ -105,7 +113,7 @@ const View = () => {
               <span className="text-sm text-default-600  w-[30%]">
                 {t("Preparation Required")} :
               </span>{" "}
-              <span className="text-default-500 w-[67%]">
+              <span className="text-default-900 font-semibold w-[67%]">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla,
                 veritatis dolor obcaecati voluptas ullam commodi? Perferendis
                 quae doloribus unde commodi voluptates totam magni fugit
