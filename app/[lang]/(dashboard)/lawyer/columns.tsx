@@ -19,6 +19,7 @@ interface Task {
   Address?: string;
   Mobile_Number?: string;
   Email?: string;
+  Category?: string;
 }
 const TableData = () => {
   const columns: ColumnDef<Task>[] = [
@@ -100,7 +101,32 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
-
+    {
+      accessorKey: "Category",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Category"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Category === "جنائي" && "destructive") ||
+                (row.original.Category === "مدنى" && "warning") ||
+                (row.original.Category === "عائلى" && "info") ||
+                "default"
+              }
+            >
+              {row.original.Category}
+            </Badge>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
     {
       accessorKey: "Mobile_Number",
       header: ({ column }) => (

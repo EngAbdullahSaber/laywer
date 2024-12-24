@@ -85,6 +85,11 @@ const config = {
           700: "#a16207",
           foreground: "hsl(var(--warning-foreground) / <alpha-value>)",
         },
+        lawyer: {
+          DEFAULT: "#fdd472",
+          700: "#fdd472",
+          foreground: "#fdd472",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted) / <alpha-value>)",
           foreground: "hsl(var(--muted-foreground) / <alpha-value>)",

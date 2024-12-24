@@ -69,7 +69,7 @@ const VerfiyForm = () => {
         {t("Two Factor Verification")}
       </div>
       <div className="2xl:text-lg text-base text-default-600 mt-2 leading-6">
-        {t("Enter the 6 figure confirmation code shown on the email")}
+        {t("Enter the 4 figure confirmation code shown on the email")}
       </div>
       <form className="mt-8">
         <div className="flex flex-wrap  gap-1 lg:gap-6">

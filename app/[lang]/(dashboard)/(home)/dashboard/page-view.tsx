@@ -56,7 +56,7 @@ const DashboardPageView = () => {
       name: "Total Laywer",
       count: "240",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-warning" />,
+      icon: <Docs className="w-10 h-10 text-primary" />,
       color: "warning",
       href: "lawyer",
     },
@@ -65,9 +65,9 @@ const DashboardPageView = () => {
       name: "Total Case",
       count: "96",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-success" />,
+      icon: <Docs className="w-10 h-10 text-primary" />,
       href: "case",
-      color: "success",
+      color: "destructive",
     },
 
     {
@@ -76,7 +76,7 @@ const DashboardPageView = () => {
       count: "18",
       href: "task",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-destructive" />,
+      icon: <Docs className="w-10 h-10 text-primary" />,
       color: "destructive",
     },
     {
@@ -85,16 +85,16 @@ const DashboardPageView = () => {
       count: "18",
       href: "task",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-dark" />,
-      color: "dark",
+      icon: <Docs className="w-10 h-10 text-primary" />,
+      color: "info",
     },
     {
       id: 5,
-      name: "Pending Cases",
+      name: "Closed Cases",
       count: "18",
       href: "pendingcases",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-dark" />,
+      icon: <Docs className="w-10 h-10 text-primary" />,
       color: "dark",
     },
     {
@@ -103,7 +103,7 @@ const DashboardPageView = () => {
       count: "18",
       href: "orders",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-success" />,
+      icon: <Docs className="w-10 h-10 text-primary" />,
       color: "success",
     },
     {
@@ -112,7 +112,7 @@ const DashboardPageView = () => {
       count: "18",
       href: "neworder",
       rate: "8.2",
-      icon: <Docs className="w-10 h-10 text-warning" />,
+      icon: <Docs className="w-10 h-10 text-primary" />,
       color: "warning",
     },
   ];
@@ -138,7 +138,7 @@ const DashboardPageView = () => {
       <div className="flex flex-row justify-between items-center   ">
         {reports.map((item) => (
           <Card
-            className={`service-card hover:bg-${item.color} before:absolute before:h-[110px] before:w-[110px]   before:opacity-60 before:rounded-full before:z-[-1] before:bottom-[-73px] before:right-[-28px] lg:w-[24%] md:w-[45%] w-full p-6 relative z-10 rounded-xl overflow-hidden bg-white`}
+            className={`service-card hover:bg-lawyer before:absolute before:h-[110px] before:w-[110px]   before:opacity-60 before:rounded-full before:z-[-1] before:bottom-[-73px] before:right-[-28px] lg:w-[24%] md:w-[45%] w-full p-6 relative z-10 rounded-xl overflow-hidden bg-white`}
           >
             <Link href={item.href}>
               <div className="shape-icon  before:absolute before:inset-0 before:bg-[#e2e8fa] relative z-10 flex justify-center items-center w-[90px] h-[85px] leading-10 align-middle mb-7">

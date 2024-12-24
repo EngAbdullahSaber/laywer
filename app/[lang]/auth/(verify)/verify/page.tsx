@@ -17,7 +17,7 @@ const VerifyPage = () => {
       <div className="min-h-screen bg-card  flex items-center  overflow-hidden w-full">
         <div className="lg-inner-column flex w-full flex-wrap justify-center overflow-y-auto">
           <div
-            className="basis-1/2 bg-primary w-full relative hidden xl:flex justify-center items-center"
+            className="basis-1/2 bg-primary w-full relative hidden flex-col xl:flex justify-center items-center"
             style={{
               backgroundImage:
                 "linear-gradient(180deg, #31291E 0%, #000080 100%)",
@@ -37,6 +37,16 @@ const VerifyPage = () => {
               className="w-96 h-80"
               priority={true}
             />
+            <p
+              className="!text-[#fdd472] text-center font-extrabold text-3xl z-50 block"
+              style={{
+                color: "#fdd472",
+                fontWeight: "800",
+                fontSize: "34px",
+              }}
+            >
+              ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي
+            </p>
           </div>
 
           <div className="min-h-screen basis-full md:basis-1/2 w-full px-4 flex justify-center items-center">

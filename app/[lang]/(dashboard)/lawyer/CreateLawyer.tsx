@@ -16,6 +16,7 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useTranslate } from "@/config/useTranslation";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 
 const schema = z.object({
   Name: z
@@ -42,12 +43,14 @@ const schema = z.object({
     .max(25, {
       message: "errorLawyer.CasepasswordMax",
     }),
+  LawyerCategory: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
 });
 
 const CreateLawyer = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -56,7 +59,11 @@ const CreateLawyer = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
-
+  const Lawyer_Category: { value: string; label: string }[] = [
+    { value: "عائلى", label: "عائلى" },
+    { value: "جنائي", label: "جنائي" },
+    { value: "مدنى", label: "مدنى" },
+  ];
   const { t } = useTranslate();
 
   return (
@@ -105,7 +112,6 @@ const CreateLawyer = () => {
                   </p>
                 )}
               </div>
-
               <div className="flex flex-col gap-2">
                 <Label
                   htmlFor="phone"
@@ -131,6 +137,27 @@ const CreateLawyer = () => {
               </div>
               <div className="flex flex-col gap-2">
                 <Label
+                  htmlFor="Court_Category"
+                  className={cn("", {
+                    "text-destructive": errors.LawyerCategory,
+                  })}
+                >
+                  {t("Lawyer Category")}
+                </Label>
+                <BasicSelect
+                  name="CourtCategory"
+                  menu={Lawyer_Category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.LawyerCategory && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.LawyerCategory.message)}
+                  </p>
+                )}
+              </div>{" "}
+              <div className="flex flex-col gap-2">
+                <Label
                   htmlFor="Address"
                   className={cn("", {
                     "text-destructive": errors.Address,
@@ -153,7 +180,6 @@ const CreateLawyer = () => {
                   </p>
                 )}
               </div>
-
               <div className="flex flex-col gap-2">
                 <Label
                   htmlFor="email"

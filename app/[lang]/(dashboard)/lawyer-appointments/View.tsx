@@ -15,11 +15,10 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
-
+import { motion } from "framer-motion";
 const View = () => {
   const { t, loading, error } = useTranslate();
   const { lang } = useParams();
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -44,50 +43,81 @@ const View = () => {
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Appointment_Title")} :
               </span>{" "}
               <span className="text-default-900 font-semibold "> TASK1</span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               <span className="text-sm text-default-600 ">{t("Date")} : </span>{" "}
               <span className="text-default-900 font-semibold ">
                 {" "}
                 September 12, 2024
               </span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9 }}
+            >
               <span className="text-sm text-default-600 ">{t("Time")} : </span>
               <span className="text-warning-700 "> 12:11 PM</span>
-            </li>
+            </motion.li>
 
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Case_Name")} :
               </span>{" "}
               <span className="text-default-900 font-semibold "> Ahmed</span>
-            </li>
+            </motion.li>
 
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Location")} :
               </span>{" "}
-              <span className="text-default-900 font-semibold ">
-                {" "}
-                Saudi Arabia ,Riyadh
-              </span>
-            </li>
-            <li>
+              <span className="text-default-900 font-semibold "> الرياض</span>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Client_Name")} :
               </span>{" "}
               <span className="text-default-900 font-semibold "> Ali</span>
-            </li>
+            </motion.li>
           </ul>
-          <hr className="my-8" />
+          <motion.hr
+            initial={{ y: 50 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1.1 }}
+            className="my-8"
+          />
           <ul className="md:grid grid-cols-1  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li className="flex flex-row justify-between items-center">
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+              className="flex flex-row justify-between items-center"
+            >
               <span className="text-sm text-default-600  w-[30%]">
                 {t("Appointment Description")} :{" "}
               </span>{" "}
@@ -97,8 +127,13 @@ const View = () => {
                 quae doloribus unde commodi voluptates totam magni fugit
                 architecto, veritatis iusto? Nulla, doloremque. Corporis.
               </span>
-            </li>
-            <li className="flex flex-row justify-between items-center">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.4 }}
+              className="flex flex-row justify-between items-center"
+            >
               <span className="text-sm text-default-600  w-[30%]">
                 {t("Associated Case Details")} :
               </span>{" "}
@@ -108,8 +143,13 @@ const View = () => {
                 quae doloribus unde commodi voluptates totam magni fugit
                 architecto, veritatis iusto? Nulla, doloremque. Corporis.
               </span>
-            </li>
-            <li className="flex flex-row justify-between items-center">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.5 }}
+              className="flex flex-row justify-between items-center"
+            >
               <span className="text-sm text-default-600  w-[30%]">
                 {t("Preparation Required")} :
               </span>{" "}
@@ -119,7 +159,7 @@ const View = () => {
                 quae doloribus unde commodi voluptates totam magni fugit
                 architecto, veritatis iusto? Nulla, doloremque. Corporis.
               </span>
-            </li>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>

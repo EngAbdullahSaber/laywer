@@ -58,7 +58,7 @@ const View = () => {
               <span className="text-sm text-default-600 ">
                 {t("Importance Level")} :
               </span>
-              <span className="text-warning-700 font-semibold"> High</span>
+              <span className="text-warning-700 font-semibold"> مهمة جدا</span>
             </li>
 
             <li>
@@ -75,7 +75,10 @@ const View = () => {
               <span className="text-sm text-default-600 ">
                 {t("Task Status")} :
               </span>{" "}
-              <span className="text-success-700 font-semibold"> Progress</span>
+              <span className="text-success-700 font-semibold">
+                {" "}
+                قيدالانتظار
+              </span>
             </li>
           </ul>
           <hr className="my-8" />

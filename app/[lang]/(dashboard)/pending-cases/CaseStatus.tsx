@@ -30,6 +30,9 @@ const schema = z.object({
     .max(20, { message: "Title must not exceed 20 characters." }),
 
   Case_Status: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
+  RejectionStatus: z
+    .string()
+    .min(8, { message: "errorCourt.clientAddressMin" }),
 });
 
 const CaseStatus = () => {
@@ -54,6 +57,11 @@ const CaseStatus = () => {
   const Case_Status: { value: string; label: string }[] = [
     { value: "اوافق", label: "اوافق" },
     { value: "ارفض", label: "ارفض" },
+  ];
+  const Rejection_Status: { value: string; label: string }[] = [
+    { value: "عدم التفرغ", label: "عدم التفرغ" },
+    { value: "عدم الوضوح", label: "عدم الوضوح" },
+    { value: "اختصاص مختلف", label: "اختصاص مختلف" },
   ];
   const { t, loading, error } = useTranslate();
 
@@ -94,7 +102,17 @@ const CaseStatus = () => {
               </div>
               <div className="flex flex-col gap-2">
                 <Label>{t("Reason for Rejection")}</Label>
-                <Textarea placeholder={t("Type Here")} rows={7} />
+                <BasicSelect
+                  name="RejectionStatus"
+                  menu={Rejection_Status}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.RejectionStatus && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.RejectionStatus.message)}
+                  </p>
+                )}{" "}
               </div>
             </div>
 

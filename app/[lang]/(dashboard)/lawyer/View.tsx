@@ -57,6 +57,12 @@ const View = () => {
             </li>
             <li>
               <span className="text-sm text-default-600 ">
+                {t("Lawyer Category")} :
+              </span>
+              <span className="text-warning-700 font-semibold "> جنائي</span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
                 {t("Phone Number")} :
               </span>
               <span className="text-default-900 font-semibold ">

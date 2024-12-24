@@ -62,7 +62,7 @@ const adminMenu = [
           href: "/case",
         },
         {
-          title: "Lawyer",
+          title: "Lawyers",
           icon: Lawyer,
           href: "/lawyer",
         },
@@ -82,22 +82,22 @@ const adminMenu = [
           href: "/orders",
         },
         {
-          title: "lawyer Category",
+          title: "lawyers Categories",
           icon: ContactCategory,
           href: "/lawyer-category",
         },
         {
-          title: "Court Category",
+          title: "Courts Categories",
           icon: ContactCategory,
           href: "/court-category",
         }, 
          {
-          title: "Cases Category",
+          title: "Cases Categories",
           icon: ContactCategory,
           href: "/cases-category",
         },
         {
-          title: "Client Category",
+          title: "Clients Categories",
           icon: ContactCategory,
           href: "/client-category",
         },

@@ -173,7 +173,41 @@ const CreateTasks = () => {
                       </p>
                     )}
                   </div>
-                  <Link href={"/lawyer"} className="w-[16%] mt-5">
+                  <Link href={"/lawyer"} className="w-[10%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row justify-between items-center">
+                  <div className="!w-[85%]" style={{ width: "85%" }}>
+                    <Label
+                      htmlFor="Case_Name"
+                      className={cn("", {
+                        "text-destructive": errors.Case_Name,
+                      })}
+                    >
+                      {t("Casess")}
+                    </Label>
+
+                    <BasicSelect
+                      name="Case_Name"
+                      menu={Case_Name}
+                      control={control}
+                      errors={errors}
+                    />
+                    {errors.TaskStatus && (
+                      <p className="text-xs text-destructive">
+                        {t(errors.Case_Name.message)}
+                      </p>
+                    )}
+                  </div>
+                  <Link href={"/case"} className="w-[10%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -200,62 +234,6 @@ const CreateTasks = () => {
                     setPicker(dates[0] || null);
                   }}
                 />{" "}
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex flex-row justify-between items-center">
-                  <div className="!w-[85%]" style={{ width: "85%" }}>
-                    <Label
-                      htmlFor="Case_Name"
-                      className={cn("", {
-                        "text-destructive": errors.Case_Name,
-                      })}
-                    >
-                      {t("Casess")}
-                    </Label>
-
-                    <BasicSelect
-                      name="Case_Name"
-                      menu={Case_Name}
-                      control={control}
-                      errors={errors}
-                    />
-                    {errors.TaskStatus && (
-                      <p className="text-xs text-destructive">
-                        {t(errors.Case_Name.message)}
-                      </p>
-                    )}
-                  </div>
-                  <Link href={"/case"} className="w-[16%] mt-5">
-                    <Icon
-                      icon="gg:add"
-                      width="24"
-                      height="24"
-                      color="#dfc77d"
-                    />
-                  </Link>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="Task_Status"
-                  className={cn("", {
-                    "text-destructive": errors.Task_Status,
-                  })}
-                >
-                  {t("Task Status")}
-                </Label>
-
-                <BasicSelect
-                  name="TaskStatus"
-                  menu={Task_Status}
-                  control={control}
-                  errors={errors}
-                />
-                {errors.TaskStatus && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.TaskStatus.message)}
-                  </p>
-                )}
               </div>
             </div>
             {/* Submit Button inside form */}

@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../tables/advanced/components/data-table";
 import AssignCase from "./AssignCase";
+import { Badge } from "@/components/ui/badge";
 
 interface Task {
   id: string;
@@ -159,9 +160,20 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Reason_for_Rejection === "اختصاص مختلف" &&
+                  "destructive") ||
+                (row.original.Reason_for_Rejection === "عدم الوضوح" &&
+                  "warning") ||
+                (row.original.Reason_for_Rejection === "عدم التفرغ" &&
+                  "info") ||
+                "default"
+              }
+            >
               {row.original.Reason_for_Rejection}
-            </span>
+            </Badge>
           </div>
         );
       },

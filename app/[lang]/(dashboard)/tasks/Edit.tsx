@@ -34,6 +34,7 @@ const schema = z.object({
     .max(25, {
       message: "errorTask.CaseNameMax",
     }),
+
   AssignedTo: z.string().min(8, { message: "errorTask.clientAddressMin" }),
   ImportanceLevel: z.string().min(8, { message: "errorTask.clientAddressMin" }),
   TaskStatus: z.string().min(8, { message: "errorTask.clientAddressMin" }),
@@ -56,19 +57,24 @@ const Edit = () => {
     toast.message(JSON.stringify(data, null, 2));
   }
   const Importance_Level: { value: string; label: string }[] = [
-    { value: "High", label: "High" },
-    { value: "Meduim", label: "Meduim" },
-    { value: "Low", label: "Low" },
+    { value: "مهمة جدا", label: "مهمة جدا" },
+    { value: "متوسطة الاهمية", label: "متوسطة الاهمية" },
+    { value: "ذات اهمية ضعيفة", label: "ذات اهمية ضعيفة" },
   ];
   const Assigned_To: { value: string; label: string }[] = [
-    { value: "Ahmed", label: "Ahmed" },
-    { value: "Abdullah", label: "Abdullah" },
-    { value: "Ali", label: "Ali" },
+    { value: "احمد محمد", label: "احمد محمد" },
+    { value: "فهد عبدالله", label: "فهد عبدالله" },
+    { value: "محمد على احمد", label: "محمد على احمد" },
   ];
   const Task_Status: { value: string; label: string }[] = [
-    { value: "Pending", label: "Pending" },
-    { value: "Progress", label: "Progress" },
-    { value: "Completed", label: "Completed" },
+    { value: "قيدالانتظار", label: "قيدالانتظار" },
+    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
+    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
+  ];
+  const Case_Name: { value: string; label: string }[] = [
+    { value: "القضية 1", label: "القضية 1" },
+    { value: "القضية 2", label: "القضية 2" },
+    { value: "القضية 3", label: "القضية 3" },
   ];
   const handleDateChange = (dates: Date[]) => {
     const selectedDate = dates[0] || null;
@@ -196,21 +202,14 @@ const Edit = () => {
                 >
                   {t("Case Name")}
                 </Label>
-                <Input
-                  type="text"
-                  {...register("Case_Name")}
-                  placeholder={t("Enter Case Name")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.Case_Name,
-                  })}
+                <BasicSelect
+                  name="Case_Name"
+                  menu={Case_Name}
+                  control={control}
+                  errors={errors}
                 />
-                {errors.Case_Name && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Case_Name,
-                    })}
-                  >
+                {errors.TaskStatus && (
+                  <p className="text-xs text-destructive">
                     {t(errors.Case_Name.message)}
                   </p>
                 )}
@@ -253,7 +252,7 @@ const Edit = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Task")}
+                {t("Edit Task")}
               </Button>
             </div>
           </form>
