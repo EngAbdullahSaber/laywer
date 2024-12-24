@@ -69,7 +69,7 @@ const CaseStatus = () => {
           <Icon icon="fluent:status-32-regular" className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%] ">
+      <DialogContent size="md" className="gap-3 h-[62%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Agree of Cases")}

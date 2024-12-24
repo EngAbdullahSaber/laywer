@@ -55,7 +55,6 @@ const CaseStatus = () => {
     { value: "قيدالانتظار", label: "قيدالانتظار" },
     { value: "قيد التنفيذ", label: "قيد التنفيذ" },
     { value: "مكتملة", label: "مكتملة" },
-    { value: "رفض", label: "رفض" },
   ];
   const { t, loading, error } = useTranslate();
 
@@ -93,10 +92,6 @@ const CaseStatus = () => {
                     {t(errors.Case_Status.message)}
                   </p>
                 )}{" "}
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label>{t("Reason for Rejection")}</Label>
-                <Textarea placeholder={t("Type Here")} rows={7} />
               </div>
             </div>
 
