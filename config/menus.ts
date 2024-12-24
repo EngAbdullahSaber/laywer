@@ -34,32 +34,23 @@ const adminMenu = [
           icon: Dashboard,
           href: "/dashboard",
         },
+        {
+          title: "New Orders",
+          icon: ContactList,
+          href: "/neworder",
+        },
        
+        {
+          title: "Pending Cases",
+          icon: ContactList,
+          href: "/pendingcases",
+        },
         {
           title: "Contact List",
           icon: ContactList,
           href: "/contact-list",
         },
-        {
-          title: "lawyer Category",
-          icon: ContactCategory,
-          href: "/lawyer-category",
-        },
-        {
-          title: "Court Category",
-          icon: ContactCategory,
-          href: "/court-category",
-        }, 
-         {
-          title: "Cases Category",
-          icon: ContactCategory,
-          href: "/cases-category",
-        },
-        {
-          title: "Client Category",
-          icon: ContactCategory,
-          href: "/client-category",
-        },
+    
         {
           title: "Client List",
           icon: ClientList,
@@ -90,6 +81,26 @@ const adminMenu = [
           icon: Courts,
           href: "/orders",
         },
+        {
+          title: "lawyer Category",
+          icon: ContactCategory,
+          href: "/lawyer-category",
+        },
+        {
+          title: "Court Category",
+          icon: ContactCategory,
+          href: "/court-category",
+        }, 
+         {
+          title: "Cases Category",
+          icon: ContactCategory,
+          href: "/cases-category",
+        },
+        {
+          title: "Client Category",
+          icon: ContactCategory,
+          href: "/client-category",
+        },
 ];
 const lawyerMenu = [
   {
@@ -102,6 +113,9 @@ const lawyerMenu = [
           icon: Case,
           href: "/lawyer-cases",
         },
+    
+       
+       
         {
           title: "Tasks",
           icon: Tasks,
@@ -123,6 +137,11 @@ const clientMenu = [
           title: "Requests",
           icon: Requests,
           href: "/client-requests",
+        },
+        {
+          title: "Communication",
+          icon: ContactList,
+          href: "/new-order",
         },
 ];
 

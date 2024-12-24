@@ -79,6 +79,42 @@ const DashboardPageView = () => {
       icon: <Docs className="w-10 h-10 text-destructive" />,
       color: "destructive",
     },
+    {
+      id: 5,
+      name: "Pending Cases",
+      count: "18",
+      href: "task",
+      rate: "8.2",
+      icon: <Docs className="w-10 h-10 text-dark" />,
+      color: "dark",
+    },
+    {
+      id: 5,
+      name: "Pending Cases",
+      count: "18",
+      href: "pendingcases",
+      rate: "8.2",
+      icon: <Docs className="w-10 h-10 text-dark" />,
+      color: "dark",
+    },
+    {
+      id: 6,
+      name: "Orders",
+      count: "18",
+      href: "orders",
+      rate: "8.2",
+      icon: <Docs className="w-10 h-10 text-success" />,
+      color: "success",
+    },
+    {
+      id: 6,
+      name: "New Orders",
+      count: "18",
+      href: "neworder",
+      rate: "8.2",
+      icon: <Docs className="w-10 h-10 text-warning" />,
+      color: "warning",
+    },
   ];
   const allUsersSeries = [
     {

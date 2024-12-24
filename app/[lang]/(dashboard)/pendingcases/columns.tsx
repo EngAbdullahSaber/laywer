@@ -5,7 +5,7 @@ import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../tables/advanced/components/data-table";
-import CaseStatus from "./CaseStatus";
+import AssignCase from "./AssignCase";
 
 interface Task {
   id: string;
@@ -15,6 +15,8 @@ interface Task {
   Address?: string;
   Case_Number?: string;
   Date?: string;
+  Reason_for_Rejection?: string;
+  Lawyer_Name?: string;
 }
 const TableData = () => {
   const columns: ColumnDef<Task>[] = [
@@ -47,7 +49,7 @@ const TableData = () => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <CaseStatus />
+          <AssignCase />
         </div>
       ),
     },
@@ -123,6 +125,42 @@ const TableData = () => {
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
               {row.original.Case_Number}
+            </span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "Lawyer Name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Lawyer Name"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <span className="max-w-[500px] truncate font-medium">
+              {row.original.Lawyer_Name}
+            </span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "Reason for Rejection",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Reason for Rejection"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <span className="max-w-[500px] truncate font-medium">
+              {row.original.Reason_for_Rejection}
             </span>
           </div>
         );

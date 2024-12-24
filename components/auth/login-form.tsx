@@ -188,7 +188,7 @@ const LogInForm = () => {
           size={!isDesktop2xl ? "lg" : "md"}
         >
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isPending ? t("Loading...") : t("Sign In")}
+          {isPending ? t("Loading") : t("Sign In")}
         </Button>
       </form>
       {/* <div className="mt-6 xl:mt-8 flex flex-wrap justify-center gap-4">

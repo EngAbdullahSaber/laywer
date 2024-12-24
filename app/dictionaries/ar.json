@@ -381,8 +381,24 @@
   "Pending Cases": "القضايا المعلقة",
   "Case Pending List Details": "تفاصيل قائمة القضايا المعلقة",
   "Case Pending List": "قائمة القضايا المعلقة",
-  "Agree of Cases": "الموافقة القضايا"
+  "Agree of Cases": "الموافقة القضايا",
+  "reason for rejection": "سبب الرفض",
+  "lawyer name": "اسم المحامي",
+  "Select Lawyer": "اختيار المحامي",
+  "Assign Case To Lawyer": "تعيين القضية للمحامي",
+  "New Orders": "طلبات جديدة",
+  "Send": "إرسال",
+  "Create Date With Client": "تحديد موعد مع العميل",
+  "New Order List": "قائمة الطلبات الجديدة",
+  "Messages List": "قائمة الرسائل",
+  "Messages": "الرسائل",
+  "Ask": "اسأل",
+  "Your Answer": "إجابتك",
+  "Reply to Client": "الرد على العميل",
 
+  "Your Question": "سؤالك",
+  "Send Your Message": "أرسل رسالتك",
+  "Communication": "التواصل"
 
 }
 

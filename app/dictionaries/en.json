@@ -350,7 +350,7 @@
   "title": "Title",
   "Reason for Rejection": "Reason for Rejection",
   "order_status": "Order Status",
-  "Loading...": "Loading...",
+  "Loading": "Loading...",
   "Sign In": "Sign In",
   "Requests": "Requests",
   "Send Recovery Email": "Send Recovery Email",
@@ -370,7 +370,23 @@
   "Case Pending List Details": "Case Pending List Details",
   "Case Pending List": "Case Pending List",
   "Agree of Cases": "Agree of Cases",
-  "Orders": "Orders",
+  "reason for rejection": "reason for rejection",
+  "lawyer name": "Lawyer Name",
+  "Select Lawyer": "Select Lawyer",
+  "Assign Case To Lawyer": "Assign Cases To Lawyer",
+  "New Orders": "New Order",
+  "Send": "Send",
+  "Create Date With Client": "Create Date With Client",
+  "New Order List": "New Order List",
+
+  "Messages List": "Messages List",
+  "Messages": "Messages",
+  "Ask": "Ask",
+  "Reply to Client": "Reply to Client",
+  "Your Answer": "Your Answer",
+  "Your Question": "Your Question",
+  "Send Your Message": "Send Your Message",
+  "Communication": "Communication",
 
   "Log Out": "Log Out"
 
