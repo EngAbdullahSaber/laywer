@@ -67,13 +67,13 @@ const CreateContact = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-          {t("Create Contact")}
+          {t("Create Client")}
         </Button>
       </DialogTrigger>
       <DialogContent size="2xl" className="gap-3 h-[55%]">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Create a New Contact")}
+            {t("Create a New Client")}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -203,7 +203,7 @@ const CreateContact = () => {
                 type="button"
                 className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Contact")}{" "}
+                {t("Create Client")}{" "}
               </Button>
             </div>
           </div>

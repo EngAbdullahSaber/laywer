@@ -85,7 +85,7 @@ const CreateDate = () => {
           {t("Reply to Client")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%] ">
+      <DialogContent size="md" className="gap-3 h-[60%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Reply to Client")}

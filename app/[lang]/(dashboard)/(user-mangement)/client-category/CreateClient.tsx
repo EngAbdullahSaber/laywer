@@ -82,7 +82,7 @@ const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Client Category")}{" "}
+              {t("Create Client Category")}
             </Button>
           </div>
         </div>

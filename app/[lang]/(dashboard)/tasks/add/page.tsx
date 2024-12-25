@@ -43,6 +43,7 @@ const schema = z.object({
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 const page = () => {
   const {
@@ -230,6 +231,13 @@ const page = () => {
                     setPicker(dates[0] || null);
                   }}
                 />{" "}
+              </div>
+            </div>
+            <div>
+              {" "}
+              <div className="flex flex-col gap-2 my-4">
+                <Label>{t("Details")}</Label>
+                <Textarea placeholder={t("Type Here")} rows={7} />
               </div>
             </div>
             {/* Submit Button inside form */}

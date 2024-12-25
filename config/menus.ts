@@ -45,11 +45,7 @@ const adminMenu = [
           icon: ContactList,
           href: "/pendingcases",
         },
-        {
-          title: "Contact List",
-          icon: ContactList,
-          href: "/contact-list",
-        },
+      
     
         {
           title: "Client List",
@@ -80,6 +76,11 @@ const adminMenu = [
           title: "Orders",
           icon: Courts,
           href: "/orders",
+        },
+        {
+          title: "Contact List",
+          icon: ContactList,
+          href: "/contact-list",
         },
         {
           title: "lawyers Categories",

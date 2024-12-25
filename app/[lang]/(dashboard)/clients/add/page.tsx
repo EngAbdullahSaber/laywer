@@ -31,6 +31,25 @@ const schema = z.object({
   phone: z.string().refine((value) => value.length === 11, {
     message: "error.phoneNumberLength",
   }),
+  City: z
+    .string()
+    .min(3, {
+      message: "errorCourt.CityMin",
+    })
+    .max(15, {
+      message: "errorCourt.CityMax",
+    }),
+  Region: z.string().min(3, {
+    message: "errorCourt.RegionMin",
+  }),
+  Nationality: z
+    .string()
+    .min(3, {
+      message: "errorCourt.RegionMin",
+    })
+    .max(15, {
+      message: "errorCourt.RegionMax",
+    }),
   email: z
     .string()
     .min(8, { message: "error.clientEmailMin" })

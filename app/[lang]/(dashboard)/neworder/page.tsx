@@ -35,19 +35,29 @@ const page = () => {
               اسم العميل : <span className="font-bold">احمد على</span>
             </p>
 
-          
+            <p className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400">
+              {" "}
+              الرقم التعريفى للعميل : <span className="font-bold"> 68786</span>
+            </p>
+            <p className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400">
+              {" "}
+              الرقم التعريفى للطلب : <span className="font-bold"> 68786</span>
+            </p>
+            <p className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400">
+              {" "}
+              الحالة : <span className="font-bold"> تم الرد</span>
+            </p>
             <p className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400">
               العنوان <span className="font-bold">الرياض</span>
             </p>
             <p className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400">
-             تاريح الارسال:{" "}
+              تاريح الارسال:{" "}
               <span className="font-bold">September 12, 2024 </span>
             </p>
-            
           </div>
           <div className="flex flex-col justify-center items-center gap-6">
             {" "}
-         <CreateDate/>
+            <CreateDate />
           </div>
         </div>
       </Card>

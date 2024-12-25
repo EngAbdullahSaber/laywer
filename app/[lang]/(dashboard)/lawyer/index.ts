@@ -13,7 +13,7 @@ export const data = [
     Name: "محمد",
     Address: "الدمام",
     Category: "عائلى",
-    Mobile_Number: "2011228734455",
+    Mobile_Number: "0581739548",
     Email: "mohamed@gmail.com",
   },
   {
@@ -21,7 +21,7 @@ export const data = [
     Name: "على",
     Category: "جنائي",
     Address: "جده",
-    Mobile_Number: "201122983455",
+    Mobile_Number: "0581739548",
     Email: "ali@gmail.com",
   },
   {
@@ -30,7 +30,7 @@ export const data = [
     Address: "الدمام",
     Category: "مدنى",
     
-    Mobile_Number: "201122376555",
+    Mobile_Number: "0581739548",
     Email: "abdullah@gmail.com",
   },
   {
@@ -39,7 +39,7 @@ export const data = [
     Address: "الرياض",
     Category: "جنائي",
 
-    Mobile_Number: "201122354755",
+    Mobile_Number: "0581739548",
     Email: "mustafa@gmail.com",
   },
   {
@@ -48,7 +48,7 @@ export const data = [
     Address: "الرياض",
     Category: "مدنى",
 
-    Mobile_Number: "201122374355",
+    Mobile_Number: "0581739548",
     Email: "fahd@gmail.com",
   },
 ];

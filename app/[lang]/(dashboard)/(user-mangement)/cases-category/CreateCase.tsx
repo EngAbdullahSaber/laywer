@@ -82,7 +82,7 @@ const CreateCase = ({ buttonShape }: { buttonShape: any }) => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Contact Category")}{" "}
+              {t("Create Case Category")}
             </Button>
           </div>
         </div>

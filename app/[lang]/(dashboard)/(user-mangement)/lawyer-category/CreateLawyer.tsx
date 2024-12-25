@@ -82,7 +82,7 @@ const CreateLawyer = ({ buttonShape }: { buttonShape: any }) => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Contact Category")}{" "}
+              {t("Create Lawyer Category")}
             </Button>
           </div>
         </div>

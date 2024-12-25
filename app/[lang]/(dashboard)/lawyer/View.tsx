@@ -67,7 +67,7 @@ const View = () => {
               </span>
               <span className="text-default-900 font-semibold ">
                 {" "}
-                011232342342
+                0581739548
               </span>
             </li>
             <li>

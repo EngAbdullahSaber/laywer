@@ -86,6 +86,16 @@ const page = () => {
     { value: "جنائي", label: "جنائي" },
     { value: "مدنى", label: "مدنى" },
   ];
+  const City: { value: string; label: string }[] = [
+    { value: "الرياض", label: "الرياض" },
+    { value: "جدة", label: "جدة" },
+    { value: "الطائف", label: "الطائف" },
+  ];
+  const Region: { value: string; label: string }[] = [
+    { value: "الرياض", label: "الرياض" },
+    { value: "جدة", label: "جدة" },
+    { value: "الطائف", label: "الطائف" },
+  ];
   const { t, loading, error } = useTranslate();
 
   return (
@@ -248,21 +258,14 @@ const page = () => {
                 >
                   {t("Region")}
                 </Label>
-                <Input
-                  type="text"
-                  {...register("Region")}
-                  placeholder={t("Enter Region")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.Region,
-                  })}
+                <BasicSelect
+                  name="Region"
+                  menu={Region}
+                  control={control}
+                  errors={errors}
                 />
                 {errors.Region && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Region,
-                    })}
-                  >
+                  <p className="text-xs text-destructive">
                     {t(errors.Region.message)}
                   </p>
                 )}
@@ -276,20 +279,14 @@ const page = () => {
                 >
                   {t("City")}
                 </Label>
-                <Input
-                  type="text"
-                  {...register("City")}
-                  placeholder={t("Enter City")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.City,
-                  })}
+                <BasicSelect
+                  name="City"
+                  menu={City}
+                  control={control}
+                  errors={errors}
                 />
                 {errors.City && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.City,
-                    })}
-                  >
+                  <p className="text-xs text-destructive">
                     {t(errors.City.message)}
                   </p>
                 )}

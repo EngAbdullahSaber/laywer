@@ -143,6 +143,24 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
+    {
+      accessorKey: "Court Website Link",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Court Website Link"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <span className="max-w-[500px] text-blue-700 truncate font-medium">
+              رابط المحكمة
+            </span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
   ];
   return (
     <div>

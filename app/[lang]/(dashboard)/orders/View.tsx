@@ -66,7 +66,15 @@ const View = () => {
                 September 12, 2024
               </span>
             </li>
-
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Lawyer_Name")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                احمد على محمد
+              </span>
+            </li>
             <li>
               <span className="text-sm text-default-600 ">
                 {t("Show File")} :
