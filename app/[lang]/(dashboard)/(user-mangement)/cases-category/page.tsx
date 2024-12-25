@@ -8,7 +8,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./columns";
-import CreateContact from "./CreateContact";
+import CreateCase from "./CreateCase";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -31,7 +31,7 @@ const page = () => {
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export PDF")}
           </Button>
-          <CreateContact />
+          <CreateCase buttonShape={true} />
         </div>
       </div>
 

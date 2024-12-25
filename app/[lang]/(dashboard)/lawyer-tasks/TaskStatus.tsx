@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { useTranslate } from "@/config/useTranslation";
+import { motion } from "framer-motion";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -76,7 +77,12 @@ const TaskStatus = () => {
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ y: -20 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col gap-2"
+              >
                 <Label htmlFor="Task_Status">{t("Change Task Status")}</Label>
                 <BasicSelect
                   name="Task_Status"
@@ -89,11 +95,16 @@ const TaskStatus = () => {
                     {t(errors.Task_Status.message)}
                   </p>
                 )}{" "}
-              </div>
+              </motion.div>
             </div>
 
             {/* Submit Button inside form */}
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -109,7 +120,7 @@ const TaskStatus = () => {
               >
                 {t("Change Staus")}
               </Button>
-            </div>
+            </motion.div>
           </form>
         </div>
       </DialogContent>

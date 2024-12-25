@@ -19,6 +19,7 @@ import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import BasicSelect from "@/components/common/Select/BasicSelect";
+import { motion } from "framer-motion";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -77,7 +78,12 @@ const TaskStatus = () => {
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ x: 50 }}
+                whileInView={{ x: 0 }}
+                transition={{ duration: 3 }}
+                className="flex flex-col gap-2"
+              >
                 <Label htmlFor="Title">Change Case Status</Label>
                 <BasicSelect menu={Case_Status} />{" "}
                 {errors.Case_Status && (
@@ -85,7 +91,7 @@ const TaskStatus = () => {
                     {errors.Case_Status.message}
                   </p>
                 )}
-              </div>
+              </motion.div>
             </div>
 
             {/* Submit Button inside form */}

@@ -15,9 +15,10 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslate } from "@/config/useTranslation";
+import { Icon } from "@iconify/react";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
-const CreateContact = () => {
+const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
   const gender: { value: string; label: string }[] = [
     { value: "Male", label: "Male" },
     { value: "Female", label: "Female" },
@@ -32,15 +33,22 @@ const CreateContact = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-          {" "}
-          {t("Create Case Category")}
-        </Button>
+        {buttonShape ? (
+          <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+            {" "}
+            {t("Create Client Category")}
+          </Button>
+        ) : (
+          <Button size="icon" className=" h-7 w-7 bg-transparent">
+            {" "}
+            <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent size="2xl" className="h-[75%]">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Create a New Cases Category")}
+            {t("Create a New Client Category")}
           </DialogTitle>
         </DialogHeader>
         <div>
@@ -49,7 +57,7 @@ const CreateContact = () => {
               <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
                 <div className="flex flex-col gap-2">
                   <Label>{t("Name")}</Label>
-                  <Input type="text" placeholder={t("Enter Cases Name")} />
+                  <Input type="text" placeholder={t("Enter Client Name")} />
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -74,7 +82,7 @@ const CreateContact = () => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Contact Category")}{" "}
+              {t("Create Client Category")}{" "}
             </Button>
           </div>
         </div>
@@ -83,4 +91,4 @@ const CreateContact = () => {
   );
 };
 
-export default CreateContact;
+export default CreateClient;

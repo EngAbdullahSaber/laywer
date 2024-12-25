@@ -71,6 +71,15 @@ const View = () => {
               </span>{" "}
               <span className="text-default-900 font-semibold "> Criminal</span>
             </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Case Date")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                12/03/2004
+              </span>
+            </li>
           </ul>
           <hr className="my-8" />
           <h3 className="font-semibold  text-lg my-3">
@@ -97,6 +106,12 @@ const View = () => {
                 {" "}
                 abc@gmail.com
               </span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Address")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> الرياض </span>
             </li>
           </ul>
           <hr className="my-8" />

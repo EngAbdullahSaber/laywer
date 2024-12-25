@@ -12,20 +12,27 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null); // Track hovered date
-  const [clickedDate, setClickedDate] = React.useState<Date | null>(null); // Track clicked date
-  const [showPopup, setShowPopup] = React.useState(false); // State to control pop-up visibility
+  const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null);
+  const [clickedDate, setClickedDate] = React.useState<Date | null>(null);
+  const [showPopup, setShowPopup] = React.useState(false);
 
   // Handle hover event
-  const handleHover = (date: Date) => {
-    setHoveredDate(date);
-    showPopupFor30Seconds(); // Show pop-up for 30 seconds on hover
+  const handleHover = (date: Date | undefined) => {
+    if (date) {
+      setHoveredDate(date);
+      setShowPopup(true); // Show popup immediately on hover
+      showPopupFor30Seconds(); // Show pop-up for 30 seconds
+    }
   };
 
   // Handle click event
-  const handleClick = (date: Date) => {
-    setClickedDate(date);
-    showPopupFor30Seconds(); // Show pop-up for 30 seconds on click
+  const handleClick = (date: Date | undefined) => {
+    if (date) {
+      setClickedDate(date);
+      setHoveredDate(null); // Clear hovered date on click
+      setShowPopup(true); // Show popup immediately on click
+      showPopupFor30Seconds(); // Show pop-up for 30 seconds
+    }
   };
 
   // Function to handle conditional message based on date
@@ -33,21 +40,18 @@ function Calendar({
     if (!date) return "";
 
     const dateString = date.toDateString();
-
-    // Check if date contains the number "1" to determine appointment type
-    if (dateString.includes("1")) {
-      return "Appointment in court";
-    }
-    return "Appointment with client";
+    return dateString.includes("1")
+      ? "الترافع عن قضية فى المحكمة"
+      : "مقابلة العميل";
   };
 
   // Function to show pop-up for 30 seconds
   const showPopupFor30Seconds = () => {
-    setShowPopup(true);
     setTimeout(() => {
       setShowPopup(false); // Hide pop-up after 30 seconds
-      setClickedDate(null);
-    }, 1000); // 30 seconds
+      setClickedDate(null); // Clear clicked date
+      setHoveredDate(null); // Clear hovered date
+    }, 30000); // 30 seconds
   };
 
   return (
@@ -56,7 +60,7 @@ function Calendar({
         showOutsideDays={showOutsideDays}
         className={cn("p-0 md:p-3", className)}
         classNames={{
-          months: "w-full  space-y-4 sm:space-x-4 sm:space-y-0",
+          months: "w-full space-y-4 sm:space-x-4 sm:space-y-0",
           month: "space-y-4",
           caption: "flex justify-center pt-1 relative items-center",
           caption_label: "text-sm font-medium",
@@ -73,7 +77,7 @@ function Calendar({
             "flex-1 text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
           row: "flex w-full gap-1 mt-2",
           cell: "flex-1 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-primary [&:has([aria-selected])]:rounded-md focus-within:relative focus-within:z-20",
-          day: "w-full h-10 rounded  p-0 font-normal aria-selected:opacity-100 bg-transparent text-current hover:text-primary",
+          day: "w-full h-10 rounded p-0 font-normal aria-selected:opacity-100 bg-transparent text-current hover:text-primary",
           day_selected:
             "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
           day_today: "bg-accent text-accent-foreground",
@@ -85,11 +89,11 @@ function Calendar({
           ...classNames,
         }}
         components={{
-          IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-          IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+          IconLeft: () => <ChevronLeft className="h-4 w-4" />,
+          IconRight: () => <ChevronRight className="h-4 w-4" />,
         }}
-        onDayHover={handleHover} // Set hover handler
-        onDayClick={handleClick} // Set click handler
+        onDayHover={handleHover}
+        onDayClick={handleClick}
         {...props}
       />
 
@@ -100,22 +104,18 @@ function Calendar({
           style={{
             top: "50px", // Adjust this based on your design
             left: "50%",
-            background: "#000080", // You can change the background color
+            background: "#000080",
             transform: "translateX(-50%)",
             zIndex: 9999,
             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
           <p>
-            {`Details for: ${
+            {` ${
               clickedDate
-                ? `${clickedDate.toDateString()} - ${getPopupMessage(
-                    clickedDate
-                  )}`
+                ? `${getPopupMessage(clickedDate)}`
                 : hoveredDate
-                ? `${hoveredDate.toDateString()} - ${getPopupMessage(
-                    hoveredDate
-                  )}`
+                ? ` ${getPopupMessage(hoveredDate)}`
                 : ""
             }`}
           </p>

@@ -15,9 +15,10 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslate } from "@/config/useTranslation";
+import { Icon } from "@iconify/react";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
-const CreateContact = () => {
+const CreateCourt = ({ buttonShape }: { buttonShape: any }) => {
   const gender: { value: string; label: string }[] = [
     { value: "Male", label: "Male" },
     { value: "Female", label: "Female" },
@@ -32,10 +33,17 @@ const CreateContact = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-          {" "}
-          {t("Create Court Category")}
-        </Button>
+        {buttonShape ? (
+          <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+            {" "}
+            {t("Create Court Category")}
+          </Button>
+        ) : (
+          <Button size="icon" className=" h-7 w-7 bg-transparent">
+            {" "}
+            <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent size="2xl" className="h-[75%]">
         <DialogHeader className="p-0">
@@ -74,7 +82,7 @@ const CreateContact = () => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Contact Category")}{" "}
+              {t("Create Court Category")}{" "}
             </Button>
           </div>
         </div>
@@ -83,4 +91,4 @@ const CreateContact = () => {
   );
 };
 
-export default CreateContact;
+export default CreateCourt;

@@ -75,13 +75,24 @@ const View = () => {
               <span className="text-default-900 font-semibold "> 21231</span>
             </li>
             <li>
-              <span className="text-sm text-default-600 ">
-                {t("Key Dates")} :{" "}
-              </span>{" "}
+              <span className="text-sm text-default-600 ">Appointment </span>{" "}
               <span className="text-default-900 font-semibold ">
                 {" "}
                 September 12, 2024 12:11 PM
               </span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">{t("Date")} : </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                September 12, 2024 12:11 PM
+              </span>
+            </li>
+            <li>
+              <span className="text-sm text-default-600 ">
+                {t("Address")} :{" "}
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> الرياض</span>
             </li>
           </ul>
           <hr className="my-8" />

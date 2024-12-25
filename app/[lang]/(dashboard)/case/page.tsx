@@ -8,6 +8,7 @@ import { Icon } from "@iconify/react";
 import TableData from "./columns";
 import CreateCase from "./CreateCase";
 import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
+import Link from "next/link";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -30,7 +31,11 @@ const page = () => {
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export PDF")}
           </Button>
-          <CreateCase />
+          <Link href={"case/add"}>
+            <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+              {t("Create Case")}
+            </Button>
+          </Link>{" "}
         </div>
       </div>
 
