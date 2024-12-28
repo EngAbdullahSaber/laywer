@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
+import { motion } from "framer-motion";
 
 import Logo from "@/public/images/auth/LawyerLogo.png";
 
@@ -84,22 +85,43 @@ const LogInForm = () => {
 
   return (
     <div className="w-full py-10">
-      <Image
-        src={Logo}
-        height={56}
-        width={56}
-        alt="logo"
-        className="w-14 h-14"
-        priority={true}
-      />
-      <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {" "}
+        <Image
+          src={Logo}
+          height={56}
+          width={56}
+          alt="logo"
+          className="w-14 h-14"
+          priority={true}
+        />
+      </motion.div>
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900"
+      >
         {t("Hey, Hello")}
-      </div>
-      <div className="2xl:text-lg text-base text-default-600 2xl:mt-2 leading-6">
+      </motion.div>
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="2xl:text-lg text-base text-default-600 2xl:mt-2 leading-6"
+      >
         {t("Enter the information you entered while registering")}
-      </div>
+      </motion.div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5 2xl:mt-7">
-        <div>
+        <motion.div
+          initial={{ y: -50 }}
+          whileInView={{ y: 0 }}
+          transition={{ duration: 1.2 }}
+        >
           <Label htmlFor="email" className="mb-2 font-medium text-default-600">
             {t("Email")}{" "}
           </Label>
@@ -115,12 +137,17 @@ const LogInForm = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </div>
+        </motion.div>
         {errors.email && (
           <div className=" text-destructive mt-2">{errors.email.message}</div>
         )}
 
-        <div className="mt-3.5">
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1.4 }}
+          className="mt-3.5"
+        >
           <Label
             htmlFor="password"
             className="mb-2 font-medium text-default-600"
@@ -157,7 +184,7 @@ const LogInForm = () => {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
         {errors.password && (
           <div className=" text-destructive mt-2">
             {errors.password.message}
@@ -178,93 +205,34 @@ const LogInForm = () => {
               Remember me
             </Label> */}
           </div>
-          <Link href="/auth/forgot" className="flex-none text-sm text-primary">
-            {t("Forget Password?")}
-          </Link>
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.6 }}
+          >
+            <Link
+              href="/auth/forgot"
+              className="flex-none text-sm text-primary"
+            >
+              {t("Forget Password?")}
+            </Link>
+          </motion.div>
         </div>
-        <Button
-          className="w-full"
-          disabled={isPending}
-          size={!isDesktop2xl ? "lg" : "md"}
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1.8 }}
         >
-          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isPending ? t("Loading") : t("Sign In")}
-        </Button>
+          <Button
+            className="w-full"
+            disabled={isPending}
+            size={!isDesktop2xl ? "lg" : "md"}
+          >
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending ? t("Loading") : t("Sign In")}
+          </Button>
+        </motion.div>
       </form>
-      {/* <div className="mt-6 xl:mt-8 flex flex-wrap justify-center gap-4">
-        <Button
-          type="button"
-          size="icon"
-          variant="outline"
-          className="rounded-full  border-default-300 hover:bg-transparent"
-          disabled={isPending}
-          onClick={() =>
-            signIn("google", {
-              callbackUrl: "/dashboard",
-            })
-          }
-        >
-          <Image
-            src={googleIcon}
-            alt="google"
-            className="w-5 h-5"
-            priority={true}
-          />
-        </Button>
-        <Button
-          type="button"
-          size="icon"
-          variant="outline"
-          className="rounded-full  border-default-300 hover:bg-transparent"
-          disabled={isPending}
-          onClick={() =>
-            signIn("github", {
-              callbackUrl: "/dashboard",
-              redirect: false,
-            })
-          }
-        >
-          <Image
-            src={GithubIcon}
-            alt="google"
-            className="w-5 h-5"
-            priority={true}
-          />
-        </Button>
-        <Button
-          type="button"
-          size="icon"
-          variant="outline"
-          className="rounded-full border-default-300 hover:bg-transparent"
-        >
-          <Image
-            src={facebook}
-            alt="google"
-            className="w-5 h-5"
-            priority={true}
-          />
-        </Button>
-        <Button
-          type="button"
-          size="icon"
-          variant="outline"
-          className="rounded-full  border-default-300 hover:bg-transparent"
-        >
-          <Image
-            src={twitter}
-            alt="google"
-            className="w-5 h-5"
-            priority={true}
-          />
-        </Button>
-      </div> */}
-      {/* <div className="mt-5 2xl:mt-8 text-center text-base text-default-600">
-        Don't have an account?{" "}
-        <Link href="/auth/register" className="text-primary">
-          {" "}
-          Sign Up{" "}
-        </Link>
-      </div> */}
     </div>
   );
 };

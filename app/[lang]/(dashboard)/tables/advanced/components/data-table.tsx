@@ -73,21 +73,26 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-4">
-
       <DataTableToolbar
         table={table}
         filterNames={filterNames}
         filters={filters}
       />
       <div className="rounded-md border">
-        <Table>
+        <Table id="data-table">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className=" !text-center rtl:!text-center " key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : t(header?.id?.toLocaleLowerCase()) }
+                    <TableHead
+                      className=" !text-center rtl:!text-center "
+                      key={header.id}
+                      colSpan={header.colSpan}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : t(header?.id?.toLocaleLowerCase())}
                     </TableHead>
                   );
                 })}
@@ -129,7 +134,6 @@ export function DataTable<TData>({
               </TableRow>
             )}
           </TableBody>
-
         </Table>
       </div>
       <DataTablePagination table={table} />

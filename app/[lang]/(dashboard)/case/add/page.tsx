@@ -276,7 +276,7 @@ const page = () => {
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <div className="flex flex-row justify-between items-center">
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label htmlFor="CourtCategory">{t("Court Category")}</Label>
@@ -296,7 +296,7 @@ const page = () => {
                     <CreateCourt buttonShape={false} />
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <Label htmlFor="category">{t("Status")} </Label>
                 <Radio text1={"Plaintiff"} text2={"Defendant"} />

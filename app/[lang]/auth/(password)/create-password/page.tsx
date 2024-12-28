@@ -8,6 +8,7 @@ import { Fragment, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import CreatePasswordForm from "./create-password-form";
 import Logo from "@/public/images/auth/LawyerLogo.png";
+import { motion } from "framer-motion";
 
 const CreatePasswordPage = () => {
   const [openVideo, setOpenVideo] = useState<boolean>(false);
@@ -27,16 +28,24 @@ const CreatePasswordPage = () => {
               alt="image"
               className="absolute top-0 left-0 w-full h-full "
             />
-
-            <Image
-              src={Logo}
-              height={320}
-              width={384}
-              alt="logo"
-              className="w-96 h-80"
-              priority={true}
-            />
-            <p
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ duration: 1.2 }}
+            >
+              <Image
+                src={Logo}
+                height={320}
+                width={384}
+                alt="logo"
+                className="w-96 h-80 block"
+                priority={true}
+              />
+            </motion.div>{" "}
+            <motion.p
+              initial={{ filter: "blur(20px)", opacity: 0 }}
+              animate={{ filter: "blur(0px)", opacity: 1 }}
+              transition={{ duration: 1.2 }}
               className="!text-[#fdd472] text-center font-extrabold text-3xl z-50 block"
               style={{
                 color: "#fdd472",
@@ -45,7 +54,7 @@ const CreatePasswordPage = () => {
               }}
             >
               ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي
-            </p>
+            </motion.p>
           </div>
 
           <div className=" min-h-screen basis-full md:basis-1/2 w-full px-4 py-5 flex justify-center items-center">

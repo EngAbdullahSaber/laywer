@@ -11,6 +11,7 @@ import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 import RequestStatus from "./RequestStatus";
 import FileRequest from "./FileRequest";
+import { motion } from "framer-motion";
 
 interface Task {
   id: string;
@@ -73,9 +74,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Request_Title}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -88,9 +94,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Request_Date}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -106,19 +117,26 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Request_Status === "قيدالانتظار" &&
-                  "destructive") ||
-                (row.original.Request_Status === "مكتمل" && "info") ||
-                (row.original.Request_Status === "تمت الاجابة عليه" &&
-                  "warning") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Request_Status}
-            </Badge>
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Request_Status === "قيدالانتظار" &&
+                    "destructive") ||
+                  (row.original.Request_Status === "مكتمل" && "info") ||
+                  (row.original.Request_Status === "تمت الاجابة عليه" &&
+                    "warning") ||
+                  "default"
+                }
+              >
+                {row.original.Request_Status}
+              </Badge>{" "}
+            </motion.span>
           </div>
         );
       },
@@ -134,19 +152,27 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Required_Action === "ارسال ملف" &&
-                  "destructive") ||
-                (row.original.Required_Action === "ارسال المعلومات" &&
-                  "info") ||
-                (row.original.Required_Action === "المزيد" && "warning") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Required_Action}
-            </Badge>
+              {" "}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Required_Action === "ارسال ملف" &&
+                    "destructive") ||
+                  (row.original.Required_Action === "ارسال المعلومات" &&
+                    "info") ||
+                  (row.original.Required_Action === "المزيد" && "warning") ||
+                  "default"
+                }
+              >
+                {row.original.Required_Action}
+              </Badge>{" "}
+            </motion.span>
           </div>
         );
       },
@@ -163,9 +189,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Associated_Case}
-            </span>
+            </motion.span>
           </div>
         );
       },

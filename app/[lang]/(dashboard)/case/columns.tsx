@@ -18,6 +18,7 @@ interface Task {
   Case_Name?: string;
   Client_Name?: string;
   Category?: string;
+  Lawyer_Name?: string;
   Next_Appointment_Date?: string;
   Status?: string;
 }
@@ -81,7 +82,24 @@ const TableData = () => {
         );
       },
     },
-
+    {
+      accessorKey: "Lawyer_Name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Lawyer_Name"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <span className="max-w-[500px] truncate font-medium">
+              {row.original.Lawyer_Name}
+            </span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
     {
       accessorKey: "Category",
       header: ({ column }) => (

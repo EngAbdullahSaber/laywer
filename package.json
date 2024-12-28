@@ -92,6 +92,8 @@
     "framer-motion": "^10.16.3",
     "google-map-react": "^2.2.1",
     "html-to-image": "^1.11.11",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "leaflet": "^1.9.4",
     "lucide": "^0.270.0",
     "lucide-react": "^0.269.0",
@@ -142,6 +144,7 @@
     "tailwindcss-animate": "^1.0.6",
     "unist-util-visit": "^5.0.0",
     "vaul": "^0.8.0",
+    "xlsx": "^0.18.5",
     "yup": "^1.4.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.1"

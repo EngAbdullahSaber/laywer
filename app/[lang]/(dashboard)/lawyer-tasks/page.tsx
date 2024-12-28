@@ -9,6 +9,7 @@ import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent"
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -27,17 +28,16 @@ const page = () => {
           <BreadcrumbComponent header={"Tasks"} body={"Task List"} />
         </motion.div>
         <motion.div
-          initial={{ x: -25 }}
+          initial={{ x: -15 }}
           whileInView={{ x: 0 }}
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          {" "}
-          <Button color="secondary" variant="outline">
+          <Button color="secondary" variant="outline" onClick={exportToExcel}>
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export Excel")}
           </Button>
-          <Button color="secondary" variant="outline">
+          <Button color="secondary" variant="outline" onClick={downloadPDF}>
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export PDF")}
           </Button>

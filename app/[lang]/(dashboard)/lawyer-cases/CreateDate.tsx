@@ -19,6 +19,7 @@ import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
+import { motion } from "framer-motion";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -86,7 +87,12 @@ const CreateDate = () => {
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.5 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Title"
                   className={cn("", {
@@ -112,9 +118,14 @@ const CreateDate = () => {
                     {t(errors.Title.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="date"
                   className={cn("", {
@@ -136,10 +147,15 @@ const CreateDate = () => {
                     {t(errors.date.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
             </div>
 
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ y: 50 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.5 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -155,7 +171,7 @@ const CreateDate = () => {
               >
                 {t("Create Date")}
               </Button>
-            </div>
+            </motion.div>
           </form>
         </div>
       </DialogContent>

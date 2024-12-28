@@ -3,6 +3,7 @@ export const data = [
     id: "TASK-8782",
    
     Client_Name: "مصطفى",
+    Lawyer_Name: "مصطفى",
     Category: "جنائي",
     Next_Appointment_Date: "September 12, 2024 ",
     Status: "قيد التنفيذ",
@@ -11,6 +12,7 @@ export const data = [
     id: "TASK-8782",
 
     Client_Name: "احمد",
+    Lawyer_Name: "احمد",
 
     Category: "مدنى",
     Next_Appointment_Date: "September 22, 2024 ",
@@ -20,6 +22,7 @@ export const data = [
     id: "TASK-8782",
 
     Client_Name: "حمد",
+    Lawyer_Name: "حمد",
 
     Category: "مدنى",
     Next_Appointment_Date: "September 2, 2024 ",
@@ -28,6 +31,7 @@ export const data = [
   {
     id: "TASK-8782",
     Client_Name: "احمد",
+    Lawyer_Name: "احمد",
 
     Category: "عائلى",
     Next_Appointment_Date: "September 12, 2024 ",
@@ -36,6 +40,7 @@ export const data = [
   {
     id: "TASK-8782",
     Client_Name: "محمد",
+    Lawyer_Name: "محمد",
  
     Category: "جنائي",
     Next_Appointment_Date: "September 10, 2024 ",
@@ -44,6 +49,7 @@ export const data = [
   {
     id: "TASK-8782",
     Client_Name: "على",
+    Lawyer_Name: "على",
 
     Category: "عائلى",
     Next_Appointment_Date: "September 12, 2024 ",
@@ -52,6 +58,7 @@ export const data = [
   {
     id: "TASK-8782",
     Client_Name: "فهد",
+    Lawyer_Name: "فهد",
 
     Category: "جنائي",
     Next_Appointment_Date: "September 17, 2024 ",

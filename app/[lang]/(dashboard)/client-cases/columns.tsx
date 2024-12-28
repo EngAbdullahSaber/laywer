@@ -10,6 +10,7 @@ import Actions from "@/components/common/Actions/Actions";
 import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
+import { motion } from "framer-motion";
 
 interface Task {
   id: string;
@@ -60,7 +61,16 @@ const TableData = () => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={"id"} />
       ),
-      cell: ({ row }) => <div className="">{row.original.id}</div>,
+      cell: ({ row }) => (
+        <motion.div
+          className=""
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1.7 }}
+        >
+          {row.original.id}
+        </motion.div>
+      ),
       enableSorting: false,
       enableHiding: false,
     },
@@ -72,9 +82,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Case_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -87,9 +102,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Case_Number}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -105,9 +125,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Court_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -123,17 +148,25 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Court_Category === "جنائي" && "destructive") ||
-                (row.original.Court_Category === "عائلى " && "info") ||
-                (row.original.Court_Category === "مدنى" && "warning") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Court_Category}
-            </Badge>
+              {" "}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Court_Category === "جنائي" && "destructive") ||
+                  (row.original.Court_Category === "عائلى " && "info") ||
+                  (row.original.Court_Category === "مدنى" && "warning") ||
+                  "default"
+                }
+              >
+                {row.original.Court_Category}
+              </Badge>
+            </motion.span>
           </div>
         );
       },
@@ -193,9 +226,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Hearing_Dates}
-            </span>
+            </motion.span>
           </div>
         );
       },

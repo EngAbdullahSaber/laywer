@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import { useTranslate } from "@/config/useTranslation";
+import { motion } from "framer-motion";
 
 const VerfiyForm = () => {
   const totalOtpField = 4;
@@ -57,22 +58,44 @@ const VerfiyForm = () => {
 
   return (
     <div className="w-full md:w-[480px] py-5">
-      <Image
-        src={Logo}
-        height={56}
-        width={56}
-        alt="logo"
-        className="w-14 h-14"
-        priority={true}
-      />
-      <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
+      <motion.div
+        initial={{ y: -50 }}
+        whileInView={{ y: 0 }}
+        transition={{ duration: 1.2 }}
+      >
+        {" "}
+        <Image
+          src={Logo}
+          height={56}
+          width={56}
+          alt="logo"
+          className="w-14 h-14"
+          priority={true}
+        />
+      </motion.div>
+      <motion.div
+        initial={{ y: -50 }}
+        whileInView={{ y: 0 }}
+        transition={{ duration: 1.2 }}
+        className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900"
+      >
         {t("Two Factor Verification")}
-      </div>
-      <div className="2xl:text-lg text-base text-default-600 mt-2 leading-6">
+      </motion.div>
+      <motion.div
+        initial={{ y: -50 }}
+        whileInView={{ y: 0 }}
+        transition={{ duration: 1.2 }}
+        className="2xl:text-lg text-base text-default-600 mt-2 leading-6"
+      >
         {t("Enter the 4 figure confirmation code shown on the email")}
-      </div>
+      </motion.div>
       <form className="mt-8">
-        <div className="flex flex-wrap  gap-1 lg:gap-6">
+        <motion.div
+          initial={{ y: -50 }}
+          whileInView={{ y: 0 }}
+          transition={{ duration: 1.2 }}
+          className="flex flex-wrap  gap-1 lg:gap-6"
+        >
           {otpFields.map((index) => (
             <Input
               key={`otp-code-${index}`}
@@ -87,8 +110,13 @@ const VerfiyForm = () => {
               ref={(ref) => (inputRefs.current[index] = ref)}
             />
           ))}
-        </div>
-        <div className="mt-6">
+        </motion.div>
+        <motion.div
+          initial={{ y: -50 }}
+          whileInView={{ y: 0 }}
+          transition={{ duration: 1.2 }}
+          className="mt-6"
+        >
           <Button
             type="button"
             className="w-full"
@@ -98,7 +126,7 @@ const VerfiyForm = () => {
           >
             {t("Verify Now")}
           </Button>
-        </div>
+        </motion.div>
       </form>
     </div>
   );

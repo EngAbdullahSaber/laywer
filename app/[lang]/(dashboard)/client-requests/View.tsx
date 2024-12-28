@@ -16,6 +16,7 @@ import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { motion } from "framer-motion";
 
 const View = () => {
   const { t, loading, error } = useTranslate();
@@ -47,13 +48,21 @@ const View = () => {
           {" "}
           <div className="py-6" dir={lang === "ar" ? "rtl" : "ltr"}>
             <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-              <li>
+              <motion.li
+                initial={{ y: 50 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
                 <span className="text-sm text-default-600 ">
                   {t("Request_Title")} :
                 </span>{" "}
                 <span className="text-default-900 font-semibold  "> Ahmed</span>
-              </li>
-              <li>
+              </motion.li>
+              <motion.li
+                initial={{ y: 50 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7 }}
+              >
                 <span className="text-sm text-default-600 ">
                   {t("Request_Date")} :
                 </span>{" "}
@@ -61,8 +70,12 @@ const View = () => {
                   {" "}
                   September 12, 2024 12:11 PM
                 </span>
-              </li>
-              <li>
+              </motion.li>
+              <motion.li
+                initial={{ y: 50 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
                 <span className="text-sm text-default-600 ">
                   {t("Request_Status")} :
                 </span>{" "}
@@ -70,14 +83,22 @@ const View = () => {
                   {" "}
                   Responded
                 </span>
-              </li>
-              <li>
+              </motion.li>
+              <motion.li
+                initial={{ y: 50 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+              >
                 <span className="text-sm text-default-600 ">
                   {t("Required_Action")} :
                 </span>{" "}
                 <span className="text-default-900 font-semibold  ">Agree</span>
-              </li>
-              <li>
+              </motion.li>
+              <motion.li
+                initial={{ y: 50 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1 }}
+              >
                 <span className="text-sm text-default-600 ">
                   {t("Associated_Case")} :
                 </span>
@@ -85,11 +106,16 @@ const View = () => {
                   {" "}
                   mohamed
                 </span>
-              </li>
+              </motion.li>
             </ul>
             <hr className="my-8" />
             <ul className="md:grid grid-cols-1  !mt-5 gap-2 space-y-2 md:space-y-0">
-              <li className="flex flex-row justify-between items-center">
+              <motion.li
+                initial={{ y: 50 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1.1 }}
+                className="flex flex-row justify-between items-center"
+              >
                 <span className="text-sm text-default-600  w-[30%]">
                   {t("Description")} :
                 </span>{" "}
@@ -100,7 +126,7 @@ const View = () => {
                   fugit architecto, veritatis iusto? Nulla, doloremque.
                   Corporis.
                 </span>
-              </li>
+              </motion.li>
             </ul>
           </div>
         </ScrollArea>
