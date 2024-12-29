@@ -65,7 +65,8 @@ const schema = z.object({
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CreateCourt from "../../(user-mangement)/court-category/CreateCourt";
+import CreateCourt from "../../(user-mangement)/court-category/CreateCourtCategory";
+import { motion } from "framer-motion";
 
 const page = () => {
   const {
@@ -111,7 +112,12 @@ const page = () => {
             className="flex flex-col justify-between "
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Name"
                   className={cn("", {
@@ -137,9 +143,14 @@ const page = () => {
                     {t(errors.Name.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
               <div className="flex flex-col gap-2">
-                <div className="flex flex-row justify-between items-center">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.7 }}
+                  className="flex flex-row justify-between items-center"
+                >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label
                       htmlFor="Court_Category"
@@ -164,9 +175,14 @@ const page = () => {
                   <div className="w-[8%] mt-5">
                     <CreateCourt buttonShape={false} />
                   </div>
-                </div>
+                </motion.div>
               </div>{" "}
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Email"
                   className={cn("", {
@@ -192,8 +208,13 @@ const page = () => {
                     {t(errors.Email.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Address"
                   className={cn("", {
@@ -220,8 +241,13 @@ const page = () => {
                     {t(errors.Address.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Room_Number"
                   className={cn("", {
@@ -248,8 +274,13 @@ const page = () => {
                     {t(errors.Room_Number.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.1 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Region"
                   className={cn("", {
@@ -269,8 +300,13 @@ const page = () => {
                     {t(errors.Region.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="City"
                   className={cn("", {
@@ -290,10 +326,15 @@ const page = () => {
                     {t(errors.City.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
             </div>
             {/* Submit Button inside form */}
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.3 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <Button
                 type="button"
                 className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
@@ -307,7 +348,7 @@ const page = () => {
               >
                 {t("Create Court")}
               </Button>
-            </div>
+            </motion.div>
           </form>{" "}
         </CardContent>
       </Card>

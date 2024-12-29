@@ -15,6 +15,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 const View = () => {
   const { t, loading, error } = useTranslate();
@@ -44,19 +45,31 @@ const View = () => {
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Case Name")} :{" "}
               </span>{" "}
               <span className="text-default-900 font-semibold "> Ahmed</span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Category")} :{" "}
               </span>
               <span className="text-default-900 font-semibold "> Admin</span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Next Appointment Date")} :
               </span>{" "}
@@ -64,14 +77,22 @@ const View = () => {
                 {" "}
                 12/03/2004
               </span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Status")} :{" "}
               </span>{" "}
               <span className="text-default-900 font-semibold "> Criminal</span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Case Date")} :
               </span>{" "}
@@ -79,26 +100,49 @@ const View = () => {
                 {" "}
                 12/03/2004
               </span>
-            </li>
+            </motion.li>
           </ul>
-          <hr className="my-8" />
-          <h3 className="font-semibold  text-lg my-3">
+          <motion.hr
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            className="my-8"
+          />
+          <motion.h3
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            className="font-semibold  text-lg my-3"
+          >
             {t("Client Information")}
-          </h3>
+          </motion.h3>
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
               <span className="text-sm text-default-600 ">{t("Name")} : </span>{" "}
               <span className="text-default-900 font-semibold "> Ahmed</span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Phone Number")} :{" "}
               </span>{" "}
               <span className="text-default-900 font-semibold">
                 011223344555
               </span>
-            </li>
-            <li className="col-span-2">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+              className="col-span-2"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Email Address")} :{" "}
               </span>{" "}
@@ -106,19 +150,39 @@ const View = () => {
                 {" "}
                 abc@gmail.com
               </span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.4 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Address")} :
               </span>{" "}
               <span className="text-default-900 font-semibold "> الرياض </span>
-            </li>
+            </motion.li>
           </ul>
-          <hr className="my-8" />
-          <h3 className="font-semibold  text-lg my-3">{t("Court Details")}</h3>
+          <motion.hr
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            className="my-8"
+          />
+          <motion.h3
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            className="font-semibold  text-lg my-3"
+          >
+            {t("Court Details")}
+          </motion.h3>
 
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.5 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Court Name")} :{" "}
               </span>{" "}
@@ -126,14 +190,22 @@ const View = () => {
                 {" "}
                 Riyadh Court
               </span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.6 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Room Number")} :{" "}
               </span>
               <span className="text-default-900 font-semibold ">22</span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.7 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Address")} :{" "}
               </span>{" "}
@@ -141,13 +213,17 @@ const View = () => {
                 {" "}
                 Saudi Arabia ,Riyadh
               </span>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.8 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Court Category")} :
               </span>{" "}
               <span className="text-default-900 font-semibold"> Criminals</span>
-            </li>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>

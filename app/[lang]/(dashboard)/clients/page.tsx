@@ -9,6 +9,8 @@ import TableData from "./columns";
 import CreateClient from "./CreateClient";
 import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -16,18 +18,27 @@ const page = () => {
   return (
     <div className="space-y-5">
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
-        <div>
+        <motion.div
+          initial={{ x: 15 }}
+          whileInView={{ x: 0 }}
+          transition={{ duration: 1.7 }}
+        >
           <div className=" text-default-900 text-2xl font-bold my-2">
             {t("Client List")}
           </div>{" "}
           <BreadcrumbComponent header={"Client"} body={"Client List"} />
-        </div>
-        <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center">
-          <Button color="secondary" variant="outline">
+        </motion.div>
+        <motion.div
+          initial={{ x: -15 }}
+          whileInView={{ x: 0 }}
+          transition={{ duration: 1.7 }}
+          className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
+        >
+          <Button color="secondary" variant="outline" onClick={exportToExcel}>
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export Excel")}
           </Button>
-          <Button color="secondary" variant="outline">
+          <Button color="secondary" variant="outline" onClick={downloadPDF}>
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export PDF")}
           </Button>
@@ -36,7 +47,7 @@ const page = () => {
               {t("Create Client")}
             </Button>
           </Link>{" "}
-        </div>
+        </motion.div>
       </div>
 
       <Card>

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
+import { motion } from "framer-motion";
 
 const Delete = () => {
   const { t, loading, error } = useTranslate();
@@ -32,28 +33,51 @@ const Delete = () => {
 
       <DialogContent className="p-6 !h-auto" size="md">
         <div className="flex flex-col items-center text-center">
-          <span className="text-8xl text-destructive">
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1.7 }}
+            className="text-8xl text-destructive"
+          >
             <Icon icon="wpf:delete-shield" color="destructive" />
-          </span>
-          <h3 className="mt-6 mb-4 text-destructive text-xl font-semibold">
+          </motion.span>
+          <motion.h3
+            initial={{ y: -50 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="mt-6 mb-4 text-destructive text-xl font-semibold"
+          >
             {t("Deleting Lawyer")}{" "}
-          </h3>
-          <p className="text-sm text-default-500 ">
-            <p>{t("Are You Sure For Delete This Lawyer?")}</p>
-          </p>
+          </motion.h3>
+          <motion.p
+            initial={{ y: -50 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 1.4 }}
+            className="text-sm text-default-500 "
+          >
+            {t("Are You Sure For Delete This Lawyer?")}
+          </motion.p>
         </div>
         <DialogFooter className="">
-          <DialogClose asChild>
+        <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.7 }}
+            className="flex flex-row gap-5 justify-center"
+          ><DialogClose asChild>
             <Button type="submit" variant="outline" color="destructive">
               {t("Disagree")}
             </Button>
           </DialogClose>
 
-          <Button type="submit"  
+          <Button
+            type="submit"
             className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
-            color="primary">
+            color="primary"
+          >
             {t("Agree")}
           </Button>
+          </motion.div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

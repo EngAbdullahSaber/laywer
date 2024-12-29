@@ -22,6 +22,7 @@ import BasicSelect from "@/components/common/Select/BasicSelect";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -82,7 +83,12 @@ const AssignCase = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <div className="flex flex-col gap-2">
-                <div className="flex flex-row justify-between items-center">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-row justify-between items-center"
+                >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label htmlFor="Title" className="my-4">
                       {t("Select Lawyer")}
@@ -99,7 +105,7 @@ const AssignCase = () => {
                       </p>
                     )}{" "}
                   </div>
-                  <Link href={"/lawyer"} className="w-[8%] mt-5">
+                  <Link href={"/lawyer"} className="w-[8%] mt-10">
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -107,12 +113,17 @@ const AssignCase = () => {
                       color="#dfc77d"
                     />
                   </Link>
-                </div>
+                </motion.div>
               </div>
             </div>
 
             {/* Submit Button inside form */}
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ y: 50 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.7 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -128,7 +139,7 @@ const AssignCase = () => {
               >
                 {t("Select Lawyer")}
               </Button>
-            </div>
+            </motion.div>
           </form>
         </div>
       </DialogContent>

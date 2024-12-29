@@ -22,6 +22,8 @@ import { Radio } from "@/components/common/atoms/Radio";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion } from "framer-motion";
+
 // Zod validation schema
 const schema = z.object({
   Name: z
@@ -96,7 +98,12 @@ const page = () => {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-row justify-between items-center  gap-4">
-              <div className="flex flex-col gap-2 w-[48%]">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Name"
                   className={cn("", { "text-destructive": errors.Name })}
@@ -116,9 +123,14 @@ const page = () => {
                     {t(errors.Name.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="flex flex-col gap-2 w-[48%]">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="phone"
                   className={cn("", { "text-destructive": errors.phone })}
@@ -138,12 +150,22 @@ const page = () => {
                     {t(errors.phone.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label htmlFor="category">{t("Status")} </Label>
                 <Radio text1={"Plaintiff"} text2={"Defendant"} />
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Address"
                   className={cn("", { "text-destructive": errors.Address })}
@@ -164,13 +186,22 @@ const page = () => {
                     {t(errors.Address.message)}
                   </p>
                 )}
-              </div>
-
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label htmlFor="Role">{t("Role")}</Label>
                 <Radio text1={"Company"} text2={"Personal"} />
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Email"
                   className={cn("", { "text-destructive": errors.Email })}
@@ -190,8 +221,13 @@ const page = () => {
                     {t(errors.Email.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.1 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="password"
                   className={cn("", { "text-destructive": errors.password })}
@@ -212,15 +248,24 @@ const page = () => {
                     {t(errors.password.message)}
                   </p>
                 )}
-              </div>
-
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label htmlFor="Identity Number">
                   {t("Identity Number *")}
                 </Label>
                 <Input type="text" placeholder={t("Enter Identity Number")} />
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.4 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label>
                   <div>
                     <Button
@@ -236,14 +281,24 @@ const page = () => {
                   </div>
                   <Input type="file" className="hidden" />
                 </Label>
-              </div>
-              <div className="flex flex-col gap-2 w-[100%]">
+              </motion.div>
+
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-[100%]"
+              >
                 <Label htmlFor="Details">{t("Details *")}</Label>
                 <Textarea placeholder={t("Enter Details")} />
-              </div>
+              </motion.div>
             </div>
-
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <Button
                 type="button"
                 variant="outline"
@@ -257,7 +312,7 @@ const page = () => {
               >
                 {t("Create Client")}
               </Button>
-            </div>
+            </motion.div>
           </form>{" "}
         </CardContent>
       </Card>

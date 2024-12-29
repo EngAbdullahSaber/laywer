@@ -25,6 +25,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { Upload } from "lucide-react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const schema = z.object({
   Name: z
@@ -126,8 +127,8 @@ const schema = z.object({
 });
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CreateCase from "../../(user-mangement)/cases-category/CreateCase";
-import CreateCourt from "../../(user-mangement)/court-category/CreateCourt";
+import CreateCase from "../../(user-mangement)/cases-category/CreateCaseCategory";
+import CreateCourt from "../../(user-mangement)/court-category/CreateCourtCategory";
 
 const page = () => {
   const {
@@ -182,7 +183,12 @@ const page = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-row justify-between items-center  gap-4">
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <div className="flex flex-row justify-between items-center">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-row justify-between items-center"
+                >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label htmlFor="Client">{t("Client Selection")}</Label>
                     <BasicSelect
@@ -205,10 +211,15 @@ const page = () => {
                       color="#dfc77d"
                     />
                   </Link>
-                </div>
+                </motion.div>
               </div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <div className="flex flex-row justify-between items-center">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.7 }}
+                  className="flex flex-row justify-between items-center"
+                >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label htmlFor="category">{t("Case Category")} </Label>
                     <BasicSelect
@@ -226,11 +237,16 @@ const page = () => {
                   <div className="w-[8%] mt-5">
                     <CreateCase buttonShape={false} />
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <div className="flex flex-row justify-between items-center">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="flex flex-row justify-between items-center"
+                >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label htmlFor="Court">{t("Court Selection")} </Label>
                     <BasicSelect
@@ -253,9 +269,15 @@ const page = () => {
                       color="#dfc77d"
                     />
                   </Link>
-                </div>
+                </motion.div>
               </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Name"
                   className={cn("", { "text-destructive": errors.Name })}
@@ -275,7 +297,7 @@ const page = () => {
                     {t(errors.Name.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
               {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <div className="flex flex-row justify-between items-center">
                   <div className="!w-[87%]" style={{ width: "87%" }}>
@@ -297,11 +319,21 @@ const page = () => {
                   </div>
                 </div>
               </div> */}
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label htmlFor="category">{t("Status")} </Label>
                 <Radio text1={"Plaintiff"} text2={"Defendant"} />
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.1 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label
                   htmlFor="PartyName"
                   className={cn("", { "text-destructive": errors.PartyName })}
@@ -322,8 +354,13 @@ const page = () => {
                     {t(errors.PartyName.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label
                   htmlFor="LawyerName"
                   className={cn("", { "text-destructive": errors.LawyerName })}
@@ -344,8 +381,13 @@ const page = () => {
                     {t(errors.LawyerName.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.3 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label
                   htmlFor="CaseNumber"
                   className={cn("", { "text-destructive": errors.CaseNumber })}
@@ -366,8 +408,13 @@ const page = () => {
                     {t(errors.CaseNumber.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.4 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label>
                   <div>
                     <Button
@@ -383,9 +430,14 @@ const page = () => {
                   </div>
                   <Input type="file" className="hidden" />
                 </Label>
-              </div>
+              </motion.div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <div className="flex flex-row justify-between items-center">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.5 }}
+                  className="flex flex-row justify-between items-center"
+                >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label htmlFor="category">{t("Lawyer Selection")} </Label>
                     <BasicSelect
@@ -408,10 +460,15 @@ const page = () => {
                       color="#dfc77d"
                     />
                   </Link>
-                </div>
+                </motion.div>
               </div>
 
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.6 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label htmlFor="category">{t("Receipt Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -426,8 +483,13 @@ const page = () => {
                     {t(errors.date1.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label htmlFor="category">{t("Submission Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -442,8 +504,13 @@ const page = () => {
                     {t(errors.date2.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.8 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label htmlFor="category">{t("Judgment Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -458,8 +525,13 @@ const page = () => {
                     {t(errors.date3.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.9 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
                 <Label htmlFor="category">{t("Hearing Date")} </Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -474,10 +546,15 @@ const page = () => {
                     {t(errors.date4.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
             </div>
             <div className="grid grid-cols-1  my-2 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2 my-2">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 2 }}
+                className="flex flex-col gap-2 my-2"
+              >
                 <Label
                   htmlFor="CaseDescription"
                   className={cn("", {
@@ -500,16 +577,21 @@ const page = () => {
                     {t(errors.CaseDescription.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
             </div>
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <Button
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
                 {t("Create Case")}
               </Button>
-            </div>
+            </motion.div>
           </form>{" "}
         </CardContent>
       </Card>

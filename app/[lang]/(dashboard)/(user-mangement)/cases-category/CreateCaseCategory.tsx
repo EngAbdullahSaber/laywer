@@ -18,7 +18,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
-const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
+const CreateCaseCategory = ({ buttonShape }: { buttonShape: any }) => {
   const gender: { value: string; label: string }[] = [
     { value: "Male", label: "Male" },
     { value: "Female", label: "Female" },
@@ -36,7 +36,7 @@ const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
         {buttonShape ? (
           <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
             {" "}
-            {t("Create Client Category")}
+            {t("Create Case Category")}
           </Button>
         ) : (
           <Button size="icon" className=" h-7 w-7 bg-transparent">
@@ -48,7 +48,7 @@ const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
       <DialogContent size="2xl" className="h-[75%]">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Create a New Client Category")}
+            {t("Create a New Cases Category")}
           </DialogTitle>
         </DialogHeader>
         <div>
@@ -57,7 +57,7 @@ const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
               <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
                 <div className="flex flex-col gap-2">
                   <Label>{t("Name")}</Label>
-                  <Input type="text" placeholder={t("Enter Client Name")} />
+                  <Input type="text" placeholder={t("Enter Cases Name")} />
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -82,7 +82,7 @@ const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Client Category")}
+              {t("Create Case Category")}
             </Button>
           </div>
         </div>
@@ -91,4 +91,4 @@ const CreateClient = ({ buttonShape }: { buttonShape: any }) => {
   );
 };
 
-export default CreateClient;
+export default CreateCaseCategory;

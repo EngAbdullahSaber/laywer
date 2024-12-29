@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { Upload } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -70,7 +71,12 @@ const FileRequest = () => {
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ y: -50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
                 <Label
                   htmlFor="Title"
                   className={cn("", {
@@ -96,8 +102,13 @@ const FileRequest = () => {
                     {t(errors.Title.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label>
                   <div>
                     <Button
@@ -113,11 +124,16 @@ const FileRequest = () => {
                   </div>
                   <Input type="file" className="hidden" />
                 </Label>
-              </div>
+              </motion.div>
             </div>
 
             {/* Submit Button inside form */}
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="flex justify-center gap-3 mt-4"
+            >
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -133,7 +149,7 @@ const FileRequest = () => {
               >
                 {t("Ask Client")}
               </Button>
-            </div>
+            </motion.div>
           </form>
         </div>
       </DialogContent>

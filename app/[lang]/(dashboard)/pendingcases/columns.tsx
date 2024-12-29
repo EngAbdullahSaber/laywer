@@ -7,6 +7,7 @@ import { DataTableColumnHeader } from "../tables/advanced/components/data-table-
 import { DataTable } from "../tables/advanced/components/data-table";
 import AssignCase from "./AssignCase";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 interface Task {
   id: string;
@@ -71,9 +72,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Case_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -87,9 +93,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Client_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -106,9 +117,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Address}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -124,9 +140,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Case_Number}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -142,9 +163,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Lawyer_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -160,20 +186,26 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Reason_for_Rejection === "اختصاص مختلف" &&
-                  "destructive") ||
-                (row.original.Reason_for_Rejection === "عدم الوضوح" &&
-                  "warning") ||
-                (row.original.Reason_for_Rejection === "عدم التفرغ" &&
-                  "info") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
             >
-              {row.original.Reason_for_Rejection}
-            </Badge>
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Reason_for_Rejection === "اختصاص مختلف" &&
+                    "destructive") ||
+                  (row.original.Reason_for_Rejection === "عدم الوضوح" &&
+                    "warning") ||
+                  (row.original.Reason_for_Rejection === "عدم التفرغ" &&
+                    "info") ||
+                  "default"
+                }
+              >
+                {row.original.Reason_for_Rejection}
+              </Badge>
+            </motion.span>
           </div>
         );
       },
@@ -189,9 +221,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Date}
-            </span>
+            </motion.span>
           </div>
         );
       },

@@ -15,6 +15,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 const View = () => {
   const { t, loading, error } = useTranslate();
@@ -45,13 +46,23 @@ const View = () => {
         <div className="py-6">
           <hr className="my-8" />
           <ul className="flex flex-row justify-between items-center">
-            <li className="my-3 w-[48%]">
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="my-3 w-[48%]"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Court Name")} :{" "}
               </span>{" "}
               <span className="text-default-900 font-semibold "> Court 1</span>
-            </li>
-            <li className="my-3 w-[48%]">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9 }}
+              className="my-3 w-[48%]"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Court Category")} :
               </span>
@@ -59,15 +70,25 @@ const View = () => {
                 {" "}
                 Criminal
               </span>
-            </li>
-            <li className="my-3 w-[48%]">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1 }}
+              className="my-3 w-[48%]"
+            >
               <span className="text-sm text-default-600 ">{t("Email")} : </span>{" "}
               <span className="text-default-900 font-semibold ">
                 {" "}
                 abc@gmail.com
               </span>
-            </li>
-            <li className="my-3 w-[48%]">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+              className="my-3 w-[48%]"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Address")} :{" "}
               </span>{" "}
@@ -75,7 +96,7 @@ const View = () => {
                 {" "}
                 Egypt , Cairo
               </span>
-            </li>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>

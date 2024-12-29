@@ -15,6 +15,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 const View = () => {
   const { t, loading, error } = useTranslate();
@@ -45,13 +46,23 @@ const View = () => {
         <div className="py-6">
           <hr className="my-8" />
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li className="my-3 flex flex-wrap items-center">
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="my-3 flex flex-wrap items-center"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Client_Name")} :
               </span>{" "}
               <span className="text-default-900 font-semibold "> Court 1</span>
-            </li>
-            <li className="my-3 flex flex-wrap items-center">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1 }}
+              className="my-3 flex flex-wrap items-center"
+            >
               <span className="text-sm text-default-600  ">
                 {t("Email")} :{" "}
               </span>{" "}
@@ -59,8 +70,13 @@ const View = () => {
                 {" "}
                 abc@gmail.com
               </span>
-            </li>
-            <li className="my-3 flex flex-wrap items-center">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1}}
+              className="my-3 flex flex-wrap items-center"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Address")} :
               </span>{" "}
@@ -68,13 +84,18 @@ const View = () => {
                 {" "}
                 Saudi Arabia , Riyadh
               </span>
-            </li>{" "}
-            <li className="my-3 flex flex-wrap items-center">
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-3 flex flex-wrap items-center"
+            >
               <span className="text-sm text-default-600 ">
                 {t("Current_Case_Name")} :
               </span>{" "}
               <span className="text-default-900 font-semibold "> Ali</span>
-            </li>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>

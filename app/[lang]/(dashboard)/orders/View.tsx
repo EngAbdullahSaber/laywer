@@ -15,6 +15,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 const View = () => {
   const { t, loading, error } = useTranslate();
@@ -42,40 +43,68 @@ const View = () => {
         </SheetHeader>
         <div className="py-6">
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <span className="text-sm text-default-600 ">{t("Title")} : </span>{" "}
               <span className="text-default-900 font-semibold "> Task 1</span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Case Name")} :{" "}
               </span>{" "}
               <span className="text-default-900 font-semibold "> Abdullah</span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("order_status")} :
               </span>
               <span className="text-warning-700 font-semibold"> تم الرد</span>
-            </li>
+            </motion.li>
 
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9 }}
+            >
               <span className="text-sm text-default-600 ">{t("Date")} : </span>{" "}
               <span className="text-default-900 font-semibold ">
                 {" "}
                 September 12, 2024
               </span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.0 }}
+            >
               <span className="text-sm text-default-600 ">
-                {t("Lawyer_Name")} :{" "}
+                {t("lawyer_name")} :{" "}
               </span>{" "}
               <span className="text-default-900 font-semibold ">
                 {" "}
                 احمد على محمد
               </span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Show File")} :
               </span>{" "}
@@ -85,7 +114,7 @@ const View = () => {
                   {t("Show File")}
                 </span>
               </a>
-            </li>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>

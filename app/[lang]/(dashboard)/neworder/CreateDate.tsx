@@ -22,6 +22,7 @@ import BasicSelect from "@/components/common/Select/BasicSelect";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 // Update the schema to validate date properly
 const schema = z.object({
@@ -94,13 +95,24 @@ const CreateDate = () => {
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2">
+              <motion.div
+                initial={{ y: -20 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
                 <Label htmlFor="question" className="my-4">
                   {t("Your Answer")}
                 </Label>
                 <Textarea placeholder="Type Here" rows={3} />
-              </div>
-              <div className="flex flex-col gap-2">
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
                 <Label htmlFor="Title" className="my-4">
                   {t("Date")}
                 </Label>
@@ -117,11 +129,16 @@ const CreateDate = () => {
                     {t(errors.date.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
             </div>
 
             {/* Submit Button inside form */}
-            <div className="flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.7 }}
+              className=" flex justify-center gap-3 mt-4"
+            >
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -137,7 +154,7 @@ const CreateDate = () => {
               >
                 {t("Send")}
               </Button>
-            </div>
+            </motion.div>
           </form>
         </div>
       </DialogContent>

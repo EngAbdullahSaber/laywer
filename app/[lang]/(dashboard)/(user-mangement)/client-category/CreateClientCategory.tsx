@@ -16,9 +16,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
-import Link from "next/link";
+import { motion } from "framer-motion";
 import Flatpickr from "react-flatpickr";
-const CreateCourt = ({ buttonShape }: { buttonShape: any }) => {
+const CreateClientCategory = ({ buttonShape }: { buttonShape: any }) => {
   const gender: { value: string; label: string }[] = [
     { value: "Male", label: "Male" },
     { value: "Female", label: "Female" },
@@ -36,7 +36,7 @@ const CreateCourt = ({ buttonShape }: { buttonShape: any }) => {
         {buttonShape ? (
           <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
             {" "}
-            {t("Create Court Category")}
+            {t("Create Client Category")}
           </Button>
         ) : (
           <Button size="icon" className=" h-7 w-7 bg-transparent">
@@ -48,27 +48,42 @@ const CreateCourt = ({ buttonShape }: { buttonShape: any }) => {
       <DialogContent size="2xl" className="h-[75%]">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Create a New Court Category")}
+            {t("Create a New Client Category")}
           </DialogTitle>
         </DialogHeader>
         <div>
           <div className="h-[290px]">
             <ScrollArea className="h-full">
               <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
-                <div className="flex flex-col gap-2">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2"
+                >
                   <Label>{t("Name")}</Label>
-                  <Input type="text" placeholder={t("Enter Court Name")} />
-                </div>
+                  <Input type="text" placeholder={t("Enter Client Name")} />
+                </motion.div>
 
-                <div className="flex flex-col gap-2">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2"
+                >
                   <Label>{t("Description")}</Label>
                   <Textarea placeholder={t("Type Here")} rows={7} />
-                </div>
+                </motion.div>
               </div>
             </ScrollArea>
           </div>
 
-          <div className=" flex justify-center gap-3 mt-4">
+          <motion.div
+            initial={{ y: 50 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 1.7 }}
+            className=" flex justify-center gap-3 mt-4"
+          >
             <DialogClose asChild>
               <Button
                 type="button"
@@ -82,13 +97,13 @@ const CreateCourt = ({ buttonShape }: { buttonShape: any }) => {
               type="button"
               className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Court Category")}
+              {t("Create Client Category")}
             </Button>
-          </div>
+          </motion.div>
         </div>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default CreateCourt;
+export default CreateClientCategory;

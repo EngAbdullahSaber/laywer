@@ -12,6 +12,7 @@ import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 import Add from "./Add";
 import FileRequest from "./FileRequest";
+import { motion } from "framer-motion";
 
 interface Task {
   id: string;
@@ -53,7 +54,8 @@ const TableData = () => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View /> <Add />
+          <View />
+           <Add />
           <FileRequest />
         </div>
       ),
@@ -75,9 +77,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Client_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -90,9 +97,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Lawyer_Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -108,17 +120,23 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Category === "جنائي" && "destructive") ||
-                (row.original.Category === "مدنى" && "warning") ||
-                (row.original.Category === "عائلى" && "info") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
             >
-              {row.original.Category}
-            </Badge>
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Category === "جنائي" && "destructive") ||
+                  (row.original.Category === "مدنى" && "warning") ||
+                  (row.original.Category === "عائلى" && "info") ||
+                  "default"
+                }
+              >
+                {row.original.Category}
+              </Badge>
+            </motion.span>
           </div>
         );
       },
@@ -138,9 +156,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Next_Appointment_Date}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -157,17 +180,23 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Status === "قيد التنفيذ" && "destructive") ||
-                (row.original.Status === "قيدالانتظار" && "warning") ||
-                (row.original.Status === "مكتملة" && "success") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
             >
-              {row.original.Status}
-            </Badge>
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Status === "قيد التنفيذ" && "destructive") ||
+                  (row.original.Status === "قيدالانتظار" && "warning") ||
+                  (row.original.Status === "مكتملة" && "success") ||
+                  "default"
+                }
+              >
+                {row.original.Status}
+              </Badge>
+            </motion.span>
           </div>
         );
       },

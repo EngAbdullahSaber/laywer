@@ -9,6 +9,7 @@ import { DataTable } from "../../tables/advanced/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import Actions from "@/components/common/Actions/Actions";
+import { motion } from "framer-motion";
 
 interface Task {
   id: string;
@@ -70,9 +71,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.User_Name}
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },
@@ -85,17 +91,24 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Categories === "S Admin" && "destructive") ||
-                (row.original.Categories === "محامى" && "info") ||
-                (row.original.Categories === "عميل" && "warning") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
             >
-              {row.original.Categories}
-            </Badge>
+              {" "}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Categories === "S Admin" && "destructive") ||
+                  (row.original.Categories === "محامى" && "info") ||
+                  (row.original.Categories === "عميل" && "warning") ||
+                  "default"
+                }
+              >
+                {row.original.Categories}
+              </Badge>
+            </motion.span>{" "}
           </div>
         );
       },
@@ -112,9 +125,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Email}
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },
@@ -130,9 +148,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Mobile_Number}
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },

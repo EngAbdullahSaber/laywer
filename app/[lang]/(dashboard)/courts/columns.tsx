@@ -11,6 +11,8 @@ import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 import Edit from "./Edit";
 import Delete from "./Delete";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface Task {
   id: string;
@@ -51,7 +53,17 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View />
-          <Edit />
+          <Button
+            size="icon"
+            variant="outline"
+            className=" h-7 w-7"
+            color="secondary"
+          >
+            {" "}
+            <Link href={"courts/edit"}>
+              <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+            </Link>{" "}
+          </Button>
           <Delete />
         </div>
       ),
@@ -74,9 +86,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Court_Name}
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },
@@ -89,17 +106,23 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Court_Category === "جنائي" && "destructive") ||
-                (row.original.Court_Category === "مدنى" && "warning") ||
-                (row.original.Court_Category === "عائلى" && "info") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
             >
-              {row.original.Court_Category}
-            </Badge>
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Court_Category === "جنائي" && "destructive") ||
+                  (row.original.Court_Category === "مدنى" && "warning") ||
+                  (row.original.Court_Category === "عائلى" && "info") ||
+                  "default"
+                }
+              >
+                {row.original.Court_Category}
+              </Badge>
+            </motion.span>
           </div>
         );
       },
@@ -115,9 +138,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Email}
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },
@@ -133,9 +161,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Address}
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },
@@ -151,9 +184,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] text-blue-700 truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] text-blue-700 truncate font-medium"
+            >
               رابط المحكمة
-            </span>
+            </motion.span>{" "}
           </div>
         );
       },

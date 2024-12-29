@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 const schema = z.object({
@@ -79,7 +80,12 @@ const CreateContact = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <div className="flex flex-row justify-between items-center  gap-4">
-              <div className="flex flex-col gap-2 w-[48%]">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Name"
                   className={cn("", {
@@ -105,9 +111,14 @@ const CreateContact = () => {
                     {t(errors.Name.message)}
                   </p>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="flex flex-col gap-2 w-[48%]">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Name"
                   className={cn("", {
@@ -133,8 +144,13 @@ const CreateContact = () => {
                     {t(errors.Email.message)}
                   </p>
                 )}
-              </div>
-              <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Name"
                   className={cn("", {
@@ -160,8 +176,13 @@ const CreateContact = () => {
                     {t(errors.phone.message)}
                   </p>
                 )}
-              </div>
-              {/* <div className="flex flex-col gap-2 w-[48%]">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-[48%]"
+              >
                 <Label
                   htmlFor="Category"
                   className={cn("", {
@@ -181,6 +202,9 @@ const CreateContact = () => {
                     {t(errors.Category.message)}
                   </p>
                 )}{" "}
+              </motion.div>
+              {/* <div className="flex flex-col gap-2 w-[48%]">
+               
               </div> */}
 
               {/* <div className="flex flex-col gap-2">
@@ -189,7 +213,12 @@ const CreateContact = () => {
                 </div> */}
             </div>
 
-            <div className=" flex justify-center gap-3 mt-4">
+            <motion.div
+              initial={{ y: 50 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.7 }}
+              className=" flex justify-center gap-3 mt-4"
+            >
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -205,7 +234,7 @@ const CreateContact = () => {
               >
                 {t("Create Client")}{" "}
               </Button>
-            </div>
+            </motion.div>
           </div>
         </form>
       </DialogContent>

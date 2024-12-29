@@ -12,6 +12,7 @@ import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 import Block from "./Block";
 import Delete from "./Delete";
+import { motion } from "framer-motion";
 
 interface Task {
   id: string;
@@ -75,9 +76,9 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span className="max-w-[500px] truncate font-medium">
               {row.original.Name}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -91,9 +92,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Address}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -109,17 +115,23 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Category === "جنائي" && "destructive") ||
-                (row.original.Category === "مدنى" && "warning") ||
-                (row.original.Category === "عائلى" && "info") ||
-                "default"
-              }
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
             >
-              {row.original.Category}
-            </Badge>
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Category === "جنائي" && "destructive") ||
+                  (row.original.Category === "مدنى" && "warning") ||
+                  (row.original.Category === "عائلى" && "info") ||
+                  "default"
+                }
+              >
+                {row.original.Category}
+              </Badge>
+            </motion.span>
           </div>
         );
       },
@@ -135,9 +147,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Mobile_Number}
-            </span>
+            </motion.span>
           </div>
         );
       },
@@ -154,9 +171,14 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span className="max-w-[500px] truncate font-medium">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
               {row.original.Email}
-            </span>
+            </motion.span>
           </div>
         );
       },

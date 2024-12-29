@@ -91,7 +91,7 @@ const page = () => {
     <div>
       <Card>
         <CardHeader>
-          <CardTitle> {t("Create a New Task")}</CardTitle>
+          <CardTitle> {t("Edit Task")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form
@@ -290,7 +290,7 @@ const page = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Task")}
+                {t("Edit Task")}
               </Button>
             </motion.div>
           </form>{" "}

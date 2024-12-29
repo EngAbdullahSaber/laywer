@@ -1,4 +1,5 @@
 "use client";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,47 +16,64 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
-import BasicSelect from "@/components/common/Select/BasicSelect";
-import { motion } from "framer-motion";
-
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "errorLawyer.LawyerNameMin" })
-    .max(20, { message: "errorLawyer.LawyerNameMax" }),
-  phone: z.string().refine((value) => value.length === 11, {
-    message: "errorLawyer.Phone",
-  }),
-  email: z
+    .min(3, { message: "errorCourt.CourtNameMin" })
+    .max(20, { message: "errorCourt.CourtNameMax" }),
+
+  Email: z
     .string()
-    .min(8, { message: "errorLawyer.LawyerEmailMin" })
-    .max(20, { message: "errorLawyer.LawyerEmailMax" }),
+    .min(8, { message: "errorCourt.CourtEmailMin" })
+    .max(25, { message: "errorCourt.CourtEmailMax" }),
   Address: z
     .string()
-    .min(8, { message: "errorLawyer.LawyerAddressMin" })
-    .max(25, { message: "errorLawyer.LawyerAddressMax" }),
-
-  password: z
-    .string()
     .min(8, {
-      message: "errorLawyer.CasepasswordMin",
+      message: "errorCourt.CourtAddressMin",
     })
     .max(25, {
-      message: "errorLawyer.CasepasswordMax",
+      message: "errorCourt.CourtAddressMax",
     }),
-  LawyerCategory: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
+  Room_Number: z
+    .string()
+    .min(1, {
+      message: "errorCourt.CourtRoomNumberMin",
+    })
+    .max(6, {
+      message: "errorCourt.CourtRoomNumberMax",
+    }),
+  City: z
+    .string()
+    .min(3, {
+      message: "errorCourt.CityMin",
+    })
+    .max(15, {
+      message: "errorCourt.CityMax",
+    }),
+  Region: z
+    .string()
+    .min(3, {
+      message: "errorCourt.RegionMin",
+    })
+    .max(15, {
+      message: "errorCourt.RegionMax",
+    }),
+  CourtCategory: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
 });
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CreateLawyer from "../../(user-mangement)/lawyer-category/CreateLawyerCategory";
+import CreateCourt from "../../(user-mangement)/court-category/CreateCourtCategory";
+import { motion } from "framer-motion";
 
 const page = () => {
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -64,18 +82,29 @@ const page = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
-  const Lawyer_Category: { value: string; label: string }[] = [
+  const Court_Category: { value: string; label: string }[] = [
     { value: "عائلى", label: "عائلى" },
     { value: "جنائي", label: "جنائي" },
     { value: "مدنى", label: "مدنى" },
   ];
-  const { t } = useTranslate();
+  const City: { value: string; label: string }[] = [
+    { value: "الرياض", label: "الرياض" },
+    { value: "جدة", label: "جدة" },
+    { value: "الطائف", label: "الطائف" },
+  ];
+  const Region: { value: string; label: string }[] = [
+    { value: "الرياض", label: "الرياض" },
+    { value: "جدة", label: "جدة" },
+    { value: "الطائف", label: "الطائف" },
+  ];
+  const { t, loading, error } = useTranslate();
+
   return (
     <div>
       {" "}
       <Card>
         <CardHeader>
-          <CardTitle> {t("Create a New Lawyer")}</CardTitle>
+          <CardTitle> {t("Edit Court")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form
@@ -95,12 +124,12 @@ const page = () => {
                     "text-destructive": errors.Name,
                   })}
                 >
-                  {t("Lawyer Name")}
+                  {t("Court Name")}
                 </Label>
                 <Input
                   type="text"
                   {...register("Name")}
-                  placeholder={t("Enter Lawyer Name")}
+                  placeholder={t("Enter Court Name")}
                   className={cn("", {
                     "border-destructive focus:border-destructive": errors.Name,
                   })}
@@ -115,68 +144,71 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.7 }}
-                className="flex flex-col gap-2"
-              >
-                <Label
-                  htmlFor="phone"
-                  className={cn("", {
-                    "text-destructive": errors.phone,
-                  })}
-                >
-                  {t("Mobile Number")}
-                </Label>
-                <Input
-                  type="number"
-                  placeholder={t("Enter Mobile Number")}
-                  {...register("phone")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.phone,
-                  })}
-                />
-                {errors.phone && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.phone.message)}
-                  </p>
-                )}
-              </motion.div>
               <div className="flex flex-col gap-2">
-                {" "}
                 <motion.div
                   initial={{ y: -50 }}
                   whileInView={{ y: 0 }}
-                  transition={{ duration: 0.8 }}
+                  transition={{ duration: 0.7 }}
                   className="flex flex-row justify-between items-center"
                 >
                   <div className="!w-[87%]" style={{ width: "87%" }}>
                     <Label
                       htmlFor="Court_Category"
                       className={cn("", {
-                        "text-destructive": errors.LawyerCategory,
+                        "text-destructive": errors.CourtCategory,
                       })}
                     >
-                      {t("Lawyer Category")}
+                      {t("Court Category Level")}
                     </Label>
                     <BasicSelect
                       name="CourtCategory"
-                      menu={Lawyer_Category}
+                      menu={Court_Category}
                       control={control}
                       errors={errors}
                     />
-                    {errors.LawyerCategory && (
+                    {errors.CourtCategory && (
                       <p className="text-xs text-destructive">
-                        {t(errors.LawyerCategory.message)}
+                        {t(errors.CourtCategory.message)}
                       </p>
-                    )}{" "}
+                    )}
                   </div>
                   <div className="w-[8%] mt-5">
-                    <CreateLawyer buttonShape={false} />
+                    <CreateCourt buttonShape={false} />
                   </div>
                 </motion.div>
               </div>{" "}
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="Email"
+                  className={cn("", {
+                    "text-destructive": errors.Email,
+                  })}
+                >
+                  {t("Email")}
+                </Label>
+                <Input
+                  type="text"
+                  {...register("Name")}
+                  placeholder={t("Enter Email")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive": errors.Email,
+                  })}
+                />
+                {errors.Email && (
+                  <p
+                    className={cn("text-xs", {
+                      "text-destructive": errors.Email,
+                    })}
+                  >
+                    {t(errors.Email.message)}
+                  </p>
+                )}
+              </motion.div>
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -193,7 +225,7 @@ const page = () => {
                 </Label>
                 <Input
                   type="text"
-                  {...register("Address")}
+                  {...register("Name")}
                   placeholder={t("Enter Address")}
                   className={cn("", {
                     "border-destructive focus:border-destructive":
@@ -201,7 +233,11 @@ const page = () => {
                   })}
                 />
                 {errors.Address && (
-                  <p className="text-xs text-destructive">
+                  <p
+                    className={cn("text-xs", {
+                      "text-destructive": errors.Address,
+                    })}
+                  >
                     {t(errors.Address.message)}
                   </p>
                 )}
@@ -213,24 +249,29 @@ const page = () => {
                 className="flex flex-col gap-2"
               >
                 <Label
-                  htmlFor="email"
+                  htmlFor="Room_Number"
                   className={cn("", {
-                    "text-destructive": errors.email,
+                    "text-destructive": errors.Room_Number,
                   })}
                 >
-                  {t("Email")}
+                  {t("Room Number")}
                 </Label>
                 <Input
-                  type="email"
-                  {...register("email")}
-                  placeholder={t("Enter Email")}
+                  type="number"
+                  {...register("Room_Number")}
+                  placeholder={t("Enter Room Number")}
                   className={cn("", {
-                    "border-destructive focus:border-destructive": errors.email,
+                    "border-destructive focus:border-destructive":
+                      errors.Room_Number,
                   })}
                 />
-                {errors.email && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.email.message)}
+                {errors.Room_Number && (
+                  <p
+                    className={cn("text-xs", {
+                      "text-destructive": errors.Room_Number,
+                    })}
+                  >
+                    {t(errors.Room_Number.message)}
                   </p>
                 )}
               </motion.div>
@@ -241,25 +282,48 @@ const page = () => {
                 className="flex flex-col gap-2"
               >
                 <Label
-                  htmlFor="password"
+                  htmlFor="Region"
                   className={cn("", {
-                    "text-destructive": errors.password,
+                    "text-destructive": errors.Region,
                   })}
                 >
-                  {t("Password")}
+                  {t("Region")}
                 </Label>
-                <Input
-                  type="password"
-                  {...register("password")}
-                  placeholder={t("Enter Password")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.password,
-                  })}
+                <BasicSelect
+                  name="Region"
+                  menu={Region}
+                  control={control}
+                  errors={errors}
                 />
-                {errors.password && (
+                {errors.Region && (
                   <p className="text-xs text-destructive">
-                    {t(errors.password.message)}
+                    {t(errors.Region.message)}
+                  </p>
+                )}
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="City"
+                  className={cn("", {
+                    "text-destructive": errors.City,
+                  })}
+                >
+                  {t("City")}
+                </Label>
+                <BasicSelect
+                  name="City"
+                  menu={City}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.City && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.City.message)}
                   </p>
                 )}
               </motion.div>
@@ -268,7 +332,7 @@ const page = () => {
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.2 }}
+              transition={{ duration: 1.3 }}
               className="flex justify-center gap-3 mt-4"
             >
               <Button
@@ -280,9 +344,9 @@ const page = () => {
               </Button>
               <Button
                 type="submit"
-                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Lawyer")}
+                {t("Edit Court")}
               </Button>
             </motion.div>
           </form>{" "}

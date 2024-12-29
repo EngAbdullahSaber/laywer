@@ -15,6 +15,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 const View = () => {
   const { t, loading, error } = useTranslate();
@@ -46,7 +47,11 @@ const View = () => {
           <hr className="my-8" />
 
           <ul className="md:grid grid-cols-2  !mt-5 gap-2 space-y-2 md:space-y-0">
-            <li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Lawyer Name")} :{" "}
               </span>{" "}
@@ -54,14 +59,24 @@ const View = () => {
                 {" "}
                 Ahmed Ali Abdullah
               </span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Lawyer Category")} :
               </span>
               <span className="text-warning-700 font-semibold "> جنائي</span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Phone Number")} :
               </span>
@@ -69,8 +84,13 @@ const View = () => {
                 {" "}
                 0581739548
               </span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("Email Address")} :{" "}
               </span>{" "}
@@ -78,8 +98,13 @@ const View = () => {
                 {" "}
                 abc@gmail.com
               </span>
-            </li>
-            <li>
+            </motion.li>
+
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
               <span className="text-sm text-default-600 ">
                 {t("address")} :{" "}
               </span>{" "}
@@ -87,7 +112,7 @@ const View = () => {
                 {" "}
                 Saudi Arabia ,Riyadh
               </span>
-            </li>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>
