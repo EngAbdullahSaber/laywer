@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 interface Task {
   id: string;
   Case_Name?: string;
+  Case?: string;
   Client_Name?: string;
   Category?: string;
   Lawyer_Name?: string;
@@ -55,7 +56,7 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View />
-           <Add />
+          <Add />
           <FileRequest />
         </div>
       ),
@@ -104,6 +105,29 @@ const TableData = () => {
               className="max-w-[500px] truncate font-medium"
             >
               {row.original.Lawyer_Name}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "case_number",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"case_number"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.Case}
             </motion.span>
           </div>
         );

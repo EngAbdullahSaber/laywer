@@ -101,6 +101,40 @@ const View = () => {
                 12/03/2004
               </span>
             </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
+              <span className="text-sm text-default-600 ">
+                {t("main_case_number")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> 15546</span>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+            >
+              <span className="text-sm text-default-600 ">
+                {t("secondary_case_number")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold "> 435345 </span>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+            >
+              <span className="text-sm text-default-600 ">
+                {t("Description")} :
+              </span>{" "}
+              <span className="text-default-900 font-semibold ">
+                {" "}
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Sapiente, natus.
+              </span>
+            </motion.li>
           </ul>
           <motion.hr
             initial={{ opacity: 0 }}

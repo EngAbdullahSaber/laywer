@@ -17,6 +17,7 @@ interface Task {
   id: string;
   Name?: string;
   Address?: string;
+  Category?: string;
   Mobile_Number?: string;
   Email?: string;
   Current_Case_Name?: string;
@@ -66,6 +67,7 @@ const TableData = () => {
       enableSorting: false,
       enableHiding: false,
     },
+
     {
       accessorKey: "Name",
       header: ({ column }) => (
@@ -86,7 +88,37 @@ const TableData = () => {
         );
       },
     },
-
+    {
+      accessorKey: "Category",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Category"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+            >
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.Category === "شخصى" && "destructive") ||
+                  (row.original.Category === "شركة" && "warning") ||
+                  "default"
+                }
+              >
+                {row.original.Category}
+              </Badge>
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
     {
       accessorKey: "Address",
       header: ({ column }) => (

@@ -50,6 +50,7 @@ const schema = z.object({
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CreateLawyer from "../../(user-mangement)/lawyer-category/CreateLawyerCategory";
+import ImageUploader from "./ImageUploader";
 
 const page = () => {
   const {
@@ -262,6 +263,42 @@ const page = () => {
                     {t(errors.password.message)}
                   </p>
                 )}
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="flex flex-col gap-2"
+              >
+                <Label>{t("Licensing photo")}</Label>
+                <ImageUploader />
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.3 }}
+                className="flex flex-col gap-2"
+              >
+                <Label>{t("licence photo")}</Label>
+                <ImageUploader />
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.4 }}
+                className="flex flex-col gap-2"
+              >
+                <Label>{t("Membership photo")}</Label>
+                <ImageUploader />
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.5 }}
+                className="flex flex-col gap-2"
+              >
+                <Label>{t("ID photo")}</Label>
+                <ImageUploader />
               </motion.div>
             </div>
             {/* Submit Button inside form */}

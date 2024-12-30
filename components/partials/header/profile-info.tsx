@@ -49,16 +49,14 @@ const ProfileInfo = () => {
             />
           )}
           <div>
-            <div className="text-sm font-medium text-default-800 capitalize ">
-              {session?.user?.name ?? "msaatylaw"}
-            </div>
+            <div className="text-sm font-medium text-default-800 capitalize "></div>
             {/* profile */}
-            {/* <Link
+            <Link
               href="/dashboard"
               className="text-xs text-default-600 hover:text-primary"
             >
-              @uxuidesigner
-            </Link> */}
+              {session?.user?.name ?? "msaatylaw"}
+            </Link>
           </div>
         </DropdownMenuLabel>
         {/* <DropdownMenuGroup>

@@ -40,11 +40,11 @@ const adminMenu = [
           href: "/neworder",
         },
        
-        {
-          title: "Pending Cases",
-          icon: ContactList,
-          href: "/pendingcases",
-        },
+        // {
+        //   title: "Pending Cases",
+        //   icon: ContactList,
+        //   href: "/pendingcases",
+        // },
       
     
         {
@@ -83,6 +83,11 @@ const adminMenu = [
           href: "/contact-list",
         },
         {
+          title: "Staff",
+          icon: ContactList,
+          href: "/staff",
+        },
+        {
           title: "lawyers Categories",
           icon: ContactCategory,
           href: "/lawyer-category",
@@ -104,11 +109,11 @@ const adminMenu = [
         },
 ];
 const lawyerMenu = [
-  {
-    title: "Pending Cases",
-    icon: Case,
-    href: "/pending-cases",
-  },
+  // {
+  //   title: "Pending Cases",
+  //   icon: Case,
+  //   href: "/pending-cases",
+  // },
   {
           title: "Cases",
           icon: Case,

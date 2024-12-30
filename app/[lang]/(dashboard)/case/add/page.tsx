@@ -213,7 +213,7 @@ const page = () => {
                   </Link>
                 </motion.div>
               </div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
+              {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <motion.div
                   initial={{ y: -50 }}
                   whileInView={{ y: 0 }}
@@ -238,7 +238,7 @@ const page = () => {
                     <CreateCase buttonShape={false} />
                   </div>
                 </motion.div>
-              </div>
+              </div> */}
 
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <motion.div
