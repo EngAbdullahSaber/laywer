@@ -145,7 +145,7 @@ const View = () => {
               </span>{" "}
               <span className="text-blue-700 font-semibold ">
                 {" "}
-                {"show file"}
+                {t("show file")}
               </span>
             </motion.li>
           </ul>
@@ -281,7 +281,7 @@ const View = () => {
               </span>{" "}
               <span className="text-blue-700 font-semibold ">
                 {" "}
-                {"show file"}
+                {t("show file")}
               </span>
             </motion.li>
           </ul>
