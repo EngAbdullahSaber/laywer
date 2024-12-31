@@ -162,6 +162,34 @@ const View = () => {
                 architecto, veritatis iusto? Nulla, doloremque. Corporis.
               </span>
             </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+              className="flex flex-row justify-between items-center"
+            >
+              <span className="text-sm text-default-600  w-[30%] ">
+                {t("Case follow-up report")} :
+              </span>{" "}
+              <span className="text-blue-700 font-semibold  w-[67%]">
+                {" "}
+                {"show file"}
+              </span>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+              className="flex flex-row justify-between items-center"
+            >
+              <span className="text-sm text-default-600  w-[30%]">
+                {t("Report of attendance at a judicial hearing")} :
+              </span>{" "}
+              <span className="text-blue-700 font-semibold  w-[67%] ">
+                {" "}
+                {"show file"}
+              </span>
+            </motion.li>
           </ul>
         </div>
         <SheetFooter>

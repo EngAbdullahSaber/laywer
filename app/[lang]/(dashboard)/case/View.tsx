@@ -135,6 +135,19 @@ const View = () => {
                 Sapiente, natus.
               </span>
             </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+            >
+              <span className="text-sm text-default-600 ">
+                {t("Case follow-up report")} :
+              </span>{" "}
+              <span className="text-blue-700 font-semibold ">
+                {" "}
+                {"show file"}
+              </span>
+            </motion.li>
           </ul>
           <motion.hr
             initial={{ opacity: 0 }}
@@ -257,6 +270,19 @@ const View = () => {
                 {t("Court Category")} :
               </span>{" "}
               <span className="text-default-900 font-semibold"> Criminals</span>
+            </motion.li>
+            <motion.li
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.3 }}
+            >
+              <span className="text-sm text-default-600 ">
+                {t("Report of attendance at a judicial hearing")} :
+              </span>{" "}
+              <span className="text-blue-700 font-semibold ">
+                {" "}
+                {"show file"}
+              </span>
             </motion.li>
           </ul>
         </div>

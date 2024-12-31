@@ -52,7 +52,7 @@ const ProfileInfo = () => {
             <div className="text-sm font-medium text-default-800 capitalize "></div>
             {/* profile */}
             <Link
-              href="/dashboard"
+              href="/user-profile"
               className="text-xs text-default-600 hover:text-primary"
             >
               {session?.user?.name ?? "msaatylaw"}

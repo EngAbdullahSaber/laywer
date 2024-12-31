@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useTranslate } from "@/config/useTranslation";
 import BasicSelect from "@/components/common/Select/BasicSelect";
+import { Icon } from "@iconify/react";
 
 const schema = z.object({
   Name: z
@@ -68,15 +69,22 @@ const CreateLawyer = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-          {t("Create Lawyer")}
+      <DialogTrigger>
+        {" "}
+        <Button
+          size="icon"
+          variant="outline"
+          className=" h-7 w-7 "
+          color="secondary"
+        >
+          {" "}
+          <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
         </Button>
       </DialogTrigger>
       <DialogContent size="2xl" className="gap-3 h-[65%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Create a New Lawyer")}
+            {t("Update Lawyer")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -135,7 +143,7 @@ const CreateLawyer = () => {
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-2">
+              {/* <div className="flex flex-col gap-2">
                 <Label
                   htmlFor="Court_Category"
                   className={cn("", {
@@ -155,7 +163,7 @@ const CreateLawyer = () => {
                     {t(errors.LawyerCategory.message)}
                   </p>
                 )}
-              </div>{" "}
+              </div>{" "} */}
               <div className="flex flex-col gap-2">
                 <Label
                   htmlFor="Address"
@@ -243,7 +251,7 @@ const CreateLawyer = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Lawyer")}
+                {t("Update Lawyer")}
               </Button>
             </div>
           </form>

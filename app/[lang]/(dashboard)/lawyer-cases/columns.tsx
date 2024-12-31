@@ -14,6 +14,7 @@ import CreateDate from "./CreateDate";
 import CaseStatus from "./CaseStatus";
 import FileRequest from "./FileRequest";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface Task {
   id: string;
@@ -59,6 +60,28 @@ const TableData = () => {
           <CaseStatus />
           <CreateDate />
           <FileRequest />
+          <Link href={"lawyer-cases/follow-report"} className="mt-1">
+            {" "}
+            <Button
+              size="icon"
+              variant="outline"
+              className=" h-7 w-7"
+              color="secondary"
+            >
+              <Icon icon="gridicons:create" width="24" height="24" />{" "}
+            </Button>
+          </Link>
+          <Link href={"lawyer-cases/attend-report"} className="mt-1">
+            {" "}
+            <Button
+              size="icon"
+              variant="outline"
+              className=" h-7 w-7"
+              color="secondary"
+            >
+              <Icon icon="gridicons:reader-follow" width="24" height="24" />{" "}
+            </Button>
+          </Link>
         </div>
       ),
     },

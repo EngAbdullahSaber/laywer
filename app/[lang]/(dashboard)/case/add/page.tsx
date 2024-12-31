@@ -46,7 +46,11 @@ const schema = z.object({
     .max(20, {
       message: "errorCase.CaseDescriptionMax",
     }),
-  CaseNumber: z
+  SecondaryCaseNumber: z
+    .string()
+    .min(3, { message: "errorCase.CaseNumberMin" })
+    .max(20, { message: "errorCase.CaseNumberMax" }),
+  MainCaseNumber: z
     .string()
     .min(3, { message: "errorCase.CaseNumberMin" })
     .max(20, { message: "errorCase.CaseNumberMax" }),
@@ -172,6 +176,9 @@ const page = () => {
   const { t } = useTranslate();
 
   const [picker, setPicker] = useState<Date>(new Date());
+  const [mainCaseNumber, setMainCaseNumber] = useState<number>(1);
+  const [secondaryCaseNumber, setSecondaryCaseNumber] = useState<number>(1);
+  const [opposit, setOpposite] = useState<number>(1);
   return (
     <div>
       {" "}
@@ -298,6 +305,7 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
+
               {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <div className="flex flex-row justify-between items-center">
                   <div className="!w-[87%]" style={{ width: "87%" }}>
@@ -319,42 +327,7 @@ const page = () => {
                   </div>
                 </div>
               </div> */}
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1 }}
-                className="flex flex-col gap-2 my-2 w-[48%]"
-              >
-                <Label htmlFor="category">{t("Status")} </Label>
-                <Radio text1={"Plaintiff"} text2={"Defendant"} />
-              </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.1 }}
-                className="flex flex-col gap-2 my-2 w-[48%]"
-              >
-                <Label
-                  htmlFor="PartyName"
-                  className={cn("", { "text-destructive": errors.PartyName })}
-                >
-                  {t("Opposing Party Name")}{" "}
-                </Label>
-                <Input
-                  type="text"
-                  {...register("PartyName")}
-                  placeholder={t("Enter Opposing Party Name")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.PartyName,
-                  })}
-                />
-                {errors.PartyName && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.PartyName.message)}
-                  </p>
-                )}
-              </motion.div>
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -382,33 +355,171 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.3 }}
-                className="flex flex-col gap-2 my-2 w-[48%]"
-              >
-                <Label
-                  htmlFor="CaseNumber"
-                  className={cn("", { "text-destructive": errors.CaseNumber })}
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="flex flex-row justify-between items-center"
                 >
-                  {t("Case Number")}
-                </Label>
-                <Input
-                  type="number"
-                  {...register("CaseNumber")}
-                  placeholder={t("Enter Case Number")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.CaseNumber,
-                  })}
-                />
-                {errors.CaseNumber && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.CaseNumber.message)}
-                  </p>
-                )}
-              </motion.div>
+                  {Array.from({ length: mainCaseNumber }).map((_, index) => (
+                    <div
+                      key={index} // Ensure you use a unique key for each item
+                      className={`${
+                        mainCaseNumber !== 1
+                          ? "!w-[100%] flex flex-row justify-between"
+                          : "!w-[100%] flex flex-row justify-between"
+                      }`}
+                    >
+                      <div
+                        className={`${
+                          mainCaseNumber === 1 ? "!w-[100%]" : "!w-[91%]"
+                        }`}
+                      >
+                        <Label
+                          htmlFor="MainCaseNumber"
+                          className={cn("", {
+                            "text-destructive": errors.MainCaseNumber,
+                          })}
+                        >
+                          {t("Case Number")}
+                        </Label>
+                        <Input
+                          type="number"
+                          {...register("MainCaseNumber")}
+                          placeholder={t("Enter Case Number")}
+                          className={cn("", {
+                            "border-destructive focus:border-destructive":
+                              errors.MainCaseNumber,
+                          })}
+                        />
+                        {errors.MainCaseNumber && (
+                          <p className="text-xs text-destructive">
+                            {t(errors.MainCaseNumber.message)}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Delete icon: Show for all items except the last one */}
+                      {mainCaseNumber > 1 && index !== mainCaseNumber - 1 && (
+                        <div
+                          className="mt-6 w-[8%]"
+                          onClick={() => setMainCaseNumber(mainCaseNumber - 1)}
+                        >
+                          <Icon
+                            icon="material-symbols:delete"
+                            width="24"
+                            height="24"
+                            color="#dfc77d"
+                          />
+                        </div>
+                      )}
+
+                      {/* Plus icon: Show if there's only one item or on the last item when there are more */}
+                      {index === mainCaseNumber - 1 && (
+                        <div
+                          className="mt-6 w-[8%]"
+                          onClick={() => setMainCaseNumber(mainCaseNumber + 1)}
+                        >
+                          <Icon
+                            icon="gg:add"
+                            width="24"
+                            height="24"
+                            color="#dfc77d"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="flex flex-row justify-between items-center"
+                >
+                  {Array.from({ length: secondaryCaseNumber }).map(
+                    (_, index) => (
+                      <div
+                        key={index} // Ensure you use a unique key for each item
+                        className={`${
+                          secondaryCaseNumber !== 1
+                            ? "!w-[100%] flex flex-row justify-between"
+                            : "!w-[100%] flex flex-row justify-between"
+                        }`}
+                      >
+                        <div
+                          className={`${
+                            secondaryCaseNumber === 1 ? "!w-[100%]" : "!w-[91%]"
+                          }`}
+                        >
+                          <Label
+                            htmlFor="SecondaryCaseNumber"
+                            className={cn("", {
+                              "text-destructive": errors.SecondaryCaseNumber,
+                            })}
+                          >
+                            {t("Secondary Case Number")}
+                          </Label>
+                          <Input
+                            type="number"
+                            {...register("SecondaryCaseNumber")}
+                            placeholder={t("Enter Secondary Case Number")}
+                            className={cn("", {
+                              "border-destructive focus:border-destructive":
+                                errors.SecondaryCaseNumber,
+                            })}
+                          />
+                          {errors.SecondaryCaseNumber && (
+                            <p className="text-xs text-destructive">
+                              {t(errors.SecondaryCaseNumber.message)}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Delete icon: Show for all items except the last one */}
+                        {secondaryCaseNumber > 1 &&
+                          index !== secondaryCaseNumber - 1 && (
+                            <div
+                              className="mt-6 w-[8%]"
+                              onClick={() =>
+                                setSecondaryCaseNumber(secondaryCaseNumber - 1)
+                              }
+                            >
+                              <Icon
+                                icon="material-symbols:delete"
+                                width="24"
+                                height="24"
+                                color="#dfc77d"
+                              />
+                            </div>
+                          )}
+
+                        {/* Plus icon: Show if there's only one item or on the last item when there are more */}
+                        {index === secondaryCaseNumber - 1 && (
+                          <div
+                            className="mt-6 w-[8%]"
+                            onClick={() =>
+                              setSecondaryCaseNumber(secondaryCaseNumber + 1)
+                            }
+                          >
+                            <Icon
+                              icon="gg:add"
+                              width="24"
+                              height="24"
+                              color="#dfc77d"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )
+                  )}
+                </motion.div>
+              </div>
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -547,6 +658,96 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
+            </div>
+            <div className="flex flex-row justify-between items-center">
+              {" "}
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
+                <Label htmlFor="category">{t("Status")} </Label>
+                <Radio text1={"Plaintiff"} text2={"Defendant"} />
+              </motion.div>
+              <div className="flex flex-col gap-2 my-2 w-[48%]">
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.1 }}
+                  className="flex flex-row justify-between items-center"
+                >
+                  {Array.from({ length: opposit }).map((_, index) => (
+                    <div
+                      key={index} // Ensure you use a unique key for each item
+                      className={`${
+                        opposit !== 1
+                          ? "!w-[100%] flex flex-row justify-between"
+                          : "!w-[100%] flex flex-row justify-between"
+                      }`}
+                    >
+                      <div
+                        className={`${
+                          opposit === 1 ? "!w-[100%]" : "!w-[91%]"
+                        }`}
+                      >
+                        <Label
+                          htmlFor="PartyName"
+                          className={cn("", {
+                            "text-destructive": errors.PartyName,
+                          })}
+                        >
+                          {t("Opposing Party Name")}
+                        </Label>
+                        <Input
+                          type="text"
+                          {...register("PartyName")}
+                          placeholder={t("Enter Opposing Party Name")}
+                          className={cn("", {
+                            "border-destructive focus:border-destructive":
+                              errors.PartyName,
+                          })}
+                        />
+                        {errors.PartyName && (
+                          <p className="text-xs text-destructive">
+                            {t(errors.PartyName.message)}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Delete icon: Show for all items except the last one */}
+                      {opposit > 1 && index !== opposit - 1 && (
+                        <div
+                          className="mt-6 w-[8%]"
+                          onClick={() => setOpposite(opposit - 1)}
+                        >
+                          <Icon
+                            icon="material-symbols:delete"
+                            width="24"
+                            height="24"
+                            color="#dfc77d"
+                          />
+                        </div>
+                      )}
+
+                      {/* Plus icon: Show if there's only one item or on the last item when there are more */}
+                      {index === opposit - 1 && (
+                        <div
+                          className="mt-6 w-[8%]"
+                          onClick={() => setOpposite(opposit + 1)}
+                        >
+                          <Icon
+                            icon="gg:add"
+                            width="24"
+                            height="24"
+                            color="#dfc77d"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
             </div>
             <div className="grid grid-cols-1  my-2 lg:grid-cols-1 gap-4">
               <motion.div

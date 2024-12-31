@@ -47,6 +47,8 @@ export { default as Tasks } from "./home/tasks.svg";
 export { default as Courts } from "./home/courts.svg";
 export { default as Appointments } from "./home/appointments.svg";
 export { default as Requests } from "./home/requests.svg";
+export { default as password } from "./home/password.svg";
+export { default as email } from "./home/email.svg";
 
 
 
