@@ -24,9 +24,9 @@ const page = () => {
           transition={{ duration: 1.7 }}
         >
           <div className=" text-default-900 text-2xl font-bold my-2">
-            {t("Contact List")}
+            {t("Staff List")}
           </div>{" "}
-          <BreadcrumbComponent header={"Contacts"} body={"Contact List"} />
+          <BreadcrumbComponent header={"Staff"} body={"Staff List"} />
         </motion.div>
         <motion.div
           initial={{ x: -15 }}
@@ -48,7 +48,7 @@ const page = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle> {t("Contact List Details")}</CardTitle>
+          <CardTitle> {t("Staff List Details")}</CardTitle>
         </CardHeader>
         <CardContent>
           <TableData />

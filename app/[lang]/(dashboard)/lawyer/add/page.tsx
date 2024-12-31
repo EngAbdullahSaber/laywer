@@ -144,6 +144,34 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="phone"
+                  className={cn("", {
+                    "text-destructive": errors.phone,
+                  })}
+                >
+                  {t("Licence Number")}
+                </Label>
+                <Input
+                  type="number"
+                  placeholder={t("Enter Licence Number")}
+                  {...register("phone")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive": errors.phone,
+                  })}
+                />
+                {errors.phone && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.phone.message)}
+                  </p>
+                )}
+              </motion.div>
               <div className="flex flex-col gap-2">
                 {" "}
                 <motion.div
