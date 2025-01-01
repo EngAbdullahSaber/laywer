@@ -78,6 +78,11 @@ const adminMenu = [
           href: "/orders",
         },
         {
+          title: "Services Orders",
+          icon: Courts,
+          href: "/orders-services",
+        },
+        {
           title: "Contact List",
           icon: ContactList,
           href: "/contact-list",
@@ -86,6 +91,11 @@ const adminMenu = [
           title: "Staff",
           icon: ContactList,
           href: "/staff",
+        },        
+        {
+          title: "Services",
+          icon: ContactList,
+          href: "/services",
         },
         {
           title: "lawyers Categories",
@@ -106,6 +116,11 @@ const adminMenu = [
           title: "Clients Categories",
           icon: ContactCategory,
           href: "/client-category",
+        },
+        {
+          title: "Staff Categories",
+          icon: ContactCategory,
+          href: "/staff-category",
         },
 ];
 const lawyerMenu = [
@@ -148,6 +163,11 @@ const clientMenu = [
           title: "Communication",
           icon: ContactList,
           href: "/new-order",
+        },
+        {
+          title: "Services"          ,
+          icon: ContactList,
+          href: "/clients-services",
         },
 ];
 

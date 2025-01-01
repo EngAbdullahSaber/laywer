@@ -8,6 +8,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import BasicSelect from "@/components/common/Select/BasicSelect";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
@@ -42,6 +44,9 @@ const schema = z.object({
       message: "errorCourt.CityMax",
     }),
   Region: z.string().min(3, {
+    message: "errorCourt.RegionMin",
+  }),
+  Category: z.string().min(3, {
     message: "errorCourt.RegionMin",
   }),
   Nationality: z
@@ -88,6 +93,11 @@ const page = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
+  const Category: { value: string; label: string }[] = [
+    { value: "عائلى", label: "عائلى" },
+    { value: "مدنى", label: "مدنى" },
+    { value: "جنائى", label: "جنائى" },
+  ];
   return (
     <div>
       {" "}
@@ -157,8 +167,18 @@ const page = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
               >
-                <Label htmlFor="category">{t("Status")} </Label>
-                <Radio text1={"Plaintiff"} text2={"Defendant"} />
+                <Label htmlFor="Category">{t("Client Category")} </Label>
+                <BasicSelect
+                  name="Category"
+                  menu={Category}
+                  control={control}
+                  errors={errors}
+                />
+                {errors.Category && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.Category.message)}
+                  </p>
+                )}
               </motion.div>
               <motion.div
                 initial={{ y: -50 }}

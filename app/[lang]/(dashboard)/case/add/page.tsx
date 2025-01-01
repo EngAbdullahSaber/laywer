@@ -305,7 +305,30 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
-
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.5 }}
+                className="flex flex-row justify-between items-center w-[48%]"
+              >
+                <div className="!w-[87%]" style={{ width: "87%" }}>
+                  <Label htmlFor="category">{t("Lawyer Selection")} </Label>
+                  <BasicSelect
+                    name="LawyerSelection"
+                    menu={lawyer}
+                    control={control}
+                    errors={errors}
+                  />
+                  {errors.LawyerSelection && (
+                    <p className="text-xs text-destructive">
+                      {t(errors.LawyerSelection.message)}
+                    </p>
+                  )}{" "}
+                </div>
+                <Link href={"/lawyer"} className="w-[8%] mt-5">
+                  <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
+                </Link>
+              </motion.div>
               {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <div className="flex flex-row justify-between items-center">
                   <div className="!w-[87%]" style={{ width: "87%" }}>
@@ -328,7 +351,7 @@ const page = () => {
                 </div>
               </div> */}
 
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.2 }}
@@ -354,57 +377,195 @@ const page = () => {
                     {t(errors.LawyerName.message)}
                   </p>
                 )}
-              </motion.div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="flex flex-row justify-between items-center"
-                >
-                  {Array.from({ length: mainCaseNumber }).map((_, index) => (
+              </motion.div> */}
+            </div>
+            <div className="flex flex-row justify-between items-center my-4  gap-4">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-row justify-between items-center gap-6 w-full"
+              >
+                {Array.from({ length: mainCaseNumber }).map((_, index) => (
+                  <div
+                    key={index} // Ensure you use a unique key for each item
+                    className={`${
+                      mainCaseNumber !== 1
+                        ? "!w-[100%] flex flex-row justify-between"
+                        : "!w-[100%] flex flex-row justify-between"
+                    }`}
+                  >
                     <div
-                      key={index} // Ensure you use a unique key for each item
                       className={`${
-                        mainCaseNumber !== 1
-                          ? "!w-[100%] flex flex-row justify-between"
-                          : "!w-[100%] flex flex-row justify-between"
+                        mainCaseNumber === 1 ? "!w-[48%]" : "!w-[48%]"
                       }`}
                     >
-                      <div
-                        className={`${
-                          mainCaseNumber === 1 ? "!w-[100%]" : "!w-[91%]"
-                        }`}
+                      <Label
+                        htmlFor="MainCaseNumber"
+                        className={cn("", {
+                          "text-destructive": errors.MainCaseNumber,
+                        })}
                       >
-                        <Label
-                          htmlFor="MainCaseNumber"
-                          className={cn("", {
-                            "text-destructive": errors.MainCaseNumber,
-                          })}
-                        >
-                          {t("Case Number")}
-                        </Label>
-                        <Input
-                          type="number"
-                          {...register("MainCaseNumber")}
-                          placeholder={t("Enter Case Number")}
-                          className={cn("", {
-                            "border-destructive focus:border-destructive":
-                              errors.MainCaseNumber,
-                          })}
-                        />
-                        {errors.MainCaseNumber && (
-                          <p className="text-xs text-destructive">
-                            {t(errors.MainCaseNumber.message)}
-                          </p>
-                        )}
-                      </div>
+                        {t("Case Number")}
+                      </Label>
+                      <Input
+                        type="number"
+                        {...register("MainCaseNumber")}
+                        placeholder={t("Enter Case Number")}
+                        className={cn("", {
+                          "border-destructive focus:border-destructive":
+                            errors.MainCaseNumber,
+                        })}
+                      />
+                      {errors.MainCaseNumber && (
+                        <p className="text-xs text-destructive">
+                          {t(errors.MainCaseNumber.message)}
+                        </p>
+                      )}
+                    </div>
+                    <div
+                      className={`${
+                        mainCaseNumber === 1 ? "!w-[42%]" : "!w-[42%]"
+                      }`}
+                    >
+                      <Label
+                        htmlFor="MainCaseNumber"
+                        className={cn("", {
+                          "text-destructive": errors.MainCaseNumber,
+                        })}
+                      >
+                        {t("Name for Number")}
+                      </Label>
+                      <Input
+                        type="number"
+                        {...register("MainCaseNumber")}
+                        placeholder={t("Enter Name for Number")}
+                        className={cn("", {
+                          "border-destructive focus:border-destructive":
+                            errors.MainCaseNumber,
+                        })}
+                      />
+                      {errors.MainCaseNumber && (
+                        <p className="text-xs text-destructive">
+                          {t(errors.MainCaseNumber.message)}
+                        </p>
+                      )}
+                    </div>
 
-                      {/* Delete icon: Show for all items except the last one */}
-                      {mainCaseNumber > 1 && index !== mainCaseNumber - 1 && (
+                    {/* Delete icon: Show for all items except the last one */}
+                    {mainCaseNumber > 1 && index !== mainCaseNumber - 1 && (
+                      <div
+                        className="mt-6 w-[3%]"
+                        onClick={() => setMainCaseNumber(mainCaseNumber - 1)}
+                      >
+                        <Icon
+                          icon="material-symbols:delete"
+                          width="24"
+                          height="24"
+                          color="#dfc77d"
+                        />
+                      </div>
+                    )}
+
+                    {/* Plus icon: Show if there's only one item or on the last item when there are more */}
+                    {index === mainCaseNumber - 1 && (
+                      <div
+                        className="mt-6 w-[3%]"
+                        onClick={() => setMainCaseNumber(mainCaseNumber + 1)}
+                      >
+                        <Icon
+                          icon="gg:add"
+                          width="24"
+                          height="24"
+                          color="#dfc77d"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="flex flex-row justify-between items-center  gap-4">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-row justify-between items-center gap-6 w-full"
+              >
+                {Array.from({ length: secondaryCaseNumber }).map((_, index) => (
+                  <div
+                    key={index} // Ensure you use a unique key for each item
+                    className={`${
+                      secondaryCaseNumber !== 1
+                        ? "!w-[100%] flex flex-row justify-between"
+                        : "!w-[100%] flex flex-row justify-between"
+                    }`}
+                  >
+                    <div
+                      className={`${
+                        secondaryCaseNumber === 1 ? "!w-[48%]" : "!w-[48%]"
+                      }`}
+                    >
+                      <Label
+                        htmlFor="SecondaryCaseNumber"
+                        className={cn("", {
+                          "text-destructive": errors.SecondaryCaseNumber,
+                        })}
+                      >
+                        {t("Secondary Case Number")}
+                      </Label>
+                      <Input
+                        type="number"
+                        {...register("SecondaryCaseNumber")}
+                        placeholder={t("Enter Secondary Case Number")}
+                        className={cn("", {
+                          "border-destructive focus:border-destructive":
+                            errors.SecondaryCaseNumber,
+                        })}
+                      />
+                      {errors.SecondaryCaseNumber && (
+                        <p className="text-xs text-destructive">
+                          {t(errors.SecondaryCaseNumber.message)}
+                        </p>
+                      )}
+                    </div>
+                    <div
+                      className={`${
+                        secondaryCaseNumber === 1 ? "!w-[42%]" : "!w-[42%]"
+                      }`}
+                    >
+                      <Label
+                        htmlFor="SecondaryCaseNumber"
+                        className={cn("", {
+                          "text-destructive": errors.SecondaryCaseNumber,
+                        })}
+                      >
+                        {t("Name for Number")}
+                      </Label>
+                      <Input
+                        type="number"
+                        {...register("SecondaryCaseNumber")}
+                        placeholder={t("Enter Name for Number")}
+                        className={cn("", {
+                          "border-destructive focus:border-destructive":
+                            errors.SecondaryCaseNumber,
+                        })}
+                      />
+                      {errors.SecondaryCaseNumber && (
+                        <p className="text-xs text-destructive">
+                          {t(errors.SecondaryCaseNumber.message)}
+                        </p>
+                      )}
+                    </div>
+                    {/* Delete icon: Show for all items except the last one */}
+                    {secondaryCaseNumber > 1 &&
+                      index !== secondaryCaseNumber - 1 && (
                         <div
-                          className="mt-6 w-[8%]"
-                          onClick={() => setMainCaseNumber(mainCaseNumber - 1)}
+                          className="mt-6 w-[3%]"
+                          onClick={() =>
+                            setSecondaryCaseNumber(secondaryCaseNumber - 1)
+                          }
                         >
                           <Icon
                             icon="material-symbols:delete"
@@ -415,111 +576,27 @@ const page = () => {
                         </div>
                       )}
 
-                      {/* Plus icon: Show if there's only one item or on the last item when there are more */}
-                      {index === mainCaseNumber - 1 && (
-                        <div
-                          className="mt-6 w-[8%]"
-                          onClick={() => setMainCaseNumber(mainCaseNumber + 1)}
-                        >
-                          <Icon
-                            icon="gg:add"
-                            width="24"
-                            height="24"
-                            color="#dfc77d"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="flex flex-row justify-between items-center"
-                >
-                  {Array.from({ length: secondaryCaseNumber }).map(
-                    (_, index) => (
+                    {/* Plus icon: Show if there's only one item or on the last item when there are more */}
+                    {index === secondaryCaseNumber - 1 && (
                       <div
-                        key={index} // Ensure you use a unique key for each item
-                        className={`${
-                          secondaryCaseNumber !== 1
-                            ? "!w-[100%] flex flex-row justify-between"
-                            : "!w-[100%] flex flex-row justify-between"
-                        }`}
+                        className="mt-6 w-[3%]"
+                        onClick={() =>
+                          setSecondaryCaseNumber(secondaryCaseNumber + 1)
+                        }
                       >
-                        <div
-                          className={`${
-                            secondaryCaseNumber === 1 ? "!w-[100%]" : "!w-[91%]"
-                          }`}
-                        >
-                          <Label
-                            htmlFor="SecondaryCaseNumber"
-                            className={cn("", {
-                              "text-destructive": errors.SecondaryCaseNumber,
-                            })}
-                          >
-                            {t("Secondary Case Number")}
-                          </Label>
-                          <Input
-                            type="number"
-                            {...register("SecondaryCaseNumber")}
-                            placeholder={t("Enter Secondary Case Number")}
-                            className={cn("", {
-                              "border-destructive focus:border-destructive":
-                                errors.SecondaryCaseNumber,
-                            })}
-                          />
-                          {errors.SecondaryCaseNumber && (
-                            <p className="text-xs text-destructive">
-                              {t(errors.SecondaryCaseNumber.message)}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Delete icon: Show for all items except the last one */}
-                        {secondaryCaseNumber > 1 &&
-                          index !== secondaryCaseNumber - 1 && (
-                            <div
-                              className="mt-6 w-[8%]"
-                              onClick={() =>
-                                setSecondaryCaseNumber(secondaryCaseNumber - 1)
-                              }
-                            >
-                              <Icon
-                                icon="material-symbols:delete"
-                                width="24"
-                                height="24"
-                                color="#dfc77d"
-                              />
-                            </div>
-                          )}
-
-                        {/* Plus icon: Show if there's only one item or on the last item when there are more */}
-                        {index === secondaryCaseNumber - 1 && (
-                          <div
-                            className="mt-6 w-[8%]"
-                            onClick={() =>
-                              setSecondaryCaseNumber(secondaryCaseNumber + 1)
-                            }
-                          >
-                            <Icon
-                              icon="gg:add"
-                              width="24"
-                              height="24"
-                              color="#dfc77d"
-                            />
-                          </div>
-                        )}
+                        <Icon
+                          icon="gg:add"
+                          width="24"
+                          height="24"
+                          color="#dfc77d"
+                        />
                       </div>
-                    )
-                  )}
-                </motion.div>
-              </div>
-
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+            <div className="flex flex-row justify-between items-center my-4 gap-4">
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -542,38 +619,7 @@ const page = () => {
                   <Input type="file" className="hidden" />
                 </Label>
               </motion.div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 1.5 }}
-                  className="flex flex-row justify-between items-center"
-                >
-                  <div className="!w-[87%]" style={{ width: "87%" }}>
-                    <Label htmlFor="category">{t("Lawyer Selection")} </Label>
-                    <BasicSelect
-                      name="LawyerSelection"
-                      menu={lawyer}
-                      control={control}
-                      errors={errors}
-                    />
-                    {errors.LawyerSelection && (
-                      <p className="text-xs text-destructive">
-                        {t(errors.LawyerSelection.message)}
-                      </p>
-                    )}{" "}
-                  </div>
-                  <Link href={"/lawyer"} className="w-[8%] mt-5">
-                    <Icon
-                      icon="gg:add"
-                      width="24"
-                      height="24"
-                      color="#dfc77d"
-                    />
-                  </Link>
-                </motion.div>
-              </div>
-
+              <div className="flex flex-col gap-2 my-2 w-[48%]"></div>
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -749,7 +795,7 @@ const page = () => {
                 </motion.div>
               </div>
             </div>
-            <div className="grid grid-cols-1  my-2 lg:grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-1  my-4 gap-4">
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
