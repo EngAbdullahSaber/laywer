@@ -4,6 +4,7 @@ export const data = [
     Price: "1320 SAR",
     Category: "خدمة 1",
     Describtion: "Lorem, ipsum dolor sit amet consectetur adipisicing elit",
+    Image: "https://picsum.photos/200/300?random=11",
  
    
   },
@@ -13,6 +14,7 @@ export const data = [
     Describtion: "Lorem, ipsum dolor sit amet consectetur adipisicing elit",
     Price: "1320 SAR",
 
+    Image: "https://picsum.photos/200/300?random=16",
    
   },
   {
@@ -21,6 +23,7 @@ export const data = [
     Describtion: "Lorem, ipsum dolor sit amet consectetur adipisicing elit",
  
     Price: "1320 SAR",
+    Image: "https://picsum.photos/200/300?random=14",
    
   },
   

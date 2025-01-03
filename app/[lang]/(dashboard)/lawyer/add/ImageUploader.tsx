@@ -98,11 +98,7 @@ const ImageUploader = () => {
       {files.length ? (
         <Fragment>
           <div>{fileList}</div>
-          <div className=" flex justify-end space-x-2">
-            <Button color="destructive" onClick={handleRemoveAllFiles}>
-              {t("Remove")}
-            </Button>
-          </div>
+          <div className=" flex justify-end space-x-2"></div>
         </Fragment>
       ) : null}
     </Fragment>

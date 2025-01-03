@@ -20,7 +20,12 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 // Update the schema to validate date properly
 const schema = z.object({
   Title: z
@@ -69,14 +74,23 @@ const CreateDate = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button
-          size="icon"
-          variant="outline"
-          className="h-7 w-7"
-          color="secondary"
-        >
-          <Icon icon="ic:outline-add" className="h-4 w-4" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                size="icon"
+                variant="outline"
+                className="h-7 w-7"
+                color="secondary"
+              >
+                <Icon icon="ic:outline-add" className="h-4 w-4" />
+              </Button>{" "}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p> {t("Create New Date With Client")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <DialogContent size="md" className="gap-3 h-[50%]">
         <DialogHeader className="p-0">

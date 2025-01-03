@@ -117,28 +117,6 @@ const CreateDate = () => {
                 <Label>{t("Payment Receipt")}</Label>
                 <ImageUploader />
               </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.4 }}
-                className="flex flex-col gap-2 w-[48%]"
-              >
-                <Label>
-                  <div>
-                    <Button
-                      asChild
-                      color="info"
-                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                      variant="outline"
-                    >
-                      <div className="mt-5">
-                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
-                      </div>
-                    </Button>
-                  </div>
-                  <Input type="file" className="hidden" />
-                </Label>
-              </motion.div>
             </div>
 
             {/* Submit Button inside form */}

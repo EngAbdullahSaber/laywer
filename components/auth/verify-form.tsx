@@ -50,7 +50,14 @@ const VerfiyForm = () => {
     console.log("Entered OTP:", enteredOtp);
     setOtp(otpArray);
     inputRefs.current[0]?.focus();
-    router.push("/dashboard");
+    const role = localStorage.getItem("role");
+    if (role == "admin") {
+      router.push("/dashboard");
+    } else if (role == "lawyer") {
+      router.push("/lawyer-cases");
+    } else if (role == "client") {
+      router.push("/client-cases");
+    }
   };
 
   const isOtpComplete = otp.every((digit) => digit !== "");

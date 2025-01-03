@@ -10,12 +10,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import Actions from "@/components/common/Actions/Actions";
 import { motion } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Task {
   id: string;
   Category?: string;
   Describtion?: string;
   Price?: string;
+  Image?: string;
 }
 const TableData = () => {
   const columns: ColumnDef<Task>[] = [
@@ -60,6 +62,25 @@ const TableData = () => {
       cell: ({ row }) => <div className="">{row.original.id}</div>,
       enableSorting: false,
       enableHiding: false,
+    },
+    {
+      accessorKey: "Services Image",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Services Image"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <Avatar>
+              <AvatarImage src={row.original.Image} />
+              <AvatarFallback>AB</AvatarFallback>
+            </Avatar>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
     },
     {
       accessorKey: "Services Name",

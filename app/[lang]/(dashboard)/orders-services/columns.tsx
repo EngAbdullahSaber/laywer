@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
@@ -20,6 +20,7 @@ interface Task {
   Order_Status?: string;
   Date?: string;
   Title?: string;
+  Image?: string;
 }
 const TableData = () => {
   const columns: ColumnDef<Task>[] = [
@@ -64,6 +65,25 @@ const TableData = () => {
       cell: ({ row }) => <div className="">{row.original.id}</div>,
       enableSorting: false,
       enableHiding: false,
+    },
+    {
+      accessorKey: "Services Image",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Services Image"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <Avatar>
+              <AvatarImage src={row.original.Image} />
+              <AvatarFallback>AB</AvatarFallback>
+            </Avatar>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
     },
     {
       accessorKey: "Services Name",

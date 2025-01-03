@@ -329,6 +329,35 @@ const page = () => {
                   <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
                 </Link>
               </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2 my-2 w-[48%]"
+              >
+                <Label
+                  htmlFor="MainCaseNumber"
+                  className={cn("", {
+                    "text-destructive": errors.MainCaseNumber,
+                  })}
+                >
+                  {t("Case Number")}
+                </Label>
+                <Input
+                  type="number"
+                  {...register("MainCaseNumber")}
+                  placeholder={t("Enter Case Number")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.MainCaseNumber,
+                  })}
+                />
+                {errors.MainCaseNumber && (
+                  <p className="text-xs text-destructive">
+                    {t(errors.MainCaseNumber.message)}
+                  </p>
+                )}
+              </motion.div>
               {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <div className="flex flex-row justify-between items-center">
                   <div className="!w-[87%]" style={{ width: "87%" }}>
@@ -379,113 +408,20 @@ const page = () => {
                 )}
               </motion.div> */}
             </div>
-            <div className="flex flex-row justify-between items-center my-4  gap-4">
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="flex flex-row justify-between items-center gap-6 w-full"
-              >
-                {Array.from({ length: mainCaseNumber }).map((_, index) => (
-                  <div
-                    key={index} // Ensure you use a unique key for each item
-                    className={`${
-                      mainCaseNumber !== 1
-                        ? "!w-[100%] flex flex-row justify-between"
-                        : "!w-[100%] flex flex-row justify-between"
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        mainCaseNumber === 1 ? "!w-[48%]" : "!w-[48%]"
-                      }`}
-                    >
-                      <Label
-                        htmlFor="MainCaseNumber"
-                        className={cn("", {
-                          "text-destructive": errors.MainCaseNumber,
-                        })}
-                      >
-                        {t("Case Number")}
-                      </Label>
-                      <Input
-                        type="number"
-                        {...register("MainCaseNumber")}
-                        placeholder={t("Enter Case Number")}
-                        className={cn("", {
-                          "border-destructive focus:border-destructive":
-                            errors.MainCaseNumber,
-                        })}
-                      />
-                      {errors.MainCaseNumber && (
-                        <p className="text-xs text-destructive">
-                          {t(errors.MainCaseNumber.message)}
-                        </p>
-                      )}
-                    </div>
-                    <div
-                      className={`${
-                        mainCaseNumber === 1 ? "!w-[42%]" : "!w-[42%]"
-                      }`}
-                    >
-                      <Label
-                        htmlFor="MainCaseNumber"
-                        className={cn("", {
-                          "text-destructive": errors.MainCaseNumber,
-                        })}
-                      >
-                        {t("Name for Number")}
-                      </Label>
-                      <Input
-                        type="number"
-                        {...register("MainCaseNumber")}
-                        placeholder={t("Enter Name for Number")}
-                        className={cn("", {
-                          "border-destructive focus:border-destructive":
-                            errors.MainCaseNumber,
-                        })}
-                      />
-                      {errors.MainCaseNumber && (
-                        <p className="text-xs text-destructive">
-                          {t(errors.MainCaseNumber.message)}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Delete icon: Show for all items except the last one */}
-                    {mainCaseNumber > 1 && index !== mainCaseNumber - 1 && (
-                      <div
-                        className="mt-6 w-[3%]"
-                        onClick={() => setMainCaseNumber(mainCaseNumber - 1)}
-                      >
-                        <Icon
-                          icon="material-symbols:delete"
-                          width="24"
-                          height="24"
-                          color="#dfc77d"
-                        />
-                      </div>
-                    )}
-
-                    {/* Plus icon: Show if there's only one item or on the last item when there are more */}
-                    {index === mainCaseNumber - 1 && (
-                      <div
-                        className="mt-6 w-[3%]"
-                        onClick={() => setMainCaseNumber(mainCaseNumber + 1)}
-                      >
-                        <Icon
-                          icon="gg:add"
-                          width="24"
-                          height="24"
-                          color="#dfc77d"
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
+            <motion.hr
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.5 }}
+              className="my-3"
+            />
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.5 }}
+              className="my-3"
+            >
+              {t("Secondary_Case_Number")}
+            </motion.p>
             <div className="flex flex-row justify-between items-center  gap-4">
               <motion.div
                 initial={{ y: -50 }}

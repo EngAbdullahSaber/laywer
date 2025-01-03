@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import ImageUploader from "../../lawyer/add/ImageUploader";
 const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
   const { t, loading, error } = useTranslate();
 
@@ -62,6 +63,15 @@ const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
                 >
                   <Label>{t("Price")}</Label>
                   <Input type="number" placeholder={t("Enter Price")} />
+                </motion.div>
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2"
+                >
+                  <Label>{t("services image")}</Label>
+                  <ImageUploader />
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0 }}

@@ -15,7 +15,13 @@ import CaseStatus from "./CaseStatus";
 import FileRequest from "./FileRequest";
 import { motion } from "framer-motion";
 import Link from "next/link";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useTranslate } from "@/config/useTranslation";
 interface Task {
   id: string;
   Case_Name?: string;
@@ -26,6 +32,8 @@ interface Task {
   Key_Dates?: string;
 }
 const TableData = () => {
+  const { t, loading, error } = useTranslate();
+
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
@@ -35,28 +43,51 @@ const TableData = () => {
           <CaseStatus />
           <CreateDate />
           <FileRequest />
-          <Link href={"lawyer-cases/follow-report"} className="mt-1">
-            {" "}
-            <Button
-              size="icon"
-              variant="outline"
-              className=" h-7 w-7"
-              color="secondary"
-            >
-              <Icon icon="gridicons:create" width="24" height="24" />{" "}
-            </Button>
-          </Link>
-          <Link href={"lawyer-cases/attend-report"} className="mt-1">
-            {" "}
-            <Button
-              size="icon"
-              variant="outline"
-              className=" h-7 w-7"
-              color="secondary"
-            >
-              <Icon icon="gridicons:reader-follow" width="24" height="24" />{" "}
-            </Button>
-          </Link>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Link href={"lawyer-cases/follow-report"} className="mt-1">
+                  {" "}
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    <Icon icon="gridicons:create" width="24" height="24" />{" "}
+                  </Button>
+                </Link>{" "}
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t("Case follow-up report")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Link href={"lawyer-cases/attend-report"} className="mt-1">
+                  {" "}
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    <Icon
+                      icon="gridicons:reader-follow"
+                      width="24"
+                      height="24"
+                    />{" "}
+                  </Button>
+                </Link>{" "}
+              </TooltipTrigger>
+              <TooltipContent>
+                <p> {t("Report of attendance at a judicial hearing")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       ),
     },
