@@ -14,21 +14,35 @@ import {
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 const Delete = () => {
   const { t, loading, error } = useTranslate();
 
   return (
     <Dialog>
       <DialogTrigger>
-        <Button
-          size="icon"
-          variant="outline"
-          className=" h-7 w-7"
-          color="secondary"
-        >
-          <Icon icon="heroicons:trash" className="h-4 w-4" />
-        </Button>{" "}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                size="icon"
+                variant="outline"
+                className=" h-7 w-7"
+                color="secondary"
+              >
+                <Icon icon="heroicons:trash" className="h-4 w-4" />
+              </Button>{" "}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p> {t("Deleting Task")} </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
 
       <DialogContent className="p-6 !h-auto" size="md">
@@ -46,9 +60,7 @@ const Delete = () => {
             whileInView={{ y: 0 }}
             transition={{ duration: 1.2 }}
             className="mt-6 mb-4 text-destructive text-xl font-semibold"
-          >
-            {t("Deleting Task")}{" "}
-          </motion.h3>
+          ></motion.h3>
           <motion.p
             initial={{ y: -50 }}
             whileInView={{ y: 0 }}

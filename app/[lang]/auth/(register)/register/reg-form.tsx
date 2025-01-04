@@ -27,6 +27,9 @@ import { useTranslate } from "@/config/useTranslation";
 const schema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
   email: z.string().email({ message: "Your email is invalid." }),
+  phone: z
+    .string()
+    .min(3, { message: "phone must be at least 11 characters." }),
   password: z.string().min(4),
 });
 const RegForm = () => {
@@ -132,6 +135,29 @@ const RegForm = () => {
             {errors.email && (
               <div className=" text-destructive mt-2 mb-4">
                 {errors.email.message as string}
+              </div>
+            )}
+          </div>
+          <div>
+            <Label
+              htmlFor="phone"
+              className="mb-2 font-medium text-default-600"
+            >
+              {t("Phone Number")}{" "}
+            </Label>
+            <Input
+              disabled={isPending}
+              {...register("phone")}
+              type="phone"
+              id="phone"
+              className={cn("", {
+                "border-destructive": errors.phone,
+              })}
+              size={!isDesktop2xl ? "xl" : "lg"}
+            />
+            {errors.phone && (
+              <div className=" text-destructive mt-2 mb-4">
+                {errors.phone.message as string}
               </div>
             )}
           </div>

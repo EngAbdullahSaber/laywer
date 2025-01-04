@@ -14,21 +14,35 @@ import {
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 const Delete = () => {
   const { t, loading, error } = useTranslate();
 
   return (
     <Dialog>
       <DialogTrigger>
-        <Button
-          size="icon"
-          variant="outline"
-          className=" h-7 w-7"
-          color="secondary"
-        >
-          <Icon icon="heroicons:trash" className="h-4 w-4" />
-        </Button>{" "}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                size="icon"
+                variant="outline"
+                className=" h-7 w-7"
+                color="secondary"
+              >
+                <Icon icon="heroicons:trash" className="h-4 w-4" />
+              </Button>{" "}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p> {t("Deleting Lawyer")} </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
 
       <DialogContent className="p-6 !h-auto" size="md">
@@ -59,24 +73,25 @@ const Delete = () => {
           </motion.p>
         </div>
         <DialogFooter className="">
-        <motion.div
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.7 }}
             className="flex flex-row gap-5 justify-center"
-          ><DialogClose asChild>
-            <Button type="submit" variant="outline" color="destructive">
-              {t("Disagree")}
-            </Button>
-          </DialogClose>
-
-          <Button
-            type="submit"
-            className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
-            color="primary"
           >
-            {t("Agree")}
-          </Button>
+            <DialogClose asChild>
+              <Button type="submit" variant="outline" color="destructive">
+                {t("Disagree")}
+              </Button>
+            </DialogClose>
+
+            <Button
+              type="submit"
+              className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              color="primary"
+            >
+              {t("Agree")}
+            </Button>
           </motion.div>
         </DialogFooter>
       </DialogContent>

@@ -20,7 +20,12 @@ import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 const schema = z.object({
   Name: z
     .string()
@@ -84,14 +89,23 @@ const Edit = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button
-          size="icon"
-          variant="outline"
-          className=" h-7 w-7"
-          color="secondary"
-        >
-          <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-        </Button>{" "}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                size="icon"
+                variant="outline"
+                className=" h-7 w-7"
+                color="secondary"
+              >
+                <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+              </Button>{" "}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p> {t("Edit Task")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <DialogContent size="2xl" className="gap-3 h-[70%] ">
         <DialogHeader className="p-0">

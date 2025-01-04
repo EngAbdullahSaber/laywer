@@ -14,7 +14,13 @@ import Edit from "./Edit";
 import Delete from "./Delete";
 import { motion } from "framer-motion";
 import Link from "next/link";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useTranslate } from "@/config/useTranslation";
 interface Task {
   id: string;
   Task_Name?: string;
@@ -25,6 +31,8 @@ interface Task {
   Task_Status?: string;
 }
 const TableData = () => {
+  const { t, loading, error } = useTranslate();
+
   const columns: ColumnDef<Task>[] = [
     // {
     //   id: "select",
@@ -56,17 +64,26 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View />
-          <Button
-            size="icon"
-            variant="outline"
-            className=" h-7 w-7"
-            color="secondary"
-          >
-            {" "}
-            <Link href={"tasks/edit"}>
-              <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-            </Link>{" "}
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className=" h-7 w-7"
+                  color="secondary"
+                >
+                  {" "}
+                  <Link href={"tasks/edit"}>
+                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                  </Link>{" "}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p> {t("Edit Task")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <Delete />
         </div>
       ),
