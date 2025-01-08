@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import BasicSelect from "./BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -148,10 +148,33 @@ const page = () => {
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
-  const category: { value: string; label: string }[] = [
-    { value: "جنائي", label: "جنائي" },
-    { value: "عائلى", label: "عائلى" },
-    { value: "مدنى", label: "مدنى" },
+  const [selectedValue, setSelectedValue] = useState<any>(null);
+  const [selectedValue1, setSelectedValue1] = useState<any>(null);
+  const charcter: { value: string; label: string }[] = [
+    { value: "A", label: "A" },
+    { value: "B", label: "B" },
+    { value: "C", label: "C" },
+    { value: "D", label: "D" },
+    { value: "E", label: "E" },
+    { value: "F", label: "F" },
+    { value: "G", label: "G" },
+    { value: "H", label: "H" },
+    { value: "I", label: "I" },
+    { value: "J", label: "J" },
+    { value: "K", label: "K" },
+    { value: "L", label: "L" },
+    { value: "M", label: "M" },
+    { value: "N", label: "N" },
+    { value: "O", label: "O" },
+    { value: "P", label: "P" },
+    { value: "Q", label: "Q" },
+    { value: "R", label: "R" },
+    { value: "S", label: "S" },
+    { value: "T", label: "T" },
+    { value: "W", label: "W" },
+    { value: "X", label: "X" },
+    { value: "Y", label: "Y" },
+    { value: "Z", label: "Z" },
   ];
   const Name: { value: string; label: string }[] = [
     { value: "على عبدالله", label: "على عبدالله" },
@@ -168,6 +191,8 @@ const page = () => {
     { value: "المحامى احمد عبدالله", label: "المحامى احمد عبدالله" },
     { value: "المحامى فهد ", label: "المحامى فهد " },
   ];
+  console.log(selectedValue);
+  console.log(selectedValue1);
   const handleDateChange = (dates: Date[]) => {
     const selectedDate = dates[0] || null;
     setPicker(selectedDate);
@@ -220,32 +245,6 @@ const page = () => {
                   </Link>
                 </motion.div>
               </div>
-              {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 0.7 }}
-                  className="flex flex-row justify-between items-center"
-                >
-                  <div className="!w-[87%]" style={{ width: "87%" }}>
-                    <Label htmlFor="category">{t("Case Category")} </Label>
-                    <BasicSelect
-                      name="category"
-                      menu={category}
-                      control={control}
-                      errors={errors}
-                    />
-                    {errors.category && (
-                      <p className="text-xs text-destructive">
-                        {t(errors.category.message)}
-                      </p>
-                    )}
-                  </div>
-                  <div className="w-[8%] mt-5">
-                    <CreateCase buttonShape={false} />
-                  </div>
-                </motion.div>
-              </div> */}
 
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <motion.div
@@ -358,55 +357,6 @@ const page = () => {
                   </p>
                 )}
               </motion.div>
-              {/* <div className="flex flex-col gap-2 my-2 w-[48%]">
-                <div className="flex flex-row justify-between items-center">
-                  <div className="!w-[87%]" style={{ width: "87%" }}>
-                    <Label htmlFor="CourtCategory">{t("Court Category")}</Label>
-                    <BasicSelect
-                      name="CourtCategory"
-                      menu={category}
-                      control={control}
-                      errors={errors}
-                    />
-                    {errors.CourtCategory && (
-                      <p className="text-xs text-destructive">
-                        {t(errors.CourtCategory.message)}
-                      </p>
-                    )}{" "}
-                  </div>
-                  <div className="w-[8%] mt-5">
-                    <CreateCourt buttonShape={false} />
-                  </div>
-                </div>
-              </div> */}
-
-              {/* <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.2 }}
-                className="flex flex-col gap-2 my-2 w-[48%]"
-              >
-                <Label
-                  htmlFor="LawyerName"
-                  className={cn("", { "text-destructive": errors.LawyerName })}
-                >
-                  {t("Lawyer Name")}
-                </Label>
-                <Input
-                  type="text"
-                  {...register("LawyerName")}
-                  placeholder={t("Enter Lawyer Name")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.LawyerName,
-                  })}
-                />
-                {errors.LawyerName && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.LawyerName.message)}
-                  </p>
-                )}
-              </motion.div> */}
             </div>
             <motion.hr
               initial={{ opacity: 0 }}
@@ -441,7 +391,7 @@ const page = () => {
                     <div
                       className={`${
                         secondaryCaseNumber === 1 ? "!w-[48%]" : "!w-[48%]"
-                      }`}
+                      } `}
                     >
                       <Label
                         htmlFor="SecondaryCaseNumber"
@@ -451,48 +401,39 @@ const page = () => {
                       >
                         {t("Secondary Case Number")}
                       </Label>
-                      <Input
-                        type="number"
-                        {...register("SecondaryCaseNumber")}
-                        placeholder={t("Enter Secondary Case Number")}
-                        className={cn("", {
-                          "border-destructive focus:border-destructive":
-                            errors.SecondaryCaseNumber,
-                        })}
-                      />
-                      {errors.SecondaryCaseNumber && (
-                        <p className="text-xs text-destructive">
-                          {t(errors.SecondaryCaseNumber.message)}
-                        </p>
-                      )}
+                      <div className="flex flex-row justify-between items-center ">
+                        <div className="w-[48%]">
+                          {" "}
+                          {/* <BasicSelect
+                            name="caseCharacter"
+                            menu={charcter}
+                            control={control}
+                            errors={errors}
+                          /> */}
+                          <BasicSelect
+                            menu={charcter}
+                            setSelectedValue={setSelectedValue} // Set the selected value
+                            selectedValue={selectedValue} // Pass selected value to BasicSelect
+                          />
+                        </div>
+                        <div className="w-[48%]">
+                          {" "}
+                          <BasicSelect
+                            menu={charcter}
+                            setSelectedValue={setSelectedValue1} // Set the selected value
+                            selectedValue={selectedValue1} // Pass selected value to BasicSelect
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div
                       className={`${
                         secondaryCaseNumber === 1 ? "!w-[42%]" : "!w-[42%]"
-                      }`}
+                      } flex flex-col items-center justify-center mt-2`}
                     >
-                      <Label
-                        htmlFor="SecondaryCaseNumber"
-                        className={cn("", {
-                          "text-destructive": errors.SecondaryCaseNumber,
-                        })}
-                      >
-                        {t("Name for Number")}
+                      <Label htmlFor="SecondaryCaseNumber">
+                        1212 {selectedValue?.value} {selectedValue1?.value}
                       </Label>
-                      <Input
-                        type="number"
-                        {...register("SecondaryCaseNumber")}
-                        placeholder={t("Enter Name for Number")}
-                        className={cn("", {
-                          "border-destructive focus:border-destructive":
-                            errors.SecondaryCaseNumber,
-                        })}
-                      />
-                      {errors.SecondaryCaseNumber && (
-                        <p className="text-xs text-destructive">
-                          {t(errors.SecondaryCaseNumber.message)}
-                        </p>
-                      )}
                     </div>
                     {/* Delete icon: Show for all items except the last one */}
                     {secondaryCaseNumber > 1 &&
