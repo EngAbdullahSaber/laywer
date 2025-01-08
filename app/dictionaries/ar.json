@@ -204,7 +204,8 @@
   "Court Details": "تفاصيل المحكمة",  
   "Case Details": "تفاصيل القضية",
   "Number of Cases This Month": "عدد القضايا  هذا الشهر",
-  
+  "First Character": "الحرف الأول",
+  "Second Character": "الحرف الثاني",
   "Enter Client Name": "أدخل اسم العميل",
   "Mobile Number": "رقم الجوال",
   "Enter Client Address": "أدخل عنوان العميل",

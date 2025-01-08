@@ -384,23 +384,15 @@ const page = () => {
                     key={index} // Ensure you use a unique key for each item
                     className={`${
                       secondaryCaseNumber !== 1
-                        ? "!w-[100%] flex flex-row justify-between"
-                        : "!w-[100%] flex flex-row justify-between"
+                        ? "!w-[50%] flex flex-row justify-between"
+                        : "!w-[50%] flex flex-row justify-between"
                     }`}
                   >
                     <div
                       className={`${
-                        secondaryCaseNumber === 1 ? "!w-[48%]" : "!w-[48%]"
+                        secondaryCaseNumber === 1 ? "!w-[85%]" : "!w-[85%]"
                       } `}
                     >
-                      <Label
-                        htmlFor="SecondaryCaseNumber"
-                        className={cn("", {
-                          "text-destructive": errors.SecondaryCaseNumber,
-                        })}
-                      >
-                        {t("Secondary Case Number")}
-                      </Label>
                       <div className="flex flex-row justify-between items-center ">
                         <div className="w-[48%]">
                           {" "}
@@ -410,6 +402,15 @@ const page = () => {
                             control={control}
                             errors={errors}
                           /> */}
+                          <Label
+                            htmlFor="SecondaryCaseNumber"
+                            className={cn("", {
+                              "text-destructive my-2":
+                                errors.SecondaryCaseNumber,
+                            })}
+                          >
+                            {t("First Character")}
+                          </Label>
                           <BasicSelect
                             menu={charcter}
                             setSelectedValue={setSelectedValue} // Set the selected value
@@ -418,6 +419,15 @@ const page = () => {
                         </div>
                         <div className="w-[48%]">
                           {" "}
+                          <Label
+                            htmlFor="SecondaryCaseNumber"
+                            className={cn("", {
+                              "text-destructive my-2":
+                                errors.SecondaryCaseNumber,
+                            })}
+                          >
+                            {t("Second Character")}
+                          </Label>
                           <BasicSelect
                             menu={charcter}
                             setSelectedValue={setSelectedValue1} // Set the selected value
@@ -428,12 +438,18 @@ const page = () => {
                     </div>
                     <div
                       className={`${
-                        secondaryCaseNumber === 1 ? "!w-[42%]" : "!w-[42%]"
+                        secondaryCaseNumber === 1 ? "!w-[15%]" : "!w-[15%]"
                       } flex flex-col items-center justify-center mt-2`}
                     >
-                      <Label htmlFor="SecondaryCaseNumber">
-                        1212 {selectedValue?.value} {selectedValue1?.value}
-                      </Label>
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1.5 }}
+                        className="mt-2 font-semibold"
+                      >
+                        001{selectedValue?.value}
+                        {selectedValue1?.value}
+                      </motion.p>
                     </div>
                     {/* Delete icon: Show for all items except the last one */}
                     {secondaryCaseNumber > 1 &&
@@ -471,32 +487,33 @@ const page = () => {
                     )}
                   </div>
                 ))}
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.4 }}
+                  className="flex flex-col gap-2 w-[48%]"
+                >
+                  <Label>
+                    <div className="flex flex-row justify-center items-center">
+                      <Button
+                        asChild
+                        color="info"
+                        className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                        variant="outline"
+                      >
+                        <div className="mt-5">
+                          {t("Choose File")}{" "}
+                          <Upload className=" mx-2 h-4 w-4" />
+                        </div>
+                      </Button>
+                    </div>
+                    <Input type="file" className="hidden" />
+                  </Label>
+                </motion.div>
               </motion.div>
             </div>
+
             <div className="flex flex-row justify-between items-center my-4 gap-4">
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.4 }}
-                className="flex flex-col gap-2 w-[48%]"
-              >
-                <Label>
-                  <div>
-                    <Button
-                      asChild
-                      color="info"
-                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                      variant="outline"
-                    >
-                      <div className="mt-5">
-                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
-                      </div>
-                    </Button>
-                  </div>
-                  <Input type="file" className="hidden" />
-                </Label>
-              </motion.div>
-              <div className="flex flex-col gap-2 my-2 w-[48%]"></div>
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
