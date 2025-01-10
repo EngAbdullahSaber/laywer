@@ -6,20 +6,21 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
-import { DataTable } from "../tables/advanced/components/data-table";
+import Actions from "@/components/common/Actions/Actions";
+import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+import { DataTable } from "../../tables/advanced/components/data-table";
 import View from "./View";
-import RequestStatus from "./RequestStatus";
-import FileRequest from "./FileRequest";
 import { motion } from "framer-motion";
 
 interface Task {
   id: string;
-  Request_Title?: string;
-  Request_Date?: string;
-  Request_Status?: string;
-  Required_Action?: string;
-  Associated_Case?: string;
+  Case_Name?: string;
+  Case_Number?: string;
+  Court_Name?: string;
+  Court_Category?: string;
+  Case_Status?: string;
+  Client_Name?: string;
+  Hearing_Dates?: string;
 }
 const TableData = () => {
   const columns: ColumnDef<Task>[] = [
@@ -52,8 +53,6 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View />
-          <FileRequest />
-          {/* <RequestStatus /> */}
         </div>
       ),
     },
@@ -62,14 +61,23 @@ const TableData = () => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={"id"} />
       ),
-      cell: ({ row }) => <div className="">{row.original.id}</div>,
+      cell: ({ row }) => (
+        <motion.div
+          className=""
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1.7 }}
+        >
+          {row.original.id}
+        </motion.div>
+      ),
       enableSorting: false,
       enableHiding: false,
     },
     {
-      accessorKey: "Request_Title",
+      accessorKey: "Case_Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Request_Title"} />
+        <DataTableColumnHeader column={column} title={"Case_Name"} />
       ),
       cell: ({ row }) => {
         return (
@@ -80,16 +88,16 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Request_Title}
+              {row.original.Case_Name}
             </motion.span>
           </div>
         );
       },
     },
     {
-      accessorKey: "Request_Date",
+      accessorKey: "Case_Number",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Request_Date"} />
+        <DataTableColumnHeader column={column} title={"Case_Number"} />
       ),
       cell: ({ row }) => {
         return (
@@ -100,42 +108,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Request_Date}
-            </motion.span>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
-    {
-      accessorKey: "Request_Status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Request_Status"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Request_Status === "قيدالانتظار" &&
-                    "destructive") ||
-                  (row.original.Request_Status === "مكتمل" && "info") ||
-                  (row.original.Request_Status === "تمت الاجابة عليه" &&
-                    "warning") ||
-                  "default"
-                }
-              >
-                {row.original.Request_Status}
-              </Badge>{" "}
+              {row.original.Case_Number}
             </motion.span>
           </div>
         );
@@ -145,9 +118,32 @@ const TableData = () => {
       },
     },
     {
-      accessorKey: "Required_Action",
+      accessorKey: "Court_Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Required_Action"} />
+        <DataTableColumnHeader column={column} title={"Court_Name"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.Court_Name}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "Court_Category",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Court_Category"} />
       ),
       cell: ({ row }) => {
         return (
@@ -162,16 +158,14 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.Required_Action === "ارسال ملف" &&
-                    "destructive") ||
-                  (row.original.Required_Action === "ارسال المعلومات" &&
-                    "info") ||
-                  (row.original.Required_Action === "المزيد" && "warning") ||
+                  (row.original.Court_Category === "جنائي" && "destructive") ||
+                  (row.original.Court_Category === "عائلى " && "info") ||
+                  (row.original.Court_Category === "مدنى" && "warning") ||
                   "default"
                 }
               >
-                {row.original.Required_Action}
-              </Badge>{" "}
+                {row.original.Court_Category}
+              </Badge>
             </motion.span>
           </div>
         );
@@ -180,11 +174,54 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
-
     {
-      accessorKey: "Associated_Case",
+      accessorKey: "Case_Status",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Associated_Case"} />
+        <DataTableColumnHeader column={column} title={"Case_Status"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.Case_Status === "قيد التنفيذ" && "destructive") ||
+                (row.original.Case_Status === "قيد التنفيذ" && "info") ||
+                (row.original.Case_Status === "مكتملة" && "warning") ||
+                "default"
+              }
+            >
+              {row.original.Case_Status}
+            </Badge>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    // {
+    //   accessorKey: "Client_Name",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={"Client_Name"} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex  items-center justify-center gap-2 mx-auto">
+    //         <span className="max-w-[500px] truncate font-medium">
+    //           {row.original.Client_Name}
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return value.includes(row.getValue(id));
+    //   },
+    // },
+    {
+      accessorKey: "Hearing_Dates",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Hearing_Dates"} />
       ),
       cell: ({ row }) => {
         return (
@@ -195,7 +232,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Associated_Case}
+              {row.original.Hearing_Dates}
             </motion.span>
           </div>
         );

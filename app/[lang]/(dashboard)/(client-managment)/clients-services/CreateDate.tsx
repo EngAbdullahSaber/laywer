@@ -16,31 +16,25 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { useTranslate } from "@/config/useTranslation";
+import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import ImageUploader from "../../lawyer/add/ImageUploader";
+
 // Update the schema to validate date properly
 const schema = z.object({
-  Title: z
+  message: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(20, { message: "Title must not exceed 20 characters." }),
-
-  Case_Status: z
-    .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(20, { message: "Title must not exceed 20 characters." }),
+    .min(10, { message: "errorClientServices.MessageMin" })
+    .max(70, { message: "errorClientServices.MessageMax" }),
 });
 
-const RequestStatus = () => {
+const CreateDate = () => {
   const {
     register,
     handleSubmit,
@@ -52,7 +46,14 @@ const RequestStatus = () => {
   });
 
   const [picker, setPicker] = useState<Date>(new Date());
+  const flatpickrRef = useRef<Flatpickr | null>(null); // Create a ref to access Flatpickr
 
+  useEffect(() => {
+    // This will ensure that Flatpickr doesn't open on its own when the dialog is opened.
+    if (flatpickrRef.current) {
+      flatpickrRef.current.close();
+    }
+  }, []);
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
@@ -60,86 +61,84 @@ const RequestStatus = () => {
   // Handle Flatpickr change event and set value in react-hook-form
 
   const Case_Status: { value: string; label: string }[] = [
-    { value: "موافق", label: "موافق" },
-    { value: "غير موافق", label: "غير موافق" },
-    { value: "المزيد", label: "المزيد" },
+    { value: "على", label: "على" },
+    { value: "احمد", label: "احمد" },
+    { value: "محمد", label: "محمد" },
+    { value: "مصطفى", label: "احمد" },
   ];
   const { t, loading, error } = useTranslate();
-
+  const handleDateChange = (dates: Date[]) => {
+    const selectedDate = dates[0] || null;
+    setPicker(selectedDate);
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  };
   return (
     <Dialog>
       <DialogTrigger>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Button
-                size="icon"
-                variant="outline"
-                className=" h-7 w-7"
-                color="secondary"
-              >
-                <Icon icon="fluent-mdl2:responses-menu" className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p> {t("Responding to Requests")}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+          {t("Ask Services")}
+        </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%] ">
+      <DialogContent size="md" className="gap-3 h-auto ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Responding to Requests")}
+            {t("Ask Services")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
-                initial={{ y: 50 }}
+                initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 3 }}
+                transition={{ duration: 1.2 }}
                 className="flex flex-col gap-2"
               >
-                <Label htmlFor="Title">{t("Change Case Status")}</Label>
-                <BasicSelect
-                  name="Case_Status"
-                  menu={Case_Status}
-                  control={control}
-                  errors={errors}
+                <Label htmlFor="question" className="my-4">
+                  {t("Your Describtion")}
+                </Label>
+                <Textarea
+                  {...register("message")} // Register textarea with react-hook-form
+                  placeholder={t("Type Here")}
+                  rows={3}
+                  id="message"
+                  className={cn(errors.message ? "border-red-500" : "")} // Add error styling if validation fails
                 />
-                {errors.Case_Status && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Case_Status.message)}
+                {errors.message && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {t(errors.message.message)}
                   </p>
                 )}{" "}
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="flex flex-col gap-2"
+              >
+                <Label>{t("Payment Receipt")}</Label>
+                <ImageUploader />
               </motion.div>
             </div>
 
             {/* Submit Button inside form */}
-            <motion.div
-              initial={{ y: -50 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 3 }}
-              className="flex justify-center gap-3 mt-4"
-            >
+            <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
                 <Button
                   type="button"
                   className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
                   variant="outline"
                 >
-                  Cancel
+                  {t("Cancel")}
                 </Button>
               </DialogClose>
               <Button
                 type="submit"
-                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Responding to Requests")}
+                {t("Ask Services")}
               </Button>
-            </motion.div>
+            </div>
           </form>
         </div>
       </DialogContent>
@@ -147,4 +146,4 @@ const RequestStatus = () => {
   );
 };
 
-export default RequestStatus;
+export default CreateDate;
