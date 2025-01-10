@@ -219,6 +219,18 @@
   "Phone": "Phone number must be exactly 11 characters."
 
 },
+"errorClientRequest": {
+  "TitleMin": "Title must be at least 3 charecters.",
+  "TitleMax": "Title must not exceed 30 characters."
+},
+"errorClientOrder": {
+  "MessageMin": "Message must be at least 10 charecters.",
+  "MessageMax": "Message must not exceed 70 characters."
+},
+"errorClientServices": {
+  "MessageMin": "Message must be at least 10 charecters.",
+  "MessageMax": "Message must not exceed 70 characters."
+},
   "Create New Date With Client": "Create New Date With Client",
   "Title": "Title",
   "Create Date": "Create Date",
@@ -293,16 +305,9 @@
   "Hey, Hello 👋": " Hey, Hello 👋", 
   "Create account to start using msaatylaw dashboard": "Create account to start using msaatylaw dashboard", 
   "Registering": "Registering...", 
-
   "Read More": "Read More", 
-  "Price": "Price", 
-  "Price": "Price", 
-  "Price": "Price", 
-
-
   "Secondary_Case_Number": "Secondary Case Number", 
   "Services Price": "Services Price",
-   
   "Services Orders": "Services Orders",  
   "Payment Receipt": "Payment Receipt",  
   "Your Describtion": "Your Describtion",  

@@ -3,8 +3,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
-import { DataTable } from "../tables/advanced/components/data-table";
+import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+import { DataTable } from "../../tables/advanced/components/data-table";
 import AssignCase from "./CreateDate";
 
 interface Task {

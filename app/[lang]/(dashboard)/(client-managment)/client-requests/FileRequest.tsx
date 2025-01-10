@@ -25,17 +25,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import FileUploaderSingle from "./FileUploaderSingle";
 // Update the schema to validate date properly
 const schema = z.object({
   Title: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(20, { message: "Title must not exceed 20 characters." }),
-
-  Email: z
-    .string()
-    .min(7, { message: "Email must be at least 7 characters." })
-    .max(20, { message: "Email must not exceed 20 characters." }),
+    .min(3, { message: "errorClientRequest.TitleMin" })
+    .max(20, { message: "errorClientRequest.TitleMax" }),
 });
 
 const FileRequest = () => {
@@ -76,7 +72,7 @@ const FileRequest = () => {
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%] ">
+      <DialogContent size="md" className="gap-3 h-auto ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-lg font-semibold text-default-700 ">
             {t("Response to the lawyer")}
@@ -86,8 +82,8 @@ const FileRequest = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
+                initial={{ y: -50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1.5 }}
                 className="flex flex-col gap-2"
               >
@@ -121,30 +117,16 @@ const FileRequest = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 1.5 }}
-                className="flex flex-col gap-2 w-[48%]"
+                className="flex flex-col gap-2 "
               >
-                <Label>
-                  <div>
-                    <Button
-                      asChild
-                      color="info"
-                      className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                      variant="outline"
-                    >
-                      <div>
-                        {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
-                      </div>
-                    </Button>
-                  </div>
-                  <Input type="file" className="hidden" />
-                </Label>
+                <FileUploaderSingle />
               </motion.div>
             </div>
 
             {/* Submit Button inside form */}
             <motion.div
-              initial={{ y: 50 }}
-              whileInView={{ y: 0 }}
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.5 }}
               className="flex justify-center gap-3 mt-4"
             >

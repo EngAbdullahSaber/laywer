@@ -23,21 +23,12 @@ import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
-// Update the schema to validate date properly
+// Update the schema to validate the message properly
 const schema = z.object({
-  date: z
+  message: z
     .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
+    .min(10, { message: "errorClientOrder.MessageMin" })
+    .max(70, { message: "errorClientOrder.MessageMax" }),
 });
 
 const CreateDate = () => {
@@ -51,41 +42,21 @@ const CreateDate = () => {
     resolver: zodResolver(schema),
   });
 
-  const [picker, setPicker] = useState<Date>(new Date());
-  const flatpickrRef = useRef<Flatpickr | null>(null); // Create a ref to access Flatpickr
-
-  useEffect(() => {
-    // This will ensure that Flatpickr doesn't open on its own when the dialog is opened.
-    if (flatpickrRef.current) {
-      flatpickrRef.current.close();
-    }
-  }, []);
   function onSubmit(data: z.infer<typeof schema>) {
     toast.message(JSON.stringify(data, null, 2));
   }
 
   // Handle Flatpickr change event and set value in react-hook-form
+  const { t } = useTranslate();
 
-  const Case_Status: { value: string; label: string }[] = [
-    { value: "على", label: "على" },
-    { value: "احمد", label: "احمد" },
-    { value: "محمد", label: "محمد" },
-    { value: "مصطفى", label: "احمد" },
-  ];
-  const { t, loading, error } = useTranslate();
-  const handleDateChange = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
-  };
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+        <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
           {t("Ask")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%] ">
+      <DialogContent size="md" className="gap-3 h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Send Your Message")}
@@ -95,10 +66,21 @@ const CreateDate = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="question" className="my-4">
+                <Label htmlFor="message" className="my-4">
                   {t("Your Question")}
                 </Label>
-                <Textarea placeholder="Type Here" rows={3} />
+                <Textarea
+                  {...register("message")} // Register textarea with react-hook-form
+                  placeholder={t("Type Here")}
+                  rows={3}
+                  id="message"
+                  className={cn(errors.message ? "border-red-500" : "")} // Add error styling if validation fails
+                />
+                {errors.message && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {t(errors.message.message)}
+                  </p>
+                )}
               </div>
             </div>
 

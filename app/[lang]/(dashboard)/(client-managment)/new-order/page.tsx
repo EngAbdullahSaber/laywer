@@ -4,7 +4,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 
-import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
+import BreadcrumbComponent from "../../(user-mangement)/shared/BreadcrumbComponent";
 import CreateDate from "./CreateDate";
 import { motion } from "framer-motion";
 
