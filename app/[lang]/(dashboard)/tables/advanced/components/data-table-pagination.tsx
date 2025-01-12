@@ -21,8 +21,8 @@ export function DataTablePagination({ table }: DataTablePaginationProps) {
   return (
     <div className="flex items-center flex-wrap gap-2 justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground whitespace-nowrap">
-        {table.getFilteredSelectedRowModel().rows.length} {t("of")}
-        {table.getFilteredRowModel().rows.length} {t("row(s) selected")}
+        {/* {table.getFilteredSelectedRowModel().rows.length} {t("of")} */}
+        {/* {table.getFilteredRowModel().rows.length} {t("row(s) selected")} */}
       </div>
       <div className="flex flex-wrap items-center gap-6 lg:gap-8">
         <div className="flex items-center gap-2">

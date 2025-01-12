@@ -74,10 +74,10 @@ const CreateDate = () => {
                   placeholder={t("Type Here")}
                   rows={3}
                   id="message"
-                  className={cn(errors.message ? "border-red-500" : "")} // Add error styling if validation fails
+                  className={cn(errors.message ? "border-red-300" : "")} // Add error styling if validation fails
                 />
                 {errors.message && (
-                  <p className="text-sm text-red-500 mt-1">
+                  <p className="text-sm text-red-300 mt-1">
                     {t(errors.message.message)}
                   </p>
                 )}

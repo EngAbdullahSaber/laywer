@@ -89,7 +89,7 @@ const CreateDate = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.2 }}
                 className="flex flex-col gap-2"
@@ -102,16 +102,16 @@ const CreateDate = () => {
                   placeholder={t("Type Here")}
                   rows={3}
                   id="message"
-                  className={cn(errors.message ? "border-red-500" : "")} // Add error styling if validation fails
+                  className={cn(errors.message ? "border-red-300" : "")} // Add error styling if validation fails
                 />
                 {errors.message && (
-                  <p className="text-sm text-red-500 mt-1">
+                  <p className="text-sm text-red-300 mt-1">
                     {t(errors.message.message)}
                   </p>
                 )}{" "}
               </motion.div>
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.2 }}
                 className="flex flex-col gap-2"

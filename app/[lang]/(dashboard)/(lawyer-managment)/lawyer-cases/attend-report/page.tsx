@@ -27,52 +27,98 @@ import { CleaveInput } from "@/components/ui/cleave";
 import { Radio } from "@/components/common/atoms/Radio";
 import ControlledRadio from "./ControlledRadio";
 import { Upload } from "lucide-react";
+import FileUploaderMultiple from "../FileUploaderSingle";
 // Update the schema to validate date properly
 const schema = z.object({
-  Case: z
+  Name: z
     .string()
-    .min(3, { message: "errorLawyer.LawyerNameMin" })
-    .max(20, { message: "errorLawyer.LawyerNameMax" }),
+    .min(5, { message: "errorLawyerAttendReport.CaseNameMin" })
+    .max(30, { message: "errorLawyerAttendReport.CaseNameMax" }),
 
   CaseLocation: z
     .string()
-    .min(8, { message: "errorLawyer.LawyerEmailMin" })
-    .max(20, { message: "errorLawyer.LawyerEmailMax" }),
+    .min(5, { message: "errorLawyerAttendReport.CaseLocationMin" })
+    .max(30, { message: "errorLawyerAttendReport.CaseLocationMax" }),
+  CaseNumber: z
+    .string()
+    .min(5, { message: "errorLawyerAttendReport.CaseNumberMin" })
+    .max(30, { message: "errorLawyerAttendReport.CaseNumberMax" }),
   Plaintiff: z
     .string()
-    .min(8, { message: "errorLawyer.LawyerAddressMin" })
-    .max(25, { message: "errorLawyer.LawyerAddressMax" }),
-  Time: z
-    .string()
-    .min(8, { message: "errorLawyer.LawyerAddressMin" })
-    .max(25, { message: "errorLawyer.LawyerAddressMax" }),
-  follow: z
-    .string()
-    .min(8, { message: "errorLawyer.LawyerAddressMin" })
-    .max(25, { message: "errorLawyer.LawyerAddressMax" }),
-  done: z
-    .string()
-    .min(8, { message: "errorLawyer.LawyerAddressMin" })
-    .max(25, { message: "errorLawyer.LawyerAddressMax" }),
-
+    .min(5, { message: "errorLawyerAttendReport.PlaintiffNameMin" })
+    .max(30, { message: "errorLawyerAttendReport.PlaintiffNameMax" }),
   Defendant: z
     .string()
-    .min(8, {
-      message: "errorLawyer.CasepasswordMin",
-    })
-    .max(25, {
-      message: "errorLawyer.CasepasswordMax",
-    }),
-  Date: z
+    .min(5, { message: "errorLawyerAttendReport.DefendantNameMin" })
+    .max(30, { message: "errorLawyerAttendReport.DefendantNameMax" }),
+
+  // Date Validation (should match YYYY-MM-DD format)
+  Date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+    message: "errorLawyerAttendReport.InvalidDateFormat",
+  }),
+
+  // Days Validation
+  Days: z
     .string()
-    .min(8, {
-      message: "errorLawyer.CasepasswordMin",
-    })
-    .max(25, {
-      message: "errorLawyer.CasepasswordMax",
-    }),
-  Days1: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
+    .refine(
+      (value) =>
+        [
+          "السبت",
+          "الاحد",
+          "الاثنين",
+          "الثلاثاء",
+          "الاربعاء",
+          "الخميس",
+          "الجمعة",
+        ].includes(value),
+      {
+        message: "errorLawyerAttendReport.InvalidDay",
+      }
+    ),
+
+  // Time Validation (should match HH:MM:SS format)
+  Time: z.string().regex(/^\d{2}:\d{2}:\d{2}$/, {
+    message: "errorLawyerAttendReport.InvalidTimeFormat",
+  }),
+
+  // Additional date fields (Date1, Time1, Days1)
+  Date1: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+    message: "errorLawyerAttendReport.InvalidDateFormat",
+  }),
+
+  Days1: z
+    .string()
+    .refine(
+      (value) =>
+        [
+          "السبت",
+          "الاحد",
+          "الاثنين",
+          "الثلاثاء",
+          "الاربعاء",
+          "الخميس",
+          "الجمعة",
+        ].includes(value),
+      {
+        message: "errorLawyerAttendReport.InvalidDay",
+      }
+    ),
+
+  Time1: z.string().regex(/^\d{2}:\d{2}:\d{2}$/, {
+    message: "errorLawyerAttendReport.InvalidTimeFormat",
+  }),
+
+  follow: z
+    .string()
+    .min(8, { message: "errorLawyerAttendReport.FollowNameMin" })
+    .max(130, { message: "errorLawyerAttendReport.FollowNameMax" }),
+
+  done: z
+    .string()
+    .min(8, { message: "errorLawyerAttendReport.DoneNameMin" })
+    .max(130, { message: "errorLawyerAttendReport.DoneNameMax" }),
 });
+
 const CaseFollowReport = () => {
   const {
     register,
@@ -116,9 +162,17 @@ const CaseFollowReport = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-between "
         >
+          <motion.p
+            initial={{ y: -30 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="my-4 font-bold"
+          >
+            {t("Case Details")}
+          </motion.p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 0.6 }}
               className="flex flex-col gap-2"
@@ -126,7 +180,7 @@ const CaseFollowReport = () => {
               <Label
                 htmlFor="Case"
                 className={cn("", {
-                  "text-destructive": errors.Case,
+                  "text-destructive": errors.Name,
                 })}
               >
                 {t("Case Name")}
@@ -136,21 +190,21 @@ const CaseFollowReport = () => {
                 {...register("Name")}
                 placeholder={t("Enter Case Name")}
                 className={cn("", {
-                  "border-destructive focus:border-destructive": errors.Case,
+                  "border-destructive focus:border-destructive": errors.Name,
                 })}
               />
-              {errors.Case && (
+              {errors.Name && (
                 <p
                   className={cn("text-xs", {
-                    "text-destructive": errors.Case,
+                    "text-destructive": errors.Name,
                   })}
                 >
-                  {t(errors.Case.message)}
+                  {t(errors.Name.message)}
                 </p>
               )}
             </motion.div>
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 0.7 }}
               className="flex flex-col gap-2"
@@ -183,42 +237,42 @@ const CaseFollowReport = () => {
               )}
             </motion.div>
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
-              transition={{ duration: 0.7 }}
+              transition={{ duration: 0.8 }}
               className="flex flex-col gap-2"
             >
               <Label
-                htmlFor="CaseLocation"
+                htmlFor="CaseNumber"
                 className={cn("", {
-                  "text-destructive": errors.CaseLocation,
+                  "text-destructive": errors.CaseNumber,
                 })}
               >
                 {t("Case Number")}
               </Label>
               <Input
                 type="number"
-                {...register("CaseLocation")}
+                {...register("CaseNumber")}
                 placeholder={t("Enter Case Number")}
                 className={cn("", {
                   "border-destructive focus:border-destructive":
-                    errors.CaseLocation,
+                    errors.CaseNumber,
                 })}
               />
-              {errors.CaseLocation && (
+              {errors.CaseNumber && (
                 <p
                   className={cn("text-xs", {
-                    "text-destructive": errors.CaseLocation,
+                    "text-destructive": errors.CaseNumber,
                   })}
                 >
-                  {t(errors.CaseLocation.message)}
+                  {t(errors.CaseNumber.message)}
                 </p>
               )}
             </motion.div>
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.9 }}
               className="flex flex-col gap-2"
             >
               <Label
@@ -249,9 +303,9 @@ const CaseFollowReport = () => {
               )}
             </motion.div>
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
-              transition={{ duration: 0.9 }}
+              transition={{ duration: 1 }}
               className="flex flex-col gap-2"
             >
               <Label
@@ -281,32 +335,46 @@ const CaseFollowReport = () => {
                 </p>
               )}
             </motion.div>
+          </div>{" "}
+          <motion.hr
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.1 }}
+            className="my-3"
+          />
+          <motion.p
+            initial={{ y: -30 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="my-4 font-bold"
+          >
+            {t("Upload Files")}
+          </motion.p>
+          <motion.div
+            initial={{ y: -30 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 1.3 }}
+            className="flex flex-col gap-2 "
+          >
+            <FileUploaderMultiple />
+          </motion.div>
+          <motion.hr
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.4 }}
+            className="my-3"
+          />
+          <motion.p
+            initial={{ y: -30 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 1.5 }}
+            className="my-4 font-bold"
+          >
+            {t("Date In Days And Hours")}
+          </motion.p>
+          <div className="flex flex-row justify-between my-4 items-center gap-5">
             <motion.div
-              initial={{ y: -50 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 1.4 }}
-              className="flex flex-col gap-2 w-[48%]"
-            >
-              <Label>
-                <div className="flex flex-row justify-center items-center">
-                  <Button
-                    asChild
-                    color="info"
-                    className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                    variant="outline"
-                  >
-                    <div className="mt-5">
-                      {t("Choose File")} <Upload className=" mx-2 h-4 w-4" />
-                    </div>
-                  </Button>
-                </div>
-                <Input type="file" className="hidden" />
-              </Label>
-            </motion.div>
-          </div>
-          <div className="flex flex-row justify-between items-center my-4 gap-5">
-            <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1 }}
               className="flex flex-col gap-2 w-[32%]"
@@ -314,7 +382,7 @@ const CaseFollowReport = () => {
               <Label
                 htmlFor="Date"
                 className={cn("", {
-                  "text-destructive": errors.Date,
+                  "text-destructive": errors.Date1,
                 })}
               >
                 {t("Date")}
@@ -323,56 +391,56 @@ const CaseFollowReport = () => {
                 id="date"
                 options={{ date: true, datePattern: ["Y", "m", "d"] }}
                 placeholder="YYYY-MM-DD"
-                {...register("Date")}
+                {...register("Date1")}
                 className={cn("", {
-                  "border-destructive focus:border-destructive": errors.Date,
+                  "border-destructive focus:border-destructive": errors.Date1,
                 })}
               />
-              {errors.Date && (
+              {errors.Date1 && (
                 <p
                   className={cn("text-xs", {
-                    "text-destructive": errors.Date,
+                    "text-destructive": errors.Date1,
                   })}
                 >
-                  {t(errors.Date.message)}
+                  {t(errors.Date1.message)}
                 </p>
               )}
             </motion.div>
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1.1 }}
               className="flex flex-col gap-2 w-[32%]"
             >
               <Label
-                htmlFor="Time"
+                htmlFor="Time1"
                 className={cn("", {
-                  "text-destructive": errors.Time,
+                  "text-destructive": errors.Time1,
                 })}
               >
                 {t("Time")}
               </Label>
               <CleaveInput
-                id="time"
+                id="time1"
                 options={{ time: true, timePattern: ["h", "m", "s"] }}
                 placeholder="HH:MM:SS"
-                {...register("Time")}
+                {...register("Time1")}
                 className={cn("", {
-                  "border-destructive focus:border-destructive": errors.Time,
+                  "border-destructive focus:border-destructive": errors.Time1,
                 })}
               />
-              {errors.Time && (
+              {errors.Time1 && (
                 <p
                   className={cn("text-xs", {
-                    "text-destructive": errors.Time,
+                    "text-destructive": errors.Time1,
                   })}
                 >
-                  {t(errors.Time.message)}
+                  {t(errors.Time1.message)}
                 </p>
               )}
             </motion.div>
             <motion.div
-              initial={{ y: -50 }}
+              initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1.2 }}
               className="flex flex-col gap-2 w-[32%]"
@@ -398,11 +466,147 @@ const CaseFollowReport = () => {
               )}{" "}
             </motion.div>
           </div>
-
           <motion.div
-            initial={{ y: -50 }}
+            initial={{ y: -30 }}
             whileInView={{ y: 0 }}
-            transition={{ duration: 1.3 }}
+            transition={{ duration: 1.4 }}
+            className="flex flex-col gap-2 my-2 w-[48%]"
+          >
+            <Label>{t("Appointment Status")} </Label>
+            <ControlledRadio
+              text1={t("There is an appointment")}
+              setSelected={setSelected}
+              selected={selected}
+              text2={t("There is no appointment")}
+            />
+          </motion.div>
+          {selected == "There is an appointment" || selected == "يوجد موعد" ? (
+            <>
+              {" "}
+              <motion.p
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 2.4 }}
+                className="my-4 font-bold"
+              >
+                {t("Next session")}
+              </motion.p>
+              <div className="flex flex-row justify-between my-4 items-center gap-5">
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 2.5 }}
+                  className="flex flex-col gap-2 w-[32%]"
+                >
+                  <Label
+                    htmlFor="Date"
+                    className={cn("", {
+                      "text-destructive": errors.Date,
+                    })}
+                  >
+                    {t("Date")}
+                  </Label>
+                  <CleaveInput
+                    id="date"
+                    options={{ date: true, datePattern: ["Y", "m", "d"] }}
+                    placeholder="YYYY-MM-DD"
+                    {...register("Date")}
+                    className={cn("", {
+                      "border-destructive focus:border-destructive":
+                        errors.Date,
+                    })}
+                  />
+                  {errors.Date && (
+                    <p
+                      className={cn("text-xs", {
+                        "text-destructive": errors.Date,
+                      })}
+                    >
+                      {t(errors.Date.message)}
+                    </p>
+                  )}
+                </motion.div>
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 2.6 }}
+                  className="flex flex-col gap-2 w-[32%]"
+                >
+                  <Label
+                    htmlFor="Time"
+                    className={cn("", {
+                      "text-destructive": errors.Time,
+                    })}
+                  >
+                    {t("Time")}
+                  </Label>
+                  <CleaveInput
+                    id="time"
+                    options={{ time: true, timePattern: ["h", "m", "s"] }}
+                    placeholder="HH:MM:SS"
+                    {...register("Time")}
+                    className={cn("", {
+                      "border-destructive focus:border-destructive":
+                        errors.Time,
+                    })}
+                  />
+                  {errors.Time && (
+                    <p
+                      className={cn("text-xs", {
+                        "text-destructive": errors.Time,
+                      })}
+                    >
+                      {t(errors.Time.message)}
+                    </p>
+                  )}
+                </motion.div>
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 2.7 }}
+                  className="flex flex-col gap-2 w-[32%]"
+                >
+                  <Label
+                    htmlFor="Days"
+                    className={cn("", {
+                      "text-destructive": errors.Days1,
+                    })}
+                  >
+                    {t("Day")}
+                  </Label>
+                  <BasicSelect
+                    name="Days"
+                    menu={Days}
+                    control={control}
+                    errors={errors}
+                  />
+                  {errors.Days1 && (
+                    <p className="text-xs text-destructive">
+                      {t(errors.Days1.message)}
+                    </p>
+                  )}{" "}
+                </motion.div>
+              </div>
+            </>
+          ) : null}
+          <motion.hr
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.9 }}
+            className="my-3"
+          />
+          <motion.p
+            initial={{ y: -30 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 2 }}
+            className="my-4 font-bold"
+          >
+            {t("Necessary Procedures")}
+          </motion.p>
+          <motion.div
+            initial={{ y: -30 }}
+            whileInView={{ y: 0 }}
+            transition={{ duration: 2.1 }}
             className="flex flex-col gap-2 my-4"
           >
             <Label
@@ -428,9 +632,9 @@ const CaseFollowReport = () => {
             )}
           </motion.div>
           <motion.div
-            initial={{ y: -50 }}
+            initial={{ y: -30 }}
             whileInView={{ y: 0 }}
-            transition={{ duration: 1.3 }}
+            transition={{ duration: 2.2 }}
             className="flex flex-col gap-2 my-4"
           >
             <Label
@@ -455,113 +659,17 @@ const CaseFollowReport = () => {
               </p>
             )}
           </motion.div>
-          <motion.p
-            initial={{ y: -50 }}
-            whileInView={{ y: 0 }}
-            transition={{ duration: 1.1 }}
-            className=""
-          >
-            {t("Next session")}
-          </motion.p>
-          <div className="flex flex-row justify-between my-4 items-center gap-5">
-            <motion.div
-              initial={{ y: -50 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 1.2 }}
-              className="flex flex-col gap-2 w-[32%]"
-            >
-              <Label
-                htmlFor="Date"
-                className={cn("", {
-                  "text-destructive": errors.Date,
-                })}
-              >
-                {t("Date")}
-              </Label>
-              <CleaveInput
-                id="date"
-                options={{ date: true, datePattern: ["Y", "m", "d"] }}
-                placeholder="YYYY-MM-DD"
-                {...register("Date")}
-                className={cn("", {
-                  "border-destructive focus:border-destructive": errors.Date,
-                })}
-              />
-              {errors.Date && (
-                <p
-                  className={cn("text-xs", {
-                    "text-destructive": errors.Date,
-                  })}
-                >
-                  {t(errors.Date.message)}
-                </p>
-              )}
-            </motion.div>
-            <motion.div
-              initial={{ y: -50 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 1.1 }}
-              className="flex flex-col gap-2 w-[32%]"
-            >
-              <Label
-                htmlFor="Time"
-                className={cn("", {
-                  "text-destructive": errors.Time,
-                })}
-              >
-                {t("Time")}
-              </Label>
-              <CleaveInput
-                id="time"
-                options={{ time: true, timePattern: ["h", "m", "s"] }}
-                placeholder="HH:MM:SS"
-                {...register("Time")}
-                className={cn("", {
-                  "border-destructive focus:border-destructive": errors.Time,
-                })}
-              />
-              {errors.Time && (
-                <p
-                  className={cn("text-xs", {
-                    "text-destructive": errors.Time,
-                  })}
-                >
-                  {t(errors.Time.message)}
-                </p>
-              )}
-            </motion.div>
-            <motion.div
-              initial={{ y: -50 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 1.2 }}
-              className="flex flex-col gap-2 w-[32%]"
-            >
-              <Label
-                htmlFor="Days"
-                className={cn("", {
-                  "text-destructive": errors.Days1,
-                })}
-              >
-                {t("Day")}
-              </Label>
-              <BasicSelect
-                name="Days"
-                menu={Days}
-                control={control}
-                errors={errors}
-              />
-              {errors.Days1 && (
-                <p className="text-xs text-destructive">
-                  {t(errors.Days1.message)}
-                </p>
-              )}{" "}
-            </motion.div>
-          </div>
+          <motion.hr
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2.3 }}
+            className="my-3"
+          />
           {/* Submit Button inside form */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1.2 }}
+            transition={{ duration: 2.9 }}
             className="flex justify-center gap-3 mt-4"
           >
             <Button

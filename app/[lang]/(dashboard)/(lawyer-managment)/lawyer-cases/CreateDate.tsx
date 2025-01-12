@@ -1,4 +1,4 @@
-"use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,19 +13,20 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
-import { useState } from "react";
-import { Icon } from "@iconify/react";
-import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTranslate } from "@/config/useTranslation";
+import { Icon } from "@iconify/react";
+
 // Update the schema to validate date properly
 const schema = z.object({
   Title: z
@@ -38,13 +39,10 @@ const schema = z.object({
     .min(1, { message: "Date is required." })
     .refine(
       (value) => {
-        // Check if the value is a valid date format
         const date = new Date(value);
         return !isNaN(date.getTime());
       },
-      {
-        message: "Please select a valid date.",
-      }
+      { message: "Please select a valid date." }
     ),
 });
 
@@ -84,15 +82,15 @@ const CreateDate = () => {
                 color="secondary"
               >
                 <Icon icon="ic:outline-add" className="h-4 w-4" />
-              </Button>{" "}
+              </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p> {t("Create New Date With Client")}</p>
+              <p>{t("Create New Date With Client")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%]">
+      <DialogContent size="md" className="gap-3 h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create New Date With Client")}
@@ -102,8 +100,8 @@ const CreateDate = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
+                initial={{ y: -30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1.5 }}
                 className="flex flex-col gap-2"
               >
@@ -152,9 +150,14 @@ const CreateDate = () => {
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Date About Meeting")}
                   value={picker}
+                  options={{
+                    clickOpens: true,
+                    static: true,
+                    appendTo: document.body,
+                  }}
                   onChange={handleDateChange}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
                   id="default-picker"
+                  onClick={(e) => e.preventDefault()}
                 />
                 {errors.date && (
                   <p className="text-xs text-destructive">
@@ -165,8 +168,8 @@ const CreateDate = () => {
             </div>
 
             <motion.div
-              initial={{ y: 50 }}
-              whileInView={{ y: 0 }}
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.5 }}
               className="flex justify-center gap-3 mt-4"
             >

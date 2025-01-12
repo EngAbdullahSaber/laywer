@@ -82,7 +82,7 @@ const TaskStatus = () => {
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%] ">
+      <DialogContent size="md" className="gap-3 h-auto ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Task Staus of Cases")}

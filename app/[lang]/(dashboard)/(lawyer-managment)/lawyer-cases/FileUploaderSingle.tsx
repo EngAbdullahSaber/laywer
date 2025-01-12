@@ -74,7 +74,7 @@ const FileUploaderMultiple = () => {
   const fileList = files.map((file) => (
     <div
       key={file.name}
-      className="flex justify-between border px-3.5 py-3 my-6 h-24 w-[45%] rounded-md"
+      className="flex justify-between border px-3.5 py-3 my-6 w-[45%] h-24 rounded-md"
     >
       <div className="flex space-x-3 items-center">
         <div className="file-preview">{renderFilePreview(file)}</div>

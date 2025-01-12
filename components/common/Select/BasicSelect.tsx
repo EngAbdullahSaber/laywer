@@ -1,6 +1,7 @@
 import React from "react";
 import Select, { StylesConfig } from "react-select";
 import { Controller } from "react-hook-form";
+import { useTranslate } from "@/config/useTranslation";
 
 // Define the shape of the option items
 interface OptionType {
@@ -29,6 +30,8 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
   name,
   errors,
 }) => {
+  const { t, loading, error } = useTranslate();
+
   return (
     <div>
       <Controller
@@ -43,6 +46,7 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
             options={menu}
             isClearable
             styles={styles}
+            placeholder={t("select")} // Translate the placeholder
           />
         )}
       />
