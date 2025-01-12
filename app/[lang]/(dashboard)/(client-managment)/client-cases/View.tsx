@@ -85,7 +85,7 @@ const View = () => {
                 ].map((item, index) => (
                   <motion.li
                     key={index}
-                    initial={{ y: 50 }}
+                    initial={{ y: 30 }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.6 + index * 0.1 }}
                     className="flex flex-row !flex-nowrap justify-between items-center"
@@ -110,7 +110,7 @@ const View = () => {
                 ].map((item, index) => (
                   <motion.li
                     key={index}
-                    initial={{ y: 50 }}
+                    initial={{ y: 30 }}
                     animate={{ y: 0 }}
                     transition={{ duration: 1.3 + index * 0.1 }}
                     className="flex flex-row !flex-nowrap justify-between items-center"

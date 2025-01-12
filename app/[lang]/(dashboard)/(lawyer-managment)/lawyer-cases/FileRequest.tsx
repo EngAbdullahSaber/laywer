@@ -25,13 +25,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import FileUploaderSingle from "./FileUploaderSingle";
+import FileUploaderMultiple from "../(client-managment)/client-requests/FileUploaderSingle";
+import { Textarea } from "@/components/ui/textarea";
 // Update the schema to validate date properly
 const schema = z.object({
   Title: z
     .string()
-    .min(3, { message: "errorClientRequest.TitleMin" })
-    .max(20, { message: "errorClientRequest.TitleMax" }),
+    .min(3, { message: "errorLawyerRequest.TitleMin" })
+    .max(20, { message: "errorLawyerRequest.TitleMax" }),
+  Description: z
+    .string()
+    .min(10, { message: "errorLawyerRequest.DescriptionMin" })
+    .max(80, { message: "errorLawyerRequest.DescriptionMax" }),
 });
 
 const FileRequest = () => {
@@ -64,18 +69,18 @@ const FileRequest = () => {
                 color="secondary"
               >
                 <Icon icon="fluent-mdl2:file-request" className="h-4 w-4" />{" "}
-              </Button>
+              </Button>{" "}
             </TooltipTrigger>
             <TooltipContent>
-              <p> {t("Response to the lawyer")}</p>
+              <p>{t("Ask Client About File")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-auto ">
+      <DialogContent size="md" className="gap-3 h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-lg font-semibold text-default-700 ">
-            {t("Response to the lawyer")}
+            {t("Ask Client About File")}
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
@@ -114,12 +119,44 @@ const FileRequest = () => {
                 )}
               </motion.div>
               <motion.div
+                initial={{ y: -30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.5 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="Description"
+                  className={cn("", {
+                    "text-destructive": errors.Description,
+                  })}
+                >
+                  {t("Description")}
+                </Label>
+                <Textarea
+                  {...register("Description")}
+                  placeholder={t("Type Here")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.Description,
+                  })}
+                />
+                {errors.Description && (
+                  <p
+                    className={cn("text-xs", {
+                      "text-destructive": errors.Description,
+                    })}
+                  >
+                    {t(errors.Description.message)}
+                  </p>
+                )}
+              </motion.div>
+              <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 1.5 }}
-                className="flex flex-col gap-2 "
+                className="flex flex-col gap-2"
               >
-                <FileUploaderSingle />
+                <FileUploaderMultiple />
               </motion.div>
             </div>
 
@@ -143,7 +180,7 @@ const FileRequest = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Send Response")}
+                {t("Ask Client")}
               </Button>
             </motion.div>
           </form>

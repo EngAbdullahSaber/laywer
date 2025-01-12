@@ -91,6 +91,7 @@
   "Lawyer Cases": "Lawyer Cases",
   "Lawyer Appoinments": "Lawyer Appoinments",
   "Appoinments": "Appoinments",
+  "Appointments": "Appointments",
   "Lawyer Tasks": "Lawyer Tasks",
   "hearing_dates": "Hearing Dates",
   "Clients Cases": "Clients Cases",
@@ -231,6 +232,52 @@
   "MessageMin": "Message must be at least 10 charecters.",
   "MessageMax": "Message must not exceed 70 characters."
 },
+"errorLawyerFollowReport": {
+  "CaseNameMin": "Case Name must be at least 5 charecters.",
+  "CaseNameMax": "Case Name must not exceed 50 characters.",
+  "CaseLocationMin": "Case Location must be at least 5 charecters.",
+  "CaseLocationMax": "Case Location must not exceed 50 characters.",
+  "PlaintiffNameMin": "Plaintiff Name must be at least 5 charecters.",
+  "PlaintiffNameMax": "Plaintiff Name must not exceed 50 characters.",
+  "DefendantNameMin": "Defendant Name must be at least 5 charecters.",
+  "DefendantNameMax": "Defendant Name must not exceed 50 characters.",
+  "DateNameMin": "Date must be at least 5 charecters.",
+  "DateNameMax": "Date must not exceed 25 characters.",
+  "DayNameMin": "Date must be at least 5 charecters.",
+  "TimeNameMin": "Time must be at least 5 charecters.",
+  "TimeNameMax": "Time must not exceed 25 characters.",
+  "FollowNameMin": "Follow Report Describtion must be at least 5 charecters.",
+  "FollowNameMax": "Follow Report Describtion must not exceed 25 characters.",
+  "DoneNameMin": "What Will dp must be at least 5 charecters.",
+  "DoneNameMax": "What Will dp must not exceed 25 characters."
+},
+"errorLawyerAttendReport": {
+  "CaseNameMin": "Case Name must be at least 5 charecters.",
+  "CaseNameMax": "Case Name must not exceed 50 characters.",
+  "CaseLocationMin": "Case Location must be at least 5 charecters.",
+  "CaseLocationMax": "Case Location must not exceed 50 characters.",
+  "CaseNumberMin": "Case Number must be at least 5 charecters.",
+  "CaseNumberMax": "Case Number must not exceed 50 characters.",
+  "PlaintiffNameMin": "Plaintiff Name must be at least 5 charecters.",
+  "PlaintiffNameMax": "Plaintiff Name must not exceed 50 characters.",
+  "DefendantNameMin": "Defendant Name must be at least 5 charecters.",
+  "DefendantNameMax": "Defendant Name must not exceed 50 characters.",
+  "DateNameMin": "Date must be at least 5 charecters.",
+  "DateNameMax": "Date must not exceed 25 characters.",
+  "DayNameMin": "Date must be at least 5 charecters.",
+  "TimeNameMin": "Time must be at least 5 charecters.",
+  "TimeNameMax": "Time must not exceed 25 characters.",
+  "FollowNameMin": "Follow Report Describtion must be at least 5 charecters.",
+  "FollowNameMax": "Follow Report Describtion must not exceed 25 characters.",
+  "DoneNameMin": "What Will dp must be at least 5 charecters.",
+  "DoneNameMax": "What Will dp must not exceed 25 characters."
+},
+"errorLawyerRequest": {
+  "TitleMin": "Title must be at least 3 characters.",
+  "TitleMax": "Title must not exceed 20 characters.",
+  "DescriptionMin": "Description must be at least 3 characters.",
+  "DescriptionMax": "Description must not exceed 20 characters."
+},
   "Create New Date With Client": "Create New Date With Client",
   "Title": "Title",
   "Create Date": "Create Date",
@@ -325,7 +372,6 @@
   "Enter Services Name": "Enter Services Name",
   "Create Services": "Create Services",
   "Create a New Services": "Create a New Services",
-
   "What should be done?": "What should be done?",
   "Day": "Day",
   "Staff Categories": "Staff Categories",
@@ -348,7 +394,6 @@
   "There is an appointment": "There is an appointment",
   "Appointment Status": "Appointment Status",
   "Create Report": "Create Report",
-
   "Enter Location of the case": "Enter Location of the case",
   "Location of the case": "Location of the case",
   "remaining_time": "Remaining Time",
@@ -493,7 +538,9 @@
   "Send": "Send",
   "Create Date With Client": "Create Date With Client",
   "New Order List": "New Order List",
-
+  "Upload Files": "Upload Files",
+  "Necessary Procedures": "Necessary Procedures",
+  "Date In Days And Hours": "Date In Days And Hours",
   "Messages List": "Messages List",
   "Messages": "Messages",
   "Ask": "Ask",
@@ -502,6 +549,7 @@
   "Your Question": "Your Question",
   "Send Your Message": "Send Your Message",
   "Communication": "Communication",
+  "Next Appointmet": "Next Appointmet",
 
   "Log Out": "Log Out"
 
