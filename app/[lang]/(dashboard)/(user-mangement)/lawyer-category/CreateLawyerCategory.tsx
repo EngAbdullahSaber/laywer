@@ -1,7 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -16,20 +14,36 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
-import Link from "next/link";
 import { motion } from "framer-motion";
-const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
-  const gender: { value: string; label: string }[] = [
-    { value: "Male", label: "Male" },
-    { value: "Female", label: "Female" },
-  ];
-  const category: { value: string; label: string }[] = [
-    { value: "Admin", label: "Admin" },
-    { value: "S Admin", label: "S Admin" },
-    { value: "Client", label: "Client" },
-  ];
-  const { t, loading, error } = useTranslate();
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
+const schema = z.object({
+  Title: z
+    .string()
+    .min(3, { message: "errorLaywerCategory.TitleMin" })
+    .max(20, { message: "errorLaywerCategory.TitleMax" }),
+  Description: z
+    .string()
+    .min(20, { message: "errorLaywerCategory.DescriptionMin" })
+    .max(100, { message: "errorLaywerCategory.DescriptionMax" }),
+});
+const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
+  const { t, loading, error } = useTranslate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+  });
+  function onSubmit(data: z.infer<typeof schema>) {
+    toast.message(JSON.stringify(data, null, 2));
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -45,24 +59,48 @@ const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent size="2xl" className="h-[75%]">
+      <DialogContent size="2xl" className="h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Lawyer Category")}
           </DialogTitle>
         </DialogHeader>
         <div>
-          <div className="h-[290px]">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <ScrollArea className="h-full">
               <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 1.7 }}
                   className="flex flex-col gap-2"
                 >
-                  <Label>{t("Name")}</Label>
-                  <Input type="text" placeholder={t("Enter Category Name")} />
+                  <Label
+                    htmlFor="Title"
+                    className={cn("", {
+                      "text-destructive": errors.Title,
+                    })}
+                  >
+                    {t("Lawyer Category Name")}
+                  </Label>
+                  <Input
+                    type="text"
+                    {...register("Title")}
+                    placeholder={t("Enter Lawyer Category Name")}
+                    className={cn("", {
+                      "border-destructive focus:border-destructive":
+                        errors.Title,
+                    })}
+                  />
+                  {errors.Title && (
+                    <p
+                      className={cn("text-xs", {
+                        "text-destructive": errors.Title,
+                      })}
+                    >
+                      {t(errors.Title.message)}
+                    </p>
+                  )}
                 </motion.div>
 
                 <motion.div
@@ -71,35 +109,59 @@ const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
                   transition={{ duration: 1.7 }}
                   className="flex flex-col gap-2"
                 >
-                  <Label>{t("Description")}</Label>
-                  <Textarea placeholder={t("Type Here")} rows={7} />
+                  <Label
+                    htmlFor="Description"
+                    className={cn("", {
+                      "text-destructive": errors.Description,
+                    })}
+                  >
+                    {t("Description Of Lawyer Category")}
+                  </Label>
+                  <Textarea
+                    placeholder={t("Type Here")}
+                    rows={7}
+                    {...register("Description")}
+                    className={cn("", {
+                      "border-destructive focus:border-destructive":
+                        errors.Description,
+                    })}
+                  />
+                  {errors.Description && (
+                    <p
+                      className={cn("text-xs", {
+                        "text-destructive": errors.Description,
+                      })}
+                    >
+                      {t(errors.Description.message)}
+                    </p>
+                  )}
                 </motion.div>
               </div>
             </ScrollArea>
-          </div>
 
-          <motion.div
-            initial={{ y: 50 }}
-            whileInView={{ y: 0 }}
-            transition={{ duration: 1.7 }}
-            className=" flex justify-center gap-3 mt-4"
-          >
-            <DialogClose asChild>
-              <Button
-                type="button"
-                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                variant="outline"
-              >
-                {t("Cancel")}
-              </Button>
-            </DialogClose>
-            <Button
-              type="button"
-              className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+            <motion.div
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.7 }}
+              className=" flex justify-center gap-3 mt-4"
             >
-              {t("Create Lawyer Category")}
-            </Button>
-          </motion.div>
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
+                </Button>
+              </DialogClose>
+              <Button
+                type="submit"
+                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Lawyer Category")}
+              </Button>
+            </motion.div>
+          </form>
         </div>
       </DialogContent>
     </Dialog>

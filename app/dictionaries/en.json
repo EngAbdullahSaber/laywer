@@ -278,8 +278,53 @@
   "DescriptionMin": "Description must be at least 3 characters.",
   "DescriptionMax": "Description must not exceed 20 characters."
 },
+"errorLaywerCategory": {
+  "TitleMin": "Lawyer Category must be at least 3 characters.",
+  "TitleMax": "Lawyer Category must not exceed 20 characters.",
+  "DescriptionMin": "Lawyer Category Description must be at least 20 characters.",
+  "DescriptionMax": "Lawyer Category Description must not exceed 100 characters."
+},
+"errorCourtCategory": {
+  "NameMin": "Court Category Name must be at least 3 characters.",
+  "NameMax": "Court Category Name must not exceed 20 characters.",
+  "DescriptionMin": "Court Category Description must be at least 20 characters.",
+  "DescriptionMax": "Court Category Description must not exceed 100 characters."
+},
+"errorCaseCategory": {
+  "NameMin": "Case Category Name must be at least 3 characters.",
+  "NameMax": "Case Category Name must not exceed 20 characters.",
+  "DescriptionMin": "Case Category Description must be at least 20 characters.",
+  "DescriptionMax": "Case Category Description must not exceed 100 characters."
+},
+"errorClientCategory": {
+  "NameMin": "Client Category Name must be at least 3 characters.",
+  "NameMax": "Client Category Name must not exceed 20 characters.",
+  "DescriptionMin": "Client Category Description must be at least 20 characters.",
+  "DescriptionMax": "Client Category Description must not exceed 100 characters."
+},
+"errorStaffCategory": {
+  "NameMin": "Staff Category Name must be at least 3 characters.",
+  "NameMax": "Staff Category Name must not exceed 20 characters.",
+  "DescriptionMin": "Staff Category Description must be at least 20 characters.",
+  "DescriptionMax": "Staff Category Description must not exceed 100 characters."
+},
   "Create New Date With Client": "Create New Date With Client",
   "Title": "Title",
+  "Description Category Staff": "Description Of Category Staff",
+  "Category Staff Name": "Category Staff Name",
+  "Client Category Name": "Client Category Name",
+  "Description Of Client Category": "Description Of Client Category",
+  "Description Of Case Category": "Description Of Case Category",
+  "Enter Case Category Name": "Enter Case Category Name",
+  "Case Category Name": "Case Category Name",
+  "Description Of Court Category": "Description Of Court Category",
+  "Enter Court Category Name": "Enter Court Category Name",
+  "Court Category Name": "Court Category Name",
+  "Description Of Lawyer Category": "Description Of Lawyer Category",
+  "Enter Lawyer Category Name": "Enter Lawyer Category Name",
+  "Lawyer Category Name": "Lawyer Category Name",
+  "Enter Staff Category Name": "Enter Staff Category Name",
+  "Enter Client Category Name": "Enter Client Category Name",
   "Create Date": "Create Date",
   "Date": "Date",
   "Select Date About Meeting": "Select Date About Meeting",
