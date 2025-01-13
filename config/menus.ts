@@ -10,6 +10,10 @@ import {
   Tasks,
   Courts,
   Dashboard,
+  Features,
+  Regions,
+  Reports,
+  Property,
 } from "@/components/svg";
 
 export interface MenuItemProps {
@@ -104,22 +108,22 @@ const adminMenu = [
         },
         {
           title: "Courts Categories",
-          icon: ContactCategory,
+          icon: Features,
           href: "/court-category",
         }, 
          {
           title: "Cases Categories",
-          icon: ContactCategory,
+          icon: Regions,
           href: "/cases-category",
         },
         {
           title: "Clients Categories",
-          icon: ContactCategory,
+          icon: Reports,
           href: "/client-category",
         },
         {
           title: "Staff Categories",
-          icon: ContactCategory,
+          icon: Property,
           href: "/staff-category",
         },
 ];
@@ -133,10 +137,7 @@ const lawyerMenu = [
           title: "Cases",
           icon: Case,
           href: "/lawyer-cases",
-        },
-    
-       
-       
+        },       
         {
           title: "Tasks",
           icon: Tasks,

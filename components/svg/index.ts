@@ -49,6 +49,10 @@ export { default as Appointments } from "./home/appointments.svg";
 export { default as Requests } from "./home/requests.svg";
 export { default as password } from "./home/password.svg";
 export { default as email } from "./home/email.svg";
+export { default as Features } from "./home/features.svg";
+export { default as Regions } from "./home/regions.svg";
+export { default as Reports } from "./home/reports.svg";
+export { default as Property } from "./home/property.svg";
 
 
 
@@ -66,7 +70,6 @@ export { default as Notification } from "./home/Notification.svg";
 export { default as storess } from "./home/storess.svg";
 export { default as productss } from "./home/productss.svg";
 export { default as ToDoList } from "./home/to-do-list.svg";
-export { default as regions } from "./home/regions.svg";
 export { default as inquiries } from "./home/inquiries.svg";
 export { default as journeys } from "./home/journeys.svg";
 export { default as stock } from "./home/stock.svg";
