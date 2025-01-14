@@ -49,8 +49,8 @@ const schema = z.object({
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CreateLawyer from "../../(user-mangement)/lawyer-category/CreateLawyerCategory";
 import ImageUploader from "./ImageUploader";
+import CreateLawyerCategory from "../../(category-mangement)/lawyer-category/CreateLawyerCategory";
 
 const page = () => {
   const {
@@ -202,7 +202,7 @@ const page = () => {
                     )}{" "}
                   </div>
                   <div className="w-[8%] mt-5">
-                    <CreateLawyer buttonShape={false} />
+                    <CreateLawyerCategory buttonShape={false} />
                   </div>
                 </motion.div>
               </div>{" "}
