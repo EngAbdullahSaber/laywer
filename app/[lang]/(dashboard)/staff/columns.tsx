@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
-import { DataTable } from "../../tables/advanced/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import Actions from "@/components/common/Actions/Actions";
 import { motion } from "framer-motion";
+import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
+import { DataTable } from "../tables/advanced/components/data-table";
 
 interface Task {
   id: string;

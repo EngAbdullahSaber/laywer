@@ -1,7 +1,5 @@
 "use client";
 
-import BreadcrumbComponent from "../shared/BreadcrumbComponent";
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
@@ -11,6 +9,7 @@ import TableData from "./columns";
 import CreateServices from "./CreateServices";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import BreadcrumbComponent from "../(category-mangement)/shared/BreadcrumbComponent";
 
 const page = () => {
   const { t, loading, error } = useTranslate();

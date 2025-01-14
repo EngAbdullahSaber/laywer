@@ -25,8 +25,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import FileUploaderMultiple from "../(client-managment)/client-requests/FileUploaderSingle";
 import { Textarea } from "@/components/ui/textarea";
+import FileUploaderMultiple from "./FileUploaderSingle";
 // Update the schema to validate date properly
 const schema = z.object({
   Title: z

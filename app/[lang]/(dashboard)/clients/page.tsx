@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./columns";
 import CreateClient from "./CreateClient";
-import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import BreadcrumbComponent from "../(category-mangement)/shared/BreadcrumbComponent";
 
 const page = () => {
   const { t, loading, error } = useTranslate();

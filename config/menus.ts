@@ -14,6 +14,10 @@ import {
   Regions,
   Reports,
   Property,
+  Finance,
+  products,
+  reports,
+  Reservation,
 } from "@/components/svg";
 
 export interface MenuItemProps {
@@ -78,12 +82,12 @@ const adminMenu = [
         },
         {
           title: "Orders",
-          icon: Courts,
+          icon: Reservation,
           href: "/orders",
         },
         {
           title: "Services Orders",
-          icon: Courts,
+          icon: reports,
           href: "/orders-services",
         },
         {
@@ -93,12 +97,12 @@ const adminMenu = [
         },
         {
           title: "Staff",
-          icon: ContactList,
+          icon: products,
           href: "/staff",
         },        
         {
           title: "Services",
-          icon: ContactList,
+          icon: Finance,
           href: "/services",
         },
         {

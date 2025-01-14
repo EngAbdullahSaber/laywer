@@ -7,8 +7,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
 import Actions from "@/components/common/Actions/Actions";
-import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
-import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
 import CreateDate from "./CreateDate";
 import CaseStatus from "./CaseStatus";
@@ -22,6 +20,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTranslate } from "@/config/useTranslation";
+import { DataTable } from "../../tables/advanced/components/data-table";
+import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 interface Task {
   id: string;
   Case_Name?: string;

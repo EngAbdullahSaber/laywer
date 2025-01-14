@@ -308,8 +308,18 @@
   "DescriptionMin": "Staff Category Description must be at least 20 characters.",
   "DescriptionMax": "Staff Category Description must not exceed 100 characters."
 },
+"errorServices": {
+  "NameMin": "Services Name must be at least 3 characters.",
+  "NameMax": "Services Name must not exceed 20 characters.",
+  "DescriptionMin": "Services Description must be at least 20 characters.",
+  "DescriptionMax": "Services Description must not exceed 100 characters.",
+  "PriceMin": "Price must be greater than 0.",
+    "PriceMax": "Price must be less than 100,000.",
+    "PriceInteger": "Price must be an integer."
+},
   "Create New Date With Client": "Create New Date With Client",
   "Title": "Title",
+  "Services Description": "Services Description",
   "Description Category Staff": "Description Of Category Staff",
   "Category Staff Name": "Category Staff Name",
   "Client Category Name": "Client Category Name",
@@ -417,7 +427,7 @@
   "Enter Services Name": "Enter Services Name",
   "Create Services": "Create Services",
   "Create a New Services": "Create a New Services",
-  "What should be done?": "What should be done?",
+  "What should be done?": "What to do",
   "Day": "Day",
   "Staff Categories": "Staff Categories",
   "Create a New Staff": "Create a New Staff",

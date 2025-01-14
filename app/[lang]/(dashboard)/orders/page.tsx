@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 
 import TableData from "./columns";
-import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
+import BreadcrumbComponent from "../(category-mangement)/shared/BreadcrumbComponent";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";

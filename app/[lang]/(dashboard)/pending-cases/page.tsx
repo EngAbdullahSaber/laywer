@@ -6,7 +6,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./columns";
-import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
+import BreadcrumbComponent from "../(category-mangement)/shared/BreadcrumbComponent";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 

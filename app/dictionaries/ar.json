@@ -113,7 +113,7 @@
   "Are You Sure For Delete This Lawyer?": "هل أنت متأكد من حذف هذا المحامي؟",
   "Agree": "موافق",
   "Disagree": "غير موافق",
-  "What should be done?": "ماذا يجب أن يتم؟",
+  "What should be done?": "ما يجب القيام به",
   "Day": "اليوم",
   "Proceedings of the session": "مجريات الجلسة",
   "Next session": "الجلسة القادمة ",
@@ -389,8 +389,18 @@
     "DescriptionMin": "يجب أن يكون وصف فئة الطاقم مكونًا من 20 حرفًا على الأقل.",
     "DescriptionMax": "يجب ألا يتجاوز وصف فئة الطاقم 100 حرف."
   },
+  "errorServices": {
+    "NameMin": "يجب أن يكون اسم الخدمة من 3 أحرف على الأقل.",
+    "NameMax": "يجب ألا يتجاوز اسم الخدمة 20 حرفًا.",
+    "DescriptionMin": "يجب أن يكون وصف الخدمة من 20 حرفًا على الأقل.",
+    "DescriptionMax": "يجب ألا يتجاوز وصف الخدمة 100 حرف.",
+    "PriceMin": "يجب أن يكون السعر أكبر من 0.",
+    "PriceMax": "يجب أن يكون السعر أقل من 100,000.",
+    "PriceInteger": "يجب أن يكون السعر عددًا صحيحًا."
+  },
   "Create New Date With Client": "إنشاء تاريخ جديد مع العميل",
   "Title": "العنوان",
+  "Services Description": "وصف الخدمة",
   "Enter Client Category Name": "ادخل اسم فئة العميل",
   "Enter Staff Category Name": "ادخل اسم فئة الطاقم",
   "Description Category Staff": "وصف فئة الموظفين",
