@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTable } from "../../tables/advanced/components/data-table";
 import { data } from "./index";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import ViewMore from "./ViewMore";
 import DeleteButton from "./DeleteButton";
+import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
+import { DataTable } from "../tables/advanced/components/data-table";
 
 interface Task {
   id: string;
