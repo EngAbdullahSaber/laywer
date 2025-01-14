@@ -1,16 +1,12 @@
 "use client";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
+
 import { Badge } from "@/components/ui/badge";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../tables/advanced/components/data-table";
 import View from "./View";
-import TaskStatus from "./TaskStatus";
 import { motion } from "framer-motion";
 
 interface Task {

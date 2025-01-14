@@ -1,7 +1,6 @@
 "use client";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -12,10 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslate } from "@/config/useTranslation";
-import Link from "next/link";
-import Flatpickr from "react-flatpickr";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -26,17 +22,24 @@ import { cn } from "@/lib/utils";
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "errorContact.ClientNameMin" })
-    .max(20, { message: "errorContact.ClientNameMax" }),
-
+    .min(3, { message: "errorStaff.NameMin" })
+    .max(20, { message: "errorStaff.NameMax" }),
   Email: z
     .string()
-    .min(8, { message: "errorContact.ClientEmailMax" })
-    .max(25, { message: "errorContact.ClientEmailMax" }),
-  phone: z.string().refine((value) => value.length === 11, {
-    message: "error.Phone",
-  }),
-  Category: z.string().min(8, { message: "errorContact.clientAddressMin" }),
+    .min(8, { message: "errorStaff.EmailMin" })
+    .max(30, { message: "errorStaff.EmailMax" })
+    .email({ message: "errorStaff.InvalidEmail" }), // Ensure it's a valid email
+  phone: z
+    .string()
+    .refine((value) => value.length === 11, { message: "errorStaff.Phone" }), // Ensure phone is 11 digits
+  Category: z.string().min(1, { message: "errorStaff.CategoryRequired" }), // Ensure category is selected
+  Password: z
+    .string()
+    .min(8, { message: "errorStaff.PasswordMin" }) // Minimum length of 8 characters
+    .regex(/[A-Z]/, { message: "errorStaff.PasswordUppercase" }) // At least one uppercase letter
+    .regex(/[a-z]/, { message: "errorStaff.PasswordLowercase" }) // At least one lowercase letter
+    .regex(/[0-9]/, { message: "errorStaff.PasswordNumber" }) // At least one number
+    .regex(/[@$!%*?&]/, { message: "errorStaff.PasswordSpecial" }), // At least one special character
 });
 const CreateContact = () => {
   const {
@@ -49,10 +52,6 @@ const CreateContact = () => {
     resolver: zodResolver(schema),
   });
 
-  const gender: { value: string; label: string }[] = [
-    { value: "Male", label: "Male" },
-    { value: "Female", label: "Female" },
-  ];
   const category: { value: string; label: string }[] = [
     { value: "مسئول", label: "مسئول" },
     { value: "محامى", label: "محامى" },
@@ -71,7 +70,7 @@ const CreateContact = () => {
           {t("Create Staff")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="2xl" className="gap-3 h-[55%]">
+      <DialogContent size="2xl" className="gap-3 h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Staff")}
@@ -81,7 +80,7 @@ const CreateContact = () => {
           <div>
             <div className="flex flex-row justify-between items-center  gap-4">
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
@@ -95,6 +94,7 @@ const CreateContact = () => {
                   {t("userss")}
                 </Label>
                 <Input
+                  id="Name"
                   type="text"
                   {...register("Name")}
                   placeholder={t("Enter User")}
@@ -114,13 +114,13 @@ const CreateContact = () => {
               </motion.div>
 
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
                 <Label
-                  htmlFor="Name"
+                  htmlFor="Email"
                   className={cn("", {
                     "text-destructive": errors.Email,
                   })}
@@ -128,6 +128,7 @@ const CreateContact = () => {
                   {t("Email Address")}
                 </Label>
                 <Input
+                  id="Email"
                   type="text"
                   {...register("Email")}
                   placeholder={t("Enter email address")}
@@ -146,34 +147,35 @@ const CreateContact = () => {
                 )}
               </motion.div>
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
                 <Label
-                  htmlFor="Name"
+                  htmlFor="Password"
                   className={cn("", {
-                    "text-destructive": errors.Email,
+                    "text-destructive": errors.Password,
                   })}
                 >
                   {t("Password")}
                 </Label>
                 <Input
-                  type="password"
-                  {...register("Email")}
+                  type="Password"
+                  {...register("Password")}
                   placeholder={t("Enter passowrd")}
                   className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Email,
+                    "border-destructive focus:border-destructive":
+                      errors.Password,
                   })}
                 />
-                {errors.Email && (
+                {errors.Password && (
                   <p
                     className={cn("text-xs", {
-                      "text-destructive": errors.Email,
+                      "text-destructive": errors.Password,
                     })}
                   >
-                    {t(errors.Email.message)}
+                    {t(errors.Password.message)}
                   </p>
                 )}
               </motion.div>
@@ -184,7 +186,7 @@ const CreateContact = () => {
                 className="flex flex-col gap-2 w-[48%]"
               >
                 <Label
-                  htmlFor="Name"
+                  htmlFor="phone"
                   className={cn("", {
                     "text-destructive": errors.phone,
                   })}
@@ -192,7 +194,8 @@ const CreateContact = () => {
                   {t("Phone Number")}
                 </Label>
                 <Input
-                  type="number"
+                  id="phone"
+                  type="tel"
                   {...register("phone")}
                   placeholder={t("Your phone number")}
                   className={cn("", {
@@ -235,18 +238,10 @@ const CreateContact = () => {
                   </p>
                 )}{" "}
               </motion.div>
-              {/* <div className="flex flex-col gap-2 w-[48%]">
-               
-              </div> */}
-
-              {/* <div className="flex flex-col gap-2">
-                  <Label>{t("Select Gender")}</Label>
-                  <Radio text1={"Female"} text2={"Male"} />
-                </div> */}
             </div>
 
             <motion.div
-              initial={{ y: 50 }}
+              initial={{ y: 30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1.7 }}
               className=" flex justify-center gap-3 mt-4"
@@ -261,7 +256,7 @@ const CreateContact = () => {
                 </Button>
               </DialogClose>
               <Button
-                type="button"
+                type="submit"
                 className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
                 {t("Create Staff")}{" "}

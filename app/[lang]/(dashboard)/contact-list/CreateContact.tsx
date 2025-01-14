@@ -26,17 +26,17 @@ import { cn } from "@/lib/utils";
 const schema = z.object({
   Name: z
     .string()
-    .min(3, { message: "errorContact.ClientNameMin" })
-    .max(20, { message: "errorContact.ClientNameMax" }),
-
+    .min(3, { message: "errorClient.NameMin" })
+    .max(20, { message: "errorClient.NameMax" }),
   Email: z
     .string()
-    .min(8, { message: "errorContact.ClientEmailMax" })
-    .max(25, { message: "errorContact.ClientEmailMax" }),
-  phone: z.string().refine((value) => value.length === 11, {
-    message: "error.Phone",
-  }),
-  Category: z.string().min(8, { message: "errorContact.clientAddressMin" }),
+    .min(8, { message: "errorClient.EmailMin" })
+    .max(30, { message: "errorClient.EmailMax" })
+    .email({ message: "errorClient.InvalidEmail" }), // Ensure it's a valid email
+  phone: z
+    .string()
+    .refine((value) => value.length === 11, { message: "errorClient.Phone" }), // Ensure phone is 11 digits
+  Category: z.string().min(1, { message: "errorClient.CategoryRequired" }), // Ensure category is selected
 });
 const CreateContact = () => {
   const {
@@ -71,7 +71,7 @@ const CreateContact = () => {
           {t("Create Client")}
         </Button>
       </DialogTrigger>
-      <DialogContent size="2xl" className="gap-3 h-[55%]">
+      <DialogContent size="2xl" className="gap-3 h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Client")}
@@ -95,6 +95,7 @@ const CreateContact = () => {
                   {t("userss")}
                 </Label>
                 <Input
+                  id="Name"
                   type="text"
                   {...register("Name")}
                   placeholder={t("Enter User")}
@@ -120,7 +121,7 @@ const CreateContact = () => {
                 className="flex flex-col gap-2 w-[48%]"
               >
                 <Label
-                  htmlFor="Name"
+                  htmlFor="Email"
                   className={cn("", {
                     "text-destructive": errors.Email,
                   })}
@@ -128,6 +129,7 @@ const CreateContact = () => {
                   {t("Email Address")}
                 </Label>
                 <Input
+                  id="Email"
                   type="text"
                   {...register("Email")}
                   placeholder={t("Enter email address")}
@@ -152,7 +154,7 @@ const CreateContact = () => {
                 className="flex flex-col gap-2 w-[48%]"
               >
                 <Label
-                  htmlFor="Name"
+                  htmlFor="phone"
                   className={cn("", {
                     "text-destructive": errors.phone,
                   })}
@@ -160,7 +162,8 @@ const CreateContact = () => {
                   {t("Phone Number")}
                 </Label>
                 <Input
-                  type="number"
+                  type="tel"
+                  id="phone"
                   {...register("phone")}
                   placeholder={t("Your phone number")}
                   className={cn("", {
@@ -229,7 +232,7 @@ const CreateContact = () => {
                 </Button>
               </DialogClose>
               <Button
-                type="button"
+                type="submit"
                 className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
                 {t("Create Client")}{" "}

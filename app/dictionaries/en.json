@@ -314,8 +314,32 @@
   "DescriptionMin": "Services Description must be at least 20 characters.",
   "DescriptionMax": "Services Description must not exceed 100 characters.",
   "PriceMin": "Price must be greater than 0.",
-    "PriceMax": "Price must be less than 100,000.",
-    "PriceInteger": "Price must be an integer."
+  "PriceMax": "Price must be less than 100,000.",
+  "PriceInteger": "Price must be an integer."
+},
+"errorStaff": {
+  "NameMin": "Staff Name must be at least 3 characters.",
+  "NameMax": "Staff Name must not exceed 20 characters.",
+  "EmailMin": "Email must be at least 8 characters.",
+  "EmailMax": "Email must not exceed 30 characters.",
+  "Phone": "Phone Number must 11 numbers.",
+  "PasswordMin": "Password must be at least 8 characters.",
+  "PasswordUppercase": "Password Should Contain At least one uppercase letter",
+  "PasswordLowercase": "Password Should Contain At least one lowercase letter",
+  "PasswordNumber": "Password Should Contain At least one number",
+  "PasswordSpecial": "Password Should Contain At least one special character"
+},
+"errorClient": {
+  "NameMin": "Staff Name must be at least 3 characters.",
+  "NameMax": "Staff Name must not exceed 20 characters.",
+  "EmailMin": "Email must be at least 8 characters.",
+  "EmailMax": "Email must not exceed 30 characters.",
+  "Phone": "Phone Number must 11 numbers.",
+  "PasswordMin": "Password must be at least 8 characters.",
+  "PasswordUppercase": "Password Should Contain At least one uppercase letter",
+  "PasswordLowercase": "Password Should Contain At least one lowercase letter",
+  "PasswordNumber": "Password Should Contain At least one number",
+  "PasswordSpecial": "Password Should Contain At least one special character"
 },
   "Create New Date With Client": "Create New Date With Client",
   "Title": "Title",

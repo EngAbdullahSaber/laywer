@@ -66,151 +66,150 @@ const CreateLawyerCategory = ({ buttonShape }: { buttonShape: any }) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent size="2xl" className="h-auto">
+      <DialogContent
+        size="2xl"
+        className="h-[calc(100vh-100px)] overflow-y-auto"
+      >
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create a New Services")}
           </DialogTitle>
         </DialogHeader>
         <div>
-          <ScrollArea className="h-auto py-5">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 1.7 }}
-                  className="flex flex-col gap-2"
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="Name"
+                  className={cn("", {
+                    "text-destructive": errors.Name,
+                  })}
                 >
-                  <Label
-                    htmlFor="Name"
-                    className={cn("", {
+                  {t("Services Name")}
+                </Label>
+                <Input
+                  id="Name"
+                  type="text"
+                  placeholder={t("Enter Services Name")}
+                  {...register("Name")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive": errors.Name,
+                  })}
+                />
+                {errors.Name && (
+                  <p
+                    className={cn("text-xs", {
                       "text-destructive": errors.Name,
                     })}
                   >
-                    {t("Services Name")}
-                  </Label>
-                  <Input
-                    id="Name"
-                    type="text"
-                    placeholder={t("Enter Services Name")}
-                    {...register("Name")}
-                    className={cn("", {
-                      "border-destructive focus:border-destructive":
-                        errors.Name,
-                    })}
-                  />
-                  {errors.Name && (
-                    <p
-                      className={cn("text-xs", {
-                        "text-destructive": errors.Name,
-                      })}
-                    >
-                      {t(errors.Name.message)}
-                    </p>
-                  )}
-                </motion.div>
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 1.7 }}
-                  className="flex flex-col gap-2"
+                    {t(errors.Name.message)}
+                  </p>
+                )}
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="Price"
+                  className={cn("", { "text-destructive": errors.Price })}
                 >
-                  <Label
-                    htmlFor="Price"
-                    className={cn("", { "text-destructive": errors.Price })}
+                  {t("Price")}
+                </Label>
+                <Input
+                  id="Price"
+                  type="number"
+                  placeholder={t("Enter Price")}
+                  {...register("Price")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive": errors.Price,
+                  })}
+                />
+                {errors.Price && (
+                  <p
+                    className={cn("text-xs", {
+                      "text-destructive": errors.Price,
+                    })}
                   >
-                    {t("Price")}
-                  </Label>
-                  <Input
-                    id="Price"
-                    type="number"
-                    placeholder={t("Enter Price")}
-                    {...register("Price")}
-                    className={cn("", {
-                      "border-destructive focus:border-destructive":
-                        errors.Price,
-                    })}
-                  />
-                  {errors.Price && (
-                    <p
-                      className={cn("text-xs", {
-                        "text-destructive": errors.Price,
-                      })}
-                    >
-                      {t(errors.Price.message)}
-                    </p>
-                  )}
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 1.7 }}
-                  className="flex flex-col gap-2"
+                    {t(errors.Price.message)}
+                  </p>
+                )}
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label
+                  htmlFor="Description"
+                  className={cn("", {
+                    "text-destructive": errors.Description,
+                  })}
                 >
-                  <Label
-                    htmlFor="Description"
-                    className={cn("", {
+                  {t("Services Description")}
+                </Label>
+                <Textarea
+                  id="Description"
+                  placeholder={t("Type Here")}
+                  rows={3}
+                  {...register("Description")}
+                  className={cn("", {
+                    "border-destructive focus:border-destructive":
+                      errors.Description,
+                  })}
+                />
+                {errors.Description && (
+                  <p
+                    className={cn("text-xs", {
                       "text-destructive": errors.Description,
                     })}
                   >
-                    {t("Services Description")}
-                  </Label>
-                  <Textarea
-                    id="Description"
-                    placeholder={t("Type Here")}
-                    rows={3}
-                    {...register("Description")}
-                    className={cn("", {
-                      "border-destructive focus:border-destructive":
-                        errors.Description,
-                    })}
-                  />
-                  {errors.Description && (
-                    <p
-                      className={cn("text-xs", {
-                        "text-destructive": errors.Description,
-                      })}
-                    >
-                      {t(errors.Description.message)}
-                    </p>
-                  )}
-                </motion.div>
-                <motion.div
-                  initial={{ y: -50 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 1.7 }}
-                  className="flex flex-col gap-2"
-                >
-                  <Label>{t("services image")}</Label>
-                  <ImageUploader />
-                </motion.div>
-              </div>
-
+                    {t(errors.Description.message)}
+                  </p>
+                )}
+              </motion.div>
               <motion.div
-                initial={{ y: 50 }}
+                initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.7 }}
-                className=" flex justify-center gap-3 mt-4"
+                className="flex flex-col gap-2"
               >
-                <DialogClose asChild>
-                  <Button
-                    type="button"
-                    className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                    variant="outline"
-                  >
-                    {t("Cancel")}
-                  </Button>
-                </DialogClose>
-                <Button
-                  type="submit"
-                  className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
-                >
-                  {t("Create Services")}
-                </Button>
+                <Label>{t("services image")}</Label>
+                <ImageUploader />
               </motion.div>
-            </form>
-          </ScrollArea>
+            </div>
+
+            <motion.div
+              initial={{ y: 50 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.7 }}
+              className=" flex justify-center gap-3 mt-4"
+            >
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  variant="outline"
+                >
+                  {t("Cancel")}
+                </Button>
+              </DialogClose>
+              <Button
+                type="submit"
+                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              >
+                {t("Create Services")}
+              </Button>
+            </motion.div>
+          </form>
         </div>
       </DialogContent>
     </Dialog>
