@@ -5,6 +5,20 @@
 @import url("https://fonts.googleapis.com/css?family=Cairo:200,300,regular,500,600,700,800,900");
 
 // root css
+body::-webkit-scrollbar {
+  width: 0.8em;
+}
+
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #dfc77d;
+  outline: 1px solid rgba(53, 136, 76, 0.191);
+  border-radius: 15%;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

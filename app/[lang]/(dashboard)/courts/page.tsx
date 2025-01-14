@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./columns";
 import CreateCourt from "./CreateCourt";
-import BreadcrumbComponent from "../(user-mangement)/shared/BreadcrumbComponent";
+import BreadcrumbComponent from "../(category-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";

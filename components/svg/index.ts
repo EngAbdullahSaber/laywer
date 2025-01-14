@@ -53,6 +53,10 @@ export { default as Features } from "./home/features.svg";
 export { default as Regions } from "./home/regions.svg";
 export { default as Reports } from "./home/reports.svg";
 export { default as Property } from "./home/property.svg";
+export { default as Finance } from "./home/Finance.svg";
+export { default as products } from "./home/products.svg";
+export { default as reports } from "./home/reports.svg";
+export { default as Reservation } from "./home/Reservation.svg";
 
 
 

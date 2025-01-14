@@ -5,12 +5,12 @@ import { Badge } from "@/components/ui/badge";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { data } from ".";
-import { DataTable } from "../../tables/advanced/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import Actions from "@/components/common/Actions/Actions";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DataTable } from "../tables/advanced/components/data-table";
+import { DataTableColumnHeader } from "../tables/advanced/components/data-table-column-header";
 
 interface Task {
   id: string;
