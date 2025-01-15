@@ -56,7 +56,7 @@ const DeleteButton = () => {
             <Icon icon="wpf:delete-shield" color="destructive" />
           </motion.span>
           <motion.h3
-            initial={{ y: -50 }}
+            initial={{ y: -30 }}
             whileInView={{ y: 0 }}
             transition={{ duration: 1.2 }}
             className="mt-6 mb-4 text-destructive text-xl font-semibold"
@@ -64,10 +64,10 @@ const DeleteButton = () => {
             {t("Deleting Client")}{" "}
           </motion.h3>
           <motion.p
-            initial={{ y: -50 }}
+            initial={{ y: -30 }}
             whileInView={{ y: 0 }}
             transition={{ duration: 1.4 }}
-            className="text-sm text-default-500 "
+            className="text-sm text-default-300 "
           >
             {t("Are You Sure For Delete This Client?")}
           </motion.p>

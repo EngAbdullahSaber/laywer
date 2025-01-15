@@ -42,8 +42,8 @@ const schema = z.object({
     .max(20, { message: "errorCase.LawyernameMax" }),
   CaseDescription: z
     .string()
-    .min(3, { message: "errorCase.CaseDescriptionMin" })
-    .max(20, {
+    .min(20, { message: "errorCase.CaseDescriptionMin" })
+    .max(200, {
       message: "errorCase.CaseDescriptionMax",
     }),
   SecondaryCaseNumber: z
@@ -131,8 +131,7 @@ const schema = z.object({
 });
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CreateCase from "../../(user-mangement)/cases-category/CreateCaseCategory";
-import CreateCourt from "../../(user-mangement)/court-category/CreateCourtCategory";
+import FileUploaderMultiple from "../../(lawyer-managment)/lawyer-cases/FileUploaderSingle";
 
 const page = () => {
   const {
@@ -191,19 +190,38 @@ const page = () => {
     { value: "المحامى احمد عبدالله", label: "المحامى احمد عبدالله" },
     { value: "المحامى فهد ", label: "المحامى فهد " },
   ];
-  console.log(selectedValue);
-  console.log(selectedValue1);
+
+  const { t } = useTranslate();
+
+  const [picker, setPicker] = useState<Date>(new Date());
+  const [picker2, setPicker2] = useState<Date>(new Date());
+  const [picker3, setPicker3] = useState<Date>(new Date());
+  const [picker4, setPicker4] = useState<Date>(new Date());
+  const [caseYear, setCaseYear] = useState<string>("");
+  const [secondaryCaseNumber, setSecondaryCaseNumber] = useState<number>(1);
+  const [opposit, setOpposite] = useState<number>(1);
+  const yearResult = caseYear.length === 4 ? caseYear.slice(-2) : null;
+
   const handleDateChange = (dates: Date[]) => {
     const selectedDate = dates[0] || null;
     setPicker(selectedDate);
     setValue("date", selectedDate ? selectedDate.toISOString() : "");
   };
-  const { t } = useTranslate();
-
-  const [picker, setPicker] = useState<Date>(new Date());
-  const [mainCaseNumber, setMainCaseNumber] = useState<number>(1);
-  const [secondaryCaseNumber, setSecondaryCaseNumber] = useState<number>(1);
-  const [opposit, setOpposite] = useState<number>(1);
+  const handleDateChange2 = (dates: Date[]) => {
+    const selectedDate = dates[0] || null;
+    setPicker2(selectedDate);
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  };
+  const handleDateChange3 = (dates: Date[]) => {
+    const selectedDate = dates[0] || null;
+    setPicker3(selectedDate);
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  };
+  const handleDateChange4 = (dates: Date[]) => {
+    const selectedDate = dates[0] || null;
+    setPicker4(selectedDate);
+    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  };
   return (
     <div>
       {" "}
@@ -213,10 +231,18 @@ const page = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <motion.p
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-4 font-bold"
+            >
+              {t("Case Info")}
+            </motion.p>
             <div className="flex flex-row justify-between items-center  gap-4">
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 0.6 }}
                   className="flex flex-row justify-between items-center"
@@ -245,10 +271,9 @@ const page = () => {
                   </Link>
                 </motion.div>
               </div>
-
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 0.8 }}
                   className="flex flex-row justify-between items-center"
@@ -277,9 +302,8 @@ const page = () => {
                   </Link>
                 </motion.div>
               </div>
-
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.9 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
@@ -305,7 +329,7 @@ const page = () => {
                 )}
               </motion.div>
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.5 }}
                 className="flex flex-row justify-between items-center w-[48%]"
@@ -328,35 +352,6 @@ const page = () => {
                   <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
                 </Link>
               </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.9 }}
-                className="flex flex-col gap-2 my-2 w-[48%]"
-              >
-                <Label
-                  htmlFor="MainCaseNumber"
-                  className={cn("", {
-                    "text-destructive": errors.MainCaseNumber,
-                  })}
-                >
-                  {t("Case Number")}
-                </Label>
-                <Input
-                  type="number"
-                  {...register("MainCaseNumber")}
-                  placeholder={t("Enter Case Number")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.MainCaseNumber,
-                  })}
-                />
-                {errors.MainCaseNumber && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.MainCaseNumber.message)}
-                  </p>
-                )}
-              </motion.div>
             </div>
             <motion.hr
               initial={{ opacity: 0 }}
@@ -365,16 +360,16 @@ const page = () => {
               className="my-3"
             />
             <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.5 }}
-              className="my-3"
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-4 font-bold"
             >
-              {t("Secondary_Case_Number")}
+              {t("Case Numbers")}
             </motion.p>
             <div className="flex flex-row justify-between items-center  gap-4">
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.8 }}
                 className="flex flex-row justify-between items-center gap-6 w-full"
@@ -393,8 +388,8 @@ const page = () => {
                         secondaryCaseNumber === 1 ? "!w-[85%]" : "!w-[85%]"
                       } `}
                     >
-                      <div className="flex flex-row justify-between items-center ">
-                        <div className="w-[48%]">
+                      <div className="flex flex-row flex-nowrap justify-between items-center ">
+                        <div className="w-[31%]">
                           {" "}
                           {/* <BasicSelect
                             name="caseCharacter"
@@ -417,21 +412,25 @@ const page = () => {
                             selectedValue={selectedValue} // Pass selected value to BasicSelect
                           />
                         </div>
-                        <div className="w-[48%]">
+                        <div className="w-[31%]">
                           {" "}
-                          <Label
-                            htmlFor="SecondaryCaseNumber"
-                            className={cn("", {
-                              "text-destructive my-2":
-                                errors.SecondaryCaseNumber,
-                            })}
-                          >
+                          <Label htmlFor="SecondaryCaseNumber">
                             {t("Second Character")}
                           </Label>
                           <BasicSelect
                             menu={charcter}
                             setSelectedValue={setSelectedValue1} // Set the selected value
                             selectedValue={selectedValue1} // Pass selected value to BasicSelect
+                          />
+                        </div>
+                        <div className="w-[31%]">
+                          {" "}
+                          <Label>{t("Year of Case")}</Label>
+                          <Input
+                            type="number"
+                            placeholder={t("Enter Year of Case")}
+                            value={caseYear}
+                            onChange={(e) => setCaseYear(e.target.value)}
                           />
                         </div>
                       </div>
@@ -447,8 +446,9 @@ const page = () => {
                         transition={{ duration: 1.5 }}
                         className="mt-2 font-semibold"
                       >
-                        001{selectedValue?.value}
                         {selectedValue1?.value}
+                        {selectedValue?.value}
+                        {yearResult}0001
                       </motion.p>
                     </div>
                     {/* Delete icon: Show for all items except the last one */}
@@ -488,34 +488,77 @@ const page = () => {
                   </div>
                 ))}
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
-                  transition={{ duration: 1.4 }}
-                  className="flex flex-col gap-2 w-[48%]"
+                  transition={{ duration: 0.9 }}
+                  className="flex flex-col gap-2 my-2 w-[48%]"
                 >
-                  <Label>
-                    <div className="flex flex-row justify-center items-center">
-                      <Button
-                        asChild
-                        color="info"
-                        className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                        variant="outline"
-                      >
-                        <div className="mt-5">
-                          {t("Choose File")}{" "}
-                          <Upload className=" mx-2 h-4 w-4" />
-                        </div>
-                      </Button>
-                    </div>
-                    <Input type="file" className="hidden" />
+                  <Label
+                    htmlFor="MainCaseNumber"
+                    className={cn("", {
+                      "text-destructive": errors.MainCaseNumber,
+                    })}
+                  >
+                    {t("Case Number")}
                   </Label>
+                  <Input
+                    type="number"
+                    {...register("MainCaseNumber")}
+                    placeholder={t("Enter Case Number")}
+                    className={cn("", {
+                      "border-destructive focus:border-destructive":
+                        errors.MainCaseNumber,
+                    })}
+                  />
+                  {errors.MainCaseNumber && (
+                    <p className="text-xs text-destructive">
+                      {t(errors.MainCaseNumber.message)}
+                    </p>
+                  )}
                 </motion.div>
               </motion.div>
             </div>
-
+            <motion.hr
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.1 }}
+              className="my-3"
+            />{" "}
+            <motion.p
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-4 font-bold"
+            >
+              {t("Upload Filess")}
+            </motion.p>
+            <motion.div
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.4 }}
+              className="flex flex-col gap-2 w-full"
+            >
+              <Label>
+                <FileUploaderMultiple />
+              </Label>
+            </motion.div>
+            <motion.hr
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.1 }}
+              className="my-3"
+            />{" "}
+            <motion.p
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-4 font-bold"
+            >
+              {t("Dates")}
+            </motion.p>
             <div className="flex flex-row justify-between items-center my-4 gap-4">
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.6 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
@@ -536,7 +579,7 @@ const page = () => {
                 )}
               </motion.div>
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
@@ -545,8 +588,8 @@ const page = () => {
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Submission Date")}
-                  value={picker}
-                  onChange={handleDateChange}
+                  value={picker2}
+                  onChange={handleDateChange2}
                   onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
                   id="default-picker"
                 />
@@ -557,7 +600,7 @@ const page = () => {
                 )}
               </motion.div>
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.8 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
@@ -566,8 +609,8 @@ const page = () => {
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Judgment Date")}
-                  value={picker}
-                  onChange={handleDateChange}
+                  value={picker3}
+                  onChange={handleDateChange3}
                   onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
                   id="default-picker"
                 />
@@ -578,7 +621,7 @@ const page = () => {
                 )}
               </motion.div>
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.9 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
@@ -587,8 +630,8 @@ const page = () => {
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Hearing Date")}
-                  value={picker}
-                  onChange={handleDateChange}
+                  value={picker4}
+                  onChange={handleDateChange4}
                   onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
                   id="default-picker"
                 />
@@ -599,10 +642,24 @@ const page = () => {
                 )}
               </motion.div>
             </div>
+            <motion.hr
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.1 }}
+              className="my-3"
+            />{" "}
+            <motion.p
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-4 font-bold"
+            >
+              {t("Data of Status")}
+            </motion.p>
             <div className="flex flex-row justify-between items-center">
               {" "}
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1 }}
                 className="flex flex-col gap-2 my-2 w-[48%]"
@@ -612,7 +669,7 @@ const page = () => {
               </motion.div>
               <div className="flex flex-col gap-2 my-2 w-[48%]">
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 1.1 }}
                   className="flex flex-row justify-between items-center"
@@ -688,10 +745,24 @@ const page = () => {
                   ))}
                 </motion.div>
               </div>
-            </div>
+            </div>{" "}
+            <motion.hr
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.1 }}
+              className="my-3"
+            />
+            <motion.p
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.2 }}
+              className="my-4 font-bold"
+            >
+              {t("Descriptions")}
+            </motion.p>
             <div className="grid grid-cols-1 lg:grid-cols-1  my-4 gap-4">
               <motion.div
-                initial={{ y: -50 }}
+                initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 2 }}
                 className="flex flex-col gap-2 my-2"

@@ -155,9 +155,9 @@ const CreateDate = () => {
                     static: true,
                     appendTo: document.body,
                   }}
+                  onClick={(e) => e.preventDefault()}
                   onChange={handleDateChange}
                   id="default-picker"
-                  onClick={(e) => e.preventDefault()}
                 />
                 {errors.date && (
                   <p className="text-xs text-destructive">

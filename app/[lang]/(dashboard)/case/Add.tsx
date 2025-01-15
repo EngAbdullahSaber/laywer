@@ -92,7 +92,7 @@ const Add = () => {
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-[50%]">
+      <DialogContent size="md" className="gap-3 h-auto">
         <DialogHeader className="p-0">
           <DialogTitle className="text-2xl font-bold text-default-700">
             {t("Create New Date With Client")}
@@ -102,7 +102,7 @@ const Add = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
-                initial={{ y: -50, opacity: 0 }}
+                initial={{ y: -30, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2"
@@ -153,7 +153,12 @@ const Add = () => {
                   placeholder={t("Select Date About Meeting")}
                   value={picker}
                   onChange={handleDateChange}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
+                  options={{
+                    clickOpens: true,
+                    static: true,
+                    appendTo: document.body,
+                  }}
+                  onClick={(e) => e.preventDefault()}
                   id="default-picker"
                 />
                 {errors.date && (
@@ -165,7 +170,7 @@ const Add = () => {
             </div>
 
             <motion.div
-              initial={{ y: 50, opacity: 0 }}
+              initial={{ y: 30, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.7 }}
               className="flex justify-center gap-3 mt-4"

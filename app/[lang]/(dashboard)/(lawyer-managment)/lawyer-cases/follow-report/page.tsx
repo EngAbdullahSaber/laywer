@@ -32,8 +32,21 @@ import FileUploaderMultiple from "../FileUploaderSingle";
 const schema = z.object({
   Name: z
     .string()
-    .min(5, { message: "errorLawyerFollowReport.CaseNameMin" })
-    .max(50, { message: "errorLawyerFollowReport.CaseNameMax" }),
+    .refine(
+      (value) =>
+        [
+          "السبت",
+          "الاحد",
+          "الاثنين",
+          "الثلاثاء",
+          "الاربعاء",
+          "الخميس",
+          "الجمعة",
+        ].includes(value),
+      {
+        message: "errorLawyerFollowReport.InvalidDay",
+      }
+    ),
 
   CaseLocation: z
     .string()
@@ -113,6 +126,10 @@ const schema = z.object({
     .string()
     .min(8, { message: "errorLawyerFollowReport.DoneNameMin" })
     .max(150, { message: "errorLawyerFollowReport.DoneNameMax" }),
+  CaseNumber: z
+    .string()
+    .min(5, { message: "errorLawyerAttendReport.CaseNumberMin" })
+    .max(30, { message: "errorLawyerAttendReport.CaseNumberMax" }),
 });
 
 const CaseFollowReport = () => {
@@ -178,23 +195,17 @@ const CaseFollowReport = () => {
               >
                 {t("Case Name")}
               </Label>
-              <Input
-                type="text"
-                {...register("Name")}
-                placeholder={t("Enter Case Name")}
-                className={cn("", {
-                  "border-destructive focus:border-destructive": errors.Name,
-                })}
+              <BasicSelect
+                name="Name"
+                menu={Days}
+                control={control}
+                errors={errors}
               />
               {errors.Name && (
-                <p
-                  className={cn("text-xs", {
-                    "text-destructive": errors.Name,
-                  })}
-                >
+                <p className="text-xs text-destructive">
                   {t(errors.Name.message)}
                 </p>
-              )}
+              )}{" "}
             </motion.div>
             <motion.div
               initial={{ y: -50 }}
@@ -226,6 +237,40 @@ const CaseFollowReport = () => {
                   })}
                 >
                   {t(errors.CaseLocation.message)}
+                </p>
+              )}
+            </motion.div>
+            <motion.div
+              initial={{ y: -30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col gap-2"
+            >
+              <Label
+                htmlFor="CaseNumber"
+                className={cn("", {
+                  "text-destructive": errors.CaseNumber,
+                })}
+              >
+                {t("Case Number")}
+              </Label>
+              <Input
+                type="number"
+                disabled
+                {...register("CaseNumber")}
+                placeholder={t("Enter Case Number")}
+                className={cn("", {
+                  "border-destructive focus:border-destructive":
+                    errors.CaseNumber,
+                })}
+              />
+              {errors.CaseNumber && (
+                <p
+                  className={cn("text-xs", {
+                    "text-destructive": errors.CaseNumber,
+                  })}
+                >
+                  {t(errors.CaseNumber.message)}
                 </p>
               )}
             </motion.div>
