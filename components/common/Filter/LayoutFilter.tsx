@@ -30,7 +30,11 @@ export function LayoutFilter() {
 
   return (
     <div className="flex flex-col gap-[40px] ">
-      <Button variant="outline" size="sm" className="ltr:ml-2 rtl:mr-2  h-8 ">
+      <Button
+        variant="outline"
+        size="sm"
+        className="ltr:ml-2 dark:!bg-[#dfc77d] dark:hover:!bg-[#f1de97] dark:hover:!text-[#191919]  rtl:mr-2  h-8 "
+      >
         <FilterIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" /> {t("Filters")}
       </Button>
     </div>

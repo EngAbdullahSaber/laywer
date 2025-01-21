@@ -26,7 +26,7 @@ import {
 
 import { useTranslate } from "@/config/useTranslation";
 import ImageUploader from "./ImageUploader";
-import CreateLawyer from "../lawyer/CreateLawyer";
+import CreateLawyer from "../(admin-managment)/lawyer/CreateLawyer";
 interface UserInfoItem {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
