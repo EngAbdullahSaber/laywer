@@ -1,0 +1,126 @@
+.iconsMap {
+  display: flex;
+  gap: 20px;
+}
+
+.iconsMap span {
+  display: flex;
+}
+
+.iconsMap span img {
+  width: 15px;
+  height: auto;
+  margin-right: 5px;
+}
+
+.iconsMap span p {
+  margin-top: 5px;
+}
+
+.flexGap {
+  justify-content: space-between;
+}
+
+.service-card {
+  box-shadow: 0px 10px 30px rgba(8, 14, 28, 0.06);
+  transition: 0.4s ease-in-out;
+}
+.service-card:hover {
+  background-color: #fdd472;
+}
+.service-card:before,
+.service-card:after {
+  content: "";
+  transition: 0.4s ease-in-out;
+}
+
+.shape-icon:before {
+  content: "";
+  -webkit-clip-path: path(
+    "M4.76563 19.2144C-2.32686 32.07 -1.20075 48.6639 6.14105 61.3767C16.4024 79.1459 38.9816 89.016 58.6174 83.4451C78.2532 77.8741 92.5688 56.7417 89.6127 36.3982C84.2306 -0.647078 23.3991 -14.559 4.76563 19.2144Z"
+  );
+  clip-path: path(
+    "M4.76563 19.2144C-2.32686 32.07 -1.20075 48.6639 6.14105 61.3767C16.4024 79.1459 38.9816 89.016 58.6174 83.4451C78.2532 77.8741 92.5688 56.7417 89.6127 36.3982C84.2306 -0.647078 23.3991 -14.559 4.76563 19.2144Z"
+  );
+  z-index: -1;
+  -webkit-transition: 0.4s ease-in-out;
+  transition: 0.4s ease-in-out;
+}
+.shape-icon .dots:before,
+.shape-icon .dots:after {
+  content: "";
+}
+
+.service-card_text {
+  transition: 0.4s ease-in-out;
+}
+
+.th-btn {
+  vertical-align: middle;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 20.5px 20px;
+  min-width: 144px;
+  border-radius: 4px;
+}
+
+.th-btn:before {
+  -webkit-transform: scaleY(0);
+  -ms-transform: scaleY(0);
+  transform: scaleY(0);
+}
+.th-btn:before,
+.th-btn:after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  -webkit-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+  border-radius: 99px;
+  -webkit-transform: scaleY(1.1);
+  -ms-transform: scaleY(1.1);
+  transform: scaleY(1.1);
+}
+
+.service-card .bg-shape {
+  position: absolute;
+  bottom: -200px;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  -webkit-transition: 0.4s ease-in-out;
+  transition: 0.4s ease-in-out;
+  pointer-events: none;
+}
+
+.service-card:after {
+  right: -73px;
+  bottom: -28px;
+}
+
+.service-card:before,
+.service-card:after {
+  opacity: 1;
+  height: 150%;
+  width: 120%;
+  border-radius: 0;
+}
+.service-card .bg-shape {
+  bottom: 0;
+  opacity: 1;
+}
+img,
+svg {
+  vertical-align: middle;
+}
+
+.service-card:hover .service-card_text,
+.service-card:hover .box-title {
+  color: #fff;
+}
