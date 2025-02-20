@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +20,39 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-const Delete = () => {
-  const { t, loading, error } = useTranslate();
+import { useParams } from "next/navigation";
+import { AxiosError } from "axios";
+import { toast as reToast } from "react-hot-toast";
+import { DeleteCases } from "@/services/cases/cases";
 
+interface IDeleteContact {
+  id: string;
+  getCasesData: () => Promise<void>;
+}
+interface ErrorResponse {
+  errors?: string[];
+}
+
+const DeleteButton: React.FC<IDeleteContact> = ({ id, getCasesData }) => {
+  const { t, loading, error } = useTranslate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const { lang } = useParams();
+
+  const handleDelete = async () => {
+    try {
+      const res = await DeleteCases(id, lang); // Delete user
+      reToast.success(res.message);
+      setIsDialogOpen(false); // Close the dialog after successful deletion
+      getCasesData(); // Re-fetch the user data after deletion
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>; // Cast to AxiosError with your expected response type
+      const errorMessage =
+        axiosError.response?.data?.errors?.[0] || "Something went wrong.";
+      reToast.error(errorMessage);
+    }
+  };
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <TooltipProvider>
           <Tooltip>
@@ -87,6 +115,7 @@ const Delete = () => {
               type="submit"
               className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               color="primary"
+              onClick={handleDelete}
             >
               {t("Agree")}
             </Button>
@@ -97,4 +126,4 @@ const Delete = () => {
   );
 };
 
-export default Delete;
+export default DeleteButton;

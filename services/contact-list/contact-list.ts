@@ -36,24 +36,16 @@ export async function CreateContactList(data:any,lang:any) {
     if (res) return res.data;
     else return false;
 }
-// export async function blockLawyer(id:any,lang:any) {
-//     let res = await api.put(`client/contact_lists?per_page=10/ban_lawyer/${id}`, {
-//         headers: {
-//             'Accept-Language': lang
-//         }
-//     });
-//     if (res) return res.data;
-//     else return false;
-// }
-// export async function DeleteLawyer(id:any,lang:any) {
-//     let res = await api.delete(`client/contact_lists?per_page=10/${id}`, {
-//         headers: {
-//             'Accept-Language': lang
-//         }
-//     });
-//     if (res) return res.data;
-//     else return false;
-// }
+
+export async function DeleteContactList(id:any,lang:any) {
+    let res = await api.delete(`client/contact_lists/${id}`, {
+        headers: {
+            'Accept-Language': lang
+        }
+    });
+    if (res) return res.data;
+    else return false;
+}
 export async function getContactListPanigation(page:any ,lang:any) {
     let res = await api.get(`client/contact_lists?per_page=10?page=${page}`, {
         headers: {
@@ -64,18 +56,18 @@ export async function getContactListPanigation(page:any ,lang:any) {
     else return false;
 }
 
-// export async function UpdateLawyer(data:any ,id:any,lang:any ) {
-//     let res = await api.post(`client/contact_lists?per_page=10/update_lawyer/${id}` ,data, {
-//         headers: {
-//             'Accept-Language': lang
-//         }
-//     });
-//     if (res) return res.data;
-//     else return false;
-// }
+export async function UpdateContactList(queryParams:any ,id:any,lang:any ) {
+    let res = await api.put(`/client/contact_lists/${id}?${queryParams}` , {
+        headers: {
+            'Accept-Language': lang
+        }
+    });
+    if (res) return res.data;
+    else return false;
+}
 
 export async function SearchContactList(id:any ,lang:any) {
-    let res = await api.get(`client/contact_lists?per_page=10?category_filter=${id}` , {
+    let res = await api.get(`client/contact_lists?per_page=10&search=${id}` , {
         headers: {
             'Accept-Language': lang
         }

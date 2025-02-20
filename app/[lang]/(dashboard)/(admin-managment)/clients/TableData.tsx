@@ -8,8 +8,7 @@ import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
 import Actions from "@/components/common/Actions/Actions";
 import View from "./View";
-import Add from "./Add";
-import FileRequest from "./FileRequest";
+import DeleteButton from "./Delete";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -19,54 +18,125 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTranslate } from "@/config/useTranslation";
-import Delete from "./Delete";
 import { DataTable } from "../../tables/advanced/components/data-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+import {
+  getClients,
+  getClientsPanigation,
+  getFilterClients,
+  SearchClients,
+} from "@/services/clients/clients";
+import { useParams } from "next/navigation";
+import useDebounce from "../../(category-mangement)/shared/useDebounce";
+import { useEffect, useState } from "react";
+
 interface Task {
   id: string;
-  Case_Name?: string;
-  Case?: string;
-  Client_Name?: string;
-  Category?: string;
-  Lawyer_Name?: string;
-  Next_Appointment_Date?: string;
-  Status?: string;
+  name?: string;
+  category?: any;
+  phone?: string;
+  email?: string;
+  Email?: string;
+  national_id_number?: string;
 }
-const TableData = () => {
-  const { t, loading, error } = useTranslate();
 
+const TableData = ({ flag }: { flag: any }) => {
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
+  const searchPalsceholder = "Search By Email ,Phone and Name";
+  const { lang } = useParams();
+  const { t } = useTranslate();
+
+  const [filters, setFilters] = useState<Record<string, string>>({
+    full_name: "",
+    email: "",
+    phone: "",
+  });
+  const buildQueryString = (filters: { [key: string]: string }) => {
+    const queryParams = Object.entries(filters)
+      .filter(([key, value]) => value) // Only include filters with values
+      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .join("&"); // Join them with "&"
+
+    return queryParams ? `?${queryParams}` : "";
+  };
+
+  const queryString = buildQueryString(filters);
+
+  const filtersConfig = [];
+
+  const handleFilterChange = (updatedFilters: Record<string, string>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+    }));
+  };
+
+  const handleFilterSubmit = () => {
+    // Perform filtering logic here
+    console.log("Filters submitted:", filters);
+    getClientData();
+  };
+
+  const getClientData = async () => {
+    setLoading(true);
+    if (queryString.length > 0) {
+      try {
+        const res = await getFilterClients(queryString, lang);
+
+        setData(res?.body?.data || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    } else {
+      try {
+        const res =
+          page === 1
+            ? await getClients(lang)
+            : await getClientsPanigation(page, lang);
+
+        setData(res?.body?.data || []);
+        console.log(res.body.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    }
+  };
+
+  const SearchData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await SearchClients(search, lang);
+
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      SearchData();
+    } else {
+      getClientData();
+    }
+  }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={
-    //         table.getIsAllPageRowsSelected() ||
-    //         (table.getIsSomePageRowsSelected() && "indeterminate")
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
-
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View />
-          <Add />{" "}
+          <View row={row} />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -77,17 +147,17 @@ const TableData = () => {
                   color="secondary"
                 >
                   {" "}
-                  <Link href={"case/edit"}>
+                  <Link href={`clients/${row.original.id}/edit`}>
                     <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
                   </Link>{" "}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p> {t("Edit Case")}</p>
+                <p> {t("Edit Client")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <FileRequest /> <Delete />
+          <DeleteButton getClientData={getClientData} id={row.original.id} />{" "}
         </div>
       ),
     },
@@ -100,10 +170,11 @@ const TableData = () => {
       enableSorting: false,
       enableHiding: false,
     },
+
     {
-      accessorKey: "Client_Name",
+      accessorKey: "Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Client_Name"} />
+        <DataTableColumnHeader column={column} title={"Name"} />
       ),
       cell: ({ row }) => {
         return (
@@ -114,56 +185,10 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Client_Name}
+              {row.original.name}
             </motion.span>
           </div>
         );
-      },
-    },
-    {
-      accessorKey: "Lawyer_Name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Lawyer_Name"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.Lawyer_Name}
-            </motion.span>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
-    {
-      accessorKey: "case_number",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"case_number"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.Case}
-            </motion.span>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
       },
     },
     {
@@ -179,17 +204,7 @@ const TableData = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Category === "جنائي" && "destructive") ||
-                  (row.original.Category === "مدنى" && "warning") ||
-                  (row.original.Category === "عائلى" && "info") ||
-                  "default"
-                }
-              >
-                {row.original.Category}
-              </Badge>
+              {row.original.category.name}
             </motion.span>
           </div>
         );
@@ -200,12 +215,9 @@ const TableData = () => {
     },
 
     {
-      accessorKey: "Next_Appointment_Date",
+      accessorKey: "Mobile_Number",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={"Next_Appointment_Date"}
-        />
+        <DataTableColumnHeader column={column} title={"Mobile_Number"} />
       ),
       cell: ({ row }) => {
         return (
@@ -216,7 +228,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Next_Appointment_Date}
+              {row.original.phone}
             </motion.span>
           </div>
         );
@@ -227,9 +239,9 @@ const TableData = () => {
     },
 
     {
-      accessorKey: "Status",
+      accessorKey: "Email",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Status"} />
+        <DataTableColumnHeader column={column} title={"Email"} />
       ),
       cell: ({ row }) => {
         return (
@@ -238,18 +250,60 @@ const TableData = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
             >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Status === "قيد التنفيذ" && "destructive") ||
-                  (row.original.Status === "قيدالانتظار" && "warning") ||
-                  (row.original.Status === "مكتملة" && "success") ||
-                  "default"
-                }
-              >
-                {row.original.Status}
-              </Badge>
+              {row.original.email}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "national_id_number",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"national_id_number"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.national_id_number}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "created",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"created"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {new Date(row.original.created_at).toLocaleDateString("en-GB", {
+                weekday: "long", // "Monday"
+                year: "numeric", // "2025"
+                month: "long", // "February"
+                day: "numeric", // "14"
+              })}
             </motion.span>
           </div>
         );
@@ -259,11 +313,24 @@ const TableData = () => {
       },
     },
   ];
+  const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (
     <div>
       {/* Render your data table here using the fetched tasks */}
       {/* Assuming you have a table component that takes columns and data */}
-      <DataTable data={data} columns={columns} />
+      <DataTable
+        data={data}
+        setPage={setPage}
+        setSearch={setSearch}
+        searchPalsceholder={searchPalsceholder}
+        page={page}
+        search={search}
+        filtersConfig={filtersConfig}
+        onFilterChange={handleFilterChange}
+        onFilterSubmit={handleFilterSubmit}
+        columns={columns}
+        isPaginationDisabled={isPaginationDisabled}
+      />{" "}
     </div>
   );
 };

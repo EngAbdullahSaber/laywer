@@ -1,237 +1,178 @@
 "use client";
-import BasicSelect from "./BasicSelect";
-import SelectCase from "./SelectCase";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { Radio } from "@/components/common/atoms/Radio";
+import { toast as reToast } from "react-hot-toast";
+import RadioRight from "./Radio";
 import Flatpickr from "react-flatpickr";
-import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
-import { Upload } from "lucide-react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-const schema = z.object({
-  Name: z
-    .string()
-    .min(3, { message: "errorCase.CasenameMin" })
-    .max(20, { message: "errorCase.CasenameMax" }),
-  PartyName: z
-    .string()
-    .min(3, { message: "errorCase.PartynameMin" })
-    .max(20, { message: "errorCase.PartynameMax" }),
-  LawyerName: z
-    .string()
-    .min(3, { message: "errorCase.LawyernameMin" })
-    .max(20, { message: "errorCase.LawyernameMax" }),
-  CaseDescription: z
-    .string()
-    .min(20, { message: "errorCase.CaseDescriptionMin" })
-    .max(200, {
-      message: "errorCase.CaseDescriptionMax",
-    }),
-  SecondaryCaseNumber: z
-    .string()
-    .min(3, { message: "errorCase.CaseNumberMin" })
-    .max(20, { message: "errorCase.CaseNumberMax" }),
-  MainCaseNumber: z
-    .string()
-    .min(3, { message: "errorCase.CaseNumberMin" })
-    .max(20, { message: "errorCase.CaseNumberMax" }),
-
-  case: z
-    .string()
-    .min(8, {
-      message: "Client Current Case Name must be at least 8 characters.",
-    })
-    .max(25, {
-      message: "Client Current Case Name must not exceed 25 characters.",
-    }),
-  Client: z.string().min(8, { message: "error.clientAddressMin" }),
-  category: z.string().min(8, { message: "error.clientAddressMin" }),
-  Court: z.string().min(8, { message: "error.clientAddressMin" }),
-  CourtCategory: z.string().min(8, { message: "error.clientAddressMin" }),
-  LawyerSelection: z.string().min(8, { message: "error.clientAddressMin" }),
-
-  password: z
-    .string()
-    .min(8, { message: "Client Password must be at least 8 characters." })
-    .max(25, { message: "Client Password must not exceed 25 characters." }),
-
-  date1: z
-    .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
-
-  date2: z
-    .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
-
-  date3: z
-    .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
-  date4: z
-    .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
-});
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import FileUploaderMultiple from "../../../(lawyer-managment)/lawyer-cases/FileUploaderSingle";
+import { getCourtsPanigation } from "@/services/courts/courts";
+import { getClientsPanigation } from "@/services/clients/clients";
+import { getLawyerPanigation } from "@/services/lawyer/lawyer";
+import { useParams } from "next/navigation";
+import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
+import SelectCase from "./SelectCase";
+import { getCategoryPanigation } from "@/services/category/category";
+import { getCases } from "@/services/cases/cases";
 
-const page = () => {
-  const {
-    register,
-    control,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  });
+interface LawyerData {
+  client_id: string;
+  court_id: string;
+  lawyer_id: string;
+  caseName: string;
+  MainCaseNumber: string;
+  description: string;
+  claim_status: string;
+  category_id: string;
+}
 
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
-  const [selectedValue, setSelectedValue] = useState<any>(null);
-  const [selectedValue1, setSelectedValue1] = useState<any>(null);
-  const charcter: { value: string; label: string }[] = [
-    { value: "A", label: "A" },
-    { value: "B", label: "B" },
-    { value: "C", label: "C" },
-    { value: "D", label: "D" },
-    { value: "E", label: "E" },
-    { value: "F", label: "F" },
-    { value: "G", label: "G" },
-    { value: "H", label: "H" },
-    { value: "I", label: "I" },
-    { value: "J", label: "J" },
-    { value: "K", label: "K" },
-    { value: "L", label: "L" },
-    { value: "M", label: "M" },
-    { value: "N", label: "N" },
-    { value: "O", label: "O" },
-    { value: "P", label: "P" },
-    { value: "Q", label: "Q" },
-    { value: "R", label: "R" },
-    { value: "S", label: "S" },
-    { value: "T", label: "T" },
-    { value: "W", label: "W" },
-    { value: "X", label: "X" },
-    { value: "Y", label: "Y" },
-    { value: "Z", label: "Z" },
-  ];
-  const Name: { value: string; label: string }[] = [
-    { value: "على عبدالله", label: "على عبدالله" },
-    { value: "محمد احمد", label: "محمد احمد" },
-    { value: "احمد محمد", label: "احمد محمد" },
-  ];
-  const courts: { value: string; label: string }[] = [
-    { value: "محكمة الرياض", label: "محكمة الرياض" },
-    { value: "محكمة مكة", label: "محكمة مكة" },
-    { value: "محكمة جدة", label: "محكمة جدة" },
-  ];
-  const lawyer: { value: string; label: string }[] = [
-    { value: "المحامى احمد على", label: "المحامى احمد على" },
-    { value: "المحامى احمد عبدالله", label: "المحامى احمد عبدالله" },
-    { value: "المحامى فهد ", label: "المحامى فهد " },
-  ];
-
+const Page = () => {
   const { t } = useTranslate();
-
-  const [picker, setPicker] = useState<Date>(new Date());
-  const [picker2, setPicker2] = useState<Date>(new Date());
-  const [picker3, setPicker3] = useState<Date>(new Date());
-  const [picker4, setPicker4] = useState<Date>(new Date());
-  const [caseYear, setCaseYear] = useState<string>("");
+  const { lang } = useParams();
+  const [lawyerData, setLawyerData] = useState<LawyerData>({
+    client_id: "",
+    court_id: "",
+    lawyer_id: "",
+    caseName: "",
+    MainCaseNumber: "",
+    description: "",
+    claim_status: "",
+    category_id: "",
+  });
+  const [selectedValue, setSelectedValue] = useState<any[]>([]); // Store an array for first character selections
+  const [selectedValue1, setSelectedValue1] = useState<any[]>([]); // Store an array for second character selections
+  const [numbers, setNumbers] = useState<any[]>([]); // Store the formatted case numbers
+  const [caseYears, setCaseYears] = useState<any[]>([]); // Store years for multiple cases
   const [secondaryCaseNumber, setSecondaryCaseNumber] = useState<number>(1);
-  const [opposit, setOpposite] = useState<number>(1);
-  const yearResult = caseYear.length === 4 ? caseYear.slice(-2) : null;
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleDateChange = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
+  const [dates, setDates] = useState<Record<string, Date>>({
+    receiptDate: new Date(),
+    submissionDate: new Date(),
+    judgmentDate: new Date(),
+    hearingDate: new Date(),
+  });
+  // Function to format numbers
+  const updateNumbers = (index: number) => {
+    const formattedValue =
+      data + index < 10
+        ? "000" + (data + index)
+        : data + index < 100
+        ? "00" + (data + index)
+        : data + index < 1000
+        ? "0" + (data + index)
+        : data + index;
+
+    const updatedNumbers = [...numbers]; // Copy current numbers state
+    updatedNumbers[index] = formattedValue; // Update the specific index with the formatted value
+    console.log(formattedValue);
+
+    setNumbers(updatedNumbers); // Set the updated numbers array
+    return formattedValue; // Return the formatted value for rendering
   };
-  const handleDateChange2 = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker2(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  console.log(numbers);
+  updateNumbers(1);
+  const getCasesData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await getCases(lang);
+
+      // Convert the ID to a string, pad it with leading zeros, and default to '0000'
+      const caseId = String(res?.body[0].id).padStart(4, "0") || "0000";
+
+      setData(Number(caseId)); // Set the padded case ID
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
   };
-  const handleDateChange3 = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker3(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  const charcter = Array.from({ length: 26 }, (_, i) => ({
+    value: String.fromCharCode(65 + i),
+    label: String.fromCharCode(65 + i),
+  }));
+
+  // Handle input changes for lawyerData
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setLawyerData((prev) => ({ ...prev, [name]: value }));
   };
-  const handleDateChange4 = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker4(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+
+  // Handle date changes
+  const handleDateChange = (key: string, newDate: Date) => {
+    const date = new Date(newDate.toISOString());
+
+    // Extract day, month, and year
+    const day = String(date.getDate()).padStart(2, "0"); // Ensures two digits
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = date.getFullYear();
+
+    // Format as yyyy-mm-dd
+    const formattedDate = `${year}-${month}-${day}`;
+    setDates((prev) => ({ ...prev, [key]: formattedDate }));
   };
+
+  const handleCaseYearChange = (index: number, value: string) => {
+    const updatedYears = [...caseYears];
+    updatedYears[index] = value; // Update the year at the specific index
+    setCaseYears(updatedYears);
+  };
+  // Handle opposite party input changes
+  const handleOppositePartyChange = (index: number, value: string) => {
+    const newParties = [...oppositeParties];
+    newParties[index] = value;
+    setOppositeParties(newParties);
+  };
+
+  // Add a new opposite party input field
+  const addOppositePartyField = () => {
+    setOppositeParties([...oppositeParties, ""]);
+  };
+
+  // Remove an opposite party input field
+  const removeOppositePartyField = (index: number) => {
+    if (oppositeParties.length > 1) {
+      const newParties = oppositeParties.filter((_, i) => i !== index);
+      setOppositeParties(newParties);
+    }
+  };
+
+  // Fetch data for infinite scroll select components
+  const fetchData = async (service: Function, page: number = 1) => {
+    try {
+      const data = await service(page, lang);
+      return data?.body?.data || [];
+    } catch (error) {
+      reToast.error(`Failed to fetch data: ${error}`);
+      return [];
+    }
+  };
+
+  const formatOption = (item: any) => ({ value: item.id, label: item.name });
+  useEffect(() => {
+    getCasesData();
+  }, []);
   return (
     <div>
-      {" "}
       <Card>
         <CardHeader>
-          <CardTitle> {t("Create a New Case")}</CardTitle>
+          <CardTitle>{t("Create a New Case")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
+            {/* Case Info Section */}
             <motion.p
               initial={{ y: -30 }}
               whileInView={{ y: 0 }}
@@ -240,29 +181,31 @@ const page = () => {
             >
               {t("Case Info")}
             </motion.p>
-            <div className="flex flex-row  flex-wrap sm:flex-nowrap justify-between items-center  gap-4">
+            <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+              {/* Client Selection */}
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
                 <motion.div
                   initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="flex flex-row justify-between items-center "
+                  className="flex flex-row justify-between items-center"
                 >
-                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                  <div className="!w-[87%]">
                     <Label htmlFor="Client">{t("Client Selection")}</Label>
-                    <BasicSelect
-                      name="Client"
-                      menu={Name}
-                      control={control}
-                      errors={errors}
+                    <InfiniteScrollSelect
+                      fetchData={() => fetchData(getClientsPanigation)}
+                      formatOption={formatOption}
+                      placeholder={t("Select Client")}
+                      selectedValue={lawyerData.client_id}
+                      setSelectedValue={(value) =>
+                        setLawyerData((prev) => ({
+                          ...prev,
+                          client_id: value?.value || "",
+                        }))
+                      }
                     />
-                    {errors.Client && (
-                      <p className="text-xs text-destructive">
-                        {t(errors.Client.message)}
-                      </p>
-                    )}{" "}
                   </div>
-                  <Link href={"/clients"} className="w-[8%] mt-5">
+                  <Link href="/clients" className="w-[8%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -272,6 +215,8 @@ const page = () => {
                   </Link>
                 </motion.div>
               </div>
+
+              {/* Court Selection */}
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
                 <motion.div
                   initial={{ y: -30 }}
@@ -279,21 +224,22 @@ const page = () => {
                   transition={{ duration: 0.8 }}
                   className="flex flex-row justify-between items-center"
                 >
-                  <div className="!w-[87%]" style={{ width: "87%" }}>
-                    <Label htmlFor="Court">{t("Court Selection")} </Label>
-                    <BasicSelect
-                      name="Court"
-                      menu={courts}
-                      control={control}
-                      errors={errors}
+                  <div className="!w-[87%]">
+                    <Label htmlFor="Court">{t("Court Selection")}</Label>
+                    <InfiniteScrollSelect
+                      fetchData={() => fetchData(getCourtsPanigation)}
+                      formatOption={formatOption}
+                      placeholder={t("Select Court")}
+                      selectedValue={lawyerData.court_id}
+                      setSelectedValue={(value) =>
+                        setLawyerData((prev) => ({
+                          ...prev,
+                          court_id: value?.value || "",
+                        }))
+                      }
                     />
-                    {errors.Court && (
-                      <p className="text-xs text-destructive">
-                        {t(errors.Court.message)}
-                      </p>
-                    )}{" "}
                   </div>
-                  <Link href={"/courts"} className="w-[8%] mt-5">
+                  <Link href="/courts" className="w-[8%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -303,57 +249,85 @@ const page = () => {
                   </Link>
                 </motion.div>
               </div>
+              {/* <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="flex flex-row justify-between items-center"
+                >
+                  <div className="!w-[87%]">
+                    <Label htmlFor="Category">{t("Case Category")}</Label>
+                    <InfiniteScrollSelect
+                      fetchData={() =>
+                        fetchData(getCategoryPanigation("cases"))
+                      }
+                      formatOption={formatOption}
+                      placeholder={t("Select Case Category")}
+                      selectedValue={lawyerData.category_id}
+                      setSelectedValue={(value) =>
+                        setLawyerData((prev) => ({
+                          ...prev,
+                          category_id: value?.value || "",
+                        }))
+                      }
+                    />
+                  </div>
+                  <Link href="/courts" className="w-[8%] mt-5">
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </Link>
+                </motion.div>
+              </div> */}
+              {/* Case Name */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.9 }}
                 className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
               >
-                <Label
-                  htmlFor="Name"
-                  className={cn("", { "text-destructive": errors.Name })}
-                >
-                  {t("Case Name")}
-                </Label>
+                <Label htmlFor="Name">{t("Case Name")}</Label>
                 <Input
                   type="text"
-                  {...register("Name")}
-                  placeholder={t("Enter User Case Name")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Name,
-                  })}
+                  placeholder={t("Enter Case Name")}
+                  name="caseName"
+                  onChange={handleInputChange}
                 />
-                {errors.Name && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Name.message)}
-                  </p>
-                )}
               </motion.div>
+
+              {/* Lawyer Selection */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.5 }}
                 className="flex flex-row justify-between items-center w-full sm:w-[48%]"
               >
-                <div className="!w-[87%]" style={{ width: "87%" }}>
-                  <Label htmlFor="category">{t("Lawyer Selection")} </Label>
-                  <BasicSelect
-                    name="LawyerSelection"
-                    menu={lawyer}
-                    control={control}
-                    errors={errors}
+                <div className="!w-[87%]">
+                  <Label htmlFor="category">{t("Lawyer Selection")}</Label>
+                  <InfiniteScrollSelect
+                    fetchData={() => fetchData(getLawyerPanigation)}
+                    formatOption={formatOption}
+                    placeholder={t("Select Lawyer")}
+                    selectedValue={lawyerData.lawyer_id}
+                    setSelectedValue={(value) =>
+                      setLawyerData((prev) => ({
+                        ...prev,
+                        lawyer_id: value?.value || "",
+                      }))
+                    }
                   />
-                  {errors.LawyerSelection && (
-                    <p className="text-xs text-destructive">
-                      {t(errors.LawyerSelection.message)}
-                    </p>
-                  )}{" "}
                 </div>
-                <Link href={"/lawyer"} className="w-[8%] mt-5">
+                <Link href="/lawyer" className="w-[8%] mt-5">
                   <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
                 </Link>
               </motion.div>
             </div>
+
+            {/* Case Numbers Section */}
             <motion.hr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -368,163 +342,133 @@ const page = () => {
             >
               {t("Case Numbers")}
             </motion.p>
-            <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center  gap-4">
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="flex flex-row justify-between flex-wrap md:flex-nowrap items-center gap-6 w-full"
-              >
-                {Array.from({ length: secondaryCaseNumber }).map((_, index) => (
-                  <div
-                    key={index} // Ensure you use a unique key for each item
-                    className={`${
-                      secondaryCaseNumber !== 1
-                        ? "w-full md:w-[48%] flex flex-row justify-between"
-                        : "w-full md:w-[48%] flex flex-row justify-between"
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        secondaryCaseNumber === 1 ? "!w-[85%]" : "!w-[85%]"
-                      } `}
-                    >
-                      <div className="flex flex-col sm:flex-row flex-nowrap justify-between items-center ">
-                        <div className="w-full sm:w-[31%]">
-                          <Label
-                            htmlFor="SecondaryCaseNumber"
-                            className={cn("", {
-                              "text-destructive my-2":
-                                errors.SecondaryCaseNumber,
-                            })}
-                          >
-                            {t("First Character")}
-                          </Label>
-                          <SelectCase
-                            menu={charcter}
-                            setSelectedValue={setSelectedValue} // Set the selected value
-                            selectedValue={selectedValue} // Pass selected value to BasicSelect
-                          />
-                        </div>
-                        <div className="w-full sm:w-[31%]">
-                          {" "}
-                          <Label htmlFor="SecondaryCaseNumber">
-                            {t("Second Character")}
-                          </Label>
-                          <SelectCase
-                            menu={charcter}
-                            setSelectedValue={setSelectedValue1} // Set the selected value
-                            selectedValue={selectedValue1} // Pass selected value to BasicSelect
-                          />
-                        </div>
-                        <div className="w-full sm:w-[31%]">
-                          {" "}
-                          <Label>{t("Year of Case")}</Label>
-                          <Input
-                            type="number"
-                            placeholder={t("Enter Year of Case")}
-                            value={caseYear}
-                            onChange={(e) => setCaseYear(e.target.value)}
-                          />
-                        </div>
+            <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+              {Array.from({ length: secondaryCaseNumber }).map((_, index) => (
+                <div
+                  key={index}
+                  className="w-full md:w-[48%] flex flex-row justify-between"
+                >
+                  <div className="!w-[85%]">
+                    <div className="flex flex-col sm:flex-row flex-nowrap justify-between items-center">
+                      <div className="w-full sm:w-[31%]">
+                        <Label htmlFor="SecondaryCaseNumber">
+                          {t("First Character")}
+                        </Label>
+                        <SelectCase
+                          menu={charcter}
+                          setSelectedValue={(value) => {
+                            const updatedValues = [...selectedValue];
+                            updatedValues[index] = value; // Store the selected value for the specific case
+                            setSelectedValue(updatedValues);
+                          }}
+                          selectedValue={selectedValue[index] || []} // Pass the selected value at the specific index
+                          index={index}
+                        />
+                      </div>
+                      <div className="w-full sm:w-[31%]">
+                        <Label htmlFor="SecondaryCaseNumber">
+                          {t("Second Character")}
+                        </Label>
+                        <SelectCase
+                          menu={charcter}
+                          setSelectedValue={(value) => {
+                            const updatedValues1 = [...selectedValue1];
+                            updatedValues1[index] = value; // Store the selected value for the specific case
+                            setSelectedValue1(updatedValues1);
+                          }}
+                          selectedValue={selectedValue1[index] || []} // Pass the selected value at the specific index
+                          index={index}
+                        />
+                      </div>
+                      <div className="w-full sm:w-[31%]">
+                        <Label>{t("Year of Case")}</Label>
+                        <Input
+                          type="number"
+                          placeholder={t("Enter Year of Case")}
+                          value={caseYears[index] || ""} // Use the value of the specific case year
+                          onChange={(e) =>
+                            handleCaseYearChange(index, e.target.value)
+                          } // Update specific case year
+                        />
                       </div>
                     </div>
-                    <div
-                      className={`${
-                        secondaryCaseNumber === 1 ? "!w-[15%]" : "!w-[15%]"
-                      } flex flex-col items-center justify-center mt-2`}
+                  </div>
+                  <div className="!w-[15%] flex flex-col items-center justify-center mt-2">
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1.5 }}
+                      className="mt-2 font-semibold"
                     >
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1.5 }}
-                        className="mt-2 font-semibold"
-                      >
-                        {selectedValue1?.value}
-                        {selectedValue?.value}
-                        {yearResult}0001
-                      </motion.p>
-                    </div>
-                    {/* Delete icon: Show for all items except the last one */}
-                    {secondaryCaseNumber > 1 &&
-                      index !== secondaryCaseNumber - 1 && (
-                        <div
-                          className="mt-6 w-[3%]"
-                          onClick={() =>
-                            setSecondaryCaseNumber(secondaryCaseNumber - 1)
-                          }
-                        >
-                          <Icon
-                            icon="material-symbols:delete"
-                            width="24"
-                            height="24"
-                            color="#dfc77d"
-                          />
-                        </div>
-                      )}
-
-                    {/* Plus icon: Show if there's only one item or on the last item when there are more */}
-                    {index === secondaryCaseNumber - 1 && (
+                      {selectedValue1[index]?.value}
+                      {selectedValue[index]?.value}
+                      {caseYears[index]?.slice(-2)}
+                      {/* {updateNumbers(index)} */}
+                    </motion.p>
+                  </div>
+                  {secondaryCaseNumber > 1 &&
+                    index !== secondaryCaseNumber - 1 && (
                       <div
-                        className="mt-4 flex justify-center items-center w-[6%]"
+                        className="mt-6 w-[3%]"
                         onClick={() =>
-                          setSecondaryCaseNumber(secondaryCaseNumber + 1)
+                          setSecondaryCaseNumber(secondaryCaseNumber - 1)
                         }
                       >
                         <Icon
-                          icon="gg:add"
+                          icon="material-symbols:delete"
                           width="24"
                           height="24"
                           color="#dfc77d"
                         />
                       </div>
                     )}
-                  </div>
-                ))}
-                <motion.div
-                  initial={{ y: -30 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 0.9 }}
-                  className="flex flex-col gap-2 my-2 w-full md:w-[48%]"
-                >
-                  <Label
-                    htmlFor="MainCaseNumber"
-                    className={cn("", {
-                      "text-destructive": errors.MainCaseNumber,
-                    })}
-                  >
-                    {t("Case Number")}
-                  </Label>
-                  <Input
-                    type="number"
-                    {...register("MainCaseNumber")}
-                    placeholder={t("Enter Case Number")}
-                    className={cn("", {
-                      "border-destructive focus:border-destructive":
-                        errors.MainCaseNumber,
-                    })}
-                  />
-                  {errors.MainCaseNumber && (
-                    <p className="text-xs text-destructive">
-                      {t(errors.MainCaseNumber.message)}
-                    </p>
+                  {index === secondaryCaseNumber - 1 && (
+                    <div
+                      className="mt-4 flex justify-center items-center w-[6%]"
+                      onClick={() =>
+                        setSecondaryCaseNumber(secondaryCaseNumber + 1)
+                      }
+                    >
+                      <Icon
+                        icon="gg:add"
+                        width="24"
+                        height="24"
+                        color="#dfc77d"
+                      />
+                    </div>
                   )}
-                </motion.div>
+                </div>
+              ))}
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2 my-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="MainCaseNumber">{t("Case Number")}</Label>
+                <Input
+                  type="number"
+                  placeholder={t("Enter Case Number")}
+                  name="MainCaseNumber"
+                  onChange={handleInputChange}
+                />
               </motion.div>
             </div>
+
+            {/* Upload Files Section */}
             <motion.hr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.1 }}
               className="my-3"
-            />{" "}
+            />
             <motion.p
               initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1.2 }}
               className="my-4 font-bold"
             >
-              {t("Upload Filess")}
+              {t("Upload Files")}
             </motion.p>
             <motion.div
               initial={{ y: -30 }}
@@ -536,12 +480,14 @@ const page = () => {
                 <FileUploaderMultiple />
               </Label>
             </motion.div>
+
+            {/* Dates Section */}
             <motion.hr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.1 }}
               className="my-3"
-            />{" "}
+            />
             <motion.p
               initial={{ y: -30 }}
               whileInView={{ y: 0 }}
@@ -551,97 +497,33 @@ const page = () => {
               {t("Dates")}
             </motion.p>
             <div className="flex flex-row justify-between flex-wrap sm:flex-nowrap items-center my-4 gap-4">
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.6 }}
-                className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="category">{t("Receipt Date")} </Label>
-                <Flatpickr
-                  className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder={t("Select Receipt Date")}
-                  value={picker}
-                  onChange={handleDateChange}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
-                  id="default-picker"
-                />
-                {errors.date1 && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.date1.message)}
-                  </p>
-                )}
-              </motion.div>
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="category">{t("Submission Date")} </Label>
-                <Flatpickr
-                  className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder={t("Select Submission Date")}
-                  value={picker2}
-                  onChange={handleDateChange2}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
-                  id="default-picker"
-                />
-                {errors.date2 && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.date2.message)}
-                  </p>
-                )}
-              </motion.div>
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.8 }}
-                className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="category">{t("Judgment Date")} </Label>
-                <Flatpickr
-                  className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder={t("Select Judgment Date")}
-                  value={picker3}
-                  onChange={handleDateChange3}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
-                  id="default-picker"
-                />
-                {errors.date3 && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.date3.message)}
-                  </p>
-                )}
-              </motion.div>
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.9 }}
-                className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="category">{t("Hearing Date")} </Label>
-                <Flatpickr
-                  className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder={t("Select Hearing Date")}
-                  value={picker4}
-                  onChange={handleDateChange4}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
-                  id="default-picker"
-                />
-                {errors.date4 && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.date4.message)}
-                  </p>
-                )}
-              </motion.div>
+              {Object.entries(dates).map(([key, value]) => (
+                <motion.div
+                  key={key}
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.6 }}
+                  className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
+                >
+                  <Label htmlFor={key}>{t(key)}</Label>
+                  <Flatpickr
+                    className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
+                    placeholder={t(`Select ${key}`)}
+                    value={value}
+                    onChange={([date]) => handleDateChange(key, date)}
+                    onBlur={(e) => e.preventDefault()}
+                  />
+                </motion.div>
+              ))}
             </div>
+
+            {/* Status Section */}
             <motion.hr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.1 }}
               className="my-3"
-            />{" "}
+            />
             <motion.p
               initial={{ y: -30 }}
               whileInView={{ y: 0 }}
@@ -651,15 +533,19 @@ const page = () => {
               {t("Data of Status")}
             </motion.p>
             <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center">
-              {" "}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1 }}
                 className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
               >
-                <Label htmlFor="category">{t("Status")} </Label>
-                <Radio text1={"Plaintiff"} text2={"Defendant"} />
+                <Label htmlFor="category">{t("Status")}</Label>
+                <RadioRight
+                  text1="claimant"
+                  text2="defendant"
+                  setValue={setLawyerData}
+                  claim_status={lawyerData.claim_status}
+                />
               </motion.div>
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
                 <motion.div
@@ -668,64 +554,48 @@ const page = () => {
                   transition={{ duration: 1.1 }}
                   className="flex flex-row justify-between items-center"
                 >
-                  {Array.from({ length: opposit }).map((_, index) => (
+                  {oppositeParties.map((party, index) => (
                     <div
-                      key={index} // Ensure you use a unique key for each item
-                      className={`${
-                        opposit !== 1
-                          ? "!w-[100%] flex flex-row justify-between"
-                          : "!w-[100%] flex flex-row justify-between"
-                      }`}
+                      key={index}
+                      className="!w-[100%] flex flex-row justify-between"
                     >
                       <div
-                        className={`${
-                          opposit === 1 ? "!w-[100%]" : "!w-[91%]"
-                        }`}
+                        className={
+                          oppositeParties.length === 1
+                            ? "!w-[100%]"
+                            : "!w-[91%]"
+                        }
                       >
-                        <Label
-                          htmlFor="PartyName"
-                          className={cn("", {
-                            "text-destructive": errors.PartyName,
-                          })}
-                        >
+                        <Label htmlFor="PartyName">
                           {t("Opposing Party Name")}
                         </Label>
                         <Input
                           type="text"
-                          {...register("PartyName")}
                           placeholder={t("Enter Opposing Party Name")}
-                          className={cn("", {
-                            "border-destructive focus:border-destructive":
-                              errors.PartyName,
-                          })}
+                          value={party}
+                          onChange={(e) =>
+                            handleOppositePartyChange(index, e.target.value)
+                          }
                         />
-                        {errors.PartyName && (
-                          <p className="text-xs text-destructive">
-                            {t(errors.PartyName.message)}
-                          </p>
-                        )}
                       </div>
-
-                      {/* Delete icon: Show for all items except the last one */}
-                      {opposit > 1 && index !== opposit - 1 && (
+                      {oppositeParties.length > 1 &&
+                        index !== oppositeParties.length - 1 && (
+                          <div
+                            className="mt-6 w-[8%]"
+                            onClick={() => removeOppositePartyField(index)}
+                          >
+                            <Icon
+                              icon="material-symbols:delete"
+                              width="24"
+                              height="24"
+                              color="#dfc77d"
+                            />
+                          </div>
+                        )}
+                      {index === oppositeParties.length - 1 && (
                         <div
                           className="mt-6 w-[8%]"
-                          onClick={() => setOpposite(opposit - 1)}
-                        >
-                          <Icon
-                            icon="material-symbols:delete"
-                            width="24"
-                            height="24"
-                            color="#dfc77d"
-                          />
-                        </div>
-                      )}
-
-                      {/* Plus icon: Show if there's only one item or on the last item when there are more */}
-                      {index === opposit - 1 && (
-                        <div
-                          className="mt-6 w-[8%]"
-                          onClick={() => setOpposite(opposit + 1)}
+                          onClick={addOppositePartyField}
                         >
                           <Icon
                             icon="gg:add"
@@ -739,7 +609,9 @@ const page = () => {
                   ))}
                 </motion.div>
               </div>
-            </div>{" "}
+            </div>
+
+            {/* Description Section */}
             <motion.hr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -754,37 +626,24 @@ const page = () => {
             >
               {t("Descriptions")}
             </motion.p>
-            <div className="grid grid-cols-1 lg:grid-cols-1  my-4 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-1 my-4 gap-4">
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 2 }}
                 className="flex flex-col gap-2 my-2"
               >
-                <Label
-                  htmlFor="CaseDescription"
-                  className={cn("", {
-                    "text-destructive": errors.CaseDescription,
-                  })}
-                >
-                  {t("Case Description")}
-                </Label>
+                <Label htmlFor="CaseDescription">{t("Case Description")}</Label>
                 <Textarea
-                  {...register("CaseDescription")}
                   placeholder={t("Type Here")}
                   rows={7}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.CaseDescription,
-                  })}
+                  name="description"
+                  onChange={handleInputChange}
                 />
-                {errors.CaseDescription && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.CaseDescription.message)}
-                  </p>
-                )}
               </motion.div>
             </div>
+
+            {/* Submit Button */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -798,11 +657,11 @@ const page = () => {
                 {t("Create Case")}
               </Button>
             </motion.div>
-          </form>{" "}
+          </form>
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default page;
+export default Page;

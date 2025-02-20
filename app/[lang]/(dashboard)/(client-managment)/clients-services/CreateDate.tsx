@@ -8,69 +8,126 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import Flatpickr from "react-flatpickr";
-import { useEffect, useRef, useState } from "react";
-import { Icon } from "@iconify/react";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link";
-import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
-import ImageUploader from "../../(admin-managment)/lawyer/add/ImageUploader";
-
-// Update the schema to validate date properly
-const schema = z.object({
-  message: z
-    .string()
-    .min(10, { message: "errorClientServices.MessageMin" })
-    .max(70, { message: "errorClientServices.MessageMax" }),
-});
-
-const CreateDate = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue, // Add setValue to update the date field in react-hook-form
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+import ImageUploader from "./ImageUploader";
+import { useState } from "react";
+import { UploadImage } from "@/services/auth/auth";
+import { useParams } from "next/navigation";
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { AskAboutServices } from "@/services/services/services";
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+interface LaywerData {
+  details: string;
+  service_id: string;
+}
+const CreateDate = ({ id }: { id: any }) => {
+  const { t } = useTranslate();
+  const [lawyerData, setLawyerData] = useState<LaywerData>({
+    details: "",
+    service_id: id,
+  });
+  const { lang } = useParams();
+  const [images, setImages] = useState<{
+    invoice_file: File | null;
+  }>({
+    invoice_file: null,
   });
 
-  const [picker, setPicker] = useState<Date>(new Date());
-  const flatpickrRef = useRef<Flatpickr | null>(null); // Create a ref to access Flatpickr
+  const handleImageChange = async (
+    file: File,
+    imageType: keyof typeof images
+  ) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await UploadImage(formData, lang); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        console.log(res.body.image_id);
+        setImages((prevState) => ({
+          ...prevState,
+          [imageType]: res.body.image_id,
+        }));
+        reToast.success(res.message); // Display success message
+      } else {
+        reToast.error(t("Failed to create upload image")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
 
-  useEffect(() => {
-    // This will ensure that Flatpickr doesn't open on its own when the dialog is opened.
-    if (flatpickrRef.current) {
-      flatpickrRef.current.close();
+      // Construct the dynamic key based on field names and the current language
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
     }
-  }, []);
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
+  };
 
-  // Handle Flatpickr change event and set value in react-hook-form
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLawyerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
 
-  const Case_Status: { value: string; label: string }[] = [
-    { value: "على", label: "على" },
-    { value: "احمد", label: "احمد" },
-    { value: "محمد", label: "محمد" },
-    { value: "مصطفى", label: "احمد" },
-  ];
-  const { t, loading, error } = useTranslate();
-  const handleDateChange = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    console.log(images.invoice_file);
+    formData.append(`invoice_file`, images.invoice_file);
+    try {
+      const res = await AskAboutServices(lang, formData); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          details: "",
+          service_id: "",
+        });
+        setImages({
+          invoice_file: null,
+        });
+        reToast.success(res.message); // Display success message
+      } else {
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = ["details", "service_id", "invoice_file"];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
   };
   return (
     <Dialog>
@@ -86,7 +143,7 @@ const CreateDate = () => {
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
                 initial={{ y: -30 }}
@@ -98,17 +155,12 @@ const CreateDate = () => {
                   {t("Your Describtion")}
                 </Label>
                 <Textarea
-                  {...register("message")} // Register textarea with react-hook-form
                   placeholder={t("Type Here")}
                   rows={3}
                   id="message"
-                  className={cn(errors.message ? "border-red-300" : "")} // Add error styling if validation fails
+                  name="details"
+                  onChange={handleInputChange}
                 />
-                {errors.message && (
-                  <p className="text-sm text-red-300 mt-1">
-                    {t(errors.message.message)}
-                  </p>
-                )}{" "}
               </motion.div>
               <motion.div
                 initial={{ y: -30 }}
@@ -117,12 +169,16 @@ const CreateDate = () => {
                 className="flex flex-col gap-2"
               >
                 <Label>{t("Payment Receipt")}</Label>
-                <ImageUploader />
+                <ImageUploader
+                  imageType="invoice_file"
+                  id={images.invoice_file}
+                  onFileChange={handleImageChange}
+                />
               </motion.div>
             </div>
 
             {/* Submit Button inside form */}
-            <div git initclassName="flex justify-center gap-3 mt-4">
+            <div className="flex justify-center gap-3 mt-4">
               <DialogClose asChild>
                 <Button
                   type="button"

@@ -20,6 +20,8 @@ import { useState } from "react";
 import { CreateCategory } from "@/services/category/category";
 import { useParams } from "next/navigation";
 import { AxiosError } from "axios";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -57,28 +59,27 @@ const CreateContactListCategory = ({
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: keyof UserData
+    key: keyof UserData,
+    field: string,
+    value: string
   ) => {
-    const value = e.target.value;
-
-    setUserData((prevData) => {
-      // Only spread if the field is an object (name or description)
-      if (field === "name" || field === "description") {
+    setUserData((prevUserData) => {
+      // Ensure that name and description are treated as objects
+      if (key === "name" || key === "description") {
         return {
-          ...prevData,
-          [field]: {
-            ...prevData[field], // Spread existing object (ar, en) properties
-            [currentLang]: value, // Update the value for the current language
+          ...prevUserData,
+          [key]: {
+            ...prevUserData[key],
+            [field]: value,
           },
         };
-      } else {
-        // For non-object fields (like `type`), just update the field directly
-        return {
-          ...prevData,
-          [field]: value,
-        };
       }
+
+      // For non-object fields like `type`, just update directly
+      return {
+        ...prevUserData,
+        [key]: value,
+      };
     });
   };
 
@@ -87,12 +88,14 @@ const CreateContactListCategory = ({
 
     Object.entries(userData).forEach(([key, value]) => {
       if (typeof value === "object") {
-        const languageValue = value[currentLang]; // Use `currentLang` instead of `lang`
-        if (languageValue) {
-          formData.append(`${key}[${currentLang}]`, languageValue);
-        }
+        // Append each language value
+        Object.entries(value).forEach(([langKey, langValue]) => {
+          // Explicitly cast langValue to string
+          formData.append(`${key}[${langKey}]`, String(langValue));
+        });
       } else {
-        formData.append(key, value);
+        // Append non-object values directly, explicitly cast to string
+        formData.append(key, String(value));
       }
     });
 
@@ -155,43 +158,109 @@ const CreateContactListCategory = ({
           <div>
             <form onSubmit={(e) => e.preventDefault()}>
               <ScrollArea className="h-full">
-                <div className="sm:grid sm:gap-5 space-y-4 sm:space-y-0">
-                  <motion.div
-                    initial={{ y: -30 }}
-                    whileInView={{ y: 0 }}
-                    transition={{ duration: 1.7 }}
-                    className="flex flex-col gap-2"
-                  >
-                    <Label htmlFor="Name">
-                      {t("Contact List Category Name")}
-                    </Label>
-                    <Input
-                      id="Name"
-                      value={userData.name[currentLang]} // No more TypeScript error
-                      onChange={(e) => handleInputChange(e, "name")}
-                      placeholder={t("Enter Contact List Category Name")}
-                      type="text"
-                    />
-                  </motion.div>
+                <Tabs
+                  defaultValue={lang == "en" ? "English" : "Arabic"}
+                  className=""
+                >
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="English">{t("English")}</TabsTrigger>
+                    <TabsTrigger value="Arabic">{t("Arabic")}</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="English">
+                    <div className="sm:grid sm:gap-5 space-y-4 sm:space-y-0">
+                      <motion.div
+                        initial={{ y: -10 }}
+                        whileInView={{ y: 0 }}
+                        transition={{ duration: 1.7 }}
+                        className="flex flex-col gap-2"
+                      >
+                        <Label htmlFor="Name">
+                          {t("Contact List Category Name")}
+                        </Label>
+                        <Input
+                          id="Name"
+                          value={userData.name["en"]} // No more TypeScript error
+                          onChange={(e) =>
+                            handleInputChange("name", "en", e.target.value)
+                          }
+                          placeholder={t("Enter Contact List Category Name")}
+                          type="text"
+                        />
+                      </motion.div>
 
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 1.7 }}
-                    className="flex flex-col gap-2"
-                  >
-                    <Label htmlFor="Description">
-                      {t("Description Of Contact List Category")}
-                    </Label>
-                    <Textarea
-                      id="Description"
-                      value={userData.description[currentLang]} // No more TypeScript error
-                      onChange={(e) => handleInputChange(e, "description")}
-                      placeholder={t("Type Here")}
-                      rows={7}
-                    />
-                  </motion.div>
-                </div>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 1.7 }}
+                        className="flex flex-col gap-2"
+                      >
+                        <Label htmlFor="Description">
+                          {t("Description Of Contact List Category")}
+                        </Label>
+                        <Textarea
+                          id="Description"
+                          value={userData.description["en"]} // No more TypeScript error
+                          onChange={(e) =>
+                            handleInputChange(
+                              "description",
+                              "en",
+                              e.target.value
+                            )
+                          }
+                          placeholder={t("Type Here")}
+                          rows={7}
+                        />
+                      </motion.div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="Arabic">
+                    <div className="sm:grid sm:gap-5 space-y-4 sm:space-y-0">
+                      <motion.div
+                        initial={{ y: -10 }}
+                        whileInView={{ y: 0 }}
+                        transition={{ duration: 1.7 }}
+                        className="flex flex-col gap-2"
+                      >
+                        <Label htmlFor="Name">
+                          {t("Contact List Category Name")}
+                        </Label>
+                        <Input
+                          id="Name"
+                          value={userData.name["ar"]} // No more TypeScript error
+                          onChange={(e) =>
+                            handleInputChange("name", "ar", e.target.value)
+                          }
+                          placeholder={t("Enter Contact List Category Name")}
+                          type="text"
+                        />
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 1.7 }}
+                        className="flex flex-col gap-2"
+                      >
+                        <Label htmlFor="Description">
+                          {t("Description Of Contact List Category")}
+                        </Label>
+                        <Textarea
+                          id="Description"
+                          value={userData.description["ar"]} // No more TypeScript error
+                          onChange={(e) =>
+                            handleInputChange(
+                              "description",
+                              "ar",
+                              e.target.value
+                            )
+                          }
+                          placeholder={t("Type Here")}
+                          rows={7}
+                        />
+                      </motion.div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </ScrollArea>
 
               <motion.div

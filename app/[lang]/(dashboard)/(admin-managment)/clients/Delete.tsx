@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +20,41 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-const DeleteButton = () => {
+import { useParams } from "next/navigation";
+import { toast as reToast } from "react-hot-toast";
+
+import { AxiosError } from "axios";
+import { DeleteClients } from "@/services/clients/clients";
+
+interface IDeleteContact {
+  id: string;
+  getClientData: () => Promise<void>;
+}
+interface ErrorResponse {
+  errors?: string[];
+}
+
+const DeleteButton: React.FC<IDeleteContact> = ({ id, getClientData }) => {
   const { t, loading, error } = useTranslate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const { lang } = useParams();
+
+  const handleDelete = async () => {
+    try {
+      const res = await DeleteClients(id, lang); // Delete user
+      reToast.success(res.message);
+      setIsDialogOpen(false); // Close the dialog after successful deletion
+      getClientData(); // Re-fetch the user data after deletion
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>; // Cast to AxiosError with your expected response type
+      const errorMessage =
+        axiosError.response?.data?.errors?.[0] || "Something went wrong.";
+      reToast.error(errorMessage);
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <TooltipProvider>
           <Tooltip>
@@ -89,6 +119,7 @@ const DeleteButton = () => {
               type="submit"
               className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               color="primary"
+              onClick={handleDelete}
             >
               {t("Agree")}
             </Button>

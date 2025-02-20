@@ -1,15 +1,13 @@
 /** @type {import('next').NextConfig} */
 
-
 const nextConfig = {
   eslint: {
-      ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
   },
   webpack(config) {
-
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg")
@@ -36,7 +34,7 @@ const nextConfig = {
 
     return config;
   },
-  
+
   images: {
     remotePatterns: [
       {
@@ -59,9 +57,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "system.msaatylaw.com", // Add this line
+      },
     ],
   },
 };
-
 
 module.exports = nextConfig;

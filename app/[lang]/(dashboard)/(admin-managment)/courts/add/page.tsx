@@ -1,83 +1,164 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { toast as reToast } from "react-hot-toast";
 import { useTranslate } from "@/config/useTranslation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import BasicSelect from "@/components/common/Select/BasicSelect";
+import { AxiosError } from "axios";
+import { getCategory } from "@/services/category/category";
+import { useParams } from "next/navigation";
+import { CreateCourts, getCities, getRegions } from "@/services/courts/courts";
+import InfiniteScrollSelect from "./InfiniteScrollSelect";
 import CreateCourtCategory from "../../../(category-mangement)/court-category/CreateCourtCategory";
 
-// Validation schema
-const schema = z.object({
-  Name: z
-    .string()
-    .min(3, { message: "errorCourt.CourtNameMin" })
-    .max(20, { message: "errorCourt.CourtNameMax" }),
-  Email: z
-    .string()
-    .min(8, { message: "errorCourt.CourtEmailMin" })
-    .max(25, { message: "errorCourt.CourtEmailMax" }),
-  Address: z
-    .string()
-    .min(8, { message: "errorCourt.CourtAddressMin" })
-    .max(25, { message: "errorCourt.CourtAddressMax" }),
-  Room_Number: z
-    .string()
-    .min(1, { message: "errorCourt.CourtRoomNumberMin" })
-    .max(6, { message: "errorCourt.CourtRoomNumberMax" }),
-  City: z
-    .string()
-    .min(3, { message: "errorCourt.CityMin" })
-    .max(15, { message: "errorCourt.CityMax" }),
-  Region: z
-    .string()
-    .min(3, { message: "errorCourt.RegionMin" })
-    .max(15, { message: "errorCourt.RegionMax" }),
-  CourtCategory: z.string().min(8, { message: "errorCourt.clientAddressMin" }),
-});
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
 
-const page = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+interface CourtData {
+  name: string;
+  category_id: string;
+  email: string;
+  address: string;
+  website: string;
+  room_number: string;
+  region_id: string;
+  city_id: string;
+}
+
+const Page = () => {
+  const { t } = useTranslate();
+  const { lang } = useParams();
+
+  const [category, setCategory] = useState<any[]>([]);
+  const [cities, setCities] = useState<any[]>([]);
+  const [regions, setRegions] = useState<any[]>([]);
+  const [flag, setFlag] = useState(false);
+
+  const [courtData, setCourtData] = useState<CourtData>({
+    name: "",
+    category_id: "",
+    email: "",
+    address: "",
+    website: "",
+    room_number: "",
+    region_id: "",
+    city_id: "",
   });
 
-  const { t } = useTranslate();
+  // Fetch cities when region changes
+  const fetchCitiesData = async (regionId: string, page: number = 1) => {
+    try {
+      const citiesData = await getCities(regionId, lang);
+      return citiesData?.body?.data || [];
+    } catch (error) {
+      reToast.error("Failed to fetch cities");
+      return [];
+    }
+  };
 
-  const Court_Category = [
-    { value: "عائلى", label: "عائلى" },
-    { value: "جنائي", label: "جنائي" },
-    { value: "مدنى", label: "مدنى" },
-  ];
+  // Format city options for the select component
+  const formatCityOption = (city: any) => ({
+    value: city.id,
+    label: city.name,
+  });
 
-  const City = [
-    { value: "الرياض", label: "الرياض" },
-    { value: "جدة", label: "جدة" },
-    { value: "الطائف", label: "الطائف" },
-  ];
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCourtData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-  const Region = [
-    { value: "الرياض", label: "الرياض" },
-    { value: "جدة", label: "جدة" },
-    { value: "الطائف", label: "الطائف" },
-  ];
+  const handleSelectChange = (selectedValue: any, field: string) => {
+    setCourtData((prevData) => ({
+      ...prevData,
+      [field]: selectedValue?.id,
+    }));
 
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
+    if (field === "region_id") {
+      setCities([]); // Clear cities when region changes
+      setCourtData((prevData) => ({
+        ...prevData,
+        city_id: "", // Reset city when region changes
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    Object.entries(courtData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    try {
+      const res = await CreateCourts(formData, lang);
+      if (res) {
+        setCourtData({
+          name: "",
+          category_id: "",
+          email: "",
+          address: "",
+          website: "",
+          room_number: "",
+          region_id: "",
+          city_id: "",
+        });
+        reToast.success(res.message);
+      } else {
+        reToast.error(t("Failed to create Court"));
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong.";
+      Object.keys(courtData).forEach((field) => {
+        const fieldErrorKey = `${field}`;
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0];
+        }
+      });
+      reToast.error(errorMessage);
+    }
+  };
+
+  const transformedCategories = category.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+
+  const transformedRegions = regions.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+
+  const fetchData = async () => {
+    try {
+      const categoriesData = await getCategory("courts", lang);
+      const regionsData = await getRegions(lang);
+      setCategory(categoriesData?.body?.data || []);
+      setRegions(regionsData?.body || []);
+    } catch (error) {
+      reToast.error("Failed to fetch categories or regions");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [flag]);
 
   return (
     <div>
@@ -86,10 +167,7 @@ const page = () => {
           <CardTitle>{t("Create Court")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col justify-between"
-          >
+          <form className="flex flex-col justify-between">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Court Name */}
               <motion.div
@@ -98,25 +176,14 @@ const page = () => {
                 transition={{ duration: 0.6 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Name"
-                  className={cn({ "text-destructive": errors.Name })}
-                >
-                  {t("Court Name")}
-                </Label>
+                <Label htmlFor="Name">{t("Court Name")}</Label>
                 <Input
                   type="text"
-                  {...register("Name")}
                   placeholder={t("Enter Court Name")}
-                  className={cn({
-                    "border-destructive focus:border-destructive": errors.Name,
-                  })}
+                  name="name"
+                  value={courtData.name}
+                  onChange={handleInputChange}
                 />
-                {errors.Name && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Name.message)}
-                  </p>
-                )}
               </motion.div>
 
               {/* Court Category */}
@@ -127,25 +194,21 @@ const page = () => {
                   transition={{ duration: 0.7 }}
                   className="flex flex-row justify-between items-center"
                 >
-                  <div className="w-[87%]">
-                    <Label
-                      htmlFor="CourtCategory"
-                      className={cn({
-                        "text-destructive": errors.CourtCategory,
-                      })}
-                    >
+                  <div className="!w-[87%]" style={{ width: "87%" }}>
+                    <Label htmlFor="CourtCategory">
                       {t("Court Category Level")}
                     </Label>
                     <BasicSelect
-                      name="CourtCategory"
-                      menu={Court_Category}
-                      control={control}
-                      errors={errors}
+                      menu={transformedCategories}
+                      setSelectedValue={(value) =>
+                        handleSelectChange(value, "category_id")
+                      }
+                      selectedValue={courtData["category_id"]}
                     />
                   </div>
                   <div className="w-[8%] mt-5">
                     <CreateCourtCategory buttonShape={false} />
-                  </div>
+                  </div>{" "}
                 </motion.div>
               </div>
 
@@ -156,25 +219,31 @@ const page = () => {
                 transition={{ duration: 0.8 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Email"
-                  className={cn({ "text-destructive": errors.Email })}
-                >
-                  {t("Email")}
-                </Label>
+                <Label htmlFor="Email">{t("Email")}</Label>
                 <Input
                   type="text"
-                  {...register("Email")}
                   placeholder={t("Enter Email")}
-                  className={cn({
-                    "border-destructive focus:border-destructive": errors.Email,
-                  })}
+                  name="email"
+                  value={courtData.email}
+                  onChange={handleInputChange}
                 />
-                {errors.Email && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Email.message)}
-                  </p>
-                )}
+              </motion.div>
+
+              {/* Website */}
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-2"
+              >
+                <Label htmlFor="Website">{t("Court Website")}</Label>
+                <Input
+                  type="text"
+                  placeholder={t("Enter Court Website")}
+                  name="website"
+                  value={courtData.website}
+                  onChange={handleInputChange}
+                />
               </motion.div>
 
               {/* Address */}
@@ -184,26 +253,14 @@ const page = () => {
                 transition={{ duration: 0.9 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Address"
-                  className={cn({ "text-destructive": errors.Address })}
-                >
-                  {t("Address")}
-                </Label>
+                <Label htmlFor="Address">{t("Address")}</Label>
                 <Input
                   type="text"
-                  {...register("Address")}
                   placeholder={t("Enter Address")}
-                  className={cn({
-                    "border-destructive focus:border-destructive":
-                      errors.Address,
-                  })}
+                  name="address"
+                  value={courtData.address}
+                  onChange={handleInputChange}
                 />
-                {errors.Address && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Address.message)}
-                  </p>
-                )}
               </motion.div>
 
               {/* Room Number */}
@@ -213,26 +270,14 @@ const page = () => {
                 transition={{ duration: 1 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Room_Number"
-                  className={cn({ "text-destructive": errors.Room_Number })}
-                >
-                  {t("Room Number")}
-                </Label>
+                <Label htmlFor="Room_Number">{t("Room Number")}</Label>
                 <Input
                   type="number"
-                  {...register("Room_Number")}
                   placeholder={t("Enter Room Number")}
-                  className={cn({
-                    "border-destructive focus:border-destructive":
-                      errors.Room_Number,
-                  })}
+                  name="room_number"
+                  value={courtData.room_number}
+                  onChange={handleInputChange}
                 />
-                {errors.Room_Number && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Room_Number.message)}
-                  </p>
-                )}
               </motion.div>
 
               {/* Region */}
@@ -242,40 +287,41 @@ const page = () => {
                 transition={{ duration: 1.1 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Region"
-                  className={cn({ "text-destructive": errors.Region })}
-                >
-                  {t("Region")}
-                </Label>
+                <Label htmlFor="Region">{t("Region")}</Label>
                 <BasicSelect
-                  name="Region"
-                  menu={Region}
-                  control={control}
-                  errors={errors}
+                  menu={transformedRegions}
+                  setSelectedValue={(value) =>
+                    handleSelectChange(value, "region_id")
+                  }
+                  selectedValue={courtData["region_id"]}
                 />
               </motion.div>
 
               {/* City */}
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.2 }}
-                className="flex flex-col gap-2"
-              >
-                <Label
-                  htmlFor="City"
-                  className={cn({ "text-destructive": errors.City })}
+              {courtData.region_id && (
+                <motion.div
+                  initial={{ y: -50 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.2 }}
+                  className="flex flex-col gap-2"
                 >
-                  {t("City")}
-                </Label>
-                <BasicSelect
-                  name="City"
-                  menu={City}
-                  control={control}
-                  errors={errors}
-                />
-              </motion.div>
+                  <Label htmlFor="City">{t("City")}</Label>
+                  <InfiniteScrollSelect
+                    fetchData={(page) =>
+                      fetchCitiesData(courtData.region_id, page)
+                    }
+                    formatOption={formatCityOption}
+                    placeholder={t("Search or Select a City")}
+                    selectedValue={courtData.city_id}
+                    setSelectedValue={(value) =>
+                      setCourtData((prevData) => ({
+                        ...prevData,
+                        city_id: value?.value || "",
+                      }))
+                    }
+                  />
+                </motion.div>
+              )}
             </div>
 
             {/* Submit Button */}
@@ -294,6 +340,7 @@ const page = () => {
               </Button>
               <Button
                 type="submit"
+                onClick={handleSubmit}
                 className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
                 {t("Create Court")}
@@ -306,4 +353,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

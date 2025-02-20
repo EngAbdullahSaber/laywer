@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Select, { SingleValue, MultiValue } from "react-select";
+import React from "react";
+import Select, { MultiValue } from "react-select";
 
 const styles = {
   option: (provided: any, state: any) => ({
@@ -7,52 +7,41 @@ const styles = {
     fontSize: "14px",
   }),
 };
+
 interface BasicSelectProps {
-  menu: any[]; // Array of options passed to the select
-  setSelectedValue: (selectedOption: any) => void; // Function to update selected options
-  selectedValue: MultiValue<any>; // Array of selected options
+  menu: { value: string; label: string }[]; // Array of options
+  setSelectedValue: (
+    selectedOptions: MultiValue<{ value: string; label: string }>
+  ) => void; // Function to update selected options
+  selectedValue: MultiValue<{ value: string; label: string }>; // Array of selected options
 }
-const SelectCase: React.FC<BasicSelectProps> = ({
-  menu,
-  setSelectedValue,
-  selectedValue,
-}) => {
-  // State to store the selected value
-  const getValueById = (id: string, list: any[]) => {
-    const selectedItem = list.find((item) => item.id === id);
-    return selectedItem || null; // Returns the entire object or null if not found
+
+const SelectCase: React.FC<{
+  menu: { value: string; label: string }[];
+  setSelectedValue: (
+    value: MultiValue<{ value: string; label: string }>
+  ) => void;
+  selectedValue: MultiValue<{ value: string; label: string }>;
+  index: number; // Pass index to handle the selection for each case
+}> = ({ menu, setSelectedValue, selectedValue, index }) => {
+  const handleChange = (
+    selectedOptions: MultiValue<{ value: string; label: string }>
+  ) => {
+    setSelectedValue(selectedOptions);
   };
-  // Handle change event to capture the selected value
-  const handleChange = (selectedOption: any) => {
-    console.log(selectedOption);
-    setSelectedValue(selectedOption); // This will store the selected option
-  };
+
   return (
     <div>
-      {selectedValue ? (
-        <Select
-          className="react-select"
-          classNamePrefix="select"
-          styles={styles}
-          defaultValue={getValueById(selectedValue, menu)}
-          name="clear"
-          options={menu}
-          isClearable
-          onChange={handleChange} // Bind the onChange handler
-        />
-      ) : (
-        <Select
-          className="react-select"
-          classNamePrefix="select"
-          styles={styles}
-          name="clear"
-          options={menu}
-          isClearable
-          onChange={handleChange} // Bind the onChange handler
-        />
-      )}
+      <Select
+        className="react-select"
+        classNamePrefix="select"
+        value={selectedValue}
+        options={menu}
+        isClearable
+        onChange={handleChange}
+        name="clear"
+      />
     </div>
   );
 };
-
 export default SelectCase;

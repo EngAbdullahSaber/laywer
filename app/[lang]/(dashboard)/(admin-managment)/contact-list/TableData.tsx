@@ -15,6 +15,8 @@ import {
   getContactListPanigation,
   getFilterContactList,
 } from "@/services/contact-list/contact-list";
+import DeleteButton from "./DeleteButton";
+import UpdateContact from "./UpdateContact";
 
 interface Task {
   id: string;
@@ -61,10 +63,10 @@ const TableData = ({ flag }: { flag: any }) => {
   const handleFilterSubmit = () => {
     // Perform filtering logic here
     console.log("Filters submitted:", filters);
-    getCategoryData();
+    getContactListData();
   };
 
-  const getCategoryData = async () => {
+  const getContactListData = async () => {
     setLoading(true);
     if (queryString.length > 0) {
       try {
@@ -111,18 +113,23 @@ const TableData = ({ flag }: { flag: any }) => {
     if (debouncedSearch) {
       SearchData();
     } else {
-      getCategoryData();
+      getContactListData();
     }
   }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
-    // {
-    //   id: "actions",
-    //   cell: ({ row }) => (
-    //     <div className="flex flex-row gap-2 items-center justify-center">
-    //       <Actions title={"Contact List"} row={row} />
-    //     </div>
-    //   ),
-    // },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="flex flex-row gap-2 items-center justify-center">
+          <UpdateContact row={row} getContactListData={getContactListData} />
+
+          <DeleteButton
+            id={row.original.id}
+            getContactListData={getContactListData}
+          />
+        </div>
+      ),
+    },
     {
       accessorKey: "id",
       header: ({ column }) => (

@@ -25,34 +25,118 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import FileUploaderSingle from "./FileUploaderSingle";
+import FileUploaderMultiple from "./FileUploaderSingle";
+import { useState } from "react";
+import { UploadImage } from "@/services/auth/auth";
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { useParams } from "next/navigation";
+import { ReplyOnLawyer } from "@/services/client-request/client-requests";
 // Update the schema to validate date properly
-const schema = z.object({
-  Title: z
-    .string()
-    .min(3, { message: "errorClientRequest.TitleMin" })
-    .max(20, { message: "errorClientRequest.TitleMax" }),
-});
-
-const FileRequest = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue, // Add setValue to update the date field in react-hook-form
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  });
-
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+interface LaywerData {
+  title: string;
+}
+const FileRequest = ({ id }: { id: any }) => {
   const { t } = useTranslate();
+  const { lang } = useParams();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
 
+  const [lawyerData, setLawyerData] = useState<LaywerData>({
+    title: "",
+  });
+  const [images, setImages] = useState<{
+    reply_files: string[]; // Array of file IDs instead of a single file ID
+  }>({
+    reply_files: [],
+  });
   // Handle Flatpickr change event and set value in react-hook-form
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLawyerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
+  const handleImageChange = async (
+    file: File,
+    imageType: keyof typeof images
+  ) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await UploadImage(formData, lang); // Call API to upload the image
+      if (res) {
+        // Append the image ID to the array of file IDs
+        setImages((prevState) => ({
+          ...prevState,
+          reply_files: [...prevState.reply_files, res.body.image_id],
+        }));
+        reToast.success(res.message); // Show success toast
+      } else {
+        reToast.error(t("Failed to upload image")); // Show failure toast
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong."; // Default fallback message
+      reToast.error(errorMessage); // Show error toast
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    images.reply_files.forEach((fileId, index) => {
+      formData.append(`reply_files[${index}]`, fileId);
+    });
+
+    try {
+      const res = await ReplyOnLawyer(lang, id, formData); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          title: "",
+        });
+        reToast.success(res.message); // Display success message
+        setIsDialogOpen(false); // Close the dialog after successful deletion
+      } else {
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = ["title"];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
+  };
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <TooltipProvider>
           <Tooltip>
@@ -79,7 +163,7 @@ const FileRequest = () => {
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
                 initial={{ y: -30, opacity: 0 }}
@@ -87,31 +171,13 @@ const FileRequest = () => {
                 transition={{ duration: 1.5 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Title"
-                  className={cn("", {
-                    "text-destructive": errors.Title,
-                  })}
-                >
-                  {t("Title")}
-                </Label>
+                <Label htmlFor="Title">{t("Title")}</Label>
                 <Input
                   type="text"
-                  {...register("Title")}
                   placeholder={t("Enter Title")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Title,
-                  })}
+                  name="title"
+                  onChange={handleInputChange}
                 />
-                {errors.Title && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Title,
-                    })}
-                  >
-                    {t(errors.Title.message)}
-                  </p>
-                )}
               </motion.div>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -119,7 +185,11 @@ const FileRequest = () => {
                 transition={{ duration: 1.5 }}
                 className="flex flex-col gap-2 "
               >
-                <FileUploaderSingle />
+                <FileUploaderMultiple
+                  imageType="reply_files"
+                  id={images.reply_files}
+                  onFileChange={handleImageChange}
+                />{" "}
               </motion.div>
             </div>
 

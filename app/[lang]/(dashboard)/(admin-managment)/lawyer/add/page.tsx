@@ -16,6 +16,7 @@ import CreateLawyerCategory from "../../../(category-mangement)/lawyer-category/
 import { getCategory } from "@/services/category/category";
 import { AxiosError } from "axios";
 import { CreateLawyer } from "@/services/lawyer/lawyer";
+import { UploadImage } from "@/services/auth/auth";
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -33,6 +34,8 @@ interface LaywerData {
 }
 const page = () => {
   const [category, setCategory] = useState<any[]>([]);
+  const [flag, setFlag] = useState(false);
+
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
@@ -55,11 +58,7 @@ const page = () => {
     national_id_image: null,
     subscription_image: null,
   });
-  const Lawyer_Category: { value: string; label: string }[] = [
-    { value: "عائلى", label: "عائلى" },
-    { value: "جنائي", label: "جنائي" },
-    { value: "مدنى", label: "مدنى" },
-  ];
+
   const { t } = useTranslate();
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,12 +76,40 @@ const page = () => {
       category_id: value?.id,
     }));
   };
-  const handleImageChange = (file: File, imageType: keyof typeof images) => {
-    setImages((prevState) => ({
-      ...prevState,
-      [imageType]: file,
-    }));
+
+  const handleImageChange = async (
+    file: File,
+    imageType: keyof typeof images
+  ) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await UploadImage(formData, lang); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        console.log(res.body.image_id);
+        setImages((prevState) => ({
+          ...prevState,
+          [imageType]: res.body.image_id,
+        }));
+        reToast.success(res.message); // Display success message
+      } else {
+        reToast.error(t("Failed to create upload image")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
@@ -176,7 +203,7 @@ const page = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [flag]);
   return (
     <div>
       {" "}
@@ -185,10 +212,7 @@ const page = () => {
           <CardTitle> {t("Create a New Lawyer")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-between "
-          >
+          <div className="flex flex-col justify-between ">
             <motion.p
               initial={{ y: -30 }}
               whileInView={{ y: 0 }}
@@ -207,8 +231,8 @@ const page = () => {
                 <Label htmlFor="Name">{t("Lawyer Name")}</Label>
                 <Input
                   type="text"
-                  name="name"
                   placeholder={t("Enter Lawyer Name")}
+                  name="name"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -255,14 +279,16 @@ const page = () => {
                     {/* <BasicSelect name="CourtCategory" menu={Lawyer_Category} /> */}
                     <BasicSelect
                       menu={transformedCategories}
-                      setSelectedValue={(value) =>
-                        handleSelectChange(value, "category_id")
-                      }
+                      setSelectedValue={(value) => handleSelectChange(value)}
                       selectedValue={lawyerData["category_id"]}
                     />
                   </div>
                   <div className="w-[8%] mt-5">
-                    {/* <CreateLawyerCategory buttonShape={false} /> */}
+                    <CreateLawyerCategory
+                      buttonShape={false}
+                      setFlag={setFlag}
+                      flag={flag}
+                    />
                   </div>
                 </motion.div>
               </div>{" "}
@@ -333,6 +359,7 @@ const page = () => {
                 <Label>{t("Licensing photo")}</Label>
                 <ImageUploader
                   imageType="driving_licence"
+                  id={images.driving_licence}
                   onFileChange={handleImageChange}
                 />
               </motion.div>
@@ -345,6 +372,7 @@ const page = () => {
                 <Label>{t("licence photo")}</Label>
                 <ImageUploader
                   imageType="lawyer_licence"
+                  id={images.lawyer_licence}
                   onFileChange={handleImageChange}
                 />
               </motion.div>
@@ -357,6 +385,7 @@ const page = () => {
                 <Label>{t("Membership photo")}</Label>
                 <ImageUploader
                   imageType="subscription_image"
+                  id={images.subscription_image}
                   onFileChange={handleImageChange}
                 />
               </motion.div>
@@ -369,6 +398,7 @@ const page = () => {
                 <Label>{t("ID photo")}</Label>
                 <ImageUploader
                   imageType="national_id_image"
+                  id={images.national_id_image}
                   onFileChange={handleImageChange}
                 />
               </motion.div>
@@ -382,19 +412,13 @@ const page = () => {
             >
               <Button
                 type="button"
-                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                variant="outline"
-              >
-                {t("Cancel")}
-              </Button>
-              <Button
-                type="submit"
+                onClick={handleSubmit}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
                 {t("Create Lawyer")}
               </Button>
             </motion.div>
-          </form>{" "}
+          </div>{" "}
         </CardContent>
       </Card>
     </div>

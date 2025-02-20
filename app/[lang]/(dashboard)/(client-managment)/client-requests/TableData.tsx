@@ -12,47 +12,124 @@ import View from "./View";
 import RequestStatus from "./RequestStatus";
 import FileRequest from "./FileRequest";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useTranslate } from "@/config/useTranslation";
+import useDebounce from "../../(category-mangement)/shared/useDebounce";
+import {
+  getClientRequests,
+  getClientRequestsPanigation,
+  getFilterClientRequests,
+  SearchClientRequests,
+} from "@/services/client-request/client-requests";
 
 interface Task {
   id: string;
-  Request_Title?: string;
-  Request_Date?: string;
-  Request_Status?: string;
+  title?: string;
+  created_at?: string;
+  status?: string;
   Required_Action?: string;
   Associated_Case?: string;
 }
-const TableData = () => {
+
+const TableData = ({ flag }: { flag: any }) => {
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
+  const searchPalsceholder = "Search By Email ,Phone and Name";
+  const { lang } = useParams();
+  const { t } = useTranslate();
+
+  const [filters, setFilters] = useState<Record<string, string>>({
+    full_name: "",
+    email: "",
+    phone: "",
+  });
+  const buildQueryString = (filters: { [key: string]: string }) => {
+    const queryParams = Object.entries(filters)
+      .filter(([key, value]) => value) // Only include filters with values
+      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .join("&"); // Join them with "&"
+
+    return queryParams ? `?${queryParams}` : "";
+  };
+
+  const queryString = buildQueryString(filters);
+
+  const filtersConfig = [];
+
+  const handleFilterChange = (updatedFilters: Record<string, string>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+    }));
+  };
+
+  const handleFilterSubmit = () => {
+    // Perform filtering logic here
+    console.log("Filters submitted:", filters);
+    getClientData();
+  };
+
+  const getClientData = async () => {
+    setLoading(true);
+    if (queryString.length > 0) {
+      try {
+        const res = await getFilterClientRequests(queryString, lang);
+
+        setData(res?.body?.data || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    } else {
+      try {
+        const res =
+          page === 1
+            ? await getClientRequests(lang)
+            : await getClientRequestsPanigation(page, lang);
+
+        setData(res?.body?.data || []);
+        console.log(res.body.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    }
+  };
+
+  const SearchData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await SearchClientRequests(search, lang);
+
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      SearchData();
+    } else {
+      getClientData();
+    }
+  }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={
-    //         table.getIsAllPageRowsSelected() ||
-    //         (table.getIsSomePageRowsSelected() && "indeterminate")
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View />
-          <FileRequest />
+          <View row={row} />
+          <FileRequest id={row.original.id}/>
           {/* <RequestStatus /> */}
         </div>
       ),
@@ -80,7 +157,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Request_Title}
+              {row.original.title}
             </motion.span>
           </div>
         );
@@ -100,7 +177,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Request_Date}
+              {new Date(row.original.created_at).toLocaleDateString("en-GB")}
             </motion.span>
           </div>
         );
@@ -123,19 +200,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Request_Status === "قيدالانتظار" &&
-                    "destructive") ||
-                  (row.original.Request_Status === "مكتمل" && "info") ||
-                  (row.original.Request_Status === "تمت الاجابة عليه" &&
-                    "warning") ||
-                  "default"
-                }
-              >
-                {row.original.Request_Status}
-              </Badge>{" "}
+              {row.original.status}
             </motion.span>
           </div>
         );
@@ -145,9 +210,9 @@ const TableData = () => {
       },
     },
     {
-      accessorKey: "Required_Action",
+      accessorKey: "Lawyer Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Required_Action"} />
+        <DataTableColumnHeader column={column} title={"Lawyer Name"} />
       ),
       cell: ({ row }) => {
         return (
@@ -159,19 +224,7 @@ const TableData = () => {
               className="max-w-[500px] truncate font-medium"
             >
               {" "}
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Required_Action === "ارسال ملف" &&
-                    "destructive") ||
-                  (row.original.Required_Action === "ارسال المعلومات" &&
-                    "info") ||
-                  (row.original.Required_Action === "المزيد" && "warning") ||
-                  "default"
-                }
-              >
-                {row.original.Required_Action}
-              </Badge>{" "}
+              {row.original.lawyer}
             </motion.span>
           </div>
         );
@@ -195,7 +248,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Associated_Case}
+              {row.original.law_suit}
             </motion.span>
           </div>
         );
@@ -205,11 +258,24 @@ const TableData = () => {
       },
     },
   ];
+  const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (
     <div>
       {/* Render your data table here using the fetched tasks */}
       {/* Assuming you have a table component that takes columns and data */}
-      <DataTable data={data} columns={columns} />
+      <DataTable
+        data={data}
+        setPage={setPage}
+        setSearch={setSearch}
+        searchPalsceholder={searchPalsceholder}
+        page={page}
+        search={search}
+        filtersConfig={filtersConfig}
+        onFilterChange={handleFilterChange}
+        onFilterSubmit={handleFilterSubmit}
+        columns={columns}
+        isPaginationDisabled={isPaginationDisabled}
+      />{" "}
     </div>
   );
 };

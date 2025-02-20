@@ -84,21 +84,41 @@ const VerifyForm = () => {
           },
         }
       );
-
       if (res) {
-        toast.success(res?.message);
-        // Save the access token to local storage or state
-        storeTokenInLocalStorage(res.body.access_token);
-        // Check role and redirect accordingly
-        const role = res.body.user.role_with_permission.name;
-        if (role == "super_admin") {
-          router.push("/dashboard");
-        } else if (role === "lawyer") {
-          router.push("/lawyer-cases");
-        } else if (role === "client") {
-          router.push("/client-cases");
+        // Check if the response has a valid message
+        if (res?.message) {
+          toast.success(res.message);
         }
+      
+        // Ensure the access_token exists before trying to store it
+        if (res?.body?.access_token) {
+          storeTokenInLocalStorage(res.body.access_token);
+        } else {
+          toast.error("Access token missing");
+          return;
+        }
+      
+        // Ensure the user and role information exists before using it
+        const userRole = res?.body?.user?.role_with_permission?.name;
+        localStorage.setItem("role",userRole);
+        if (userRole) {
+          // Redirect based on role
+          if (userRole == "super_admin") {
+            router.push("/dashboard");
+          } else if (userRole == "lawyer") {
+            router.push("/lawyer-cases");
+          } else if (userRole == "client") {
+            router.push("/client-cases");
+          } else {
+            toast.error("Unknown role");
+          }
+        } else {
+          toast.error("User role information is missing");
+        }
+      } else {
+        toast.error("Response is invalid or missing");
       }
+      
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 

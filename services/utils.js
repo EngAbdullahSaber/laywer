@@ -2,7 +2,6 @@
 
 import { headerConfigKeyName } from "./app.config";
 
-
 export function getHeaderConfig() {
   const token = localStorage.getItem(headerConfigKeyName);
 
@@ -15,7 +14,7 @@ export function getHeaderConfig() {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          "Accept-Language": "en",
+          "Accept-Language": "ar",
           Authorization: `Bearer ${parsedToken}`,
         },
       };
@@ -26,7 +25,7 @@ export function getHeaderConfig() {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          "Accept-Language": "en",
+          "Accept-Language": "ar",
         },
       };
     }
@@ -40,7 +39,6 @@ export function getHeaderConfig() {
     };
   }
 }
-
 
 export const storeTokenInLocalStorage = (token) => {
   if (typeof localStorage !== "undefined") {

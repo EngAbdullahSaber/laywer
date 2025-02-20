@@ -10,11 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
@@ -26,53 +21,122 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-// Update the schema to validate date properly
-const schema = z.object({
-  Title: z
-    .string()
-    .min(3, { message: "errorCase.caseTitleMin" })
-    .max(20, { message: "errorCase.caseTitleMin" }),
+import { useParams } from "next/navigation";
+import { CleaveInput } from "@/components/ui/cleave";
+import { Textarea } from "@/components/ui/textarea";
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { CreateNewDate } from "@/services/cases/cases";
+// Interface for lawyer data
+interface LawyerData {
+  title: string;
+  appointment_time: string;
+  details: string;
+  appointment_date: string;
+  law_suit_id: string;
+}
 
-  date: z
-    .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
-});
-
-const Add = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+const Add = ({ id }: { id: any }) => {
+  const { t } = useTranslate();
+  const { lang } = useParams();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const [lawyerData, setLawyerData] = useState<LawyerData>({
+    title: "",
+    appointment_time: "",
+    details: "",
+    law_suit_id: id,
+    appointment_date: "",
   });
 
-  const [picker, setPicker] = useState<Date>(new Date());
-  const { t } = useTranslate();
+  // Handle title input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
+    setLawyerData({ ...lawyerData, [name]: value });
+  };
 
-  const handleDateChange = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+  // Handle date change from Flatpickr
+  const handleDateChange = (date1: Date[]) => {
+    const date = new Date(date1[0].toISOString());
+
+    // Extract day, month, and year
+    const day = String(date.getDate()).padStart(2, "0"); // Ensures two digits
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = date.getFullYear();
+
+    // Format as yyyy-mm-dd
+    const formattedDate = `${year}-${month}-${day}`;
+    setLawyerData({
+      ...lawyerData,
+      appointment_date: formattedDate.toString(),
+    });
+  };
+
+  // Handle form submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    console.log(typeof lawyerData.appointment_date);
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    formData.append(`requested_details`, lawyerData.details);
+
+    try {
+      const res = await CreateNewDate(formData, lang); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          title: "",
+          appointment_time: "",
+          details: "",
+          law_suit_id: id,
+          appointment_date: "",
+        });
+        reToast.success(res.message); // Display success message
+        setIsDialogOpen(false); // Close the dialog after successful deletion
+      } else {
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = [
+        "title",
+        "requested_data",
+        "details",
+        "law_suit_id",
+        "appointment_date",
+        "appointment_time",
+      ];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <TooltipProvider>
           <Tooltip>
@@ -99,7 +163,7 @@ const Add = () => {
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
                 initial={{ y: -30, opacity: 0 }}
@@ -107,51 +171,63 @@ const Add = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="Title"
-                  className={cn("", {
-                    "text-destructive": errors.Title,
-                  })}
-                >
-                  {t("Title")}
-                </Label>
+                <Label htmlFor="title">{t("Title")}</Label>
                 <Input
                   type="text"
-                  {...register("Title")}
+                  id="title"
+                  name="title"
+                  onChange={handleInputChange}
                   placeholder={t("Enter Title About Date")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Title,
-                  })}
                 />
-                {errors.Title && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Title,
-                    })}
-                  >
-                    {t(errors.Title.message)}
-                  </p>
-                )}
               </motion.div>
-
+              <motion.div
+                initial={{ y: -30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label htmlFor="Description">{t("Description")}</Label>
+                <Textarea
+                  placeholder={t("Type Here")}
+                  rows={3}
+                  name="details"
+                  onChange={handleInputChange}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ y: -30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label htmlFor="titimetle">{t("Time")}</Label>
+                <CleaveInput
+                  id="time"
+                  options={{
+                    time: true,
+                    timePattern: ["h", "m"], // Only hours and minutes
+                    timeFormat: "24", // Use 24-hour format
+                  }}
+                  placeholder="HH:MM"
+                  name="appointment_time"
+                  onChange={handleInputChange}
+                />
+              </motion.div>
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2"
               >
-                <Label
-                  htmlFor="date"
-                  className={cn("", {
-                    "text-destructive": errors.date,
-                  })}
-                >
-                  {t("Date")}
-                </Label>
+                <Label htmlFor="date">{t("Date")}</Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Date About Meeting")}
-                  value={picker}
+                  value={
+                    lawyerData.appointment_date
+                      ? new Date(lawyerData.appointment_date)
+                      : ""
+                  }
                   onChange={handleDateChange}
                   options={{
                     clickOpens: true,
@@ -161,11 +237,6 @@ const Add = () => {
                   onClick={(e) => e.preventDefault()}
                   id="default-picker"
                 />
-                {errors.date && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.date.message)}
-                  </p>
-                )}
               </motion.div>
             </div>
 

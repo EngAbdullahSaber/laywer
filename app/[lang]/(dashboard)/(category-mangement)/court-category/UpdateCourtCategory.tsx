@@ -79,24 +79,39 @@ const UpdateCourtCategory: React.FC<UpdateCourtCategoryProps> = ({
     }
   }, [row]);
 
-  // Handle the update category API call
+  const buildQueryParams = () => {
+    const params = new URLSearchParams();
+
+    // Add name with language dynamically
+    if (userData.name && userData.name !== row.original.name) {
+      params.append(`name[${lang}]`, userData.name); // e.g., name[en]=category03
+    }
+
+    // Add description with language dynamically
+    if (
+      userData.description &&
+      userData.description !== row.original.description
+    ) {
+      params.append(`description[${lang}]`, userData.description); // e.g., description[en]=description03
+    }
+
+    // Convert to string and return the query string
+    return params.toString();
+  };
+
   const handleUpdateCategory = async () => {
     const formData = new FormData();
 
     // Loop through userData and append values to the FormData object
-    Object.entries(userData).forEach(([key, value]) => {
-      if (typeof value === "object") {
-        const languageValue = value[currentLang]; // Use `currentLang` instead of `lang`
-        if (languageValue) {
-          formData.append(`${key}[${currentLang}]`, languageValue);
-        }
-      } else {
-        formData.append(key, value);
-      }
-    });
+    const queryParams = buildQueryParams();
 
     try {
-      const res = await UpdateCategory(formData, row.original.id, currentLang); // Use `currentLang` instead of `lang`
+      const res = await UpdateCategory(
+        formData,
+        row.original.id,
+        currentLang,
+        queryParams
+      ); // Use `currentLang` instead of `lang`
       if (res) {
         reToast.success(res.message);
         // Reset the form and close the dialog

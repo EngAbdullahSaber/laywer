@@ -48,14 +48,17 @@ const LogInForm = () => {
     e.preventDefault();
 
     try {
-      const res = await LogIn({
-        email: email,
-        device_name: email,
-        password: password,
-      });
+      const res = await LogIn(
+        {
+          email: email,
+          device_name: email,
+          password: password,
+        },
+        lang
+      );
       if (res) {
-        console.log(res.body.verify_user_token);
-        toast.success("OTP Sended Successfully");
+        toast.success(res?.message);
+        startTransition(true);
         // storeTokenInLocalStorage(res?.body?.verify_user_token);
         dispatch(setUserName(email));
         dispatch(setTokens(res?.body?.verify_user_token));

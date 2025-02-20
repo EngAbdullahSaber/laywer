@@ -1,5 +1,5 @@
-" use client";
-import { Fragment, useState } from "react";
+"use client";
+import { Fragment, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/components/ui/use-toast";
 import { useDropzone } from "react-dropzone";
@@ -7,101 +7,161 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Upload } from "lucide-react";
 import { useTranslate } from "@/config/useTranslation";
-const ImageUploader = () => {
-  const [files, setFiles] = useState([]);
+import { RemoveImage } from "@/services/auth/auth";
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { useParams } from "next/navigation";
+
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+
+interface ImageUploaderProps {
+  imageType:
+    | "lawyer_licence"
+    | "driving_licence"
+    | "national_id_image"
+    | "subscription_image"; // Restrict imageType to allowed literals
+  id: File | null;
+  onFileChange: (
+    file: File,
+    imageType:
+      | "lawyer_licence"
+      | "driving_licence"
+      | "national_id_image"
+      | "subscription_image"
+  ) => Promise<void>;
+}
+
+const ImageUploader = ({ imageType, id, onFileChange }: ImageUploaderProps) => {
+  const [files, setFiles] = useState<File[]>([]);
+  const { t } = useTranslate();
+  const { lang } = useParams();
   const { toast } = useToast();
+
   const { getRootProps, getInputProps } = useDropzone({
-    maxFiles: 2,
-    maxSize: 2000000,
+    maxFiles: 1, // Only allow 1 file per upload
+    maxSize: 2000000, // 2 MB max size
     accept: {
       "image/*": [".png", ".jpg", ".jpeg", ".gif"],
     },
     onDrop: (acceptedFiles) => {
-      setFiles(acceptedFiles.map((file) => Object.assign(file)));
+      const file = acceptedFiles[0]; // We only allow one file per drop
+      setFiles([file]);
+      onFileChange(file, imageType); // Trigger the callback with the file and its type
     },
     onDropRejected: () => {
       toast({
         color: "destructive",
         title: "Error",
-        description: "You can only upload 2 files & maximum size of 2 MB",
+        description: "You can only upload 1 file & maximum size of 2 MB",
       });
     },
   });
-  const renderFilePreview = (file) => {
-    if (file.type.startsWith("image")) {
+
+  useEffect(() => {
+    if (id) {
+      setFiles([id]);
+    }
+  }, [id]);
+  // File preview logic based on whether it's a File object or an uploaded image
+  const renderFilePreview = (file: File) => {
+    if (file && file?.type?.startsWith("image")) {
+      console.log(file[0]);
       return (
         <Image
           width={48}
           height={48}
           alt={file.name}
-          src={URL.createObjectURL(file)}
-          className=" rounded border p-0.5"
+          src={URL.createObjectURL(file) || file[0].url}
+          className="rounded border p-0.5"
         />
       );
     } else {
       return <Icon icon="tabler:file-description" />;
     }
   };
-  const handleRemoveFile = (file) => {
-    const uploadedFiles = files;
-    const filtered = uploadedFiles.filter((i) => i.name !== file.name);
-    setFiles([...filtered]);
+  const handleRemoveFile = async (file: File, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent form submission or other event triggers
+
+    setFiles([]); // Clear the file from state
+
+    try {
+      if (typeof id == "object") {
+        const res = await RemoveImage(id.image_id, lang); // Call API to remove the image
+        if (res) {
+          reToast.success(res.message);
+        } else {
+          reToast.error(t("Failed to remove image"));
+        }
+      } else {
+        const res = await RemoveImage(id, lang); // Call API to remove the image
+        if (res) {
+          reToast.success(res.message);
+        } else {
+          reToast.error(t("Failed to remove image"));
+        }
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong.";
+      reToast.error(errorMessage);
+    }
+
+    // Do not call onFileChange here to avoid triggering handleImageChange
   };
-  const fileList = files.map((file) => (
-    <div
-      key={file.name}
-      className=" flex justify-between border px-3.5 py-3 my-6 rounded-md"
-    >
-      <div className="flex space-x-3 items-center">
-        <div className="file-preview">{renderFilePreview(file)}</div>
-        <div>
-          <div className=" text-sm  text-card-foreground">{file.name}</div>
-          <div className=" text-xs font-light text-muted-foreground">
-            {Math.round(file.size / 100) / 10 > 1000 ? (
-              <>{(Math.round(file.size / 100) / 10000).toFixed(1)}</>
-            ) : (
-              <>{(Math.round(file.size / 100) / 10).toFixed(1)}</>
-            )}
-            {" kb"}
-          </div>
-        </div>
-      </div>
-      <Button
-        size="icon"
-        color="destructive"
-        variant="outline"
-        className=" border-none rounded-full"
-        onClick={() => handleRemoveFile(file)}
-      >
-        <Icon icon="tabler:x" className=" h-5 w-5" />
-      </Button>
-    </div>
-  ));
-  const handleRemoveAllFiles = () => {
-    setFiles([]);
-  };
-  const { t } = useTranslate();
 
   return (
     <Fragment>
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <div className=" w-full text-center border-dashed border  rounded-md py-4 flex  items-center flex-col">
+        <div className="w-full text-center border-dashed border rounded-md py-4 flex items-center flex-col">
           <div className="h-12 w-12 inline-flex rounded-md bg-muted items-center justify-center mb-3">
             <Upload className="h-6 w-6 text-default-500" />
           </div>
-          <h4 className=" text-lg font-medium mb-1 text-card-foreground/80">
+          <h4 className="text-lg font-medium mb-1 text-card-foreground/80">
             {t("Drop image here or click to upload")}
           </h4>
         </div>
       </div>
       {files.length ? (
         <Fragment>
-          <div>{fileList}</div>
-          <div className=" flex justify-end space-x-2"></div>
+          <div className="flex justify-between items-center border px-3.5 py-3 my-6 rounded-md">
+            <div className="flex space-x-3 items-center">
+              <div className="file-preview">{renderFilePreview(files[0])}</div>
+              <div>
+                <div className="text-sm text-card-foreground">
+                  {files[0].name || files[0].image_name}
+                </div>
+                <div className="text-xs font-light text-muted-foreground">
+                  {files[0].name
+                    ? Math.round(files[0]?.size / 100) / 10 > 1000
+                      ? `${(Math.round(files[0].size / 100) / 10000).toFixed(
+                          1
+                        )} MB`
+                      : `${(Math.round(files[0]?.size / 100) / 10).toFixed(
+                          1
+                        )} KB`
+                    : null}
+                </div>
+              </div>
+            </div>
+            <Button
+              size="icon"
+              color="destructive"
+              variant="outline"
+              className="border-none rounded-full"
+              onClick={(e) => handleRemoveFile(files[0], e)}
+            >
+              <Icon icon="tabler:x" className="h-5 w-5" />
+            </Button>
+          </div>
         </Fragment>
       ) : null}
     </Fragment>
   );
 };
+
 export default ImageUploader;

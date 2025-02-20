@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,122 +8,157 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
   SheetFooter,
 } from "@/components/ui/sheet";
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
-const View = () => {
-  const { t } = useTranslate();
+// A reusable component to display a list of details
+const DetailItem: React.FC<{ label: string; value: string | number }> = ({
+  label,
+  value,
+}) => (
+  <motion.li
+    className="flex flex-row gap-6 items-center"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.3 }}
+  >
+    <span className="text-sm text-default-900 font-medium w-[52%]">
+      {label}:
+    </span>
+    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+  </motion.li>
+);
+
+interface ViewUserData {
+  row: any;
+}
+
+const ViewMore: React.FC<ViewUserData> = ({ row }) => {
+  const { t, loading, error } = useTranslate();
   const { lang } = useParams();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleSheet = () => {
-    setIsOpen((prevState) => !prevState);
+  const renderImagesData = () => {
+    const profile = row?.original;
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Client Files")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <motion.li
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="flex flex-row gap-6 items-center"
+          >
+            <span className="text-sm text-default-900 font-medium w-[52%]">
+              {t("Client Files")}:
+            </span>
+            <span className="text-default-500 font-semibold w-[40%]">
+              {profile?.client_files}
+            </span>
+          </motion.li>
+        </ul>
+      </>
+    );
+  };
+
+  const renderClientData = () => {
+    const clientData = row?.original;
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Client Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem label={t("Id")} value={clientData?.id || "-"} />
+          <DetailItem label={t("Email")} value={clientData?.email || "-"} />
+          <DetailItem label={t("Name")} value={clientData?.name || "-"} />
+          <DetailItem label={t("Phone")} value={clientData?.phone || "-"} />
+          <DetailItem
+            label={t("Status")}
+            value={clientData?.status == "active" ? "Yes" : "No" || "-"}
+          />
+          <DetailItem label={t("Address")} value={clientData?.address || "-"} />
+          <DetailItem
+            label={t("national_id_number")}
+            value={clientData?.national_id_number || "-"}
+          />
+
+          <DetailItem
+            label={t("Category")}
+            value={clientData?.category.name || "-"}
+          />
+          <DetailItem
+            label="Date Of Create Account"
+            value={
+              new Date(clientData?.created_at).toLocaleDateString("en-GB") ||
+              "-"
+            }
+          />
+          <DetailItem
+            label="Last Update of Account"
+            value={
+              new Date(clientData?.updated_at).toLocaleDateString("en-GB") ||
+              "-"
+            }
+          />
+        </ul>
+      </>
+    );
   };
 
   return (
-    <>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Button
-              size="icon"
-              variant="outline"
-              className="h-7 w-7"
-              color="secondary"
-              onClick={toggleSheet}
-            >
-              <Icon icon="heroicons:eye" className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{t("Client Details")}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <Sheet open={isOpen} onOpenChange={toggleSheet}>
-        <SheetContent
-          side={lang === "ar" ? "left" : "right"}
-          dir={lang === "ar" ? "rtl" : "ltr"}
-          className="max-w-[736px]"
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          size="icon"
+          variant="outline"
+          className="h-7 w-7"
+          color="secondary"
         >
-          <SheetHeader>
-            <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
-              {t("Client Details")}
-            </SheetTitle>
-          </SheetHeader>
-          <div className="py-6 overflow-y-auto h-full">
-            <ClientDetails />
-          </div>
-          <SheetFooter>
-            <SheetClose asChild>footer content</SheetClose>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </>
-  );
-};
-
-const ClientDetails = () => {
-  const { t } = useTranslate();
-  const clientInfo = [
-    { label: t("Client_Name"), value: "Court 1" },
-    { label: t("Email"), value: "abc@gmail.com" },
-    { label: t("Address"), value: "Saudi Arabia, Riyadh" },
-    { label: t("Current_Case_Name"), value: "Ali" },
-  ];
-
-  return (
-    <Section title={t("Client Information")}>
-      <DetailsList items={clientInfo} />
-    </Section>
-  );
-};
-
-const Section = ({ title, children }) => (
-  <>
-    <motion.h3
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="font-semibold text-lg my-3"
-    >
-      {title}
-    </motion.h3>
-    {children}
-    <motion.hr
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="my-8"
-    />
-  </>
-);
-
-const DetailsList = ({ items }) => (
-  <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-    {items.map((item, index) => (
-      <motion.li
-        key={index}
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 + index * 0.1 }}
-        className="my-3 flex flex-wrap items-center"
+          <Icon icon="heroicons:eye" className="h-4 w-4" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side={lang === "ar" ? "left" : "right"}
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        className="max-w-[736px]"
       >
-        <span className="text-sm text-default-600">{item.label}:</span>
-        <span className="text-default-900 font-semibold">{item.value}</span>
-      </motion.li>
-    ))}
-  </ul>
-);
+        <SheetHeader>
+          <SheetTitle>{t("Client Details")}</SheetTitle>
+        </SheetHeader>
+        <ScrollArea className="h-[100%]">
+          <div className="py-6">
+            {renderClientData()}
+            <hr className="my-8" />
+            {renderImagesData()}
+          </div>
+        </ScrollArea>
+        <SheetFooter>
+          <SheetClose asChild>footer content</SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+};
 
-export default View;
+export default ViewMore;

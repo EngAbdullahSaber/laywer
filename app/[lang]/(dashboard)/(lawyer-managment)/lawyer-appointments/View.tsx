@@ -1,208 +1,251 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetFooter,
 } from "@/components/ui/sheet";
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
-const AppointmentDetails = () => {
-  const { t } = useTranslate();
+// A reusable component to display a list of details
+const DetailItem = ({
+  label,
+  value,
+  transitionDuration,
+}: {
+  label: string;
+  value: string;
+  transitionDuration: number;
+}) => (
+  <motion.li
+    className="flex flex-row gap-6 items-center"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: transitionDuration }}
+  >
+    <span className="text-sm text-default-900 font-medium w-[52%]">
+      {label}:
+    </span>
+    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+  </motion.li>
+);
+const DetailItemLink = ({
+  label,
+  value,
+  transitionDuration,
+}: {
+  label: string;
+  value: string;
+  transitionDuration: number;
+}) => (
+  <motion.li
+    className="flex flex-row gap-6 items-center"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: transitionDuration }}
+  >
+    <span className="text-sm text-default-900 font-medium w-[52%]">
+      {label}:
+    </span>
+    <span className="text-blue-700 font-semibold w-[40%]">{value}</span>
+  </motion.li>
+);
+
+const ListItem = ({
+  label,
+  value,
+  transitionDuration,
+}: {
+  label: string;
+  value: string;
+  transitionDuration: number;
+}) => (
+  <motion.li
+    initial={{ y: 30 }}
+    animate={{ y: 0 }}
+    transition={{ duration: transitionDuration }}
+    className="flex flex-row !flex-nowrap justify-between items-center"
+  >
+    <span className="text-sm text-default-600 w-[30%]">{label}:</span>
+    <span className="text-default-900 font-semibold w-[67%]">{value}</span>
+  </motion.li>
+);
+interface ViewUserData {
+  row: any;
+}
+
+const ViewMore: React.FC<ViewUserData> = ({ row }) => {
+  const { t, loading, error } = useTranslate();
   const { lang } = useParams();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleSheet = () => {
-    setIsOpen((prevState) => !prevState);
-  };
+  const renderAppointementData = () => {
+    const lawyerData = row?.original;
 
-  const renderAppointmentInfo = () => (
-    <>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[35%]">
-          {t("Appointment_Title")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[62%]">TASK1</span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[35%]">{t("Date")} :</span>
-        <span className="text-default-900 font-semibold w-[62%]">
-          {" "}
-          September 12, 2024
-        </span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.9 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[35%]">{t("Time")} :</span>
-        <span className="text-default-900 font-semibold w-[62%]">12:11 PM</span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <span className="text-sm text-default-600 w-[35%]">
-          {t("Case_Name")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[62%]">Ahmed</span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1.1 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[35%]">
-          {t("Location")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[62%]">الرياض</span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1.2 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[35%]">
-          {t("Client_Name")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[62%]">Ali</span>
-      </motion.li>
-    </>
-  );
-
-  const renderDetailsList = () => (
-    <>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1.3 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[30%]">
-          {t("Appointment Description")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[67%]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla,
-          veritatis dolor obcaecati voluptas ullam commodi?
-        </span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1.4 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[30%]">
-          {t("Associated Case Details")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[67%]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla,
-          veritatis dolor obcaecati voluptas ullam commodi?
-        </span>
-      </motion.li>
-      <motion.li
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1.5 }}
-        className="flex flex-row !flex-nowrap justify-between items-center"
-      >
-        <span className="text-sm text-default-600 w-[30%]">
-          {t("Preparation Required")} :
-        </span>
-        <span className="text-default-900 font-semibold w-[67%]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla,
-          veritatis dolor obcaecati voluptas ullam commodi?
-        </span>
-      </motion.li>
-    </>
-  );
-
-  return (
-    <>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Button
-              size="icon"
-              variant="outline"
-              className="h-7 w-7"
-              color="secondary"
-              onClick={toggleSheet}
-            >
-              <Icon icon="heroicons:eye" className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{t("Appointment Details")}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-
-      <Sheet open={isOpen} onOpenChange={toggleSheet}>
-        <SheetTrigger asChild />
-        <SheetContent
-          side={lang === "ar" ? "left" : "right"}
-          dir={lang === "ar" ? "rtl" : "ltr"}
-          className="max-w-[736px]"
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          <SheetHeader>
-            <SheetTitle className="mt-5 pt-5 font-bold text-2xl">
-              {t("Appointment Details")}
-            </SheetTitle>
-          </SheetHeader>
-
-          <div className="py-6">
-            <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-              {renderAppointmentInfo()}
-            </ul>
-            <motion.hr
-              initial={{ y: 50 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.1 }}
-              className="my-8"
+          {t("Appointment Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem
+            transitionDuration={0.8}
+            label={t("Id")}
+            value={lawyerData?.id || "-"}
+          />
+          <DetailItem
+            transitionDuration={0.9}
+            label={t("title")}
+            value={lawyerData?.title || "-"}
+          />
+          <DetailItem
+            transitionDuration={1}
+            label={t("appointment_date")}
+            value={lawyerData?.appointment_date || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.1}
+            label={t("appointment_time")}
+            value={lawyerData?.appointment_time || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.2}
+            label={t("client")}
+            value={lawyerData?.client?.name || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.3}
+            label={t("Address")}
+            value={lawyerData?.address || "-"}
+          />
+        </ul>
+      </>
+    );
+  };
+  const renderClientData = () => {
+    const lawyerData = row?.original?.client;
+    const clientFiles = row?.original?.client?.client_files;
+    if (clientFiles?.length === 0) return null;
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Client Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem
+            transitionDuration={1.4}
+            label={t("Id")}
+            value={lawyerData?.id || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.5}
+            label={t("name")}
+            value={lawyerData?.name || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.6}
+            label={t("email")}
+            value={lawyerData?.email || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.7}
+            label={t("phone")}
+            value={lawyerData?.phone || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.8}
+            label={t("address")}
+            value={lawyerData?.address || "-"}
+          />
+        </ul>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          {clientFiles.map((file, index) => (
+            <DetailItemLink
+              key={index}
+              transitionDuration={1.9}
+              label={t("File")}
+              value={
+                <a
+                  href={file.url}
+                  target="_blank"
+                  className="to-blue-700"
+                  rel="noopener noreferrer"
+                >
+                  {file.image_name}
+                </a>
+              }
             />
+          ))}
+        </ul>
+      </>
+    );
+  };
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          size="icon"
+          variant="outline"
+          className="h-7 w-7"
+          color="secondary"
+        >
+          <Icon icon="heroicons:eye" className="h-4 w-4" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side={lang === "ar" ? "left" : "right"}
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        className="max-w-[736px]"
+      >
+        <SheetHeader>
+          <SheetTitle>{t("Appointment Details")}</SheetTitle>
+        </SheetHeader>
+        <ScrollArea className="h-[100%]">
+          <div className="py-6">
+            {renderAppointementData()}
+            <hr className="my-8" />
             <ul className="md:grid grid-cols-1 !mt-5 gap-2 space-y-2 md:space-y-0">
-              {renderDetailsList()}
-            </ul>
+              <ListItem
+                label={t("details")}
+                value={row?.original?.details}
+                transitionDuration={1.4}
+              />
+              <ListItem
+                label={t("requested_details")}
+                value={row?.original?.requested_details}
+                transitionDuration={1.5}
+              />
+            </ul>{" "}
+            <hr className="my-8" />
+            {renderClientData()}
           </div>
-
-          <SheetFooter>
-            <SheetClose asChild />
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </>
+        </ScrollArea>
+        <SheetFooter>
+          <SheetClose asChild>footer content</SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
 
-export default AppointmentDetails;
+export default ViewMore;

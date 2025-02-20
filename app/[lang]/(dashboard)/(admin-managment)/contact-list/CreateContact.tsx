@@ -1,4 +1,4 @@
-"use client";
+"use Contact List";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -125,11 +125,9 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
       reToast.error("Failed to fetch data");
     }
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
   const handleOpen = () => {
     setOpen(!open);
+    fetchData();
   };
   return (
     <>
@@ -138,20 +136,20 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
         onClick={handleOpen}
         className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
       >
-        {t("Create Client")}
+        {t("Create Contact List")}
       </Button>
       <Dialog open={open} onOpenChange={handleOpen}>
         <DialogContent size="2xl" className="gap-3 h-auto">
           <DialogHeader className="p-0">
             <DialogTitle className="text-2xl font-bold text-default-700">
-              {t("Create a New Client")}
+              {t("Create a New Contact List")}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div>
               <div className="flex flex-row justify-between items-center  gap-4">
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 1.7 }}
                   className="flex flex-col gap-2 w-[48%]"
@@ -167,7 +165,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                 </motion.div>
 
                 <motion.div
-                  initial={{ y: -50 }}
+                  initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
                   transition={{ duration: 1.7 }}
                   className="flex flex-col gap-2 w-[48%]"
@@ -205,9 +203,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                   <Label htmlFor="Category">{t("Category")}</Label>
                   <BasicSelect
                     menu={transformedCategories}
-                    setSelectedValue={(value) =>
-                      handleSelectChange(value, "category_id")
-                    }
+                    setSelectedValue={(value) => handleSelectChange(value)}
                     selectedValue={contactList["category_id"]}
                   />
                 </motion.div>
@@ -222,7 +218,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
               </div>
 
               <motion.div
-                initial={{ y: 50 }}
+                initial={{ y: 30 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 1.7 }}
                 className=" flex justify-center gap-3 mt-4"
@@ -240,7 +236,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                   type="submit"
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Client")}{" "}
+                  {t("Create Contact List")}{" "}
                 </Button>
               </motion.div>
             </div>
