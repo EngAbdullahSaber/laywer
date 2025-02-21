@@ -37,7 +37,6 @@ const SelectCase: React.FC<{
         classNamePrefix="select"
         value={selectedValue}
         options={menu}
-        isClearable
         onChange={handleChange}
         name="clear"
       />

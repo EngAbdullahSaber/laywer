@@ -21,6 +21,7 @@ import { AxiosError } from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { CreateContactList } from "@/services/contact-list/contact-list";
+import { CleaveInput } from "@/components/ui/cleave";
 
 interface ErrorResponse {
   errors: {
@@ -186,7 +187,14 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                   className="flex flex-col gap-2 w-[48%]"
                 >
                   <Label htmlFor="phone">{t("Phone Number")}</Label>
-                  <Input
+                  <CleaveInput
+                    options={{
+                      prefix: "+966",
+                      delimiter: " ",
+                      blocks: [4, 2, 3, 4],
+                      numericOnly: true,
+                      uppercase: true,
+                    }}
                     type="tel"
                     id="phone"
                     name="phone"

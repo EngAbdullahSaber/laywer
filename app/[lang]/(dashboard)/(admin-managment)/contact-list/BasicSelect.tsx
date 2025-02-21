@@ -30,9 +30,9 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
   };
   console.log(selectedValue);
   const transformedSelectedValue = {
-    id: selectedValue.id,
-    value: selectedValue.name,
-    label: selectedValue.name,
+    id: selectedValue?.id,
+    value: selectedValue?.name,
+    label: selectedValue?.name,
   };
 
   console.log(transformedSelectedValue);

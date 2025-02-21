@@ -200,7 +200,119 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
       </>
     );
   };
+  const renderLawyerCasesData = () => {
+    const lawyerData = row?.original.suits;
 
+    // If lawyerData is not an array or is empty, return a fallback message
+    if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
+      return (
+        <>
+          <motion.h3
+            className="font-semibold text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {t("Lawyer Cases")}
+          </motion.h3>
+          <p className="text-gray-500 mt-2">{t("No cases found.")}</p>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Lawyer Cases")}
+        </motion.h3>
+        <div className="space-y-4 mt-5">
+          {lawyerData.map((suit, index) => (
+            <div key={index} className="border rounded-lg p-4">
+              <h4 className="font-semibold text-md mb-3">
+                {t(`Case ${index + 1}`)}
+              </h4>
+              <ul className="md:grid grid-cols-2 gap-2 space-y-2 md:space-y-0">
+                <DetailItem label={t("Id")} value={suit?.id || "-"} />
+                <DetailItem label={t("Title")} value={suit?.title || "-"} />
+                <DetailItem
+                  label={t("Court Name")}
+                  value={suit?.court?.name || "-"}
+                />
+                <DetailItem
+                  label={t("Court Region")}
+                  value={suit?.court?.region?.name?.en || "-"}
+                />
+                <DetailItem
+                  label={t("Court City")}
+                  value={suit?.court?.city?.name?.en || "-"}
+                />
+                <DetailItem
+                  label={t("Court Address")}
+                  value={suit?.court?.address || "-"}
+                />
+                <DetailItem
+                  label={t("Main Case Number")}
+                  value={suit?.main_case_number || "-"}
+                />
+                <DetailItem
+                  label={t("Case Numbers")}
+                  value={
+                    suit?.case_numbers
+                      ?.map(
+                        (caseNum) =>
+                          `${caseNum.first_letter}${caseNum.second_letter}/${caseNum.case_year}/${caseNum.case_number_id}`
+                      )
+                      .join(", ") || "-"
+                  }
+                />
+                <DetailItem
+                  label={t("Category")}
+                  value={suit?.category?.name || "-"}
+                />
+                <DetailItem
+                  label={t("Receive Date")}
+                  value={suit?.receive_date || "-"}
+                />
+                <DetailItem
+                  label={t("Submit Date")}
+                  value={suit?.submit_date || "-"}
+                />
+                <DetailItem
+                  label={t("Judgment Date")}
+                  value={suit?.judgment_date || "-"}
+                />
+                <DetailItem
+                  label={t("Session Date")}
+                  value={suit?.session_date || "-"}
+                />
+                <DetailItem label={t("Status")} value={suit?.status || "-"} />
+                <DetailItem
+                  label={t("Claim Status")}
+                  value={suit?.claim_status || "-"}
+                />
+                <DetailItem
+                  label={t("Defendants")}
+                  value={suit?.defendants?.join(", ") || "-"}
+                />
+                <DetailItem label={t("Details")} value={suit?.details || "-"} />
+                <DetailItem
+                  label={t("Files")}
+                  value={
+                    suit?.files?.length > 0 ? suit.files.length : "No files"
+                  }
+                />
+              </ul>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  };
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -226,6 +338,8 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             {renderLawyerData()}
             <hr className="my-8" />
             {renderImagesData()}
+            <hr className="my-8" />
+            {renderLawyerCasesData()}
           </div>
         </ScrollArea>
         <SheetFooter>

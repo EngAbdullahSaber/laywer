@@ -17,6 +17,7 @@ import { getCategory } from "@/services/category/category";
 import { AxiosError } from "axios";
 import { CreateLawyer } from "@/services/lawyer/lawyer";
 import { UploadImage } from "@/services/auth/auth";
+import { CleaveInput } from "@/components/ui/cleave";
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -243,8 +244,16 @@ const page = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label htmlFor="phone">{t("Mobile Number")}</Label>
-                <Input
-                  type="number"
+                <CleaveInput
+                  id="phone"
+                  options={{
+                    prefix: "+966",
+                    delimiter: " ",
+                    blocks: [4, 2, 3, 4],
+                    numericOnly: true,
+                    uppercase: true,
+                  }}
+                  type="tel"
                   name="phone"
                   placeholder={t("Enter Mobile Number")}
                   onChange={handleInputChange}

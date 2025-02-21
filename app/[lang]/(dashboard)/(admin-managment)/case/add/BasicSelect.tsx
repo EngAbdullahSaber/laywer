@@ -21,7 +21,6 @@ const SelectCase: React.FC<BasicSelectProps> = ({ menu }) => {
         styles={styles}
         name="clear"
         options={menu}
-        isClearable
       />
     </div>
   );

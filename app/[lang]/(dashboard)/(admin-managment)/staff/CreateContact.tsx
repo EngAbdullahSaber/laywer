@@ -15,54 +15,112 @@ import { useTranslate } from "@/config/useTranslation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast } from "sonner";
 import { motion } from "framer-motion";
-
-import { cn } from "@/lib/utils";
-const schema = z.object({
-  Name: z
-    .string()
-    .min(3, { message: "errorStaff.NameMin" })
-    .max(20, { message: "errorStaff.NameMax" }),
-  Email: z
-    .string()
-    .min(8, { message: "errorStaff.EmailMin" })
-    .max(30, { message: "errorStaff.EmailMax" })
-    .email({ message: "errorStaff.InvalidEmail" }), // Ensure it's a valid email
-  phone: z
-    .string()
-    .refine((value) => value.length === 11, { message: "errorStaff.Phone" }), // Ensure phone is 11 digits
-  Category: z.string().min(1, { message: "errorStaff.CategoryRequired" }), // Ensure category is selected
-  Password: z
-    .string()
-    .min(8, { message: "errorStaff.PasswordMin" }) // Minimum length of 8 characters
-    .regex(/[A-Z]/, { message: "errorStaff.PasswordUppercase" }) // At least one uppercase letter
-    .regex(/[a-z]/, { message: "errorStaff.PasswordLowercase" }) // At least one lowercase letter
-    .regex(/[0-9]/, { message: "errorStaff.PasswordNumber" }) // At least one number
-    .regex(/[@$!%*?&]/, { message: "errorStaff.PasswordSpecial" }), // At least one special character
-});
-const CreateContact = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  });
-
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { CreateStaff } from "@/services/staff/staff";
+import { CleaveInput } from "@/components/ui/cleave";
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+interface LaywerData {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  category_id: string;
+}
+const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   const category: { value: string; label: string }[] = [
     { value: "مسئول", label: "مسئول" },
     { value: "محامى", label: "محامى" },
     { value: "عميل", label: "عميل" },
   ];
+  const { t } = useTranslate();
+  const [open, setOpen] = useState(false);
 
-  const { t, loading, error } = useTranslate();
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
+  const [lawyerData, setLawyerData] = useState<LaywerData>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    category_id: "",
+  });
+  const { lang } = useParams();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLawyerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSelectChange = (value: string) => {
+    setLawyerData((prevData) => ({
+      ...prevData,
+      category_id: value?.value,
+    }));
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
 
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    try {
+      const res = await CreateStaff(formData, lang); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
+          category_id: "",
+        });
+
+        reToast.success(res.message); // Display success message
+        setFlag(!flag);
+
+        setOpen(false); // Close the modal after success
+      } else {
+        reToast.error(t("Failed to create services")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = [
+        "title.ar",
+        "title.en",
+        "description.en",
+        "service_file",
+        "description.ar",
+        "price",
+      ];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -76,7 +134,7 @@ const CreateContact = () => {
             {t("Create a New Staff")}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit}>
           <div>
             <div className="flex flex-row justify-between items-center  gap-4">
               <motion.div
@@ -85,32 +143,14 @@ const CreateContact = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
-                <Label
-                  htmlFor="Name"
-                  className={cn("", {
-                    "text-destructive": errors.Name,
-                  })}
-                >
-                  {t("userss")}
-                </Label>
+                <Label htmlFor="Name">{t("userss")}</Label>
                 <Input
                   id="Name"
                   type="text"
-                  {...register("Name")}
                   placeholder={t("Enter User")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Name,
-                  })}
+                  name="name"
+                  onChange={handleInputChange}
                 />
-                {errors.Name && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Name,
-                    })}
-                  >
-                    {t(errors.Name.message)}
-                  </p>
-                )}
               </motion.div>
 
               <motion.div
@@ -119,32 +159,14 @@ const CreateContact = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
-                <Label
-                  htmlFor="Email"
-                  className={cn("", {
-                    "text-destructive": errors.Email,
-                  })}
-                >
-                  {t("Email Address")}
-                </Label>
+                <Label htmlFor="Email">{t("Email Address")}</Label>
                 <Input
                   id="Email"
                   type="text"
-                  {...register("Email")}
                   placeholder={t("Enter email address")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.Email,
-                  })}
+                  name="email"
+                  onChange={handleInputChange}
                 />
-                {errors.Email && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Email,
-                    })}
-                  >
-                    {t(errors.Email.message)}
-                  </p>
-                )}
               </motion.div>
               <motion.div
                 initial={{ y: -30 }}
@@ -152,32 +174,13 @@ const CreateContact = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
-                <Label
-                  htmlFor="Password"
-                  className={cn("", {
-                    "text-destructive": errors.Password,
-                  })}
-                >
-                  {t("Password")}
-                </Label>
+                <Label htmlFor="Password">{t("Password")}</Label>
                 <Input
                   type="Password"
-                  {...register("Password")}
                   placeholder={t("Enter passowrd")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive":
-                      errors.Password,
-                  })}
+                  name="password"
+                  onChange={handleInputChange}
                 />
-                {errors.Password && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.Password,
-                    })}
-                  >
-                    {t(errors.Password.message)}
-                  </p>
-                )}
               </motion.div>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -185,32 +188,21 @@ const CreateContact = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
-                <Label
-                  htmlFor="phone"
-                  className={cn("", {
-                    "text-destructive": errors.phone,
-                  })}
-                >
-                  {t("Phone Number")}
-                </Label>
-                <Input
-                  id="phone"
+                <Label htmlFor="phone">{t("Phone Number")}</Label>
+                <CleaveInput
+                  id="prefix"
+                  options={{
+                    prefix: "+966",
+                    delimiter: " ",
+                    blocks: [4, 2, 3, 4],
+                    numericOnly: true,
+                    uppercase: true,
+                  }}
                   type="tel"
-                  {...register("phone")}
                   placeholder={t("Your phone number")}
-                  className={cn("", {
-                    "border-destructive focus:border-destructive": errors.phone,
-                  })}
+                  name="phone"
+                  onChange={handleInputChange}
                 />
-                {errors.phone && (
-                  <p
-                    className={cn("text-xs", {
-                      "text-destructive": errors.phone,
-                    })}
-                  >
-                    {t(errors.phone.message)}
-                  </p>
-                )}
               </motion.div>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -218,25 +210,12 @@ const CreateContact = () => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-[48%]"
               >
-                <Label
-                  htmlFor="Category"
-                  className={cn("", {
-                    "text-destructive": errors.Category,
-                  })}
-                >
-                  {t("Category")}
-                </Label>
+                <Label htmlFor="Category">{t("Category")}</Label>
                 <BasicSelect
-                  name="Category"
                   menu={category}
-                  control={control}
-                  errors={errors}
+                  setSelectedValue={(value) => handleSelectChange(value)}
+                  selectedValue={lawyerData["category_id"]}
                 />
-                {errors.Category && (
-                  <p className="text-xs text-destructive">
-                    {t(errors.Category.message)}
-                  </p>
-                )}{" "}
               </motion.div>
             </div>
 

@@ -12,27 +12,35 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FileUploaderMultiple from "../../../(lawyer-managment)/lawyer-cases/FileUploaderSingle";
+import FileUploaderMultiple from "./FileUploaderSingle";
 import { getCourtsPanigation } from "@/services/courts/courts";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { getLawyerPanigation } from "@/services/lawyer/lawyer";
 import { useParams } from "next/navigation";
 import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
 import SelectCase from "./SelectCase";
-import { getCategoryPanigation } from "@/services/category/category";
-import { getCases } from "@/services/cases/cases";
+import { CreateCases, getCases } from "@/services/cases/cases";
+import { getCategory } from "@/services/category/category";
+import BasicSelect from "../../contact-list/BasicSelect";
+import CreateCaseCategory from "../../../(category-mangement)/cases-category/CreateCaseCategory";
+import { UploadImage } from "@/services/auth/auth";
+import { AxiosError } from "axios";
 
 interface LawyerData {
   client_id: string;
   court_id: string;
   lawyer_id: string;
-  caseName: string;
-  MainCaseNumber: string;
-  description: string;
+  title: string;
+  main_case_number: string;
+  details: string;
   claim_status: string;
   category_id: string;
 }
-
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
 const Page = () => {
   const { t } = useTranslate();
   const { lang } = useParams();
@@ -40,11 +48,16 @@ const Page = () => {
     client_id: "",
     court_id: "",
     lawyer_id: "",
-    caseName: "",
-    MainCaseNumber: "",
-    description: "",
+    title: "",
+    main_case_number: "",
+    details: "",
     claim_status: "",
     category_id: "",
+  });
+  const [images, setImages] = useState<{
+    files: string[]; // Array of file IDs instead of a single file ID
+  }>({
+    files: [],
   });
   const [selectedValue, setSelectedValue] = useState<any[]>([]); // Store an array for first character selections
   const [selectedValue1, setSelectedValue1] = useState<any[]>([]); // Store an array for second character selections
@@ -53,34 +66,18 @@ const Page = () => {
   const [secondaryCaseNumber, setSecondaryCaseNumber] = useState<number>(1);
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [flag, setFlag] = useState(true);
+  const [category, setCategory] = useState<any[]>([]);
+  const [caseNumbers, setCaseNumbers] = useState<any[]>([]); // Store the final case numbers structure
 
   const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
   const [dates, setDates] = useState<Record<string, Date>>({
-    receiptDate: new Date(),
+    receive_date: new Date(),
     submissionDate: new Date(),
     judgmentDate: new Date(),
     hearingDate: new Date(),
   });
-  // Function to format numbers
-  const updateNumbers = (index: number) => {
-    const formattedValue =
-      data + index < 10
-        ? "000" + (data + index)
-        : data + index < 100
-        ? "00" + (data + index)
-        : data + index < 1000
-        ? "0" + (data + index)
-        : data + index;
 
-    const updatedNumbers = [...numbers]; // Copy current numbers state
-    updatedNumbers[index] = formattedValue; // Update the specific index with the formatted value
-    console.log(formattedValue);
-
-    setNumbers(updatedNumbers); // Set the updated numbers array
-    return formattedValue; // Return the formatted value for rendering
-  };
-  console.log(numbers);
-  updateNumbers(1);
   const getCasesData = async () => {
     setLoading(true);
 
@@ -89,8 +86,19 @@ const Page = () => {
 
       // Convert the ID to a string, pad it with leading zeros, and default to '0000'
       const caseId = String(res?.body[0].id).padStart(4, "0") || "0000";
+      // console.log(caseId);
+      // const initialNumbers =
+      //   Number(caseId) < 10
+      //     ? "000" + Number(caseId)
+      //     : Number(caseId) < 100
+      //     ? "00" + Number(caseId)
+      //     : Number(caseId) < 1000
+      //     ? "0" + Number(caseId)
+      //     : Number(caseId).toString();
 
+      // setNumbers(initialNumbers);
       setData(Number(caseId)); // Set the padded case ID
+      setNumbers([caseId]); // Set the padded case ID
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -110,6 +118,31 @@ const Page = () => {
     setLawyerData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageChange = async (
+    file: File,
+    imageType: keyof typeof images
+  ) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await UploadImage(formData, lang); // Call API to upload the image
+      if (res) {
+        // Append the image ID to the array of file IDs
+        setImages((prevState) => ({
+          ...prevState,
+          files: [...prevState.files, res.body.image_id],
+        }));
+        reToast.success(res.message); // Show success toast
+      } else {
+        reToast.error(t("Failed to upload image")); // Show failure toast
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong."; // Default fallback message
+      reToast.error(errorMessage); // Show error toast
+    }
+  };
   // Handle date changes
   const handleDateChange = (key: string, newDate: Date) => {
     const date = new Date(newDate.toISOString());
@@ -159,11 +192,155 @@ const Page = () => {
       return [];
     }
   };
+  const handleIncrement = (index: number) => {
+    setSecondaryCaseNumber(secondaryCaseNumber + 1);
+    console.log(index);
+    const updatedNumbers = [...numbers];
+    updatedNumbers[index + 1] =
+      data + index < 10
+        ? "000" + (data + index + 1)
+        : data + index < 100
+        ? "00" + (data + index + 1)
+        : data + index < 1000
+        ? "0" + (data + index + 1)
+        : data + index; // Increment the number at the specific index
 
+    setNumbers(updatedNumbers);
+  };
+
+  const handleDecrement = (index: number) => {
+    setSecondaryCaseNumber(secondaryCaseNumber - 1);
+    const updatedNumbers = [...numbers];
+
+    // Remove the last element from the array
+    updatedNumbers.pop(); // This removes the last element
+
+    // Update the state with the new array
+    setNumbers(updatedNumbers);
+  };
+  const handleSelectChange = (value: string) => {
+    setLawyerData((prevData) => ({
+      ...prevData,
+      category_id: value?.id,
+    }));
+  };
+
+  const fetchDataCategory = async () => {
+    try {
+      const countriesData = await getCategory("cases", lang);
+      setCategory(countriesData?.body?.data || []);
+    } catch (error) {
+      reToast.error("Failed to fetch data");
+    }
+  };
+  const transformedCategories = category.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+  useEffect(() => {
+    // Make sure the arrays have the same length before combining them
+    if (
+      selectedValue.length === selectedValue1.length &&
+      selectedValue.length === caseYears.length &&
+      selectedValue.length === numbers.length
+    ) {
+      const combinedCaseNumbers = selectedValue.map((firstLetter, index) => ({
+        first_letter: firstLetter,
+        second_letter: selectedValue1[index],
+        case_year: caseYears[index],
+        case_number_id: numbers[index],
+      }));
+
+      setCaseNumbers(combinedCaseNumbers);
+    }
+  }, [selectedValue, selectedValue1, numbers, caseYears]);
+  useEffect(() => {
+    fetchDataCategory();
+  }, [flag]);
   const formatOption = (item: any) => ({ value: item.id, label: item.name });
   useEffect(() => {
     getCasesData();
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    images.files.forEach((fileId, index) => {
+      formData.append(`files[${index}]`, fileId);
+    });
+    oppositeParties.forEach((fileId, index) => {
+      formData.append(`defendants[${index}]`, fileId);
+    });
+    formData.append(`receive_date`, dates.receive_date);
+    formData.append(`session_date`, dates.hearingDate);
+    formData.append(`judgment_date`, dates.judgmentDate);
+    formData.append(`submit_date`, dates.submissionDate);
+    caseNumbers.forEach((caseNumber, index) => {
+      // Append each caseNumber detail to formData
+      formData.append(
+        `case_numbers[${index}][first_letter]`,
+        caseNumber.first_letter
+      );
+      formData.append(
+        `case_numbers[${index}][second_letter]`,
+        caseNumber.second_letter
+      );
+      formData.append(
+        `case_numbers[${index}][case_year]`,
+        caseNumber.case_year
+      );
+      formData.append(
+        `case_numbers[${index}][case_number_id]`,
+        caseNumber.case_number_id
+      );
+    });
+    try {
+      const res = await CreateCases(formData, lang); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          client_id: "",
+          court_id: "",
+          lawyer_id: "",
+          title: "",
+          main_case_number: "",
+          details: "",
+          claim_status: "",
+          category_id: "",
+        });
+        reToast.success(res.message); // Display success message
+      } else {
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = ["title"];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
+  };
   return (
     <div>
       <Card>
@@ -171,7 +348,7 @@ const Page = () => {
           <CardTitle>{t("Create a New Case")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             {/* Case Info Section */}
             <motion.p
               initial={{ y: -30 }}
@@ -205,7 +382,10 @@ const Page = () => {
                       }
                     />
                   </div>
-                  <Link href="/clients" className="w-[8%] mt-5">
+                  <Link
+                    href="/clients"
+                    className="w-[8%] mt-5 flex justify-end"
+                  >
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -239,7 +419,7 @@ const Page = () => {
                       }
                     />
                   </div>
-                  <Link href="/courts" className="w-[8%] mt-5">
+                  <Link href="/courts" className="w-[8%] mt-5 flex justify-end">
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -249,7 +429,7 @@ const Page = () => {
                   </Link>
                 </motion.div>
               </div>
-              {/* <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
+              <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
                 <motion.div
                   initial={{ y: -30 }}
                   whileInView={{ y: 0 }}
@@ -258,31 +438,19 @@ const Page = () => {
                 >
                   <div className="!w-[87%]">
                     <Label htmlFor="Category">{t("Case Category")}</Label>
-                    <InfiniteScrollSelect
-                      fetchData={() =>
-                        fetchData(getCategoryPanigation("cases"))
-                      }
-                      formatOption={formatOption}
-                      placeholder={t("Select Case Category")}
-                      selectedValue={lawyerData.category_id}
-                      setSelectedValue={(value) =>
-                        setLawyerData((prev) => ({
-                          ...prev,
-                          category_id: value?.value || "",
-                        }))
-                      }
+                    <BasicSelect
+                      menu={transformedCategories}
+                      setSelectedValue={(value) => handleSelectChange(value)}
+                      selectedValue={lawyerData["category_id"]}
                     />
                   </div>
-                  <Link href="/courts" className="w-[8%] mt-5">
-                    <Icon
-                      icon="gg:add"
-                      width="24"
-                      height="24"
-                      color="#dfc77d"
-                    />
-                  </Link>
+                  <CreateCaseCategory
+                    flag={flag}
+                    setFlag={setFlag}
+                    buttonShape={false}
+                  />
                 </motion.div>
-              </div> */}
+              </div>
               {/* Case Name */}
               <motion.div
                 initial={{ y: -30 }}
@@ -294,7 +462,7 @@ const Page = () => {
                 <Input
                   type="text"
                   placeholder={t("Enter Case Name")}
-                  name="caseName"
+                  name="title"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -321,7 +489,7 @@ const Page = () => {
                     }
                   />
                 </div>
-                <Link href="/lawyer" className="w-[8%] mt-5">
+                <Link href="/lawyer" className="w-[8%] mt-5 flex justify-end">
                   <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
                 </Link>
               </motion.div>
@@ -403,16 +571,14 @@ const Page = () => {
                       {selectedValue1[index]?.value}
                       {selectedValue[index]?.value}
                       {caseYears[index]?.slice(-2)}
-                      {/* {updateNumbers(index)} */}
+                      {numbers[index]}
                     </motion.p>
                   </div>
                   {secondaryCaseNumber > 1 &&
                     index !== secondaryCaseNumber - 1 && (
                       <div
                         className="mt-6 w-[3%]"
-                        onClick={() =>
-                          setSecondaryCaseNumber(secondaryCaseNumber - 1)
-                        }
+                        onClick={() => handleDecrement(index)}
                       >
                         <Icon
                           icon="material-symbols:delete"
@@ -425,9 +591,7 @@ const Page = () => {
                   {index === secondaryCaseNumber - 1 && (
                     <div
                       className="mt-4 flex justify-center items-center w-[6%]"
-                      onClick={() =>
-                        setSecondaryCaseNumber(secondaryCaseNumber + 1)
-                      }
+                      onClick={() => handleIncrement(index)}
                     >
                       <Icon
                         icon="gg:add"
@@ -449,7 +613,7 @@ const Page = () => {
                 <Input
                   type="number"
                   placeholder={t("Enter Case Number")}
-                  name="MainCaseNumber"
+                  name="main_case_number"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -477,7 +641,11 @@ const Page = () => {
               className="flex flex-col gap-2 w-full"
             >
               <Label>
-                <FileUploaderMultiple />
+                <FileUploaderMultiple
+                  imageType="reply_files"
+                  id={images.reply_files}
+                  onFileChange={handleImageChange}
+                />{" "}
               </Label>
             </motion.div>
 
@@ -637,7 +805,7 @@ const Page = () => {
                 <Textarea
                   placeholder={t("Type Here")}
                   rows={7}
-                  name="description"
+                  name="details"
                   onChange={handleInputChange}
                 />
               </motion.div>

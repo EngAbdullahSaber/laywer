@@ -11,6 +11,16 @@ import { DataTableColumnHeader } from "../../tables/advanced/components/data-tab
 import { DataTable } from "../../tables/advanced/components/data-table";
 import View from "./View";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useTranslate } from "@/config/useTranslation";
+import useDebounce from "../../(category-mangement)/shared/useDebounce";
+import { useParams } from "next/navigation";
+import {
+  getClientCases,
+  getClientCasesPanigation,
+  getFilterClientCases,
+  SearchClientCases,
+} from "@/services/client-cases/client-cases";
 
 interface Task {
   id: string;
@@ -22,37 +32,104 @@ interface Task {
   Client_Name?: string;
   Hearing_Dates?: string;
 }
+
 const TableData = () => {
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
+  const searchPalsceholder = "Search By Email ,Phone and Name";
+  const { lang } = useParams();
+  const { t } = useTranslate();
+
+  const [filters, setFilters] = useState<Record<string, string>>({
+    full_name: "",
+    email: "",
+    phone: "",
+  });
+  const buildQueryString = (filters: { [key: string]: string }) => {
+    const queryParams = Object.entries(filters)
+      .filter(([key, value]) => value) // Only include filters with values
+      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .join("&"); // Join them with "&"
+
+    return queryParams ? `?${queryParams}` : "";
+  };
+
+  const queryString = buildQueryString(filters);
+
+  const filtersConfig = [];
+
+  const handleFilterChange = (updatedFilters: Record<string, string>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+    }));
+  };
+
+  const handleFilterSubmit = () => {
+    // Perform filtering logic here
+    console.log("Filters submitted:", filters);
+    getClientData();
+  };
+
+  const getClientData = async () => {
+    setLoading(true);
+    if (queryString.length > 0) {
+      try {
+        const res = await getFilterClientCases(queryString, lang);
+
+        setData(res?.body?.data || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    } else {
+      try {
+        const res =
+          page === 1
+            ? await getClientCases(lang)
+            : await getClientCasesPanigation(page, lang);
+
+        setData(res?.body?.data || []);
+        console.log(res.body.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    }
+  };
+
+  const SearchData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await SearchClientCases(search, lang);
+
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      SearchData();
+    } else {
+      getClientData();
+    }
+  }, [debouncedSearch, page, filters]);
   const columns: ColumnDef<Task>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={
-    //         table.getIsAllPageRowsSelected() ||
-    //         (table.getIsSomePageRowsSelected() && "indeterminate")
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View />
+          <View row={row} />
         </div>
       ),
     },
@@ -242,11 +319,24 @@ const TableData = () => {
       },
     },
   ];
+  const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (
     <div>
       {/* Render your data table here using the fetched tasks */}
       {/* Assuming you have a table component that takes columns and data */}
-      <DataTable data={data} columns={columns} />
+      <DataTable
+        data={data}
+        setPage={setPage}
+        setSearch={setSearch}
+        searchPalsceholder={searchPalsceholder}
+        page={page}
+        search={search}
+        filtersConfig={filtersConfig}
+        onFilterChange={handleFilterChange}
+        onFilterSubmit={handleFilterSubmit}
+        columns={columns}
+        isPaginationDisabled={isPaginationDisabled}
+      />{" "}
     </div>
   );
 };

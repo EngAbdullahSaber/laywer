@@ -495,12 +495,12 @@
 "Lawyer Selection": "اختيار المحامي",
 "Select Receipt Date": "اختيار تاريخ الاستلام",
 "Receipt Date": "تاريخ الاستلام",
-"Submission Date": "تاريخ التقديم",
+"submissionDate": "تاريخ التقديم",
 "Select Submission Date": "اختيار تاريخ التقديم",
 "Select Judgment Date": "اختيار تاريخ الحكم",
-"Judgment Date": "تاريخ الحكم",
+"judgmentDate": "تاريخ الحكم",
 "Select Hearing Date": "اختيار تاريخ الجلسة",
-"Hearing Date": "تاريخ الجلسة",
+"hearingDate": "تاريخ الجلسة",
 "Type Here": "اكتب هنا..",
 "Case Date": "تاريخ القضية",
 "lawyers Categories": "فئات المحامين",
@@ -735,6 +735,8 @@
   "appointment_date": "Appointment Date",
   "Deleting Services": "Deleting Services",
   "Are You Sure You Want To Delete This Services?": "Are You Sure You Want To Delete This Services?",
+  "Select Client": "Select Client",
+  "Select Court": "Select Court",
   "Next Appointmet": "الموعد القادم"
 
 }

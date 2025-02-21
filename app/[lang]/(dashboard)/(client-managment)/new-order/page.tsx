@@ -1,16 +1,38 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import CreateDate from "./CreateDate";
 import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import { getOrders } from "@/services/orders/orders";
 
 const page = () => {
-  const { t, loading, error } = useTranslate();
+  const { t, error } = useTranslate();
+  const [loading, setLoading] = useState(true);
+  const { lang } = useParams();
+  const [data, setData] = useState<any>([]);
 
+  const getCourtData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await getOrders(lang);
+
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getCourtData();
+  }, []);
   return (
     <div className="space-y-5">
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
@@ -32,7 +54,7 @@ const page = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {" "}
-          <CreateDate />
+          <CreateDate  />
         </motion.div>
       </div>
 

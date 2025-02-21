@@ -8,104 +8,137 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { toast as reToast } from "react-hot-toast";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import Flatpickr from "react-flatpickr";
-import { useEffect, useRef, useState } from "react";
-import { Icon } from "@iconify/react";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+
+import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link";
+import { AxiosError } from "axios";
+import { useParams } from "next/navigation";
+import { AskAboutOrders } from "@/services/orders/orders";
 
-// Update the schema to validate the message properly
-const schema = z.object({
-  message: z
-    .string()
-    .min(10, { message: "errorClientOrder.MessageMin" })
-    .max(70, { message: "errorClientOrder.MessageMax" }),
-});
-
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+interface LaywerData {
+  messages: string;
+}
 const CreateDate = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue, // Add setValue to update the date field in react-hook-form
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const [lawyerData, setLawyerData] = useState<LaywerData>({
+    messages: "",
   });
+  const { lang } = useParams();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
 
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLawyerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
 
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    try {
+      const res = await AskAboutOrders(lang, formData); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          messages: "",
+        });
+        reToast.success(res.message); // Display success message
+        setIsDialogOpen(false); // Close the dialog after successful deletion
+      } else {
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = ["messages"];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
+  };
   // Handle Flatpickr change event and set value in react-hook-form
   const { t } = useTranslate();
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-          {t("Ask")}
-        </Button>
-      </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-auto">
-        <DialogHeader className="p-0">
-          <DialogTitle className="text-2xl font-bold text-default-700">
-            {t("Send Your Message")}
-          </DialogTitle>
-        </DialogHeader>
-        <div className="h-auto">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="message" className="my-4">
-                  {t("Your Question")}
-                </Label>
-                <Textarea
-                  {...register("message")} // Register textarea with react-hook-form
-                  placeholder={t("Type Here")}
-                  rows={3}
-                  id="message"
-                  className={cn(errors.message ? "border-red-300" : "")} // Add error styling if validation fails
-                />
-                {errors.message && (
-                  <p className="text-sm text-red-300 mt-1">
-                    {t(errors.message.message)}
-                  </p>
-                )}
+    <>
+      {" "}
+      <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+        {t("Ask")}
+      </Button>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent size="md" className="gap-3 h-auto">
+          <DialogHeader className="p-0">
+            <DialogTitle className="text-2xl font-bold text-default-700">
+              {t("Send Your Message")}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="h-auto">
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="message" className="my-4">
+                    {t("Your Question")}
+                  </Label>
+                  <Textarea
+                    placeholder={t("Type Here")}
+                    rows={3}
+                    id="message"
+                    name="messages"
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Submit Button inside form */}
-            <div className="flex justify-center gap-3 mt-4">
-              <DialogClose asChild>
+              {/* Submit Button inside form */}
+              <div className="flex justify-center gap-3 mt-4">
+                <DialogClose asChild>
+                  <Button
+                    type="button"
+                    className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                    variant="outline"
+                  >
+                    {t("Cancel")}
+                  </Button>
+                </DialogClose>
                 <Button
-                  type="button"
-                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                  variant="outline"
+                  type="submit"
+                  className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Cancel")}
+                  {t("Send")}
                 </Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
-              >
-                {t("Send")}
-              </Button>
-            </div>
-          </form>
-        </div>
-      </DialogContent>
-    </Dialog>
+              </div>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
