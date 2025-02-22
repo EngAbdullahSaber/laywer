@@ -16,7 +16,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
-import { AskAboutOrders } from "@/services/orders/orders";
+import { AskAboutOrders } from "@/services/new-orders/new-orders";
 
 interface ErrorResponse {
   errors: {

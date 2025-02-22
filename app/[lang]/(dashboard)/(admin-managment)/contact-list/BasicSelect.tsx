@@ -24,8 +24,6 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
   };
   // Handle change event to capture the selected value
   const handleChange = (selectedOption: any) => {
-    console.log(selectedOption);
-
     setSelectedValue(selectedOption); // This will store the selected option
   };
   console.log(selectedValue);

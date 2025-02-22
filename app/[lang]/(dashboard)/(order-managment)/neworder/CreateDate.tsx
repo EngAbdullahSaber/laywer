@@ -9,57 +9,106 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { toast } from "sonner";
+
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { ReplyOnMessages } from "@/services/messages/messages";
+import { useParams } from "next/navigation";
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+interface LaywerData {
+  messages: string;
+  date: string;
+}
+const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
+  const { t } = useTranslate();
+  const { lang } = useParams();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
 
-// Update the schema to validate date properly
-const schema = z.object({
-  date: z
-    .string()
-    .min(1, { message: "Date is required." })
-    .refine(
-      (value) => {
-        // Check if the value is a valid date format
-        const date = new Date(value);
-        return !isNaN(date.getTime());
-      },
-      {
-        message: "Please select a valid date.",
-      }
-    ),
-});
-
-const CreateDate = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue, // Add setValue to update the date field in react-hook-form
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const [lawyerData, setLawyerData] = useState<LaywerData>({
+    messages: "",
+    date: "",
   });
 
-  const [picker, setPicker] = useState<Date>(new Date());
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLawyerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleDateChange = (date1: Date[]) => {
+    const date = new Date(date1[0].toISOString());
 
-  function onSubmit(data: z.infer<typeof schema>) {
-    toast.message(JSON.stringify(data, null, 2));
-  }
-  const { t, loading, error } = useTranslate();
-  const handleDateChange = (dates: Date[]) => {
-    const selectedDate = dates[0] || null;
-    setPicker(selectedDate);
-    setValue("date", selectedDate ? selectedDate.toISOString() : "");
+    // Extract day, month, and year
+    const day = String(date.getDate()).padStart(2, "0"); // Ensures two digits
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = date.getFullYear();
+
+    // Format as yyyy-mm-dd
+    const formattedDate = `${year}-${month}-${day}`;
+    setLawyerData({
+      ...lawyerData,
+      date: formattedDate.toString(),
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    // Append form data
+    Object.entries(lawyerData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    try {
+      const res = await ReplyOnMessages(formData, lang); // Call API to create the lawyer
+      if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          messages: "",
+          date: "",
+        });
+
+        reToast.success(res.message); // Display success message
+        setIsDialogOpen(false); // Close the dialog after successful deletion
+
+        setFlag(flag);
+      } else {
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Construct the dynamic key based on field names and the current language
+      const fields = ["details", "service_id", "invoice_file"];
+
+      let errorMessage = "Something went wrong."; // Default fallback message
+
+      // Loop through the fields to find the corresponding error message
+      for (let field of fields) {
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0]; // Retrieve the first error message for the field
+          break; // Exit the loop once the error is found
+        }
+      }
+
+      // Show the error in a toast notification
+      reToast.error(errorMessage); // Display the error message in the toast
+    }
   };
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
           {t("Reply to Client")}
@@ -72,7 +121,7 @@ const CreateDate = () => {
           </DialogTitle>
         </DialogHeader>
         <div className="h-auto">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <motion.div
                 initial={{ y: -20 }}
@@ -83,7 +132,12 @@ const CreateDate = () => {
                 <Label htmlFor="question" className="my-4">
                   {t("Your Answer")}
                 </Label>
-                <Textarea placeholder="Type Here" rows={3} />
+                <Textarea
+                  placeholder="Type Here"
+                  rows={3}
+                  name="messages"
+                  onChange={handleInputChange}
+                />
               </motion.div>
 
               <motion.div
@@ -98,15 +152,15 @@ const CreateDate = () => {
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Date About Meeting")}
-                  onBlur={(e) => e.preventDefault()} // Prevent dialog from closing
-                  id="default-picker"
+                  value={lawyerData.date ? new Date(lawyerData.date) : ""}
                   onChange={handleDateChange}
                   options={{
                     clickOpens: true,
                     static: true,
                     appendTo: document.body,
                   }}
-                  onClick={(e) => e.preventDefault()} // Call date change handler
+                  onClick={(e) => e.preventDefault()}
+                  id="default-picker"
                 />
               </motion.div>
             </div>

@@ -1,6 +1,6 @@
 import { api } from "../axios";
 
-export async function getCases(lang: any) {
+export async function getLawyerCases(lang: any) {
   let res = await api.get(`court/cases`, {
     headers: {
       "Accept-Language": lang,
@@ -18,7 +18,7 @@ export async function getSpecifiedCases(lang: any, id: any) {
   if (res) return res.data;
   else return false;
 }
-export async function getFilterCases(data: any, lang: any) {
+export async function getFilterLawyerCases(data: any, lang: any) {
   let res = await api.get(`court/cases?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
@@ -27,7 +27,7 @@ export async function getFilterCases(data: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
-export async function CreateCases(data: any, lang: any) {
+export async function ChangeStatus(data: any, lang: any) {
   let res = await api.post(`court/cases`, data, {
     headers: {
       "Accept-Language": lang,
@@ -63,7 +63,7 @@ export async function DeleteCases(id: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
-export async function getCasesPanigation(page: any, lang: any) {
+export async function getLawyerCasesPanigation(page: any, lang: any) {
   let res = await api.get(`court/cases?page=${page}`, {
     headers: {
       "Accept-Language": lang,
@@ -83,7 +83,7 @@ export async function UpdateCases(data: any, id: any, lang: any) {
   else return false;
 }
 
-export async function SearchCases(id: any, lang: any) {
+export async function SearchLawyerCases(id: any, lang: any) {
   let res = await api.get(`court/cases?search=${id}`, {
     headers: {
       "Accept-Language": lang,

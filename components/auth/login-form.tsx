@@ -13,13 +13,12 @@ import { motion } from "framer-motion";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useTranslate } from "@/config/useTranslation";
-import { setPhoneTokens, setTokens, setUserName } from "../../store/Action";
+import { setPhoneTokens, setUserName } from "../../store/Action";
 import { LogIn } from "@/services/auth/auth";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AxiosError } from "axios";
-import { storeTokenInLocalStorage } from "@/services/utils";
 interface ErrorResponse {
   errors?: {
     [key: string]: string[]; // This allows us to map error fields to an array of error messages
@@ -61,7 +60,7 @@ const LogInForm = () => {
         startTransition(true);
         // storeTokenInLocalStorage(res?.body?.verify_user_token);
         dispatch(setUserName(email));
-        dispatch(setTokens(res?.body?.verify_user_token));
+        dispatch(setPhoneTokens(res?.body?.verify_user_token));
 
         router.push("/auth/verify");
       }

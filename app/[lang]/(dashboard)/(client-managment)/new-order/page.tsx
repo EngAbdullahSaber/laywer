@@ -8,7 +8,7 @@ import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbCom
 import CreateDate from "./CreateDate";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
-import { getOrders } from "@/services/orders/orders";
+import { getOrders } from "@/services/new-orders/new-orders";
 
 const page = () => {
   const { t, error } = useTranslate();
@@ -54,7 +54,7 @@ const page = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {" "}
-          <CreateDate  />
+          <CreateDate />
         </motion.div>
       </div>
 

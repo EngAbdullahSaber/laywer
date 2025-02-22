@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 
@@ -8,9 +8,38 @@ import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbCom
 import CreateDate from "./CreateDate";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useParams } from "next/navigation";
+import {
+  getNotReplyedMessages,
+  getReplyedMessages,
+} from "@/services/messages/messages";
 const page = () => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
+  const [loading, setLoading] = useState(true);
+  const { lang } = useParams();
+  const [replyedMessages, setReplyedMessages] = useState<any>([]);
+  const [flag, setFlag] = useState<any>([]);
+  const [notReplyedMessages, setNotReplyedMessages] = useState<any>([]);
 
+  const getMessagesData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await getReplyedMessages(lang);
+      const res1 = await getNotReplyedMessages(lang);
+
+      setReplyedMessages(res?.body?.data || []);
+      setNotReplyedMessages(res1?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getMessagesData();
+  }, []);
   return (
     <Tabs defaultValue="Answered" className="">
       <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20  sm:h-12">
@@ -200,7 +229,7 @@ const page = () => {
               </div>
               <div className="flex flex-col justify-center items-center gap-6">
                 {" "}
-                <CreateDate />
+                <CreateDate flag={flag} setFlag={flag} />
               </div>
             </div>
           </Card>

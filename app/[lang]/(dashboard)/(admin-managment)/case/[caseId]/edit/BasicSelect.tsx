@@ -12,7 +12,7 @@ interface BasicSelectProps {
   setSelectedValue: (selectedOption: any) => void; // Function to update selected options
   selectedValue: MultiValue<any>; // Array of selected options
 }
-const SelectCase: React.FC<BasicSelectProps> = ({
+const BasicSelect: React.FC<BasicSelectProps> = ({
   menu,
   setSelectedValue,
   selectedValue,
@@ -24,9 +24,10 @@ const SelectCase: React.FC<BasicSelectProps> = ({
   };
   // Handle change event to capture the selected value
   const handleChange = (selectedOption: any) => {
-    console.log(selectedOption);
     setSelectedValue(selectedOption); // This will store the selected option
   };
+  const transformedSelectedValue = getValueById(selectedValue, menu);
+
   return (
     <div>
       {selectedValue ? (
@@ -34,7 +35,7 @@ const SelectCase: React.FC<BasicSelectProps> = ({
           className="react-select"
           classNamePrefix="select"
           styles={styles}
-          defaultValue={getValueById(selectedValue, menu)}
+          value={transformedSelectedValue}
           name="clear"
           options={menu}
           isClearable
@@ -55,4 +56,4 @@ const SelectCase: React.FC<BasicSelectProps> = ({
   );
 };
 
-export default SelectCase;
+export default BasicSelect;

@@ -129,7 +129,7 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <TaskStatus />
+          <TaskStatus id={row.original.id} />
         </div>
       ),
     },

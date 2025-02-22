@@ -149,7 +149,7 @@ const TableData = ({ flag }: { flag: any }) => {
                   color="secondary"
                 >
                   {" "}
-                  <Link href={"case/edit"}>
+                  <Link href={`case/${row.original.id}/edit`}>
                     <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
                   </Link>{" "}
                 </Button>

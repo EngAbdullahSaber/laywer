@@ -22,6 +22,15 @@ import {
 import { useTranslate } from "@/config/useTranslation";
 import { DataTable } from "../../tables/advanced/components/data-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import useDebounce from "../../(category-mangement)/shared/useDebounce";
+import {
+  getFilterLawyerCases,
+  getLawyerCases,
+  getLawyerCasesPanigation,
+  SearchLawyerCases,
+} from "@/services/lawyer-cases/lawyer-cases";
 interface Task {
   id: string;
   Case_Name?: string;
@@ -31,19 +40,106 @@ interface Task {
   Case_Number?: string;
   Key_Dates?: string;
 }
-const TableData = () => {
-  const { t, loading, error } = useTranslate();
 
+const TableData = ({ flag }: { flag: any }) => {
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
+  const searchPalsceholder = "Search By Email ,Phone and Name";
+  const { lang } = useParams();
+  const { t } = useTranslate();
+
+  const [filters, setFilters] = useState<Record<string, string>>({
+    full_name: "",
+    email: "",
+    phone: "",
+  });
+  const buildQueryString = (filters: { [key: string]: string }) => {
+    const queryParams = Object.entries(filters)
+      .filter(([key, value]) => value) // Only include filters with values
+      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .join("&"); // Join them with "&"
+
+    return queryParams ? `?${queryParams}` : "";
+  };
+
+  const queryString = buildQueryString(filters);
+
+  const filtersConfig = [];
+
+  const handleFilterChange = (updatedFilters: Record<string, string>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+    }));
+  };
+
+  const handleFilterSubmit = () => {
+    // Perform filtering logic here
+    console.log("Filters submitted:", filters);
+    getClientData();
+  };
+
+  const getClientData = async () => {
+    setLoading(true);
+    if (queryString.length > 0) {
+      try {
+        const res = await getFilterLawyerCases(queryString, lang);
+
+        setData(res?.body || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    } else {
+      try {
+        const res =
+          page === 1
+            ? await getLawyerCases(lang)
+            : await getLawyerCasesPanigation(page, lang);
+
+        setData(res?.body || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    }
+  };
+
+  const SearchData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await SearchLawyerCases(search, lang);
+
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      SearchData();
+    } else {
+      getClientData();
+    }
+  }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View />
-          <CaseStatus />
-          <CreateDate />
-          <FileRequest />
-
+          <View row={row} />
+          <CaseStatus id={row.original.id} />
+          <CreateDate id={row.original.id} />
+          <FileRequest id={row.original.id} />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -249,11 +345,24 @@ const TableData = () => {
       },
     },
   ];
+  const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (
     <div>
       {/* Render your data table here using the fetched tasks */}
       {/* Assuming you have a table component that takes columns and data */}
-      <DataTable data={data} columns={columns} />
+      <DataTable
+        data={data}
+        setPage={setPage}
+        setSearch={setSearch}
+        searchPalsceholder={searchPalsceholder}
+        page={page}
+        search={search}
+        filtersConfig={filtersConfig}
+        onFilterChange={handleFilterChange}
+        onFilterSubmit={handleFilterSubmit}
+        columns={columns}
+        isPaginationDisabled={isPaginationDisabled}
+      />{" "}
     </div>
   );
 };

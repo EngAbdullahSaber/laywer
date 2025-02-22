@@ -35,7 +35,7 @@ const VerifyForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const username = useSelector((state: RootState) => state.userName);
-  const tokenOtp = useSelector((state: RootState1) => state.accessToken);
+  const tokenOtp = useSelector((state: RootState1) => state.phoneToken);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
@@ -89,7 +89,7 @@ const VerifyForm = () => {
         if (res?.message) {
           toast.success(res.message);
         }
-      
+
         // Ensure the access_token exists before trying to store it
         if (res?.body?.access_token) {
           storeTokenInLocalStorage(res.body.access_token);
@@ -97,10 +97,10 @@ const VerifyForm = () => {
           toast.error("Access token missing");
           return;
         }
-      
+
         // Ensure the user and role information exists before using it
         const userRole = res?.body?.user?.role_with_permission?.name;
-        localStorage.setItem("role",userRole);
+        localStorage.setItem("role", userRole);
         if (userRole) {
           // Redirect based on role
           if (userRole == "super_admin") {
@@ -118,7 +118,6 @@ const VerifyForm = () => {
       } else {
         toast.error("Response is invalid or missing");
       }
-      
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 

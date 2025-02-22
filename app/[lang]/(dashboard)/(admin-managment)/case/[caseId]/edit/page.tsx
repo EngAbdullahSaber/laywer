@@ -12,17 +12,22 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FileUploaderMultiple from "./FileUploaderSingle";
+import FileUploaderSingle from "./FileUploaderSingle";
 import { getCourtsPanigation } from "@/services/courts/courts";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { getLawyerPanigation } from "@/services/lawyer/lawyer";
 import { useParams } from "next/navigation";
-import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
+import InfiniteScrollSelect from "../../../courts/add/InfiniteScrollSelect";
 import SelectCase from "./SelectCase";
-import { CreateCases, getCases } from "@/services/cases/cases";
+import {
+  CreateCases,
+  getCases,
+  getSpecifiedCases,
+  UpdateCases,
+} from "@/services/cases/cases";
 import { getCategory } from "@/services/category/category";
-import BasicSelect from "../../contact-list/BasicSelect";
-import CreateCaseCategory from "../../../(category-mangement)/cases-category/CreateCaseCategory";
+import BasicSelect from "./BasicSelect";
+import CreateCaseCategory from "../../../../(category-mangement)/cases-category/CreateCaseCategory";
 import { UploadImage } from "@/services/auth/auth";
 import { AxiosError } from "axios";
 
@@ -43,7 +48,7 @@ interface ErrorResponse {
 }
 const Page = () => {
   const { t } = useTranslate();
-  const { lang } = useParams();
+  const { lang, caseId } = useParams();
   const [lawyerData, setLawyerData] = useState<LawyerData>({
     client_id: "",
     court_id: "",
@@ -85,9 +90,8 @@ const Page = () => {
       const res = await getCases(lang);
 
       // Convert the ID to a string, pad it with leading zeros, and default to '0000'
-      const caseId =
-        String(res?.body[res?.body.length - 1].id).padStart(4, "0") || "0000";
-      console.log(res?.body[res?.body.length - 1].id);
+      const caseId = String(res?.body[0].id).padStart(4, "0") || "0000";
+      // console.log(caseId);
       // const initialNumbers =
       //   Number(caseId) < 10
       //     ? "000" + Number(caseId)
@@ -239,6 +243,54 @@ const Page = () => {
     value: item.name,
     label: item.name,
   }));
+
+  const getLawyerData = async () => {
+    try {
+      const res = await getSpecifiedCases(lang, caseId);
+      if (res?.body) {
+        const lawyer = res.body;
+        console.log(lawyer);
+        setLawyerData({
+          category_id: lawyer.category?.id,
+          claim_status: lawyer.claim_status,
+          details: lawyer.details,
+          main_case_number: lawyer.main_case_number,
+          title: lawyer.title,
+          lawyer_id: lawyer.lawyer?.id,
+          court_id: lawyer.court?.id,
+          client_id: lawyer.client?.id,
+        });
+        setDates({
+          receive_date: lawyer.receive_date,
+          submissionDate: lawyer.submit_date,
+          judgmentDate: lawyer.judgment_date,
+          hearingDate: lawyer.session_date,
+        });
+        setOppositeParties(lawyer.defendants);
+        setCaseNumbers(lawyer.case_numbers);
+        const caseNumbers = lawyer.case_numbers.map(
+          (item) => item.case_number_id
+        );
+        setNumbers(caseNumbers);
+        const secondLetters = lawyer.case_numbers.map(
+          (item) => item.second_letter
+        );
+        setSelectedValue1(secondLetters);
+        const firstLetters = lawyer.case_numbers.map(
+          (item) => item.first_letter
+        );
+        setSelectedValue(firstLetters);
+        const years = lawyer.case_numbers.map((item) => item.case_year);
+        setCaseYears(years);
+
+        setImages({
+          files: lawyer.files,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching lawyer data", error);
+    }
+  };
   useEffect(() => {
     // Make sure the arrays have the same length before combining them
     if (
@@ -257,10 +309,11 @@ const Page = () => {
     }
   }, [selectedValue, selectedValue1, numbers, caseYears]);
   useEffect(() => {
-    fetchDataCategory();
+    getLawyerData();
   }, [flag]);
   const formatOption = (item: any) => ({ value: item.id, label: item.name });
   useEffect(() => {
+    fetchDataCategory();
     getCasesData();
   }, []);
 
@@ -274,7 +327,7 @@ const Page = () => {
     });
 
     images.files.forEach((fileId, index) => {
-      formData.append(`files[${index}]`, fileId);
+      formData.append(`files[${index}]`, fileId.image_id);
     });
     oppositeParties.forEach((fileId, index) => {
       formData.append(`defendants[${index}]`, fileId);
@@ -287,11 +340,11 @@ const Page = () => {
       // Append each caseNumber detail to formData
       formData.append(
         `case_numbers[${index}][first_letter]`,
-        caseNumber.first_letter.value
+        caseNumber.first_letter
       );
       formData.append(
         `case_numbers[${index}][second_letter]`,
-        caseNumber.second_letter.value
+        caseNumber.second_letter
       );
       formData.append(
         `case_numbers[${index}][case_year]`,
@@ -299,14 +352,11 @@ const Page = () => {
       );
       formData.append(
         `case_numbers[${index}][case_number_id]`,
-        caseNumber.second_letter.value +
-          caseNumber.first_letter.value +
-          caseNumber.case_year.slice(-2) +
-          caseNumber.case_number_id
+        caseNumber.case_number_id
       );
     });
     try {
-      const res = await CreateCases(formData, lang); // Call API to create the lawyer
+      const res = await UpdateCases(formData, caseId, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
         setLawyerData({
@@ -328,22 +378,22 @@ const Page = () => {
 
       // Construct the dynamic key based on field names and the current language
       const fields = [
-        "client_id",
-        "court_id",
-        "category_id",
         "title",
-        "lawyer_id",
-        "case_numbers",
+        "category_id",
+        "claim_status",
+        "details",
         "main_case_number",
+        "lawyer_id",
+        "court_id",
+        "client_id",
         "files",
+        "defendants",
         "judgment_date",
         "submit_date",
         "session_date",
         "receive_date",
-        "claim_status",
-        "details",
-        "defendants",
       ];
+
       let errorMessage = "Something went wrong."; // Default fallback message
 
       // Loop through the fields to find the corresponding error message
@@ -362,11 +412,13 @@ const Page = () => {
   };
   console.log(selectedValue);
   console.log(selectedValue1);
+  console.log(caseYears);
+  console.log(numbers);
   return (
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>{t("Create a New Case")}</CardTitle>
+          <CardTitle>{t("Update Case")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -484,6 +536,7 @@ const Page = () => {
                   type="text"
                   placeholder={t("Enter Case Name")}
                   name="title"
+                  value={lawyerData.title}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -635,6 +688,7 @@ const Page = () => {
                   type="number"
                   placeholder={t("Enter Case Number")}
                   name="main_case_number"
+                  value={lawyerData.main_case_number}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -662,9 +716,9 @@ const Page = () => {
               className="flex flex-col gap-2 w-full"
             >
               <Label>
-                <FileUploaderMultiple
-                  imageType="reply_files"
-                  id={images.reply_files}
+                <FileUploaderSingle
+                  imageType="files"
+                  id={images.files}
                   onFileChange={handleImageChange}
                 />{" "}
               </Label>
@@ -826,6 +880,7 @@ const Page = () => {
                 <Textarea
                   placeholder={t("Type Here")}
                   rows={7}
+                  value={lawyerData.details}
                   name="details"
                   onChange={handleInputChange}
                 />
@@ -843,7 +898,7 @@ const Page = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Case")}
+                {t("Update Case")}
               </Button>
             </motion.div>
           </form>
