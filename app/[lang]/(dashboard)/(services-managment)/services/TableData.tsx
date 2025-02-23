@@ -35,7 +35,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
-  const searchPalsceholder = "Search By Email ,Phone and Name";
+  const searchPalsceholder = "Searchs";
   const { lang } = useParams();
 
   const [filters, setFilters] = useState<Record<string, string>>({

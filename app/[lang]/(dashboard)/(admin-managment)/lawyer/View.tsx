@@ -55,7 +55,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          Profile Data
+          {t("Profile Data")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
           <motion.li
@@ -183,14 +183,14 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             value={lawyerData?.category.name || "-"}
           />
           <DetailItem
-            label="Date Of Create Account"
+            label={t("Date Of Create Accounts")}
             value={
               new Date(lawyerData?.created_at).toLocaleDateString("en-GB") ||
               "-"
             }
           />
           <DetailItem
-            label="Last Update of Account"
+            label={t("Last Update of Accounts")}
             value={
               new Date(lawyerData?.updated_at).toLocaleDateString("en-GB") ||
               "-"
@@ -215,7 +215,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           >
             {t("Lawyer Cases")}
           </motion.h3>
-          <p className="text-gray-500 mt-2">{t("No cases found.")}</p>
+          <p className="text-gray-500 mt-2">{t("No cases found")}</p>
         </>
       );
     }
@@ -232,10 +232,8 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         </motion.h3>
         <div className="space-y-4 mt-5">
           {lawyerData.map((suit, index) => (
-            <div key={index} className="border rounded-lg p-4">
-              <h4 className="font-semibold text-md mb-3">
-                {t(`Case ${index + 1}`)}
-              </h4>
+            <div key={index} className="border-b-2 py-4">
+              <h4 className="font-semibold text-md mb-3">{suit?.title}</h4>
               <ul className="md:grid grid-cols-2 gap-2 space-y-2 md:space-y-0">
                 <DetailItem label={t("Id")} value={suit?.id || "-"} />
                 <DetailItem label={t("Title")} value={suit?.title || "-"} />

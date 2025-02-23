@@ -38,7 +38,7 @@ export function DataTableToolbar({
     <div className="flex flex-1 flex-wrap items-center gap-2">
       {searchPalsceholder ? (
         <Input
-          placeholder={searchPalsceholder}
+          placeholder={t(searchPalsceholder)}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="h-8 min-w-[200px] max-w-sm"

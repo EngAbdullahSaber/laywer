@@ -38,7 +38,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
-  const searchPalsceholder = "Search By Email ,Phone and Name";
+  const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const { t } = useTranslate();
 
@@ -129,7 +129,7 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <FileRequest id={row.original.id}/>
+          <FileRequest id={row.original.id} />
           {/* <RequestStatus /> */}
         </div>
       ),

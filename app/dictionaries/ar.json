@@ -742,6 +742,23 @@
   "Select judgmentDate": "اختر تاريخ الحكم",
   "Select hearingDate": "اختر تاريخ الجلسة",
   "Select receive_date": "اختر تاريخ الاستلام",
+  "Claim Status": "حالة المطالبة",
+  "Session Date": "تاريخ الجلسة",
+  "Judgment Date": "تاريخ الحكم",
+  "Submit Date": "تاريخ التقديم",
+  "Main Case Number": "رقم القضية الرئيسي",
+  "Court City": "مدينة المحكمة",
+  "Court Region": "منطقة المحكمة",
+  "Court Address": "عنوان المحكمة",
+  "Defendants": "المتهمون",
+  "Files": "الملفات",
+  "Receive Date": "تاريخ الاستلام",
+  "Profile Data": "بيانات الملف الشخصي",
+  "Last Update of Accounts": "آخر تحديث للحساب",
+  "Date Of Create Accounts": "تاريخ إنشاء الحساب",
+  "No cases found": "لا توجد قضايا",
+  "Searchs": "بحث...",
+
   "Next Appointmet": "الموعد القادم"
 
 }
