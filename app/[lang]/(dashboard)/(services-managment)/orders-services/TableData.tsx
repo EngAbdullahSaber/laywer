@@ -20,12 +20,12 @@ import {
 
 interface Task {
   id: string;
-  Client_Name?: string;
-  Lawyer_Name?: string;
+  client?: any;
+  created_at?: string;
   Order_Status?: string;
   Date?: string;
   Title?: string;
-  Image?: string;
+  service?: any;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -146,8 +146,10 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <Avatar>
-              <AvatarImage src={row.original.Image} />
-              <AvatarFallback>AB</AvatarFallback>
+              <AvatarImage src={row.original?.service?.service_file?.url} />
+              <AvatarFallback>
+                {row.original?.service?.service_file?.image_name.slice(0, 2)}
+              </AvatarFallback>
             </Avatar>
           </div>
         );
@@ -170,7 +172,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Title}
+              {row.original?.service?.title}
             </motion.span>{" "}
           </div>
         );
@@ -190,7 +192,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Client_Name}
+              {row.original?.client?.name}
             </motion.span>{" "}
           </div>
         );
@@ -214,7 +216,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Date}
+              {new Date(row.original.created_at).toLocaleDateString("en-GB")}
             </motion.span>{" "}
           </div>
         );

@@ -27,7 +27,7 @@ const page = () => {
     try {
       const res = await getReplyedMessages(lang);
       const res1 = await getNotReplyedMessages(lang);
-
+      console.log(res?.body?.data);
       setReplyedMessages(res?.body?.data || []);
       setNotReplyedMessages(res1?.body?.data || []);
       setLoading(false);
@@ -36,10 +36,11 @@ const page = () => {
       setLoading(false);
     }
   };
+  console.log(replyedMessages);
 
   useEffect(() => {
     getMessagesData();
-  }, []);
+  }, [flag]);
   return (
     <Tabs defaultValue="Answered" className="">
       <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20  sm:h-12">
@@ -66,79 +67,90 @@ const page = () => {
             <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"></div>
           </div>
 
-          <Card className="my-4">
-            <div className="flex flex-row  !flex-nowrap justify-between items-center p-4 rounded-xl my-3">
-              <div className="flex flex-col gap-3 justify-between items-start">
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.6 }}
-                  className="font-bold text-xl  text-[#1A1A1A] dark:text-slate-400"
-                >
-                  اريد ان احجز قضية جديدة
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.7 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  اسم العميل : <span className="font-bold">احمد على</span>
-                </motion.p>
+          {replyedMessages.map((item: any, index: number) => {
+            return (
+              <Card className="my-4" key={index}>
+                <div className="flex flex-row !flex-nowrap justify-between items-center p-4 rounded-xl my-3">
+                  <div className="flex flex-col gap-3 justify-between items-start">
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.6 }}
+                      className="font-bold text-xl text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      {item?.message}{" "}
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.7 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الرد : <span className="font-bold"> {item?.reply}</span>
+                    </motion.p>
 
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  الرقم التعريفى للعميل :{" "}
-                  <span className="font-bold"> 68786</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.9 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  الرقم التعريفى للطلب :{" "}
-                  <span className="font-bold"> 68786</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  الحالة : <span className="font-bold"> تم الرد</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1.1 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  العنوان <span className="font-bold">الرياض</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1.2 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  تاريح الارسال:{" "}
-                  <span className="font-bold">September 12, 2024 </span>
-                </motion.p>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-6">
-                {" "}
-              </div>
-            </div>
-          </Card>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.8 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الرقم التعريفى للعميل :{" "}
+                      <span className="font-bold"> 68786</span>
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.9 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الرقم التعريفى للطلب :{" "}
+                      <span className="font-bold"> {item?.id}</span>
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الحالة : <span className="font-bold"> تم الرد</span>
+                    </motion.p>
+                    {/* <motion.p
+                    initial={{ x: 15, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 1.1 }}
+                    className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                  >
+                    العنوان <span className="font-bold">الرياض</span>
+                  </motion.p> */}
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.1 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      تاريح المقابلة مع المحامى:{" "}
+                      <span className="font-bold">{item?.meeting_date} </span>
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.2 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      تاريخ الارسال:{" "}
+                      <span className="font-bold">
+                        {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
+                      </span>{" "}
+                    </motion.p>
+                  </div>
+                  <div className="flex flex-col justify-center items-center gap-6">
+                    {/* Add any other content here */}
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </TabsContent>
       <TabsContent value="NotAnswered">
@@ -159,80 +171,87 @@ const page = () => {
             <div className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"></div>
           </div>
 
-          <Card className="my-4">
-            <div className="flex flex-row  !flex-wrap justify-between items-center p-4 rounded-xl my-3">
-              <div className="flex flex-col gap-3 justify-between items-start">
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.6 }}
-                  className="font-bold text-xl  text-[#1A1A1A] dark:text-slate-400"
-                >
-                  اريد ان احجز قضية جديدة
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.7 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  اسم العميل : <span className="font-bold">احمد على</span>
-                </motion.p>
+          {notReplyedMessages.map((item: any, index: number) => {
+            return (
+              <Card className="my-4" key={index}>
+                <div className="flex flex-row !flex-wrap justify-between items-center p-4 rounded-xl my-3">
+                  <div className="flex flex-col gap-3 justify-between items-start">
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.6 }}
+                      className="font-bold text-xl text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      {item?.message}{" "}
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.7 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      اسم العميل : <span className="font-bold">احمد على</span>
+                    </motion.p>
 
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  الرقم التعريفى للعميل :{" "}
-                  <span className="font-bold"> 68786</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.9 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  الرقم التعريفى للطلب :{" "}
-                  <span className="font-bold"> 68786</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  {" "}
-                  الحالة : <span className="font-bold"> تم الرد</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1.1 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  العنوان <span className="font-bold">الرياض</span>
-                </motion.p>
-                <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1.2 }}
-                  className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  تاريح الارسال:{" "}
-                  <span className="font-bold">September 12, 2024 </span>
-                </motion.p>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-6">
-                {" "}
-                <CreateDate flag={flag} setFlag={flag} />
-              </div>
-            </div>
-          </Card>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.8 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الرقم التعريفى للعميل :{" "}
+                      <span className="font-bold"> 68786</span>
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.9 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الرقم التعريفى للطلب :{" "}
+                      <span className="font-bold"> {item?.id}</span>
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      الحالة : <span className="font-bold"> لم يتم الرد</span>
+                    </motion.p>
+                    {/* <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.1 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      العنوان <span className="font-bold">الرياض</span>
+                    </motion.p> */}
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.2 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      تاريخ الارسال:{" "}
+                      <span className="font-bold">
+                        {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
+                      </span>{" "}
+                    </motion.p>
+                  </div>
+                  <div className="flex flex-col justify-center items-center gap-6">
+                    {/* Pass correct props for CreateDate */}
+                    <CreateDate
+                      flag={item.flag}
+                      setFlag={item.setFlag}
+                      id={item.id}
+                    />{" "}
+                    {/* Assuming `flag` and `setFlag` are part of `item` */}
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </TabsContent>
     </Tabs>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { cn, isLocationMatch, getDynamicPath, translate } from "@/lib/utils";
-import { menusConfig, ModernNavType } from "@/config/menus";
+import { useRole } from "@/config/useRole";
+import { getMenusConfig } from "@/config/menus";
 import SingleIconMenu from "./single-icon-menu";
 import { useRouter, usePathname } from "next/navigation";
 import { useSidebar, useThemeStore } from "@/store";
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslate } from "@/config/useTranslation";
 
 const ModuleSidebar = ({ trans }: { trans: any }) => {
+  const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.modern || [];
   const { subMenu, setSubmenu, collapsed, setCollapsed, sidebarBg } =
     useSidebar();

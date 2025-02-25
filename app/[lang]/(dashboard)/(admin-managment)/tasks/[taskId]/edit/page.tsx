@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import BasicSelect from "./BasicSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,7 @@ import { getLawyerPanigation } from "@/services/lawyer/lawyer";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import Flatpickr from "react-flatpickr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
@@ -16,9 +16,13 @@ import { motion } from "framer-motion";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
+import InfiniteScrollSelect from "../../../courts/add/InfiniteScrollSelect";
 import { useParams } from "next/navigation";
-import { CreateTasks } from "@/services/tasks/tasks";
+import {
+  CreateTasks,
+  getSpecifiedTasks,
+  UpdateTasks,
+} from "@/services/tasks/tasks";
 import { getCasesPanigation } from "@/services/cases/cases";
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
@@ -27,10 +31,8 @@ const Importance_Level: { id: string; value: string; label: string }[] = [
 ];
 
 interface LawyerData {
-  titleEn: string;
-  titleAr: string;
-  detailsEn: string;
-  detailsAr: string;
+  title: string;
+  details: string;
   lawyer_id: string;
   importance_level: string;
   law_suit_id: string;
@@ -42,12 +44,10 @@ interface ErrorResponse {
 }
 const page = () => {
   const { t } = useTranslate();
-  const { lang } = useParams();
+  const { lang, taskId } = useParams();
   const [lawyerData, setLawyerData] = useState<LawyerData>({
-    titleEn: "",
-    titleAr: "",
-    detailsEn: "",
-    detailsAr: "",
+    title: "",
+    details: "",
     lawyer_id: "",
     importance_level: "",
     law_suit_id: "",
@@ -75,6 +75,30 @@ const page = () => {
       return [];
     }
   };
+  const getCasesData = async () => {
+    try {
+      const res = await getSpecifiedTasks(lang, taskId);
+      if (res?.body) {
+        const lawyer = res.body;
+        console.log(lawyer);
+        setLawyerData({
+          law_suit_id: lawyer.law_suit?.id,
+          importance_level: lawyer.importance_level,
+          title: lawyer.title,
+          lawyer_id: lawyer.lawyer?.id,
+          details: lawyer.details,
+        });
+        setDates({
+          due_date: lawyer.due_date,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching lawyer data", error);
+    }
+  };
+  useEffect(() => {
+    getCasesData();
+  }, []);
   const fetchCasesData = async (service: Function, page: number = 1) => {
     try {
       const data = await service(page, lang);
@@ -103,11 +127,12 @@ const page = () => {
     const formattedDate = `${year}-${month}-${day}`;
     setDates((prev) => ({ ...prev, [key]: formattedDate }));
   };
+  console.log(lawyerData.importance_level);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
-      title: { en: lawyerData.titleEn, ar: lawyerData.titleAr },
-      details: { en: lawyerData.detailsEn, ar: lawyerData.detailsAr },
+      title: lawyerData.title,
+      details: lawyerData.details,
       lawyer_id: lawyerData.lawyer_id,
       importance_level: lawyerData.importance_level,
       due_date: dates.due_date,
@@ -115,18 +140,10 @@ const page = () => {
     };
 
     try {
-      const res = await CreateTasks(data, lang); // Call API to create the lawyer
+      const res = await UpdateTasks(lang, taskId, data); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
-        setLawyerData({
-          titleEn: "",
-          titleAr: "",
-          detailsEn: "",
-          detailsAr: "",
-          lawyer_id: "",
-          importance_level: "",
-          law_suit_id: "",
-        });
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -136,10 +153,8 @@ const page = () => {
 
       // Construct the dynamic key based on field names and the current language
       const fields = [
-        "titleEn",
-        "titleAr",
-        "detailsEn",
-        "detailsAr",
+        "title",
+        "details",
         "lawyer_id",
         "importance_level",
         "law_suit_id",
@@ -165,7 +180,7 @@ const page = () => {
     <div>
       <Card>
         <CardHeader>
-          <CardTitle> {t("Create a New Task")}</CardTitle>
+          <CardTitle> {t("Edit Task")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form
@@ -179,25 +194,12 @@ const page = () => {
                 transition={{ duration: 0.6 }}
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
-                <Label htmlFor="Name">{t("Task Name In English")}</Label>
-                <Input
-                  type="text"
-                  placeholder={t("Enter Task Name In English")}
-                  name="titleEn"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-col gap-2 w-full sm:w-[48%]"
-              >
                 <Label htmlFor="Name">{t("Task Name In Arabic")}</Label>
                 <Input
                   type="text"
                   placeholder={t("Enter Task Name In Arabic")}
-                  name="titleAr"
+                  name="title"
+                  value={lawyerData.title}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -214,7 +216,7 @@ const page = () => {
                 <BasicSelect
                   menu={Importance_Level}
                   setSelectedValue={(value) => handleSelectChange(value)}
-                  selectedValue={lawyerData["importance_level"]}
+                  selectedValue={lawyerData.importance_level}
                 />
               </motion.div>
 
@@ -298,22 +300,7 @@ const page = () => {
                 />{" "}
               </motion.div>
             </div>
-            <motion.div
-              initial={{ y: -50 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 1.1 }}
-            >
-              {" "}
-              <div className="flex flex-col gap-2 w-full  my-4">
-                <Label>{t("Details In English")}</Label>
-                <Textarea
-                  placeholder={t("Type Here")}
-                  rows={7}
-                  name="detailsEn"
-                  onChange={handleInputChange}
-                />
-              </div>
-            </motion.div>
+
             <motion.div
               initial={{ y: -50 }}
               whileInView={{ y: 0 }}
@@ -325,7 +312,8 @@ const page = () => {
                 <Textarea
                   placeholder={t("Type Here")}
                   rows={7}
-                  name="detailsAr"
+                  value={lawyerData.details}
+                  name="details"
                   onChange={handleInputChange}
                 />
               </div>
@@ -348,7 +336,7 @@ const page = () => {
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Task")}
+                {t("Edit Task")}
               </Button>
             </motion.div>
           </form>{" "}

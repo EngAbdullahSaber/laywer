@@ -378,22 +378,22 @@ const Page = () => {
 
       // Construct the dynamic key based on field names and the current language
       const fields = [
-        "title",
-        "category_id",
-        "claim_status",
-        "details",
-        "main_case_number",
-        "lawyer_id",
-        "court_id",
         "client_id",
+        "court_id",
+        "category_id",
+        "title",
+        "lawyer_id",
+        "case_numbers",
+        "main_case_number",
         "files",
-        "defendants",
         "judgment_date",
         "submit_date",
         "session_date",
         "receive_date",
+        "claim_status",
+        "details",
+        "defendants",
       ];
-
       let errorMessage = "Something went wrong."; // Default fallback message
 
       // Loop through the fields to find the corresponding error message
@@ -585,6 +585,21 @@ const Page = () => {
               {t("Case Numbers")}
             </motion.p>
             <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2 my-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="MainCaseNumber">{t("Case Number")}</Label>
+                <Input
+                  type="number"
+                  placeholder={t("Enter Case Number")}
+                  name="main_case_number"
+                  value={lawyerData.main_case_number}
+                  onChange={handleInputChange}
+                />
+              </motion.div>
               {Array.from({ length: secondaryCaseNumber }).map((_, index) => (
                 <div
                   key={index}
@@ -677,21 +692,6 @@ const Page = () => {
                   )}
                 </div>
               ))}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.9 }}
-                className="flex flex-col gap-2 my-2 w-full md:w-[48%]"
-              >
-                <Label htmlFor="MainCaseNumber">{t("Case Number")}</Label>
-                <Input
-                  type="number"
-                  placeholder={t("Enter Case Number")}
-                  name="main_case_number"
-                  value={lawyerData.main_case_number}
-                  onChange={handleInputChange}
-                />
-              </motion.div>
             </div>
 
             {/* Upload Files Section */}

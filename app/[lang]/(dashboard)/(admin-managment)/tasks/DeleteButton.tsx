@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +20,38 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-const Delete = () => {
-  const { t, loading, error } = useTranslate();
+import { toast as reToast } from "react-hot-toast";
+import { useParams } from "next/navigation";
+import { AxiosError } from "axios";
+import { DeleteTasks } from "@/services/tasks/tasks";
+interface DeleteTasks {
+  id: string;
+  getLawyerData: () => Promise<void>;
+}
+interface ErrorResponse {
+  errors?: string[];
+}
+const DeleteButton: React.FC<DeleteTasks> = ({ id, getLawyerData }) => {
+  const { t } = useTranslate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const { lang } = useParams();
+
+  const deleteTasksData = async () => {
+    try {
+      const res = await DeleteTasks(id, lang); // Delete user
+      reToast.success(res.message);
+      setIsDialogOpen(false); // Close the dialog after successful deletion
+      getLawyerData(); // Re-fetch the user data after deletion
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>; // Cast to AxiosError with your expected response type
+      const errorMessage =
+        axiosError.response?.data?.errors?.[0] || "Something went wrong.";
+      reToast.error(errorMessage);
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <TooltipProvider>
           <Tooltip>
@@ -70,12 +97,12 @@ const Delete = () => {
             {t("Are You Sure For Delete This Task?")}
           </motion.p>
         </div>
-        <DialogFooter className="">
+        <DialogFooter className="flex flex-row gap-5 justify-center">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.7 }}
-            className="flex flex-row gap-5 justify-center"
+            className="flex flex-row gap-5 justify-center w-full"
           >
             {" "}
             <DialogClose asChild>
@@ -86,6 +113,7 @@ const Delete = () => {
             <Button
               type="submit"
               className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+              onClick={deleteTasksData}
               color="primary"
             >
               {t("Agree")}
@@ -97,4 +125,4 @@ const Delete = () => {
   );
 };
 
-export default Delete;
+export default DeleteButton;

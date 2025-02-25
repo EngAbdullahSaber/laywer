@@ -3,7 +3,8 @@ import React, { useState } from "react";
 
 import { cn, isLocationMatch, getDynamicPath } from "@/lib/utils";
 import SidebarLogo from "../common/logo";
-import { menusConfig } from "@/config/menus";
+import { useRole } from "@/config/useRole";
+import { getMenusConfig } from "@/config/menus";
 import MenuLabel from "../common/menu-label";
 import SingleMenuItem from "./single-menu-item";
 import SubMenuHandler from "./sub-menu-handler";
@@ -16,6 +17,7 @@ import { usePathname } from "next/navigation";
 const PopoverSidebar = ({ trans }: { trans: string }) => {
   const { collapsed, sidebarBg } = useSidebar();
   const { layout, isRtl } = useThemeStore();
+  const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);

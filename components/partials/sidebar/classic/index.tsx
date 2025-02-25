@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { cn, isLocationMatch, getDynamicPath } from "@/lib/utils";
 import { useSidebar, useThemeStore } from "@/store";
 import SidebarLogo from "../common/logo";
-import { menusConfig } from "@/config/menus";
+import { useRole } from "@/config/useRole";
+import { getMenusConfig } from "@/config/menus";
 import MenuLabel from "../common/menu-label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useParams, usePathname } from "next/navigation";
@@ -15,6 +16,9 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const { sidebarBg } = useSidebar();
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
+
+  const role = useRole(); // Fetch role using the custom hook
+  const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const { collapsed, setCollapsed } = useSidebar();
   const { isRtl } = useThemeStore();

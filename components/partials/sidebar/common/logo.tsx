@@ -15,7 +15,7 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
             height={32}
             width={32}
             alt="logo"
-            className="w-8 h-8"
+            className="w-16 h-12"
             priority={true}
           />{" "}
           {/* {(!collapsed || hovered) && (

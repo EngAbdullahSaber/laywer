@@ -7,7 +7,34 @@ import Image from "next/image";
 import { Upload } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
+import { RemoveImage } from "@/services/auth/auth";
+import { AxiosError } from "axios";
+import { toast as reToast } from "react-hot-toast";
+import { useParams } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
+interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+
+interface ImageUploaderProps {
+  imageType:
+    | "lawyer_licence"
+    | "driving_licence"
+    | "national_id_image"
+    | "subscription_image"; // Restrict imageType to allowed literals
+  id: File | null;
+  onFileChange: (
+    file: File,
+    imageType:
+      | "lawyer_licence"
+      | "driving_licence"
+      | "national_id_image"
+      | "subscription_image"
+  ) => Promise<void>;
+}
 // Define accepted file types (image formats and common file formats)
 const acceptedFileTypes = [
   "image/jpeg",
@@ -18,18 +45,33 @@ const acceptedFileTypes = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 
-const FileUploaderMultiple = () => {
-  const [files, setFiles] = useState<File[]>([]);
+const FileUploaderMultiple = ({
+  imageType,
+  id,
+  onFileChange,
+}: ImageUploaderProps) => {
+  const [files, setFiles] = useState<File[]>([]); // Keep track of multiple files
   const { t } = useTranslate();
+  const { lang } = useParams();
+  const { toast } = useToast();
 
-  // UseDropzone hook configuration
+  // UseDropzone hook configuration for multiple files
   const { getRootProps, getInputProps } = useDropzone({
-    accept: acceptedFileTypes, // Accept images and common document types
+    maxFiles: 5, // You can upload up to 5 files
+    maxSize: 2000000, // 2 MB max size for each file
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".gif"],
+    },
     onDrop: (acceptedFiles) => {
-      setFiles((prevFiles) => [
-        ...prevFiles,
-        ...acceptedFiles.map((file) => Object.assign(file)),
-      ]);
+      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); // Add new files to the array
+      acceptedFiles.forEach((file) => onFileChange(file, imageType)); // Trigger the callback for each file
+    },
+    onDropRejected: () => {
+      toast({
+        color: "destructive",
+        title: "Error",
+        description: "You can only upload 5 files & maximum size of 2 MB each",
+      });
     },
   });
 
@@ -51,13 +93,23 @@ const FileUploaderMultiple = () => {
   };
 
   // Handle removal of individual files
-  const handleRemoveFile = (file: File) => {
-    setFiles(files.filter((f) => f.name !== file.name));
-  };
+  const handleRemoveFile = async (file: File, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent form submission or other event triggers
 
-  // Handle removing all files
-  const handleRemoveAllFiles = () => {
-    setFiles([]);
+    setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name)); // Remove the specific file from the state
+
+    try {
+      const res = await RemoveImage(id, lang); // Call API to remove the image (adjust if needed)
+      if (res) {
+        reToast.success(res.message);
+      } else {
+        reToast.error(t("Failed to remove image"));
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong.";
+      reToast.error(errorMessage);
+    }
   };
 
   // Format file size into human-readable format (KB or MB)
@@ -90,7 +142,7 @@ const FileUploaderMultiple = () => {
         color="destructive"
         variant="outline"
         className="border-none rounded-full"
-        onClick={() => handleRemoveFile(file)}
+        onClick={(e) => handleRemoveFile(file, e)}
       >
         <Icon icon="tabler:x" className="h-5 w-5" />
       </Button>
@@ -122,7 +174,7 @@ const FileUploaderMultiple = () => {
       {/* Display the uploaded files */}
       {files.length > 0 && (
         <div>
-          <div className="mt-4 flex flex-row justify-between items-center w-full">
+          <div className="mt-4 flex flex-wrap justify-between items-center w-full">
             {fileList}
           </div>
         </div>

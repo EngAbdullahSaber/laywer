@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getServicesOrders(lang: any) {
-  let res = await api.get(`court/services`, {
+  let res = await api.get(`court/service-orders`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -19,7 +19,7 @@ export async function getServicesOrders(lang: any) {
 //   else return false;
 // }
 export async function getFilterServicesOrders(data: any, lang: any) {
-  let res = await api.get(`court/services?per_page=10${data}`, {
+  let res = await api.get(`court/service-orders?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -29,7 +29,7 @@ export async function getFilterServicesOrders(data: any, lang: any) {
 }
 
 export async function getServicesPanigationOrders(page: any, lang: any) {
-  let res = await api.get(`court/services?page=${page}`, {
+  let res = await api.get(`court/service-orders?page=${page}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -39,7 +39,7 @@ export async function getServicesPanigationOrders(page: any, lang: any) {
 }
 
 export async function SearchServicesOrders(id: any, lang: any) {
-  let res = await api.get(`court/services?search=${id}`, {
+  let res = await api.get(`court/service-orders?search=${id}`, {
     headers: {
       "Accept-Language": lang,
     },

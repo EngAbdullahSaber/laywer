@@ -3,17 +3,26 @@ import React, { useState } from "react";
 import { cn, isLocationMatch } from "@/lib/utils";
 import { useSidebar, useThemeStore } from "@/store";
 import SidebarLogo from "../common/logo";
-import { menusConfig } from "@/config/menus";
+import { useRole } from "@/config/useRole";
+import { getMenusConfig } from "@/config/menus";
 import MenuLabel from "../common/menu-label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import SingleMenuItem from "./single-menu-item";
 import SubMenuHandler from "./sub-menu-handler";
 import NestedSubMenu from "../common/nested-menus";
-const MobileSidebar = ({ className, trans }: { className?: string, trans: any }) => {
+const MobileSidebar = ({
+  className,
+  trans,
+}: {
+  className?: string;
+  trans: any;
+}) => {
   const { sidebarBg, mobileMenu, setMobileMenu } = useSidebar();
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
+  const role = useRole(); // Fetch role using the custom hook
+  const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const { collapsed } = useSidebar();
 
@@ -119,7 +128,10 @@ const MobileSidebar = ({ className, trans }: { className?: string, trans: any })
                         activeMultiMenu={activeMultiMenu}
                         activeSubmenu={activeSubmenu}
                         item={item}
-                        index={i} title={""} trans={undefined} />
+                        index={i}
+                        title={""}
+                        trans={undefined}
+                      />
                     )}
                   </>
                 )}

@@ -21,9 +21,9 @@ import {
 
 interface Task {
   id: string;
-  Client_Name?: string;
-  Lawyer_Name?: string;
-  Order_Status?: string;
+  service?: any;
+  client?: any;
+  created_at?: string;
   Date?: string;
   Title?: string;
 }
@@ -151,7 +151,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Title}
+              {row.original?.service?.title}
             </motion.span>{" "}
           </div>
         );
@@ -171,7 +171,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Client_Name}
+              {row.original?.client?.name}
             </motion.span>{" "}
           </div>
         );
@@ -180,29 +180,7 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
-    {
-      accessorKey: "Lawyer_Name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Lawyer_Name"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.Lawyer_Name}
-            </motion.span>{" "}
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
+
     {
       accessorKey: "Order_Status",
       header: ({ column }) => (
@@ -216,17 +194,7 @@ const TableData = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Order_Status === "تم الرد" && "success") ||
-                  (row.original.Order_Status === "لم يتم الرد" &&
-                    "destructive") ||
-                  "default"
-                }
-              >
-                {row.original.Order_Status}
-              </Badge>
+              {row.original?.service?.price}
             </motion.span>
           </div>
         );
@@ -250,7 +218,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Date}
+              {new Date(row.original.created_at).toLocaleDateString("en-GB")}
             </motion.span>{" "}
           </div>
         );

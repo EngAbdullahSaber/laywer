@@ -360,8 +360,6 @@ const Page = () => {
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
-  console.log(selectedValue);
-  console.log(selectedValue1);
   return (
     <div>
       <Card>
@@ -532,6 +530,20 @@ const Page = () => {
               {t("Case Numbers")}
             </motion.p>
             <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="flex flex-col gap-2 my-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="MainCaseNumber">{t("Case Number")}</Label>
+                <Input
+                  type="number"
+                  placeholder={t("Enter Case Number")}
+                  name="main_case_number"
+                  onChange={handleInputChange}
+                />
+              </motion.div>
               {Array.from({ length: secondaryCaseNumber }).map((_, index) => (
                 <div
                   key={index}
@@ -624,20 +636,6 @@ const Page = () => {
                   )}
                 </div>
               ))}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.9 }}
-                className="flex flex-col gap-2 my-2 w-full md:w-[48%]"
-              >
-                <Label htmlFor="MainCaseNumber">{t("Case Number")}</Label>
-                <Input
-                  type="number"
-                  placeholder={t("Enter Case Number")}
-                  name="main_case_number"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
             </div>
 
             {/* Upload Files Section */}

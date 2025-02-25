@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,48 +14,100 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { motion } from "framer-motion";
 
 // A reusable component to display a list of details
-const DetailItem: React.FC<{
-  label: string;
-  value: string | number;
-  className?: string;
-}> = ({ label, value, className = "" }) => (
-  <li className="flex flex-row gap-6 items-center">
+const DetailItem: React.FC<{ label: string; value: string | number }> = ({
+  label,
+  value,
+}) => (
+  <motion.li
+    className="flex flex-row gap-6 items-center"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.3 }}
+  >
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className={`text-default-500 font-semibold w-[40%] ${className}`}>
-      {value}
-    </span>
-  </li>
+    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+  </motion.li>
 );
 
-const View = () => {
-  const { t } = useTranslate();
+interface ViewUserData {
+  row: any;
+}
+
+const ViewMore: React.FC<ViewUserData> = ({ row }) => {
+  const { t, loading, error } = useTranslate();
   const { lang } = useParams();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleSheet = () => setIsOpen((prevState) => !prevState);
+  const renderTasksData = () => {
+    const TaskData = row?.original;
 
-  // Task details to be displayed in the sheet
-  const taskDetails = [
-    { label: t("Task Name"), value: "Task 1" },
-    {
-      label: t("Importance Level"),
-      value: "High",
-      className: "text-warning-700",
-    },
-    { label: t("Assigned To"), value: "Ahmed" },
-    { label: t("Due Date"), value: "September 12, 2024 12:11 PM" },
-    { label: t("Case Name"), value: "Abdullah" },
-    {
-      label: t("Task Status"),
-      value: "Progress",
-      className: "text-success-700",
-    },
-  ];
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Task Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem label={t("Id")} value={TaskData?.id || "-"} />
+          <DetailItem label={t("title")} value={TaskData?.title || "-"} />
+          <DetailItem
+            label={t("lawyer Name")}
+            value={TaskData?.lawyer?.name || "-"}
+          />
+          <DetailItem
+            label={t("case_number")}
+            value={TaskData?.law_suit?.case_number || "-"}
+          />
+          <DetailItem label={t("due_date")} value={TaskData?.phone || "-"} />
+          <DetailItem
+            label={t("status")}
+            value={
+              TaskData?.status == "completed"
+                ? "مكتملة"
+                : TaskData?.importance_level == "in_progress"
+                ? "قيد التنفيذ"
+                : "قيدالانتظار" || "-"
+            }
+          />
+          <DetailItem
+            label={t("status")}
+            value={
+              TaskData?.importance_level == "high"
+                ? " مهمة جدا"
+                : TaskData?.importance_level == "mid"
+                ? "متوسطة الاهمية"
+                : "ذات اهمية ضعيفة" || "-"
+            }
+          />
+          <DetailItem label={t("due_date")} value={TaskData?.due_date || "-"} />
+          <DetailItem label={t("details")} value={TaskData?.details || "-"} />
+
+          <DetailItem
+            label={t("Date Of Create Task")}
+            value={
+              new Date(TaskData?.created_at).toLocaleDateString("en-GB") || "-"
+            }
+          />
+          <DetailItem
+            label={t("Last Update of Task")}
+            value={
+              new Date(TaskData?.updated_at).toLocaleDateString("en-GB") || "-"
+            }
+          />
+        </ul>
+      </>
+    );
+  };
 
   return (
     <Sheet>
@@ -65,12 +117,10 @@ const View = () => {
           variant="outline"
           className="h-7 w-7"
           color="secondary"
-          onClick={toggleSheet}
         >
           <Icon icon="heroicons:eye" className="h-4 w-4" />
         </Button>
       </SheetTrigger>
-
       <SheetContent
         side={lang === "ar" ? "left" : "right"}
         dir={lang === "ar" ? "rtl" : "ltr"}
@@ -79,30 +129,15 @@ const View = () => {
         <SheetHeader>
           <SheetTitle>{t("Task Details")}</SheetTitle>
         </SheetHeader>
-
         <ScrollArea className="h-[100%]">
-          <div className="py-6">
-            <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-              {taskDetails.map((detail, index) => (
-                <DetailItem
-                  key={index}
-                  label={detail.label}
-                  value={detail.value}
-                  className={detail.className}
-                />
-              ))}
-            </ul>
-          </div>
+          <div className="py-6">{renderTasksData()}</div>
         </ScrollArea>
-
         <SheetFooter>
-          <SheetClose asChild>
-            <Button variant="outline">{t("Close")}</Button>
-          </SheetClose>
+          <SheetClose asChild>footer content</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
   );
 };
 
-export default View;
+export default ViewMore;

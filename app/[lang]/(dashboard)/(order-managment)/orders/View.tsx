@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,28 +38,6 @@ const DetailItem = ({
     <span className="text-default-500 font-semibold w-[40%]">{value}</span>
   </motion.li>
 );
-const DetailItemLink = ({
-  label,
-  value,
-  transitionDuration,
-}: {
-  label: string;
-  value: string;
-  transitionDuration: number;
-}) => (
-  <motion.li
-    className="flex flex-row gap-6 items-center"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: transitionDuration }}
-  >
-    <span className="text-sm text-default-900 font-medium w-[52%]">
-      {label}:
-    </span>
-    <span className="text-blue-700 font-semibold w-[40%]">{value}</span>
-  </motion.li>
-);
-
 const ListItem = ({
   label,
   value,
@@ -110,30 +86,62 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           />
           <DetailItem
             transitionDuration={0.9}
-            label={t("title")}
-            value={lawyerData?.title || "-"}
+            label={t("Service Title")}
+            value={lawyerData?.service?.title || "-"}
           />
           <DetailItem
             transitionDuration={1}
-            label={t("appointment_date")}
-            value={lawyerData?.appointment_date || "-"}
+            label={t("Service price")}
+            value={lawyerData?.price || "-"}
           />
           <DetailItem
             transitionDuration={1.1}
-            label={t("appointment_time")}
-            value={lawyerData?.appointment_time || "-"}
-          />
-          <DetailItem
-            transitionDuration={1.2}
-            label={t("client")}
+            label={t("Client")}
             value={lawyerData?.client?.name || "-"}
           />
+
           <DetailItem
             transitionDuration={1.3}
-            label={t("Address")}
-            value={lawyerData?.address || "-"}
+            label={t("Date Of Ask Services")}
+            value={
+              new Date(lawyerData?.created_at).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
         </ul>
+        <hr className="my-8" />
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="flex flex-row gap-6 items-center"
+        >
+          <span className="text-sm text-default-900 font-medium w-[52%]">
+            {t("details")}:
+          </span>
+          <span className="text-default-500 font-semibold w-[40%]">
+            {lawyerData.details} {/* Display the file name */}
+          </span>
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="flex flex-row gap-6 my-5 items-center"
+        >
+          <span className="text-sm text-default-900 font-medium w-[52%]">
+            {t("invoice file")}:
+          </span>
+          <a
+            href={lawyerData.invoice_file?.url} // Access the file URL dynamically from the `file` object
+            className="text-default-500 font-semibold w-[40%]"
+            target="_blank"
+            rel="noopener noreferrer" // Added for security when opening links
+          >
+            {t("Show File")} {/* Display the file name */}
+          </a>
+        </motion.p>
       </>
     );
   };
@@ -159,22 +167,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <SheetTitle>{t("Appointment Details")}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[100%]">
-          <div className="py-6">
-            {renderAppointementData()}
-            <hr className="my-8" />
-            <ul className="md:grid grid-cols-1 !mt-5 gap-2 space-y-2 md:space-y-0">
-              <ListItem
-                label={t("details")}
-                value={row?.original?.details}
-                transitionDuration={1.4}
-              />
-              <ListItem
-                label={t("requested_details")}
-                value={row?.original?.requested_details}
-                transitionDuration={1.5}
-              />
-            </ul>{" "}
-          </div>
+          <div className="py-6">{renderAppointementData()}</div>
         </ScrollArea>
         <SheetFooter>
           <SheetClose asChild>footer content</SheetClose>

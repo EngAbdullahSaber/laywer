@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import { VerifyLogin } from "@/services/auth/auth";
 import { headerConfigKeyName } from "@/services/app.config";
 import { storeTokenInLocalStorage } from "@/services/utils";
+import { changeUserData } from "@/store/Action";
 
 interface ErrorResponse {
   errors?: {
@@ -93,14 +94,21 @@ const VerifyForm = () => {
         // Ensure the access_token exists before trying to store it
         if (res?.body?.access_token) {
           storeTokenInLocalStorage(res.body.access_token);
+          dispatch(changeUserData(res.body.user));
         } else {
           toast.error("Access token missing");
           return;
         }
 
         // Ensure the user and role information exists before using it
-        const userRole = res?.body?.user?.role_with_permission?.name;
-        localStorage.setItem("role", userRole);
+        localStorage.setItem(
+          "role",
+          res?.body?.user?.role_with_permission?.name
+        );
+        console.log(res?.body?.user?.role_with_permission?.name);
+
+        const userRole = localStorage.getItem("role");
+        console.log(userRole);
         if (userRole) {
           // Redirect based on role
           if (userRole == "super_admin") {

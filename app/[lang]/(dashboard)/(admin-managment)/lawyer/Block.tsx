@@ -112,12 +112,12 @@ const Block: React.FC<BlockUser> = ({ id, getLawyerData, status }) => {
               : t("Are You Sure For UnBlock This Laywer?")}
           </motion.p>
         </div>
-        <DialogFooter className="">
+        <DialogFooter className="flex flex-row gap-5 justify-center">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.7 }}
-            className="flex flex-row gap-5 justify-center"
+            className="flex flex-row gap-5 justify-center w-full"
           >
             {" "}
             <DialogClose asChild>

@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getTasks(lang: any) {
-  let res = await api.get(`court/cases`, {
+  let res = await api.get(`user/tasks`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -10,7 +10,7 @@ export async function getTasks(lang: any) {
   else return false;
 }
 export async function getSpecifiedTasks(lang: any, id: any) {
-  let res = await api.get(`court/cases/${id}`, {
+  let res = await api.get(`user/tasks/${id}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -19,7 +19,7 @@ export async function getSpecifiedTasks(lang: any, id: any) {
   else return false;
 }
 export async function getFilterTasks(data: any, lang: any) {
-  let res = await api.get(`court/cases?per_page=10${data}`, {
+  let res = await api.get(`user/tasks?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -28,7 +28,7 @@ export async function getFilterTasks(data: any, lang: any) {
   else return false;
 }
 export async function CreateTasks(data: any, lang: any) {
-  let res = await api.post(`court/cases`, data, {
+  let res = await api.post(`user/tasks`, data, {
     headers: {
       "Accept-Language": lang,
     },
@@ -36,9 +36,10 @@ export async function CreateTasks(data: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
-export async function ChangeStatus(data: any, lang: any) {
-  let res = await api.post(`court/cases/ask-client`, data, {
+export async function ChangeStatus(data: any, id: any, lang: any) {
+  let res = await api.put(`user/tasks/update-status/${id}`, data, {
     headers: {
+      "Content-Type": "application/json",
       "Accept-Language": lang,
     },
   });
@@ -46,7 +47,7 @@ export async function ChangeStatus(data: any, lang: any) {
   else return false;
 }
 export async function CreateNewDate(data: any, lang: any) {
-  let res = await api.post(`court/cases/new-appointment`, data, {
+  let res = await api.post(`user/tasks/new-appointment`, data, {
     headers: {
       "Accept-Language": lang,
     },
@@ -55,7 +56,7 @@ export async function CreateNewDate(data: any, lang: any) {
   else return false;
 }
 export async function DeleteTasks(id: any, lang: any) {
-  let res = await api.delete(`court/cases/${id}`, {
+  let res = await api.delete(`user/tasks/${id}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -64,7 +65,7 @@ export async function DeleteTasks(id: any, lang: any) {
   else return false;
 }
 export async function getTasksPanigation(page: any, lang: any) {
-  let res = await api.get(`court/cases?page=${page}`, {
+  let res = await api.get(`user/tasks?page=${page}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -74,7 +75,7 @@ export async function getTasksPanigation(page: any, lang: any) {
 }
 
 export async function UpdateTasks(lang: any, id: any, queryParams: any) {
-  let res = await api.put(`court/cases/${id}?${queryParams}`, {
+  let res = await api.put(`user/tasks/${id}`, queryParams, {
     headers: {
       "Accept-Language": lang,
     },
@@ -84,7 +85,7 @@ export async function UpdateTasks(lang: any, id: any, queryParams: any) {
 }
 
 export async function SearchTasks(id: any, lang: any) {
-  let res = await api.get(`court/cases?search=${id}`, {
+  let res = await api.get(`user/tasks?search=${id}`, {
     headers: {
       "Accept-Language": lang,
     },

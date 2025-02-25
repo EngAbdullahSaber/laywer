@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getOrders(lang: any) {
-  let res = await api.get(`court/services`, {
+  let res = await api.get(`client/client-inquiries`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -10,7 +10,7 @@ export async function getOrders(lang: any) {
   else return false;
 }
 export async function AskAboutOrders(lang: any, data: any) {
-  let res = await api.post(`court/services/ask-service`, data, {
+  let res = await api.post(`client/client-inquiries`, data, {
     headers: {
       "Accept-Language": lang,
     },

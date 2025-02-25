@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import LogInForm from "@/components/auth/login-form";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 const LoginPage = () => {
-  console.log(logo);
   const [openVideo, setOpenVideo] = useState<boolean>(false);
   return (
     <Fragment>

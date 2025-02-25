@@ -23,13 +23,13 @@ export default function DynamicMetadata() {
       <link
         rel="icon"
         type="image/png"
-        href="/favicon-32x32.png"
+        href="/web-app-manifest-192x192.png"
         sizes="32x32"
       />
       <link
         rel="icon"
         type="image/png"
-        href="/favicon-16x16.png"
+        href="/web-app-manifest-192x192.png"
         sizes="16x16"
       />
 

@@ -63,6 +63,16 @@ export async function DeleteCases(id: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
+export async function ChangeStatus(data: any, id: any, lang: any) {
+  let res = await api.put(`court/cases/update-status/${id}`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}
 export async function getCasesPanigation(page: any, lang: any) {
   let res = await api.get(`court/cases?page=${page}`, {
     headers: {

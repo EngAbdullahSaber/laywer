@@ -115,7 +115,11 @@ const page = () => {
 
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (key == "phone") {
+        formData.append(key, value.replace("+", ""));
+      } else {
+        formData.append(key, value);
+      }
     });
 
     images.client_files.forEach((fileId, index) => {

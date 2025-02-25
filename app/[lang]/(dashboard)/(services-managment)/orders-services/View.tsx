@@ -100,7 +100,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {t("Appointment Info")}
+          {t("Services Order Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
           <DetailItem
@@ -111,28 +111,57 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem
             transitionDuration={0.9}
             label={t("title")}
-            value={lawyerData?.title || "-"}
+            value={lawyerData?.service?.title || "-"}
           />
           <DetailItem
             transitionDuration={1}
-            label={t("appointment_date")}
-            value={lawyerData?.appointment_date || "-"}
+            label={t("price")}
+            value={lawyerData?.service?.price || "-"}
           />
           <DetailItem
             transitionDuration={1.1}
-            label={t("appointment_time")}
-            value={lawyerData?.appointment_time || "-"}
-          />
-          <DetailItem
-            transitionDuration={1.2}
             label={t("client")}
             value={lawyerData?.client?.name || "-"}
           />
           <DetailItem
             transitionDuration={1.3}
-            label={t("Address")}
-            value={lawyerData?.address || "-"}
+            label={t("Date Of Create Services")}
+            value={
+              new Date(lawyerData?.created_at).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
+          <DetailItem
+            transitionDuration={1.3}
+            label={t("Date Of Update Services")}
+            value={
+              new Date(lawyerData?.updated_at).toLocaleDateString("en-GB") ||
+              "-"
+            }
+          />{" "}
+          <motion.li
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="flex flex-row gap-6 items-center"
+          >
+            <span className="text-sm text-default-900 font-medium w-[52%]">
+              {t("invoice")}:
+            </span>
+            <span className="text-default-500 font-semibold w-[40%]">
+              <Avatar className="w-16 h-16">
+                <AvatarImage
+                  className="w-16 h-16"
+                  src={`${lawyerData?.invoice_file?.url}`}
+                />
+                <AvatarFallback>
+                  {lawyerData?.invoice_file?.image_name
+                    ?.slice(0, 2)
+                    .toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </span>
+          </motion.li>
         </ul>
       </>
     );
@@ -156,7 +185,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>{t("Appointment Details")}</SheetTitle>
+          <SheetTitle>{t("Services Order Details")}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[100%]">
           <div className="py-6">
@@ -167,11 +196,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                 label={t("details")}
                 value={row?.original?.details}
                 transitionDuration={1.4}
-              />
-              <ListItem
-                label={t("requested_details")}
-                value={row?.original?.requested_details}
-                transitionDuration={1.5}
               />
             </ul>{" "}
           </div>

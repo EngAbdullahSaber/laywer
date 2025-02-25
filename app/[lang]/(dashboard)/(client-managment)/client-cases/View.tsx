@@ -14,25 +14,19 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 
 // A reusable component to display a list of details
-const DetailItem = ({
+const DetailItem: React.FC<{ label: string; value: string | number }> = ({
   label,
   value,
-  transitionDuration,
-}: {
-  label: string;
-  value: string;
-  transitionDuration: number;
 }) => (
   <motion.li
     className="flex flex-row gap-6 items-center"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: transitionDuration }}
+    transition={{ duration: 0.3 }}
   >
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
@@ -49,8 +43,190 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   const { t, loading, error } = useTranslate();
   const { lang } = useParams();
 
-  const renderAppointementData = () => {
-    const lawyerData = row?.original;
+  // const renderClientsData = () => {
+  //   const profile = row?.original;
+
+  //   return (
+  //     <>
+  //       <motion.h3
+  //         className="font-semibold text-lg"
+  //         initial={{ opacity: 0 }}
+  //         animate={{ opacity: 1 }}
+  //         transition={{ duration: 0.5 }}
+  //       >
+  //         {t("Cases Files")}
+  //       </motion.h3>
+  //       <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+  //         <motion.li
+  //           initial={{ opacity: 0 }}
+  //           animate={{ opacity: 1 }}
+  //           transition={{ delay: 0.3, duration: 0.5 }}
+  //           className="flex flex-row gap-6 items-center"
+  //         >
+  //           <span className="text-sm text-default-900 font-medium w-[52%]">
+  //             {t("Cases Files")}:
+  //           </span>
+  //           <span className="text-default-500 font-semibold w-[40%]">
+  //             {profile?.client_files}
+  //           </span>
+  //         </motion.li>
+  //       </ul>
+  //     </>
+  //   );
+  // };
+  const renderClientsData = () => {
+    const casesData = row?.original;
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Client Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
+          <DetailItem label={t("name")} value={casesData?.name || "-"} />
+          <DetailItem label={t("email")} value={casesData?.email || "-"} />
+          <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
+          <DetailItem label={t("details")} value={casesData?.details || "-"} />
+          <DetailItem
+            label={t("client_type")}
+            value={casesData?.client_type || "-"}
+          />
+          <DetailItem label={t("address")} value={casesData?.address || "-"} />
+
+          <DetailItem
+            label={t("client_files")}
+            value={casesData?.client_files || "-"}
+          />
+          <DetailItem
+            label="Date Of Create"
+            value={
+              new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
+            }
+          />
+          <DetailItem
+            label="Date Of Create"
+            value={
+              new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
+            }
+          />
+        </ul>
+      </>
+    );
+  };
+
+  const renderCourtsData = () => {
+    const casesData = row?.original?.court;
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Court Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
+          <DetailItem label={t("name")} value={casesData?.name || "-"} />
+          <DetailItem
+            label={t("category")}
+            value={casesData?.category.name || "-"}
+          />
+          <DetailItem
+            label={t("Region")}
+            value={
+              lang == "en"
+                ? casesData?.region?.name.en
+                : casesData?.region?.name.ar || "-"
+            }
+          />
+          <DetailItem
+            label={t("City")}
+            value={
+              lang == "en"
+                ? casesData?.city?.name.en
+                : casesData?.city?.name.ar || "-"
+            }
+          />{" "}
+          <DetailItem label={t("address")} value={casesData?.address || "-"} />
+          <DetailItem
+            label={t("room_number")}
+            value={casesData?.room_number || "-"}
+          />
+          <DetailItem
+            label="Date Of Create"
+            value={
+              new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
+            }
+          />
+          <DetailItem
+            label="Date Of Update"
+            value={
+              new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
+            }
+          />
+        </ul>
+      </>
+    );
+  };
+  const renderCaseFilesData = () => {
+    const lawyerData = row?.original?.files;
+    console.log(typeof lawyerData);
+    // If lawyerData is not an array or is empty, return a fallback message
+    if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
+      return (
+        <>
+          <motion.h3
+            className="font-semibold text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {t("Client Files")}
+          </motion.h3>
+          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="space-y-4 mt-5">
+          {lawyerData.map((file, index) => (
+            <motion.li
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="flex flex-row gap-6 items-center"
+            >
+              <span className="text-sm text-default-900 font-medium w-[52%]">
+                {t("Client Files")}:
+              </span>
+              <a
+                href={file.url} // Access the file URL dynamically from the `file` object
+                className="text-default-500 font-semibold w-[40%]"
+                target="_blank"
+                rel="noopener noreferrer" // Added for security when opening links
+              >
+                {t("Show File")} {/* Display the file name */}
+              </a>
+            </motion.li>
+          ))}
+        </div>
+      </>
+    );
+  };
+  const renderCasaesData = () => {
+    const casesData = row?.original;
 
     return (
       <>
@@ -63,56 +239,84 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           {t("Cases Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
+          <DetailItem label={t("Title")} value={casesData?.title || "-"} />
           <DetailItem
-            transitionDuration={0.8}
-            label={t("Id")}
-            value={lawyerData?.id || "-"}
+            label={t("category")}
+            value={casesData?.category.name || "-"}
+          />
+
+          <DetailItem
+            label={t("main_case_number")}
+            value={casesData?.main_case_number || "-"}
           />
           <DetailItem
-            transitionDuration={0.9}
-            label={t("title")}
-            value={lawyerData?.title || "-"}
+            label={t("receive_date")}
+            value={casesData?.receive_date || "-"}
           />
           <DetailItem
-            transitionDuration={1}
-            label={t("status")}
-            value={lawyerData?.status || "-"}
+            label={t("submit_date")}
+            value={casesData?.submit_date || "-"}
           />
           <DetailItem
-            transitionDuration={1.1}
-            label={t("requested_data")}
-            value={lawyerData?.requested_data || "-"}
+            label={t("judgment_date")}
+            value={casesData?.judgment_date || "-"}
           />
           <DetailItem
-            transitionDuration={1.2}
-            label={t("details")}
-            value={lawyerData?.details || "-"}
+            label={t("session_date")}
+            value={casesData?.session_date || "-"}
+          />
+
+          <DetailItem label={t("status")} value={casesData?.status || "-"} />
+          <DetailItem
+            label={t("claim_status")}
+            value={casesData?.claim_status || "-"}
+          />
+          <DetailItem label={t("details")} value={casesData?.details || "-"} />
+          {/* <DetailItem
+            label="Date Of Create Account"
+            value={
+              new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
+            }
           />
           <DetailItem
-            transitionDuration={1.3}
-            label={t("lawyer")}
-            value={lawyerData?.lawyer || "-"}
-          />
+            label="Last Update of Account"
+            value={
+              new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
+            }
+          /> */}
+        </ul>
+        {renderCaseFilesData()}
+      </>
+    );
+  };
+  const renderLawyerData = () => {
+    const casesData = row?.original?.lawyer;
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Lawyer Info")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
+          <DetailItem label={t("name")} value={casesData?.name || "-"} />
+          <DetailItem label={t("email")} value={casesData?.email || "-"} />
+          <DetailItem label={t("address")} value={casesData?.address || "-"} />
+          <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
           <DetailItem
-            transitionDuration={1.3}
-            label={t("lawyer")}
-            value={lawyerData?.law_suit || "-"}
-          />
-          <DetailItem
-            transitionDuration={1.3}
-            label={t("created_at")}
-            value={lawyerData?.created_at || "-"}
-          />
-          <DetailItem
-            transitionDuration={1.3}
-            label={t("updated_at")}
-            value={lawyerData?.updated_at || "-"}
+            label={t("category")}
+            value={casesData?.category.name || "-"}
           />
         </ul>
       </>
     );
   };
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -134,7 +338,13 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <SheetTitle>{t("Cases Details")}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[100%]">
-          <div className="py-6">{renderAppointementData()}</div>
+          <div className="py-6">
+            {renderCasaesData()}
+            <hr className="my-8" />
+            {renderLawyerData()}
+            <hr className="my-8" />
+            {renderCourtsData()}
+          </div>
         </ScrollArea>
         <SheetFooter>
           <SheetClose asChild>footer content</SheetClose>

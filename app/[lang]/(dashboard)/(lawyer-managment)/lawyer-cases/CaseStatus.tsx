@@ -32,7 +32,7 @@ import { useParams } from "next/navigation";
 // Update the schema to validate date properly
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
-import { ChangeStatus } from "@/services/tasks/tasks";
+import { ChangeStatus } from "@/services/cases/cases";
 
 interface ErrorResponse {
   errors: {
@@ -63,9 +63,9 @@ const CaseStatus = ({ id }: { id: any }) => {
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
+    const data = { status: lawyerData.status };
     try {
-      const res = await ChangeStatus(formData, lang); // Call API to create the lawyer
+      const res = await ChangeStatus(data, id, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
         setLawyerData({
@@ -99,9 +99,9 @@ const CaseStatus = ({ id }: { id: any }) => {
     }
   };
   const Case_Status: { value: string; label: string }[] = [
-    { value: "قيدالانتظار", label: "قيدالانتظار" },
-    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
-    { value: "مكتملة", label: "مكتملة" },
+    { value: "pending", label: "قيدالانتظار" },
+    { value: "in_progress", label: "قيد التنفيذ" },
+    { value: "completed", label: "مكتملة" },
   ];
   const handleOpen = () => {
     setIsDialogOpen(!isDialogOpen);

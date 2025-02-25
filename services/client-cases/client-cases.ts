@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getClientCases(lang: any) {
-  let res = await api.get(`client/client_orders`, {
+  let res = await api.get(`court/cases`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -11,7 +11,7 @@ export async function getClientCases(lang: any) {
 }
 
 export async function getFilterClientCases(data: any, lang: any) {
-  let res = await api.get(`client/client_orders?per_page=10${data}`, {
+  let res = await api.get(`court/cases?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -21,7 +21,7 @@ export async function getFilterClientCases(data: any, lang: any) {
 }
 
 export async function getClientCasesPanigation(page: any, lang: any) {
-  let res = await api.get(`client/client_orders?page=${page}`, {
+  let res = await api.get(`court/cases?page=${page}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -31,7 +31,7 @@ export async function getClientCasesPanigation(page: any, lang: any) {
 }
 
 export async function SearchClientCases(id: any, lang: any) {
-  let res = await api.get(`client/client_orders?search=${id}`, {
+  let res = await api.get(`court/cases?search=${id}`, {
     headers: {
       "Accept-Language": lang,
     },

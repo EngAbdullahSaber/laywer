@@ -33,12 +33,12 @@ import {
 } from "@/services/lawyer-cases/lawyer-cases";
 interface Task {
   id: string;
-  Case_Name?: string;
-  Case_Status?: string;
-  Client_Name?: string;
-  Court_Name?: string;
-  Case_Number?: string;
-  Key_Dates?: string;
+  title?: string;
+  status?: string;
+  client?: any;
+  court?: any;
+  main_case_number?: string;
+  session_date?: string;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -210,7 +210,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Case_Name}
+              {row.original.title}
             </motion.span>
           </div>
         );
@@ -230,18 +230,7 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Case_Status === "قيد التنفيذ" &&
-                    "destructive") ||
-                  (row.original.Case_Status === "قيدالانتظار" && "warning") ||
-                  (row.original.Case_Status === "مكتملة" && "success") ||
-                  "default"
-                }
-              >
-                {row.original.Case_Status}
-              </Badge>{" "}
+              {row.original.status}
             </motion.span>
           </div>
         );
@@ -265,7 +254,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Client_Name}
+              {row.original.client?.name}
             </motion.span>
           </div>
         );
@@ -289,7 +278,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Court_Name}
+              {row.original.court?.name}
             </motion.span>
           </div>
         );
@@ -312,7 +301,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Case_Number}
+              {row.original.main_case_number}
             </motion.span>
           </div>
         );
@@ -335,7 +324,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Key_Dates}
+              {row.original.session_date}
             </motion.span>{" "}
           </div>
         );

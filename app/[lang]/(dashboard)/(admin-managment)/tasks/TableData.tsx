@@ -11,7 +11,7 @@ import { DataTableColumnHeader } from "../../tables/advanced/components/data-tab
 import { DataTable } from "../../tables/advanced/components/data-table";
 import View from "./View";
 import Edit from "./Edit";
-import Delete from "./Delete";
+import Delete from "./DeleteButton";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -21,49 +21,122 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTranslate } from "@/config/useTranslation";
+import { useEffect, useState } from "react";
+import useDebounce from "../../(category-mangement)/shared/useDebounce";
+import { useParams } from "next/navigation";
+import {
+  getFilterTasks,
+  getTasks,
+  getTasksPanigation,
+  SearchTasks,
+} from "@/services/tasks/tasks";
 interface Task {
   id: string;
-  Task_Name?: string;
-  Importance_Level?: string;
-  Assigned_To?: string;
-  Due_Date?: string;
-  Case_Name?: string;
-  Task_Status?: string;
+  title?: string;
+  importance_level?: string;
+  lawyer?: any;
+  due_date?: string;
+  case_number?: string;
+  status?: string;
 }
+
 const TableData = () => {
-  const { t, loading, error } = useTranslate();
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
+  const searchPalsceholder = "Searchs";
+  const { lang } = useParams();
+  const { t } = useTranslate();
+
+  const [filters, setFilters] = useState<Record<string, string>>({
+    full_name: "",
+    email: "",
+    phone: "",
+  });
+  const buildQueryString = (filters: { [key: string]: string }) => {
+    const queryParams = Object.entries(filters)
+      .filter(([key, value]) => value) // Only include filters with values
+      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .join("&"); // Join them with "&"
+
+    return queryParams ? `?${queryParams}` : "";
+  };
+
+  const queryString = buildQueryString(filters);
+
+  const filtersConfig = [];
+
+  const handleFilterChange = (updatedFilters: Record<string, string>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+    }));
+  };
+
+  const handleFilterSubmit = () => {
+    // Perform filtering logic here
+    console.log("Filters submitted:", filters);
+    getLawyerData();
+  };
+
+  const getLawyerData = async () => {
+    setLoading(true);
+    if (queryString.length > 0) {
+      try {
+        const res = await getFilterTasks(queryString, lang);
+
+        setData(res?.body?.data || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    } else {
+      try {
+        const res =
+          page === 1
+            ? await getTasks(lang)
+            : await getTasksPanigation(page, lang);
+
+        setData(res?.body?.data || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setLoading(false);
+      }
+    }
+  };
+
+  const SearchData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await SearchTasks(search, lang);
+
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      SearchData();
+    } else {
+      getLawyerData();
+    }
+  }, [debouncedSearch, page, filters]);
 
   const columns: ColumnDef<Task>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={
-    //         table.getIsAllPageRowsSelected() ||
-    //         (table.getIsSomePageRowsSelected() && "indeterminate")
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //       className="t-y-0.5"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
-
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View />
+          <View row={row} />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -74,7 +147,7 @@ const TableData = () => {
                   color="secondary"
                 >
                   {" "}
-                  <Link href={"tasks/edit"}>
+                  <Link href={`tasks/${row.original.id}/edit`}>
                     <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
                   </Link>{" "}
                 </Button>
@@ -84,7 +157,7 @@ const TableData = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <Delete />
+          <Delete id={row.original.id} getLawyerData={getLawyerData} />
         </div>
       ),
     },
@@ -111,7 +184,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Task_Name}
+              {row.original.title}
             </motion.span>
           </div>
         );
@@ -134,16 +207,17 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.Importance_Level == "مهمة جدا" &&
-                    "destructive") ||
-                  (row.original.Importance_Level == "متوسطة الاهمية" &&
-                    "warning") ||
-                  (row.original.Importance_Level == "ذات اهمية ضعيفة" &&
-                    "secondary") ||
+                  (row.original.importance_level == "high" && "destructive") ||
+                  (row.original.importance_level == "low" && "warning") ||
+                  (row.original.importance_level == "mid" && "secondary") ||
                   "default"
                 }
               >
-                {row.original.Importance_Level}
+                {row.original.importance_level == "high"
+                  ? " مهمة جدا"
+                  : row.original.importance_level == "mid"
+                  ? "متوسطة الاهمية"
+                  : "ذات اهمية ضعيفة"}
               </Badge>
             </motion.span>
           </div>
@@ -168,7 +242,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Assigned_To}
+              {row.original?.lawyer?.name}
             </motion.span>
           </div>
         );
@@ -192,7 +266,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Due_Date}
+              {row.original.due_date}
             </motion.span>
           </div>
         );
@@ -202,9 +276,9 @@ const TableData = () => {
       },
     },
     {
-      accessorKey: "Case_Name",
+      accessorKey: "case_number",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Case_Name"} />
+        <DataTableColumnHeader column={column} title={"case_number"} />
       ),
       cell: ({ row }) => {
         return (
@@ -215,7 +289,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Case_Name}
+              {row.original?.law_suit?.case_number}
             </motion.span>
           </div>
         );
@@ -240,14 +314,17 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.Task_Status === "قيد التنفيذ" &&
-                    "destructive") ||
-                  (row.original.Task_Status === "قيد التنفيذ" && "warning") ||
-                  (row.original.Task_Status === "مكتملة" && "success") ||
+                  (row.original.status === "pending" && "destructive") ||
+                  (row.original.status === "in_progress" && "warning") ||
+                  (row.original.status === "completed" && "success") ||
                   "default"
                 }
               >
-                {row.original.Task_Status}
+                {row.original.status == "completed"
+                  ? "مكتملة"
+                  : row.original.status == "in_progress"
+                  ? "قيد التنفيذ"
+                  : "قيدالانتظار"}{" "}
               </Badge>
             </motion.span>
           </div>
@@ -258,11 +335,24 @@ const TableData = () => {
       },
     },
   ];
+  const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (
     <div>
       {/* Render your data table here using the fetched tasks */}
       {/* Assuming you have a table component that takes columns and data */}
-      <DataTable data={data} columns={columns} />
+      <DataTable
+        data={data}
+        setPage={setPage}
+        setSearch={setSearch}
+        searchPalsceholder={searchPalsceholder}
+        page={page}
+        search={search}
+        filtersConfig={filtersConfig}
+        onFilterChange={handleFilterChange}
+        onFilterSubmit={handleFilterSubmit}
+        columns={columns}
+        isPaginationDisabled={isPaginationDisabled}
+      />{" "}
     </div>
   );
 };

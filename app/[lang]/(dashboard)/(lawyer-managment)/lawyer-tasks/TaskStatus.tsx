@@ -38,7 +38,13 @@ interface ErrorResponse {
 interface LaywerData {
   status: string;
 }
-const TaskStatus = ({ id }: { id: any }) => {
+const TaskStatus = ({
+  id,
+  getClientData,
+}: {
+  id: any;
+  getClientData: () => Promise<void>;
+}) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
@@ -48,26 +54,27 @@ const TaskStatus = ({ id }: { id: any }) => {
   const handleSelectChange = (value: string) => {
     setLawyerData((prevData) => ({
       ...prevData,
-      status: value.value,
+      status: value?.value,
     }));
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
 
     // Append form data
-    Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+    const data = {
+      status: lawyerData.status, //pending, in_progress, completed
+      id: lawyerData.status, //pending, in_progress, completed
+    };
 
     try {
-      const res = await ChangeStatus(formData, lang); // Call API to create the lawyer
+      const res = await ChangeStatus(data, id, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
         setLawyerData({
           status: "",
         });
         reToast.success(res.message); // Display success message
+        getClientData();
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -95,9 +102,9 @@ const TaskStatus = ({ id }: { id: any }) => {
     }
   };
   const Task_Status: { value: string; label: string }[] = [
-    { value: "قيدالانتظار", label: "قيدالانتظار" },
-    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
-    { value: "مكتملة", label: "مكتملة" },
+    { value: "pending", label: "قيدالانتظار" },
+    { value: "in_progress", label: "قيد التنفيذ" },
+    { value: "completed", label: "مكتملة" },
   ];
   const handleOpen = () => {
     setIsDialogOpen(!isDialogOpen);

@@ -24,13 +24,12 @@ import {
 
 interface Task {
   id: string;
-  Case_Name?: string;
-  Case_Number?: string;
-  Court_Name?: string;
-  Court_Category?: string;
+  title?: string;
+  main_case_number?: string;
+  court?: any;
+  status?: string;
   Case_Status?: string;
-  Client_Name?: string;
-  Hearing_Dates?: string;
+  session_date?: string;
 }
 
 const TableData = () => {
@@ -80,7 +79,7 @@ const TableData = () => {
       try {
         const res = await getFilterClientCases(queryString, lang);
 
-        setData(res?.body?.data || []);
+        setData(res?.body || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -93,8 +92,7 @@ const TableData = () => {
             ? await getClientCases(lang)
             : await getClientCasesPanigation(page, lang);
 
-        setData(res?.body?.data || []);
-        console.log(res.body.data);
+        setData(res?.body || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -109,7 +107,7 @@ const TableData = () => {
     try {
       const res = await SearchClientCases(search, lang);
 
-      setData(res?.body?.data || []);
+      setData(res?.body || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -165,7 +163,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Case_Name}
+              {row.original.title}
             </motion.span>
           </div>
         );
@@ -185,7 +183,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Case_Number}
+              {row.original.main_case_number}
             </motion.span>
           </div>
         );
@@ -208,7 +206,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Court_Name}
+              {row.original?.court?.name}
             </motion.span>
           </div>
         );
@@ -232,17 +230,7 @@ const TableData = () => {
               className="max-w-[500px] truncate font-medium"
             >
               {" "}
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Court_Category === "جنائي" && "destructive") ||
-                  (row.original.Court_Category === "عائلى " && "info") ||
-                  (row.original.Court_Category === "مدنى" && "warning") ||
-                  "default"
-                }
-              >
-                {row.original.Court_Category}
-              </Badge>
+              {row.original?.court?.category?.name}
             </motion.span>
           </div>
         );
@@ -259,17 +247,7 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <Badge
-              className="!text-center"
-              color={
-                (row.original.Case_Status === "قيد التنفيذ" && "destructive") ||
-                (row.original.Case_Status === "قيد التنفيذ" && "info") ||
-                (row.original.Case_Status === "مكتملة" && "warning") ||
-                "default"
-              }
-            >
-              {row.original.Case_Status}
-            </Badge>
+            {row.original.status}
           </div>
         );
       },
@@ -309,7 +287,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Hearing_Dates}
+              {row.original.session_date}
             </motion.span>
           </div>
         );

@@ -25,17 +25,25 @@ interface ErrorResponse {
   };
 }
 interface LaywerData {
-  messages: string;
-  date: string;
+  reply: string;
+  meeting_date: string;
 }
-const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
+const CreateDate = ({
+  flag,
+  setFlag,
+  id,
+}: {
+  flag: any;
+  id: any;
+  setFlag: any;
+}) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
-    messages: "",
-    date: "",
+    reply: "",
+    meeting_date: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +65,7 @@ const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
     const formattedDate = `${year}-${month}-${day}`;
     setLawyerData({
       ...lawyerData,
-      date: formattedDate.toString(),
+      meeting_date: formattedDate.toString(),
     });
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,20 +76,23 @@ const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
+    const data = {
+      reply: lawyerData.reply,
+      meeting_date: lawyerData.meeting_date,
+    };
     try {
-      const res = await ReplyOnMessages(formData, lang); // Call API to create the lawyer
+      const res = await ReplyOnMessages(data, id, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
         setLawyerData({
-          messages: "",
-          date: "",
+          reply: "",
+          meeting_date: "",
         });
 
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
 
-        setFlag(flag);
+        setFlag(!flag);
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
       }
@@ -89,7 +100,7 @@ const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
       const axiosError = error as AxiosError<ErrorResponse>;
 
       // Construct the dynamic key based on field names and the current language
-      const fields = ["details", "service_id", "invoice_file"];
+      const fields = ["reply", "meeting_date"];
 
       let errorMessage = "Something went wrong."; // Default fallback message
 
@@ -135,7 +146,7 @@ const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
                 <Textarea
                   placeholder="Type Here"
                   rows={3}
-                  name="messages"
+                  name="reply"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -152,7 +163,11 @@ const CreateDate = ({ flag, setFlag }: { flag: any; setFlag: any }) => {
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Date About Meeting")}
-                  value={lawyerData.date ? new Date(lawyerData.date) : ""}
+                  value={
+                    lawyerData.meeting_date
+                      ? new Date(lawyerData.meeting_date)
+                      : ""
+                  }
                   onChange={handleDateChange}
                   options={{
                     clickOpens: true,

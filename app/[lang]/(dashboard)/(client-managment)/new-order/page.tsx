@@ -54,63 +54,72 @@ const page = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {" "}
-          <CreateDate />
+          <CreateDate getCourtData={getCourtData} />
         </motion.div>
       </div>
 
-      <Card className="my-4">
-        <div className="flex flex-row  !flex-nowrap justify-between items-center p-4 rounded-xl my-3">
-          <div className="flex flex-col gap-3 justify-between items-start">
-            <motion.p
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="font-bold text-xl  text-[#1A1A1A] dark:text-slate-400"
-            >
-              اريد ان احجز قضية جديدة
-            </motion.p>
-            <motion.p
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-            >
-              {" "}
-              اسم العميل : <span className="font-bold">احمد على</span>
-            </motion.p>
-
-            <motion.p
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-            >
-              العنوان <span className="font-bold">الرياض</span>
-            </motion.p>
-            <motion.p
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1.2 }}
-              className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-            >
-              تاريح الارسال:{" "}
-              <span className="font-bold">September 12, 2024 </span>
-            </motion.p>
-            <motion.p
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1.4 }}
-              className="font-semibold  text-base text-[#1A1A1A] dark:text-slate-400"
-            >
-              تاريح المقابلة مع المحامى:{" "}
-              <span className="font-bold">September 16, 2024 </span>
-            </motion.p>
-          </div>
-          <div className="flex flex-col justify-center items-center gap-6">
+      {data.map((item: any, index: number) => {
+        // Use a parameter for each item (and index if needed)
+        return (
+          <Card className="my-4" key={index}>
             {" "}
-          </div>
-        </div>
-      </Card>
+            {/* Ensure to add a unique 'key' for each mapped item */}
+            <div className="flex flex-row !flex-nowrap justify-between items-center p-4 rounded-xl my-3">
+              <div className="flex flex-col gap-3 justify-between items-start">
+                <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="font-bold text-xl text-[#1A1A1A] dark:text-slate-400"
+                >
+                  {item?.message}{" "}
+                </motion.p>
+                <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                >
+                  اسم المحامى :{" "}
+                  <span className="font-bold"> {item?.reply_from?.name}</span>
+                </motion.p>
+
+                {/* <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 1 }}
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                >
+                  العنوان <span className="font-bold">الرياض</span>
+                </motion.p> */}
+                <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 1.2 }}
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                >
+                  تاريح الارسال:{" "}
+                  <span className="font-bold">
+                    {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
+                  </span>
+                </motion.p>
+                <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 1.4 }}
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                >
+                  تاريح المقابلة مع المحامى:{" "}
+                  <span className="font-bold">{item?.meeting_date} </span>
+                </motion.p>
+              </div>
+              <div className="flex flex-col justify-center items-center gap-6">
+                {/* Add any other content here */}
+              </div>
+            </div>
+          </Card>
+        );
+      })}
     </div>
   );
 };

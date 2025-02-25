@@ -236,6 +236,37 @@ const TableData = ({ flag }: { flag: any }) => {
       },
     },
     {
+      accessorKey: "Status",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Status"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+            >
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.status === "banned" && "destructive") ||
+                  (row.original.status === "active" && "success") ||
+                  "default"
+                }
+              >
+                {row.original.status == "active" ? "نشط" : "تم حظره"}{" "}
+              </Badge>
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
       accessorKey: "Mobile_Number",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={"Mobile_Number"} />

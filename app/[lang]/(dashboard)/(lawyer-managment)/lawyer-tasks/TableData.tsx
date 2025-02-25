@@ -24,12 +24,12 @@ import {
 
 interface Task {
   id: string;
-  Task_Name?: string;
-  Case_Name?: string;
-  Due_Date?: string;
-  Remaining_Time?: string;
-  Task_Status?: string;
-  Importance_Level?: string;
+  title?: string;
+  importance_level?: string;
+  lawyer?: any;
+  due_date?: string;
+  law_suit?: any;
+  status?: string;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -92,8 +92,8 @@ const TableData = ({ flag }: { flag: any }) => {
             ? await getTasks(lang)
             : await getTasksPanigation(page, lang);
 
-        setData(res?.body || []);
-        console.log(res.body);
+        setData(res?.body?.data || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -129,7 +129,7 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <TaskStatus id={row.original.id} />
+          <TaskStatus id={row.original.id} getClientData={getClientData} />
         </div>
       ),
     },
@@ -156,35 +156,13 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Task_Name}
+              {row.original.title}
             </motion.span>
           </div>
         );
       },
     },
-    {
-      accessorKey: "Case_Name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Case_Name"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.Case_Name}
-            </motion.span>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
+
     {
       accessorKey: "Importance_Level",
       header: ({ column }) => (
@@ -197,23 +175,46 @@ const TableData = ({ flag }: { flag: any }) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
             >
-              {" "}
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.Importance_Level === "مهمة جدا" &&
-                    "destructive") ||
-                  (row.original.Importance_Level === "متوسطة الاهمية" &&
-                    "info") ||
-                  (row.original.Importance_Level === "ذات اهمية ضعيفة" &&
-                    "warning") ||
+                  (row.original.importance_level == "high" && "destructive") ||
+                  (row.original.importance_level == "low" && "warning") ||
+                  (row.original.importance_level == "mid" && "secondary") ||
                   "default"
                 }
               >
-                {row.original.Importance_Level}
+                {row.original.importance_level == "high"
+                  ? " مهمة جدا"
+                  : row.original.importance_level == "mid"
+                  ? "متوسطة الاهمية"
+                  : "ذات اهمية ضعيفة"}
               </Badge>
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+
+    {
+      accessorKey: "Assigned_To",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Assigned_To"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original?.lawyer?.name}
             </motion.span>
           </div>
         );
@@ -237,7 +238,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Due_Date}
+              {row.original.due_date}
             </motion.span>
           </div>
         );
@@ -247,9 +248,9 @@ const TableData = ({ flag }: { flag: any }) => {
       },
     },
     {
-      accessorKey: "Remaining_Time",
+      accessorKey: "case_number",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Remaining_Time"} />
+        <DataTableColumnHeader column={column} title={"case_number"} />
       ),
       cell: ({ row }) => {
         return (
@@ -260,7 +261,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Remaining_Time}
+              {row.original?.law_suit?.case_number}
             </motion.span>
           </div>
         );
@@ -281,20 +282,21 @@ const TableData = ({ flag }: { flag: any }) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
             >
-              {" "}
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.Task_Status === "قيد التنفيذ" &&
-                    "destructive") ||
-                  (row.original.Task_Status === "قيد التنفيذ" && "info") ||
-                  (row.original.Task_Status === "مكتملة" && "warning") ||
+                  (row.original.status === "pending" && "destructive") ||
+                  (row.original.status === "in_progress" && "warning") ||
+                  (row.original.status === "completed" && "success") ||
                   "default"
                 }
               >
-                {row.original.Task_Status}
+                {row.original.status == "completed"
+                  ? "مكتملة"
+                  : row.original.status == "in_progress"
+                  ? "قيد التنفيذ"
+                  : "قيدالانتظار"}{" "}
               </Badge>
             </motion.span>
           </div>

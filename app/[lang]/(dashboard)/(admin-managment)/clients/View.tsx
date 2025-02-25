@@ -43,34 +43,82 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   const { t, loading, error } = useTranslate();
   const { lang } = useParams();
 
-  const renderImagesData = () => {
-    const profile = row?.original;
+  // const renderImagesData = () => {
+  //   const profile = row?.original;
+
+  //   return (
+  //     <>
+  //       <motion.h3
+  //         className="font-semibold text-lg"
+  //         initial={{ opacity: 0 }}
+  //         animate={{ opacity: 1 }}
+  //         transition={{ duration: 0.5 }}
+  //       >
+  //         {t("Client Files")}
+  //       </motion.h3>
+  //       <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+  //         <motion.li
+  //           initial={{ opacity: 0 }}
+  //           animate={{ opacity: 1 }}
+  //           transition={{ delay: 0.3, duration: 0.5 }}
+  //           className="flex flex-row gap-6 items-center"
+  //         >
+  //           <span className="text-sm text-default-900 font-medium w-[52%]">
+  //             {t("Client Files")}:
+  //           </span>
+  //           <span className="text-default-500 font-semibold w-[40%]">
+  //             {profile?.client_files}
+  //           </span>
+  //         </motion.li>
+  //       </ul>
+  //     </>
+  //   );
+  // };
+  const renderLawyerCasesData = () => {
+    const lawyerData = row?.original?.client_files;
+    console.log(typeof lawyerData);
+    // If lawyerData is not an array or is empty, return a fallback message
+    if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
+      return (
+        <>
+          <motion.h3
+            className="font-semibold text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {t("Client Files")}
+          </motion.h3>
+          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+        </>
+      );
+    }
 
     return (
       <>
-        <motion.h3
-          className="font-semibold text-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {t("Client Files")}
-        </motion.h3>
-        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-          <motion.li
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="flex flex-row gap-6 items-center"
-          >
-            <span className="text-sm text-default-900 font-medium w-[52%]">
-              {t("Client Files")}:
-            </span>
-            <span className="text-default-500 font-semibold w-[40%]">
-              {profile?.client_files}
-            </span>
-          </motion.li>
-        </ul>
+        <div className="space-y-4 mt-5">
+          {lawyerData.map((file, index) => (
+            <motion.li
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="flex flex-row gap-6 items-center"
+            >
+              <span className="text-sm text-default-900 font-medium w-[52%]">
+                {t("Client Files")}:
+              </span>
+              <a
+                href={file.url} // Access the file URL dynamically from the `file` object
+                className="text-default-500 font-semibold w-[40%]"
+                target="_blank"
+                rel="noopener noreferrer" // Added for security when opening links
+              >
+                {t("Show File")} {/* Display the file name */}
+              </a>
+            </motion.li>
+          ))}
+        </div>
       </>
     );
   };
@@ -108,14 +156,14 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             value={clientData?.category.name || "-"}
           />
           <DetailItem
-            label="Date Of Create Account"
+            label={t("Date Of Create Account")}
             value={
               new Date(clientData?.created_at).toLocaleDateString("en-GB") ||
               "-"
             }
           />
           <DetailItem
-            label="Last Update of Account"
+            label={t("Last Update of Account")}
             value={
               new Date(clientData?.updated_at).toLocaleDateString("en-GB") ||
               "-"
@@ -150,7 +198,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <div className="py-6">
             {renderClientData()}
             <hr className="my-8" />
-            {renderImagesData()}
+            {renderLawyerCasesData()}
           </div>
         </ScrollArea>
         <SheetFooter>

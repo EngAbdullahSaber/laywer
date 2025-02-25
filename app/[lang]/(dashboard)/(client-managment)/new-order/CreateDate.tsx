@@ -24,11 +24,15 @@ interface ErrorResponse {
   };
 }
 interface LaywerData {
-  messages: string;
+  message: string;
 }
-const CreateDate = () => {
+const CreateDate = ({
+  getCourtData,
+}: {
+  getCourtData: () => Promise<void>;
+}) => {
   const [lawyerData, setLawyerData] = useState<LaywerData>({
-    messages: "",
+    message: "",
   });
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
@@ -54,9 +58,10 @@ const CreateDate = () => {
       if (res) {
         // Reset data after successful creation
         setLawyerData({
-          messages: "",
+          message: "",
         });
         reToast.success(res.message); // Display success message
+        getCourtData();
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -65,7 +70,7 @@ const CreateDate = () => {
       const axiosError = error as AxiosError<ErrorResponse>;
 
       // Construct the dynamic key based on field names and the current language
-      const fields = ["messages"];
+      const fields = ["message"];
 
       let errorMessage = "Something went wrong."; // Default fallback message
 
@@ -85,11 +90,16 @@ const CreateDate = () => {
   };
   // Handle Flatpickr change event and set value in react-hook-form
   const { t } = useTranslate();
-
+  const handleOpen = () => {
+    setIsDialogOpen(!isDialogOpen);
+  };
   return (
     <>
       {" "}
-      <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+      <Button
+        className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+        onClick={handleOpen}
+      >
         {t("Ask")}
       </Button>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -110,7 +120,7 @@ const CreateDate = () => {
                     placeholder={t("Type Here")}
                     rows={3}
                     id="message"
-                    name="messages"
+                    name="message"
                     onChange={handleInputChange}
                   />
                 </div>

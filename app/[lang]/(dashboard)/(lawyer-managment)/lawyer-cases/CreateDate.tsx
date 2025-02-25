@@ -1,4 +1,4 @@
-import { useState } from "react";
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,24 +10,24 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import Flatpickr from "react-flatpickr";
+import { useState } from "react";
+import { Icon } from "@iconify/react";
+import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
-import { CleaveInput } from "@/components/ui/cleave";
-import { toast as reToast } from "react-hot-toast";
-import { AxiosError } from "axios";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useTranslate } from "@/config/useTranslation";
-import { Icon } from "@iconify/react";
 import { useParams } from "next/navigation";
-import { CreateNewDate } from "@/services/lawyer-cases/lawyer-cases";
+import { CleaveInput } from "@/components/ui/cleave";
 import { Textarea } from "@/components/ui/textarea";
-
+import { toast as reToast } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { CreateNewDate } from "@/services/cases/cases";
+// Interface for lawyer data
 interface LawyerData {
   title: string;
   appointment_time: string;
@@ -134,6 +134,7 @@ const CreateDate = ({ id }: { id: any }) => {
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
@@ -199,25 +200,6 @@ const CreateDate = ({ id }: { id: any }) => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2"
               >
-                <Label htmlFor="titimetle">{t("Time")}</Label>
-                <CleaveInput
-                  id="time"
-                  options={{
-                    time: true,
-                    timePattern: ["h", "m"], // Only hours and minutes
-                    timeFormat: "24", // Use 24-hour format
-                  }}
-                  placeholder="HH:MM"
-                  name="appointment_time"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2"
-              >
                 <Label htmlFor="date">{t("Date")}</Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -235,6 +217,25 @@ const CreateDate = ({ id }: { id: any }) => {
                   }}
                   onClick={(e) => e.preventDefault()}
                   id="default-picker"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label htmlFor="titimetle">{t("Time")}</Label>
+                <CleaveInput
+                  id="time"
+                  options={{
+                    time: true,
+                    timePattern: ["h", "m"], // Only hours and minutes
+                    timeFormat: "24", // Use 24-hour format
+                  }}
+                  placeholder="HH:MM"
+                  name="appointment_time"
+                  onChange={handleInputChange}
                 />
               </motion.div>
             </div>

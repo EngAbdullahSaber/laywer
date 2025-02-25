@@ -200,25 +200,6 @@ const Add = ({ id }: { id: any }) => {
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2"
               >
-                <Label htmlFor="titimetle">{t("Time")}</Label>
-                <CleaveInput
-                  id="time"
-                  options={{
-                    time: true,
-                    timePattern: ["h", "m"], // Only hours and minutes
-                    timeFormat: "24", // Use 24-hour format
-                  }}
-                  placeholder="HH:MM"
-                  name="appointment_time"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2"
-              >
                 <Label htmlFor="date">{t("Date")}</Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
@@ -236,6 +217,25 @@ const Add = ({ id }: { id: any }) => {
                   }}
                   onClick={(e) => e.preventDefault()}
                   id="default-picker"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label htmlFor="titimetle">{t("Time")}</Label>
+                <CleaveInput
+                  id="time"
+                  options={{
+                    time: true,
+                    timePattern: ["h", "m"], // Only hours and minutes
+                    timeFormat: "24", // Use 24-hour format
+                  }}
+                  placeholder="HH:MM"
+                  name="appointment_time"
+                  onChange={handleInputChange}
                 />
               </motion.div>
             </div>

@@ -20,13 +20,18 @@ import Link from "next/link";
 import { useTranslate } from "@/config/useTranslation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RemoveTokenInLocalStorage } from "@/services/utils";
+interface RootState {
+  user: any;
+}
 const ProfileInfo = () => {
   const { t, loading, error } = useTranslate();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const handleLogOut = () => {
     dispatch(changeUserData(""));
     dispatch(removeTokens());
     RemoveTokenInLocalStorage();
+    localStorage.removeItem("role");
   };
   return (
     <DropdownMenu>
@@ -35,7 +40,9 @@ const ProfileInfo = () => {
           {" "}
           <Avatar>
             <AvatarImage src={``} />
-            <AvatarFallback>US</AvatarFallback>
+            <AvatarFallback>
+              {user?.role_with_permission?.name?.slice(0, 2)}
+            </AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>
