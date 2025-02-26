@@ -9,21 +9,21 @@ interface RootState {
 
 export const Auth = (WrappedComponent: any) => {
   return function AuthWrapper(props: any) {
-    const userData = useSelector((state: RootState) => state.user);
-    console.log(userData?.user?.role_with_permission?.name);
+    // const userData = useSelector((state: RootState) => state.user);
+    // console.log(userData?.user?.role_with_permission?.name);
 
-    // Use useEffect inside the component body
-    useEffect(() => {
-      if (!userData) {
-        // If user is not authenticated, redirect to login
-        redirect("/auth/login");
-      }
-    }, [userData]);
+    // // Use useEffect inside the component body
+    // useEffect(() => {
+    //   if (!userData) {
+    //     // If user is not authenticated, redirect to login
+    //     redirect("/auth/login");
+    //   }
+    // }, [userData]);
 
-    // If there is no user, render nothing or loading state
-    if (!userData) {
-      return null; // or <Loading /> for a better UX
-    }
+    // // If there is no user, render nothing or loading state
+    // if (!userData) {
+    //   return null; // or <Loading /> for a better UX
+    // }
 
     // Once the user is available, render the WrappedComponent
     return <WrappedComponent {...props} />;
