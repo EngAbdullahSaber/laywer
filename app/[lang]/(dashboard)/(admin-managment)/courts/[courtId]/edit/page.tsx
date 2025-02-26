@@ -21,6 +21,7 @@ import {
 } from "@/services/courts/courts";
 import InfiniteScrollSelect from "../../add/InfiniteScrollSelect";
 import CreateCourtCategory from "@/app/[lang]/(dashboard)/(category-mangement)/court-category/CreateCourtCategory";
+import { Auth } from "@/components/auth/Auth";
 
 interface ErrorResponse {
   errors: {
@@ -66,6 +67,9 @@ const Page = () => {
       return citiesData?.body?.data || [];
     } catch (error) {
       reToast.error("Failed to fetch cities");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       return [];
     }
   };
@@ -168,6 +172,9 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -179,6 +186,9 @@ const Page = () => {
       setRegions(regionsData?.body || []);
     } catch (error) {
       reToast.error("Failed to fetch categories or regions");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -383,4 +393,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Auth(page);

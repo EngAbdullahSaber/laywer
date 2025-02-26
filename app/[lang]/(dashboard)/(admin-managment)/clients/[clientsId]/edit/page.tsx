@@ -20,6 +20,7 @@ import { getSpecifiedClient, UpdateClients } from "@/services/clients/clients";
 import { UploadImage } from "@/services/auth/auth";
 import CreateClientCategory from "@/app/[lang]/(dashboard)/(category-mangement)/client-category/CreateClientCategory";
 import { CleaveInput } from "@/components/ui/cleave";
+import { Auth } from "@/components/auth/Auth";
 
 interface ErrorResponse {
   errors: {
@@ -123,6 +124,9 @@ const page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -282,11 +286,11 @@ const page = () => {
                 <CleaveInput
                   id="phone"
                   options={{
-                    prefix: "+966", 
+                    prefix: "+966",
                     delimiter: " ",
-                    blocks: [4, 2, 3, 4], 
-                    numericOnly: true, 
-                    uppercase: true, 
+                    blocks: [4, 2, 3, 4],
+                    numericOnly: true,
+                    uppercase: true,
                   }}
                   type="tel"
                   name="phone"
@@ -463,4 +467,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

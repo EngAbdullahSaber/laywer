@@ -140,6 +140,9 @@ const UpdateContact = ({
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
   useEffect(() => {

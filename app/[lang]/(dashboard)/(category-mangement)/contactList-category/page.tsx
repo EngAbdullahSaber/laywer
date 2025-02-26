@@ -11,6 +11,7 @@ import TableData from "./TableData";
 import CreateContactListCategory from "./CreateContactListCategory";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
   const { t } = useTranslate();
@@ -65,4 +66,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

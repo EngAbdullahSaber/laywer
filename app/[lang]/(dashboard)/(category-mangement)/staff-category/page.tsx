@@ -11,9 +11,10 @@ import TableData from "./TableData";
 import CreateStaffCategory from "./CreateStaffCategory";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
-  const { t} = useTranslate();
+  const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
   return (
     <div className="space-y-5">
@@ -43,8 +44,11 @@ const page = () => {
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export PDF")}
           </Button>
-          <CreateStaffCategory buttonShape={true}   setFlag={setFlag}
-            flag={flag} />
+          <CreateStaffCategory
+            buttonShape={true}
+            setFlag={setFlag}
+            flag={flag}
+          />
         </motion.div>
       </div>
 
@@ -53,11 +57,11 @@ const page = () => {
           <CardTitle> {t("Staff Category Details")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <TableData flag={flag}/>
+          <TableData flag={flag} />
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default page;
+export default Auth(page);

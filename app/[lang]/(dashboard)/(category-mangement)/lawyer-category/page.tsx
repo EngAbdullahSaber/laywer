@@ -11,6 +11,7 @@ import TableData from "./TableData";
 import CreateLawyerCategory from "./CreateLawyerCategory";
 import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -63,4 +64,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

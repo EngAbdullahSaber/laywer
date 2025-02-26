@@ -30,6 +30,7 @@ import BasicSelect from "./BasicSelect";
 import CreateCaseCategory from "../../../../(category-mangement)/cases-category/CreateCaseCategory";
 import { UploadImage } from "@/services/auth/auth";
 import { AxiosError } from "axios";
+import { Auth } from "@/components/auth/Auth";
 
 interface LawyerData {
   client_id: string;
@@ -107,6 +108,9 @@ const Page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };
@@ -194,6 +198,9 @@ const Page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       return [];
     }
   };
@@ -236,6 +243,9 @@ const Page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
   const transformedCategories = category.map((item) => ({
@@ -289,6 +299,9 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
   useEffect(() => {
@@ -908,4 +921,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Auth(page);

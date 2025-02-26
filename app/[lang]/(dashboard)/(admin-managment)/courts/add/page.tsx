@@ -16,6 +16,7 @@ import { useParams } from "next/navigation";
 import { CreateCourts, getCities, getRegions } from "@/services/courts/courts";
 import InfiniteScrollSelect from "./InfiniteScrollSelect";
 import CreateCourtCategory from "../../../(category-mangement)/court-category/CreateCourtCategory";
+import { Auth } from "@/components/auth/Auth";
 
 interface ErrorResponse {
   errors: {
@@ -61,6 +62,9 @@ const Page = () => {
       return citiesData?.body?.data || [];
     } catch (error) {
       reToast.error("Failed to fetch cities");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       return [];
     }
   };
@@ -153,6 +157,9 @@ const Page = () => {
       setRegions(regionsData?.body || []);
     } catch (error) {
       reToast.error("Failed to fetch categories or regions");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -353,4 +360,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Auth(page);

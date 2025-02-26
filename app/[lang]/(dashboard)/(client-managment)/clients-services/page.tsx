@@ -11,6 +11,7 @@ import Image from "next/image";
 import card6 from "@/public/images/card/card6.jpg";
 import { useParams } from "next/navigation";
 import { getServices } from "@/services/services/services";
+import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
   const { t, error } = useTranslate();
@@ -28,6 +29,9 @@ const page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };
@@ -109,4 +113,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

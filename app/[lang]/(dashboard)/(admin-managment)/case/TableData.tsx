@@ -30,7 +30,7 @@ import {
 } from "@/services/cases/cases";
 import { useEffect, useState } from "react";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import DeleteButton from "./Delete";
 interface Task {
   id: string;
@@ -93,6 +93,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
         setLoading(false);
       }
     } else {
@@ -105,6 +108,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setData(res?.body || []);
         setLoading(false);
       } catch (error) {
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
         console.error("Error fetching data", error);
         setLoading(false);
       }
@@ -121,6 +127,9 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };

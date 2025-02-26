@@ -28,7 +28,7 @@ interface Task {
   service?: any;
 }
 
-const TableData = ({ flag }: { flag: any }) => {
+const TableData = () => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState<string>("");
@@ -79,6 +79,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
         setLoading(false);
       }
     } else {
@@ -93,6 +96,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
         setLoading(false);
       }
     }
@@ -108,6 +114,9 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };
@@ -118,7 +127,7 @@ const TableData = ({ flag }: { flag: any }) => {
     } else {
       getClientData();
     }
-  }, [debouncedSearch, page, filters, flag]);
+  }, [debouncedSearch, page, filters]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",

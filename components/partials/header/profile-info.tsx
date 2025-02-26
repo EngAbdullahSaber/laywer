@@ -20,6 +20,8 @@ import Link from "next/link";
 import { useTranslate } from "@/config/useTranslation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RemoveTokenInLocalStorage } from "@/services/utils";
+import Cookies from "js-cookie";
+
 interface RootState {
   user: any;
 }
@@ -32,6 +34,10 @@ const ProfileInfo = () => {
     dispatch(removeTokens());
     RemoveTokenInLocalStorage();
     localStorage.removeItem("role");
+    Cookies.remove("userName");
+    Cookies.remove("accessToken");
+    Cookies.remove("phoneToken");
+    Cookies.remove("user");
   };
   return (
     <DropdownMenu>

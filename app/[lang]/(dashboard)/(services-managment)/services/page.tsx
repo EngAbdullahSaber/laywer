@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import TableData from "./TableData";
+import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
   const { t, loading, error } = useTranslate();
@@ -43,7 +44,7 @@ const page = () => {
             <Icon icon="lets-icons:export" className="h-5 w-5" />
             {t("Export PDF")}
           </Button>
-          <CreateServices buttonShape={true} />
+          <CreateServices buttonShape={true} setFlag={setFlag} flag={flag} />
         </motion.div>
       </div>
 
@@ -59,4 +60,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

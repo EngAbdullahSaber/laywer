@@ -9,6 +9,7 @@ import CreateDate from "./CreateDate";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { getOrders } from "@/services/new-orders/new-orders";
+import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
   const { t, error } = useTranslate();
@@ -26,6 +27,9 @@ const page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };
@@ -124,4 +128,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

@@ -18,6 +18,7 @@ import { getCategory } from "@/services/category/category";
 import { UploadImage } from "@/services/auth/auth";
 import CreateLawyerCategory from "@/app/[lang]/(dashboard)/(category-mangement)/lawyer-category/CreateLawyerCategory";
 import { CleaveInput } from "@/components/ui/cleave";
+import { Auth } from "@/components/auth/Auth";
 
 interface ErrorResponse {
   errors: {
@@ -123,6 +124,9 @@ const page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -236,6 +240,9 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -469,4 +476,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

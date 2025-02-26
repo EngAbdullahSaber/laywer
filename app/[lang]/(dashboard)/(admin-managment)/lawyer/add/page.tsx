@@ -18,6 +18,7 @@ import { AxiosError } from "axios";
 import { CreateLawyer } from "@/services/lawyer/lawyer";
 import { UploadImage } from "@/services/auth/auth";
 import { CleaveInput } from "@/components/ui/cleave";
+import { Auth } from "@/components/auth/Auth";
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -204,6 +205,9 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
   useEffect(() => {
@@ -438,7 +442,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);
 // "use client";
 // import { Button } from "@/components/ui/button";
 // import {

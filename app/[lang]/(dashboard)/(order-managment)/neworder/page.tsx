@@ -13,6 +13,7 @@ import {
   getNotReplyedMessages,
   getReplyedMessages,
 } from "@/services/messages/messages";
+import { Auth } from "@/components/auth/Auth";
 const page = () => {
   const { t } = useTranslate();
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,9 @@ const page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };
@@ -258,4 +262,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);

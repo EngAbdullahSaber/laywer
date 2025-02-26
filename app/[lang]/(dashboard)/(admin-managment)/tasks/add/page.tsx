@@ -20,6 +20,7 @@ import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
 import { useParams } from "next/navigation";
 import { CreateTasks } from "@/services/tasks/tasks";
 import { getCasesPanigation } from "@/services/cases/cases";
+import { Auth } from "@/components/auth/Auth";
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
   { id: "mid", value: "mid", label: "متوسطة الاهمية" },
@@ -72,6 +73,9 @@ const page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       return [];
     }
   };
@@ -81,6 +85,9 @@ const page = () => {
       return data?.body || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       return [];
     }
   };
@@ -358,4 +365,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Auth(page);
