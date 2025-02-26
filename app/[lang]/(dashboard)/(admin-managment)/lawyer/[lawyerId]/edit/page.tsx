@@ -124,9 +124,6 @@ const page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 
@@ -240,9 +237,6 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 

@@ -124,9 +124,6 @@ const page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 

@@ -108,9 +108,7 @@ const Page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+  
       setLoading(false);
     }
   };
@@ -198,9 +196,7 @@ const Page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+ 
       return [];
     }
   };
@@ -243,9 +239,7 @@ const Page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
     }
   };
   const transformedCategories = category.map((item) => ({
@@ -299,9 +293,7 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+ 
     }
   };
   useEffect(() => {

@@ -73,9 +73,7 @@ const page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       return [];
     }
   };
@@ -98,9 +96,6 @@ const page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
   useEffect(() => {
@@ -112,9 +107,7 @@ const page = () => {
       return data?.body || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       return [];
     }
   };
