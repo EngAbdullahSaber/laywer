@@ -68,7 +68,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             label={t("case_number")}
             value={TaskData?.law_suit?.case_number || "-"}
           />
-          <DetailItem label={t("due_date")} value={TaskData?.phone || "-"} />
           <DetailItem
             label={t("status")}
             value={
@@ -80,7 +79,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             }
           />
           <DetailItem
-            label={t("status")}
+            label={t("importance_level")}
             value={
               TaskData?.importance_level == "high"
                 ? " مهمة جدا"

@@ -71,7 +71,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getLawyerData }) => {
                 </Button>{" "}
               </TooltipTrigger>
               <TooltipContent>
-                <p> {t("Deleting Lawyer")} </p>
+                <p> {t("Deleting Employee")} </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -92,7 +92,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getLawyerData }) => {
               transition={{ duration: 1.2 }}
               className="mt-6 mb-4 text-destructive text-xl font-semibold"
             >
-              {t("Deleting Lawyer")}{" "}
+              {t("Deleting Employee")}{" "}
             </motion.h3>
             <motion.p
               initial={{ y: -50 }}
@@ -100,7 +100,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getLawyerData }) => {
               transition={{ duration: 1.4 }}
               className="text-sm text-default-500 "
             >
-              {t("Are You Sure For Delete This Lawyer?")}
+              {t("Are You Sure For Delete This Employee?")}
             </motion.p>
           </div>
           <DialogFooter className="flex flex-row gap-5 justify-center">

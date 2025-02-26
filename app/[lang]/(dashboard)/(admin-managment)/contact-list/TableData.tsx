@@ -76,6 +76,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
         setLoading(false);
       }
@@ -91,6 +94,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
         setLoading(false);
       }
@@ -107,6 +113,9 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
 
       setLoading(false);
     }
@@ -221,6 +230,7 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
+              dir="ltr"
             >
               {row.original.phone}
             </motion.span>{" "}

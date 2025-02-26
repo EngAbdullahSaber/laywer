@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -14,6 +14,8 @@ import { VerifyLogin } from "@/services/auth/auth";
 import { headerConfigKeyName } from "@/services/app.config";
 import { storeTokenInLocalStorage } from "@/services/utils";
 import { changeUserData } from "@/store/Action";
+import { updateAxiosHeader } from "@/services/axios";
+import { useAccessToken } from "@/config/accessToken";
 
 interface ErrorResponse {
   errors?: {
@@ -37,7 +39,7 @@ const VerifyForm = () => {
   const dispatch = useDispatch();
   const username = useSelector((state: RootState) => state.userName);
   const tokenOtp = useSelector((state: RootState1) => state.phoneToken);
-
+  const accessToken = useAccessToken();
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
     if (!isNaN(Number(value)) && value.length <= 1) {
@@ -105,7 +107,6 @@ const VerifyForm = () => {
           "role",
           res?.body?.user?.role_with_permission?.name
         );
-        console.log(res?.body?.user?.role_with_permission?.name);
 
         const userRole = localStorage.getItem("role");
         console.log(userRole);
@@ -148,7 +149,11 @@ const VerifyForm = () => {
 
   const isOtpComplete = otp.every((digit) => digit !== "");
   const { t } = useTranslate();
-
+  useEffect(() => {
+    if (accessToken) {
+      updateAxiosHeader(accessToken);
+    }
+  }, [accessToken]);
   return (
     <div className="w-full md:w-[480px] py-5">
       <motion.div

@@ -29,6 +29,9 @@ const page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
 
       setLoading(false);
     }
@@ -111,4 +114,8 @@ const page = () => {
   );
 };
 
-export default Auth(page);
+const allowedRoles = ["client"];
+
+const ProtectedComponent = Auth({ allowedRoles })(page);
+
+export default ProtectedComponent;

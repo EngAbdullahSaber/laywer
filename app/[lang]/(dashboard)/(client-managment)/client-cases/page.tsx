@@ -64,4 +64,8 @@ const page = () => {
   );
 };
 
-export default Auth(page);
+const allowedRoles = ["client"];
+
+const ProtectedComponent = Auth({ allowedRoles })(page);
+
+export default ProtectedComponent;

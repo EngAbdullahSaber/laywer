@@ -2,39 +2,28 @@
 
 import { headerConfigKeyName } from "./app.config";
 
-export function getHeaderConfig() {
+export function getHeaderConfig(accessToken) {
   const token = localStorage.getItem(headerConfigKeyName);
 
-  if (typeof localStorage !== "undefined" && token) {
-    try {
-      // Try to parse the token to ensure it's valid JSON
-      const parsedToken = JSON.parse(token);
-
-      return {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-          "Accept-Language": "ar",
-          Authorization: `Bearer ${parsedToken}`,
-        },
-      };
-    } catch (error) {
-      // In case of JSON parsing error, log it and return a safe config
-      console.error("Error parsing token from localStorage:", error);
-      return {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-          "Accept-Language": "ar",
-        },
-      };
-    }
-  } else {
+  try {
+    // Try to parse the token to ensure it's valid JSON
+    console.log(accessToken);
     return {
       headers: {
         "Content-Type": "multipart/form-data",
         Accept: "application/json",
-        "Accept-Language": "en",
+        "Accept-Language": "ar",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+  } catch (error) {
+    // In case of JSON parsing error, log it and return a safe config
+    console.error("Error parsing token from localStorage:", error);
+    return {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
+        "Accept-Language": "ar",
       },
     };
   }

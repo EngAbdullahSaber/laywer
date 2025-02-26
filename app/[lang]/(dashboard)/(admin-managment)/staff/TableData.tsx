@@ -25,10 +25,10 @@ import DeleteButton from "./DeleteButton";
 interface Task {
   id: string;
   Categories?: string;
-  User_Name?: string;
-  Email?: string;
+  name?: string;
+  email?: string;
   Gender?: string;
-  Mobile_Number?: string;
+  phone?: string;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -82,6 +82,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
         setLoading(false);
       }
     } else {
@@ -96,6 +99,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
         setLoading(false);
       }
     }
@@ -111,6 +117,9 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       setLoading(false);
     }
   };
@@ -154,45 +163,45 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.User_Name}
+              {row.original.name}
             </motion.span>{" "}
           </div>
         );
       },
     },
-    {
-      accessorKey: "Categories",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Categories"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-            >
-              {" "}
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.Categories === "سكرتير" && "destructive") ||
-                  (row.original.Categories === "محامى" && "info") ||
-                  (row.original.Categories === "مساعد" && "warning") ||
-                  "default"
-                }
-              >
-                {row.original.Categories}
-              </Badge>
-            </motion.span>{" "}
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
+    // {
+    //   accessorKey: "Categories",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={"Categories"} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex  items-center justify-center gap-2 mx-auto">
+    //         <motion.span
+    //           initial={{ opacity: 0 }}
+    //           whileInView={{ opacity: 1 }}
+    //           transition={{ duration: 1.7 }}
+    //         >
+    //           {" "}
+    //           <Badge
+    //             className="!text-center"
+    //             color={
+    //               (row.original.Categories === "سكرتير" && "destructive") ||
+    //               (row.original.Categories === "محامى" && "info") ||
+    //               (row.original.Categories === "مساعد" && "warning") ||
+    //               "default"
+    //             }
+    //           >
+    //             {row.original.Categories}
+    //           </Badge>
+    //         </motion.span>{" "}
+    //       </div>
+    //     );
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return value.includes(row.getValue(id));
+    //   },
+    // },
 
     {
       accessorKey: "Email",
@@ -208,7 +217,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.Email}
+              {row.original.email}
             </motion.span>{" "}
           </div>
         );
@@ -230,8 +239,9 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
+              dir="ltr"
             >
-              {row.original.Mobile_Number}
+              {row.original.phone}
             </motion.span>{" "}
           </div>
         );

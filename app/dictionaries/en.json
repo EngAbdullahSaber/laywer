@@ -83,6 +83,8 @@
   "receive_date": "Receive Date",
   "judgment_date": "Judgment Date",
   "details": "Details",
+  "Are You Sure For Delete This Employee?": "Are You Sure For Delete This Employee?",
+  "Deleting Employee": "Deleting Employee",
   "claim_status": "Claim Status",
   "session_date": "Session Date",
   "submit_date": "Submit_date",

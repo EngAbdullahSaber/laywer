@@ -56,5 +56,8 @@ const page = () => {
     </div>
   );
 };
+const allowedRoles = ["lawyer"];
 
-export default Auth(page);
+const ProtectedComponent = Auth({ allowedRoles })(page);
+
+export default ProtectedComponent;

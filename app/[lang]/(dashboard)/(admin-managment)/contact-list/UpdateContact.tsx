@@ -64,17 +64,22 @@ const UpdateContact = ({
     const params = new URLSearchParams();
 
     // Add each key-value pair to the URLSearchParams object
-    if (contactList.name && contactList.name != row.original.name)
+    if (contactList.name && contactList.name !== row.original.name) {
       params.append("name", contactList.name);
-    if (contactList.email && contactList.email != row.original.email)
-      params.append("email", contactList.email);
-    if (contactList.phone && contactList.phone != row.original.phone)
-      params.append("phone", contactList.phone);
-    if (contactList.category_id) {
-      console.log(contactList.category_id);
-      params.append("category_id", row.original.category.id);
     }
-    //  }
+    if (contactList.email && contactList.email !== row.original.email) {
+      params.append("email", contactList.email);
+    }
+    if (contactList.phone && contactList.phone !== row.original.phone) {
+      params.append("phone", contactList.phone);
+    }
+    if (
+      contactList.category_id &&
+      contactList.category_id?.id !== row.original.category?.id
+    ) {
+      params.append("category_id", contactList.category_id);
+    }
+
     // Convert to string
     return params.toString();
   };
@@ -85,6 +90,7 @@ const UpdateContact = ({
       category_id: value?.id,
     }));
   };
+  console.log(contactList.category_id);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

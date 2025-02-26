@@ -680,7 +680,8 @@
   "Last Update of Account": "آخر تحديث للحساب",
   "Date Of Create Account": "تاريخ إنشاء الحساب",
   "National Id Number": "رقم الهوية الوطنية",
-  "Id": "الهوية",
+  "Id": "الرقم التعريفي",
+
   "Phone": "الهاتف",
   "Enter Contact List Category Name": "أدخل اسم فئة قائمة الاتصال",
   "Update Contact List Category": "تحديث فئة قائمة الاتصال",
@@ -780,6 +781,8 @@
   "invoice file": "ملف الفاتورة",
   "Date Of Ask Services": "تاريخ طلب الخدمات",
   "Service price": "سعر الخدمة",
+   "Are You Sure For Delete This Employee?": "هل أنت متأكد من حذف هذا الموظف؟",
+  "Deleting Employee": " حذف الموظف",
   "Next Appointmet": "الموعد القادم"
 
 }

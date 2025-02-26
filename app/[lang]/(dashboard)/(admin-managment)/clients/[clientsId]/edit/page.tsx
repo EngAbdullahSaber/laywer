@@ -94,7 +94,7 @@ const page = () => {
             images.client_files[index].image_id
           );
         } else {
-          params.append(`client_files[${index}]`, fileId);
+          params.append(`client_files[${index}]`, fileId.image_id);
         }
       });
     }
@@ -199,6 +199,7 @@ const page = () => {
         "details",
         "email",
         "client_type",
+        "client_files",
         "national_id_number",
         "category_id",
         "address",
@@ -464,4 +465,8 @@ const page = () => {
   );
 };
 
-export default Auth(page);
+const allowedRoles = ["super_admin"];
+
+const ProtectedComponent = Auth({ allowedRoles })(page);
+
+export default ProtectedComponent;

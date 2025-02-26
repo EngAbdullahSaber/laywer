@@ -91,6 +91,9 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
         setLoading(false);
       }
@@ -105,6 +108,9 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
+        if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
         setLoading(false);
       }
@@ -121,6 +127,9 @@ const TableData = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
 
       setLoading(false);
     }

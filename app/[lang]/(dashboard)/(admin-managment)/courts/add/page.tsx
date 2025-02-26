@@ -355,4 +355,8 @@ const Page = () => {
   );
 };
 
-export default Auth(page);
+const allowedRoles = ["super_admin"];
+
+const ProtectedComponent = Auth({ allowedRoles })(page);
+
+export default ProtectedComponent;

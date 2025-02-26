@@ -108,7 +108,7 @@ const Page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-  
+
       setLoading(false);
     }
   };
@@ -196,7 +196,7 @@ const Page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
- 
+
       return [];
     }
   };
@@ -239,7 +239,6 @@ const Page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-
     }
   };
   const transformedCategories = category.map((item) => ({
@@ -293,7 +292,6 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
- 
     }
   };
   useEffect(() => {
@@ -913,4 +911,8 @@ const Page = () => {
   );
 };
 
-export default Auth(page);
+const allowedRoles = ["super_admin"];
+
+const ProtectedComponent = Auth({ allowedRoles })(page);
+
+export default ProtectedComponent;

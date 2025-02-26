@@ -70,7 +70,9 @@ const TableData = ({ flag }: { flag: any }) => {
         setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data", error);
+        console.error("Error fetching data", error);  if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
         setLoading(false);
       }
@@ -85,7 +87,9 @@ const TableData = ({ flag }: { flag: any }) => {
         console.log(res.body.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data", error);
+        console.error("Error fetching data", error);  if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
         setLoading(false);
       }
@@ -101,7 +105,9 @@ const TableData = ({ flag }: { flag: any }) => {
       setData(res?.body?.data || []);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data", error);
+      console.error("Error fetching data", error);  if (error?.status == 401) {
+          window.location.href = "/auth/login";
+        }
 
       setLoading(false);
     }
