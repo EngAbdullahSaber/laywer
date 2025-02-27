@@ -128,11 +128,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             label={t("client")}
             value={lawyerData?.client?.name || "-"}
           />
-          <DetailItem
-            transitionDuration={1.3}
-            label={t("Address")}
-            value={lawyerData?.address || "-"}
-          />
         </ul>
       </>
     );

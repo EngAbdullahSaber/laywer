@@ -268,7 +268,13 @@ const TableData = ({ flag }: { flag: any }) => {
                   "default"
                 }
               >
-                {row.original.status == "active" ? "نشط" : "تم حظره"}{" "}
+                {lang == "en"
+                  ? row.original.status == "active"
+                    ? "نشط"
+                    : "تم حظره"
+                  : row.original.status == "active"
+                  ? "Active"
+                  : "Blocked"}{" "}
               </Badge>
             </motion.span>
           </div>

@@ -20,8 +20,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
-import { CreateStaff, getRoles } from "@/services/staff/staff";
+import { getRoles, UpdateStaff } from "@/services/staff/staff";
 import { CleaveInput } from "@/components/ui/cleave";
+import { Icon } from "@iconify/react";
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -34,12 +35,11 @@ interface LaywerData {
   password: string;
   role_id: string;
 }
-const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
-  const category: { value: string; label: string }[] = [
-    { value: "مسئول", label: "مسئول" },
-    { value: "محامى", label: "محامى" },
-    { value: "عميل", label: "عميل" },
-  ];
+interface UpdateStaffProps {
+  row: any; // This is passed in from the parent, and contains the data for the category to update
+  getLawyerData: () => void; // Function to reload the category data after the update
+}
+const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
   const [roles, setRoles] = useState([]);
@@ -80,15 +80,15 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   }));
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
-
-    // Append form data
-    Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
+    const data = {
+      name: lawyerData.name,
+      phone: lawyerData.phone,
+      email: lawyerData.email,
+      password: lawyerData.name,
+      role_id: lawyerData.role_id,
+    };
     try {
-      const res = await CreateStaff(formData, lang); // Call API to create the lawyer
+      const res = await UpdateStaff(data, row.original.id, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
         setLawyerData({
@@ -100,11 +100,10 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
         });
 
         reToast.success(res.message); // Display success message
-        setFlag(!flag);
-
+        getLawyerData();
         setOpen(false); // Close the modal after success
       } else {
-        reToast.error(t("Failed to create services")); // Show a fallback failure message
+        reToast.error(t("Failed to update employee")); // Show a fallback failure message
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -128,6 +127,18 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
+  useEffect(() => {
+    if (row?.original) {
+      setLawyerData({
+        name: row.original.name,
+        email: row.original.email,
+        phone: row.original.phone,
+        password: row.original.password,
+        role_id: row.original?.role_with_permission?.id,
+      });
+    }
+  }, [row]);
+  console.log(row);
   const handleOpen = () => {
     setOpen(!open);
     fetchDataCategory();
@@ -135,16 +146,19 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   return (
     <>
       <Button
-        className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+        size="icon"
+        variant="outline"
+        className="h-7 w-7"
         onClick={handleOpen}
+        color="secondary"
       >
-        {t("Create Staff")}
+        <Icon icon="heroicons:pencil" className="h-4 w-4" />
       </Button>
       <Dialog open={open} onOpenChange={handleOpen}>
         <DialogContent size="2xl" className="gap-3 h-auto">
           <DialogHeader className="p-0">
             <DialogTitle className="text-2xl font-bold text-default-700">
-              {t("Create a New Staff")}
+              {t("Update Staff")}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
@@ -162,6 +176,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     type="text"
                     placeholder={t("Enter User")}
                     name="name"
+                    value={lawyerData.name}
                     onChange={handleInputChange}
                   />
                 </motion.div>
@@ -177,6 +192,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     id="Email"
                     type="text"
                     placeholder={t("Enter email address")}
+                    value={lawyerData.email}
                     name="email"
                     onChange={handleInputChange}
                   />
@@ -191,6 +207,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                   <Input
                     type="Password"
                     placeholder={t("Enter passowrd")}
+                    value={lawyerData.password}
                     name="password"
                     onChange={handleInputChange}
                   />
@@ -213,6 +230,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     }}
                     type="tel"
                     placeholder={t("Your phone number")}
+                    value={lawyerData.phone}
                     name="phone"
                     onChange={handleInputChange}
                   />
@@ -251,7 +269,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                   type="submit"
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Staff")}{" "}
+                  {t("Update Staff")}{" "}
                 </Button>
               </motion.div>
             </div>
@@ -262,4 +280,4 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   );
 };
 
-export default CreateContact;
+export default UpdateContact;

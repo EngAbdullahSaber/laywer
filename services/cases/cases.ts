@@ -87,6 +87,7 @@ export async function UpdateCases(data: any, id: any, lang: any) {
   let res = await api.put(`court/cases/${id}`, data, {
     headers: {
       "Accept-Language": lang,
+      "Content-Type": "application/json",
     },
   });
   if (res) return res.data;

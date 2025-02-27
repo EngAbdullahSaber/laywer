@@ -9,8 +9,8 @@ export async function getStaff(lang: any) {
   if (res) return res.data;
   else return false;
 }
-export async function getSpecifiedStaff(lang: any, id: any) {
-  let res = await api.get(`user/staffs/${id}`, {
+export async function getRoles(lang: any) {
+  let res = await api.get(`user/roles`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -65,9 +65,10 @@ export async function getStaffPanigation(page: any, lang: any) {
 }
 
 export async function UpdateStaff(queryParams: any, id: any, lang: any) {
-  let res = await api.put(`user/staffs/${id}?${queryParams}`, {
+  let res = await api.put(`user/staffs/${id}`, queryParams, {
     headers: {
       "Accept-Language": lang,
+      "Content-Type": "application/json",
     },
   });
   if (res) return res.data;

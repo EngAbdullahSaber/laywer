@@ -21,6 +21,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
 import DeleteButton from "./DeleteButton";
+import UpdateContact from "./UpdateContact";
 
 interface Task {
   id: string;
@@ -40,7 +41,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const { t } = useTranslate();
-
+  console.log(data);
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
     email: "",
@@ -137,6 +138,7 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <DeleteButton id={row.original.id} getLawyerData={getLawyerData} />
+          <UpdateContact row={row} getLawyerData={getLawyerData} />
         </div>
       ),
     },

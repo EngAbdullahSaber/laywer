@@ -78,6 +78,7 @@ export async function UpdateTasks(lang: any, id: any, queryParams: any) {
   let res = await api.put(`user/tasks/${id}`, queryParams, {
     headers: {
       "Accept-Language": lang,
+      "Content-Type": "application/json",
     },
   });
   if (res) return res.data;

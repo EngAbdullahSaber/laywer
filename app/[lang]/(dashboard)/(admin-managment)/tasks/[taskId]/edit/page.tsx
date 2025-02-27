@@ -32,8 +32,10 @@ const Importance_Level: { id: string; value: string; label: string }[] = [
 ];
 
 interface LawyerData {
-  title: string;
-  details: string;
+  titleEn: string;
+  titleAr: string;
+  detailsEn: string;
+  detailsAr: string;
   lawyer_id: string;
   importance_level: string;
   law_suit_id: string;
@@ -47,8 +49,10 @@ const page = () => {
   const { t } = useTranslate();
   const { lang, taskId } = useParams();
   const [lawyerData, setLawyerData] = useState<LawyerData>({
-    title: "",
-    details: "",
+    titleEn: "",
+    titleAr: "",
+    detailsEn: "",
+    detailsAr: "",
     lawyer_id: "",
     importance_level: "",
     law_suit_id: "",
@@ -86,9 +90,11 @@ const page = () => {
         setLawyerData({
           law_suit_id: lawyer.law_suit?.id,
           importance_level: lawyer.importance_level,
-          title: lawyer.title,
+          titleEn: lawyer.title,
+          titleAr: lawyer.title,
           lawyer_id: lawyer.lawyer?.id,
-          details: lawyer.details,
+          detailsAr: lawyer.details,
+          detailsEn: lawyer.details,
         });
         setDates({
           due_date: lawyer.due_date,
@@ -134,8 +140,8 @@ const page = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
-      title: lawyerData.title,
-      details: lawyerData.details,
+      title: { en: lawyerData.titleEn, ar: lawyerData.titleAr },
+      details: { en: lawyerData.detailsEn, ar: lawyerData.detailsAr },
       lawyer_id: lawyerData.lawyer_id,
       importance_level: lawyerData.importance_level,
       due_date: dates.due_date,
@@ -156,8 +162,10 @@ const page = () => {
 
       // Construct the dynamic key based on field names and the current language
       const fields = [
-        "title",
-        "details",
+        "titleEn",
+        "titleAr",
+        "detailsEn",
+        "detailsAr",
         "lawyer_id",
         "importance_level",
         "law_suit_id",
@@ -197,12 +205,27 @@ const page = () => {
                 transition={{ duration: 0.6 }}
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
+                <Label htmlFor="Name">{t("Task Name In English")}</Label>
+                <Input
+                  type="text"
+                  placeholder={t("Enter Task Name In English")}
+                  value={lawyerData.titleEn}
+                  name="titleEn"
+                  onChange={handleInputChange}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col gap-2 w-full sm:w-[48%]"
+              >
                 <Label htmlFor="Name">{t("Task Name In Arabic")}</Label>
                 <Input
                   type="text"
                   placeholder={t("Enter Task Name In Arabic")}
-                  name="title"
-                  value={lawyerData.title}
+                  name="titleAr"
+                  value={lawyerData.titleAr}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -311,12 +334,29 @@ const page = () => {
             >
               {" "}
               <div className="flex flex-col gap-2 w-full  my-4">
+                <Label>{t("Details In English")}</Label>
+                <Textarea
+                  placeholder={t("Type Here")}
+                  value={lawyerData.detailsEn}
+                  rows={7}
+                  name="detailsEn"
+                  onChange={handleInputChange}
+                />
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ y: -50 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
+              {" "}
+              <div className="flex flex-col gap-2 w-full  my-4">
                 <Label>{t("Details In Arabic")}</Label>
                 <Textarea
                   placeholder={t("Type Here")}
+                  value={lawyerData.detailsAr}
                   rows={7}
-                  value={lawyerData.details}
-                  name="details"
+                  name="detailsAr"
                   onChange={handleInputChange}
                 />
               </div>

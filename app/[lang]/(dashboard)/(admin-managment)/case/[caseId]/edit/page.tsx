@@ -362,16 +362,7 @@ const Page = () => {
       const res = await UpdateCases(formData, caseId, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
-        setLawyerData({
-          client_id: "",
-          court_id: "",
-          lawyer_id: "",
-          title: "",
-          main_case_number: "",
-          details: "",
-          claim_status: "",
-          category_id: "",
-        });
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -913,6 +904,6 @@ const Page = () => {
 
 const allowedRoles = ["super_admin"];
 
-const ProtectedComponent = Auth({ allowedRoles })(page);
+const ProtectedComponent = Auth({ allowedRoles })(Page);
 
 export default ProtectedComponent;

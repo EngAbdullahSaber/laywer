@@ -387,6 +387,6 @@ const Page = () => {
 
 const allowedRoles = ["super_admin"];
 
-const ProtectedComponent = Auth({ allowedRoles })(page);
+const ProtectedComponent = Auth({ allowedRoles })(Page);
 
 export default ProtectedComponent;

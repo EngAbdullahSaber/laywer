@@ -77,6 +77,7 @@
   "Id": "Id",
   "room_number": "Room Number",
   "phone": "Phone",
+  "Update Staff": "Update Staff",
   "client_type": "Client Type",
   "client_files": "Client Files",
   "case_numbers": "Case Numbers",

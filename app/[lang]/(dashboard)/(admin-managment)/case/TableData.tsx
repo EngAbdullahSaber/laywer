@@ -313,7 +313,27 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              {row.original.status}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.status === "pending" && "destructive") ||
+                  (row.original.status === "in_progress" && "warning") ||
+                  (row.original.status === "completed" && "success") ||
+                  "default"
+                }
+              >
+                {lang == "en"
+                  ? row.original.status == "completed"
+                    ? "Completed"
+                    : row.original.status == "in_progress"
+                    ? "In Progress"
+                    : "Pending"
+                  : row.original.status == "completed"
+                  ? "مكتملة"
+                  : row.original.status == "in_progress"
+                  ? "قيد التنفيذ"
+                  : "قيدالانتظار"}{" "}
+              </Badge>{" "}
             </motion.span>
           </div>
         );

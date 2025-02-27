@@ -197,7 +197,13 @@ const TableData = () => {
                   "default"
                 }
               >
-                {row.original.importance_level == "high"
+                {lang == "en"
+                  ? row.original.importance_level == "high"
+                    ? "Very Important"
+                    : row.original.importance_level == "mid"
+                    ? "Moderately Important"
+                    : "Low Importance"
+                  : row.original.importance_level == "high"
                   ? " مهمة جدا"
                   : row.original.importance_level == "mid"
                   ? "متوسطة الاهمية"
@@ -304,7 +310,13 @@ const TableData = () => {
                   "default"
                 }
               >
-                {row.original.status == "completed"
+                {lang == "en"
+                  ? row.original.status == "completed"
+                    ? "Completed"
+                    : row.original.status == "in_progress"
+                    ? "In Progress"
+                    : "Pending"
+                  : row.original.status == "completed"
                   ? "مكتملة"
                   : row.original.status == "in_progress"
                   ? "قيد التنفيذ"
