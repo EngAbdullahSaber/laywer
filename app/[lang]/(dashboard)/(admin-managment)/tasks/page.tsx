@@ -35,14 +35,6 @@ const page = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          <Button color="secondary" variant="outline" onClick={exportToExcel}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export Excel")}
-          </Button>
-          <Button color="secondary" variant="outline" onClick={downloadPDF}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export PDF")}
-          </Button>
           <Link href={"tasks/add"}>
             <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
               {t("Create Task")}

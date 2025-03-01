@@ -97,7 +97,7 @@ export function DataTable<TData>({
         searchPalsceholder={searchPalsceholder}
       />
       <div className="rounded-md border">
-        <Table>
+        <Table id="data-table">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="">

@@ -26,7 +26,10 @@ const page = () => {
           <div className=" text-default-900 text-2xl font-bold my-2">
             {t("Case List Orders")}
           </div>{" "}
-          <BreadcrumbComponent header={"Case Orders"} body={"Case List Orders"} />
+          <BreadcrumbComponent
+            header={"Case Orders"}
+            body={"Case List Orders"}
+          />
         </motion.div>
         <motion.div
           initial={{ x: -15 }}
@@ -35,14 +38,6 @@ const page = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {" "}
-          <Button color="secondary" variant="outline" onClick={exportToExcel}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export Excel")}
-          </Button>
-          <Button color="secondary" variant="outline" onClick={downloadPDF}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export PDF")}
-          </Button>
         </motion.div>{" "}
       </div>
 
