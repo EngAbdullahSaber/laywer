@@ -32,7 +32,6 @@ interface LaywerData {
   name: string;
   email: string;
   phone: string;
-  password: string;
   role_id: string;
 }
 interface UpdateStaffProps {
@@ -47,7 +46,6 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
-    password: "",
     email: "",
     role_id: "",
   });
@@ -84,7 +82,6 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
       name: lawyerData.name,
       phone: lawyerData.phone,
       email: lawyerData.email,
-      password: lawyerData.name,
       role_id: lawyerData.role_id,
     };
     try {
@@ -95,7 +92,6 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
           name: "",
           email: "",
           phone: "",
-          password: "",
           role_id: "",
         });
 
@@ -109,7 +105,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
       const axiosError = error as AxiosError<ErrorResponse>;
 
       // Construct the dynamic key based on field names and the current language
-      const fields = ["name", "email", "phone", "password", "role_id"];
+      const fields = ["name", "email", "phone", "role_id"];
 
       let errorMessage = "Something went wrong."; // Default fallback message
 
@@ -127,18 +123,17 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
+  console.log(row.original?.role_with_permission?.id);
   useEffect(() => {
     if (row?.original) {
       setLawyerData({
         name: row.original.name,
         email: row.original.email,
         phone: row.original.phone,
-        password: row.original.password,
         role_id: row.original?.role_with_permission?.id,
       });
     }
   }, [row]);
-  console.log(row);
   const handleOpen = () => {
     setOpen(!open);
     fetchDataCategory();
@@ -197,21 +192,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
                     onChange={handleInputChange}
                   />
                 </motion.div>
-                <motion.div
-                  initial={{ y: -30 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 1.7 }}
-                  className="flex flex-col gap-2 w-[48%]"
-                >
-                  <Label htmlFor="Password">{t("Password")}</Label>
-                  <Input
-                    type="Password"
-                    placeholder={t("Enter passowrd")}
-                    value={lawyerData.password}
-                    name="password"
-                    onChange={handleInputChange}
-                  />
-                </motion.div>
+
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}

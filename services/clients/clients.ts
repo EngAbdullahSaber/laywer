@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getClients(lang: any) {
-  let res = await api.get(`user/clients`, {
+  let res = await api.get(`user/clients?per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -47,7 +47,7 @@ export async function DeleteClients(id: any, lang: any) {
   else return false;
 }
 export async function getClientsPanigation(page: any, lang: any) {
-  let res = await api.get(`user/clients?page=${page}`, {
+  let res = await api.get(`user/clients?page=${page}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -67,7 +67,7 @@ export async function UpdateClients(lang: any, id: any, queryParams: any) {
 }
 
 export async function SearchClients(id: any, lang: any) {
-  let res = await api.get(`user/clients?search=${id}`, {
+  let res = await api.get(`user/clients?search=${id}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },

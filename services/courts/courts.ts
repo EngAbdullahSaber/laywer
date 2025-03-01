@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getCourts(lang: any) {
-  let res = await api.get(`court/courts`, {
+  let res = await api.get(`court/courts?per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -37,7 +37,7 @@ export async function getSpecifiedCourts(lang: any, id: any) {
   else return false;
 }
 export async function getFilterCourts(data: any, lang: any) {
-  let res = await api.get(`court/courts${data}`, {
+  let res = await api.get(`court/courts?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -65,7 +65,7 @@ export async function DeleteCourts(id: any, lang: any) {
   else return false;
 }
 export async function getCourtsPanigation(page: any, lang: any) {
-  let res = await api.get(`court/courts?page=${page}`, {
+  let res = await api.get(`court/courts?page=${page}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -85,7 +85,7 @@ export async function UpdateCourts(queryParams: any, id: any, lang: any) {
 }
 
 export async function SearchCourts(id: any, lang: any) {
-  let res = await api.get(`court/courts?category_filter=${id}`, {
+  let res = await api.get(`court/courts?search=${id}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },

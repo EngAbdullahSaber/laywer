@@ -254,6 +254,102 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
     );
   };
 
+  const renderCaseAttendFilesData = () => {
+    const lawyerData = row?.original?.attendance_reports;
+    console.log(typeof lawyerData);
+    // If lawyerData is not an array or is empty, return a fallback message
+    if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
+      return (
+        <>
+          <motion.h3
+            className="font-semibold text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {t("Report of attendance at a judicial hearing")}
+          </motion.h3>
+          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="space-y-4 mt-5">
+          {lawyerData.map((file, index) => (
+            <motion.li
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="flex flex-row gap-6 items-center"
+            >
+              <span className="text-sm text-default-900 font-medium w-[52%]">
+                {t("Report of attendance at a judicial hearing ") + index}:
+              </span>
+              <a
+                href={file.url} // Access the file URL dynamically from the `file` object
+                className="text-default-500 font-semibold w-[40%]"
+                target="_blank"
+                rel="noopener noreferrer" // Added for security when opening links
+              >
+                {t("Show File")} {/* Display the file name */}
+              </a>
+            </motion.li>
+          ))}
+        </div>
+      </>
+    );
+  };
+  const renderCaseFollowFilesData = () => {
+    const lawyerData = row?.original?.follow_up_reports;
+    console.log(typeof lawyerData);
+    // If lawyerData is not an array or is empty, return a fallback message
+    if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
+      return (
+        <>
+          <motion.h3
+            className="font-semibold text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {t("Case follow-up report")}
+          </motion.h3>
+          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="space-y-4 mt-5">
+          {lawyerData.map((file, index) => (
+            <motion.li
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="flex flex-row gap-6 items-center"
+            >
+              <span className="text-sm text-default-900 font-medium w-[52%]">
+                {t("Case follow-up report ") + index}:
+              </span>
+              <a
+                href={file.url} // Access the file URL dynamically from the `file` object
+                className="text-default-500 font-semibold w-[40%]"
+                target="_blank"
+                rel="noopener noreferrer" // Added for security when opening links
+              >
+                {t("Show File")} {/* Display the file name */}
+              </a>
+            </motion.li>
+          ))}
+        </div>
+      </>
+    );
+  };
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -282,6 +378,10 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
             <hr className="my-8" />
             {renderCourtsData()}
+            <hr className="my-8" />
+            {renderCaseFollowFilesData()}
+            <hr className="my-8" />
+            {renderCaseAttendFilesData()}
           </div>
         </ScrollArea>
         <SheetFooter>

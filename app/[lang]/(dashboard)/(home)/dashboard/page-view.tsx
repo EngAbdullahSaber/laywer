@@ -17,6 +17,10 @@ import Image from "next/image";
 import CalendarPage from "./components/CalendarPage";
 import ReportsChart from "./components/reports-snapshot/reports-chart";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getDashBoardInfo } from "@/services/auth/auth";
+import { useParams } from "next/navigation";
+import { Auth } from "@/components/auth/Auth";
 
 interface ReportItem {
   id: number;
@@ -40,12 +44,36 @@ const DashboardPageView = () => {
   const { theme: config, setTheme: setConfig } = useThemeStore();
   const { theme: mode } = useTheme();
   const theme = themes.find((theme) => theme.name === config);
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const { lang } = useParams();
 
+  // const getMessagesData = async () => {
+  //   setLoading(true);
+  //   const formData = new FormData();
+
+  //   formData.append("suit_month", "2025-03");
+  //   formData.append("next_appointments_date", "2025-03");
+
+  //   try {
+  //     const res = await getDashBoardInfo(lang, formData);
+  //     console.log(res?.body);
+  //     setData(res?.body || []);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching data", error);
+
+  //     setLoading(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getMessagesData();
+  // }, []);
   const reports: ReportItem[] = [
     {
       id: 1,
       name: "Total Clients",
-      count: "1206",
+      count: data.all_clients || 0,
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       color: "primary",
@@ -54,7 +82,7 @@ const DashboardPageView = () => {
     {
       id: 2,
       name: "Total Laywer",
-      count: "240",
+      count: data.all_lawyers || 0,
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       color: "warning",
@@ -63,7 +91,7 @@ const DashboardPageView = () => {
     {
       id: 3,
       name: "Total Case",
-      count: "96",
+      count: data.tasks || 0,
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       href: "case",
@@ -73,7 +101,7 @@ const DashboardPageView = () => {
     {
       id: 4,
       name: "Total Task",
-      count: "18",
+      count: data.tasks || 0,
       href: "task",
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
@@ -142,4 +170,8 @@ const DashboardPageView = () => {
   );
 };
 
-export default DashboardPageView;
+const allowedRoles = ["super_admin"];
+
+const ProtectedComponent = Auth({ allowedRoles })(DashboardPageView);
+
+export default ProtectedComponent;

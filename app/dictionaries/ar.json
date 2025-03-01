@@ -49,6 +49,7 @@
   "Create a New Staff": "إنشاء موظف جديد",
   "Create Staff": "إنشاء موظف",
   "Case follow-up report": "تقرير متابعة قضية",
+  "Case follow-up report ": "تقرير متابعة قضية",
   "Location of the case": "مكان القضية ",
   "Enter Location of the case": "أدخل مكان القضية",
   "Licence Number": "رقم الرخصة",
@@ -128,6 +129,7 @@
   "Proceedings of the session": "مجريات الجلسة",
   "Next session": "الجلسة القادمة ",
   "Report of attendance at a judicial hearing": "تقرير حضور جلسة قضائية",
+  "Report of attendance at a judicial hearing ": "تقرير حضور جلسة قضائية",
   "show file": "عرض الملف",
   "Update Client Category": "تحديث فئة العميل",
   "describtion": "الوصف",
@@ -784,6 +786,10 @@
   "Service price": "سعر الخدمة",
    "Are You Sure For Delete This Employee?": "هل أنت متأكد من حذف هذا الموظف؟",
   "Deleting Employee": " حذف الموظف",
+  "Select Staff": "اختر موظف",
+  "Case List Orders Details": "تفاصيل قائمة طلبات القضية",
+  "Case Orders": "طلبات القضية",
+  "Case List Orders": "قائمة طلبات القضية",
   "Next Appointmet": "الموعد القادم"
 
 }

@@ -88,7 +88,7 @@ const TableData = ({ flag }: { flag: any }) => {
       try {
         const res = await getFilterLawyerCases(queryString, lang);
 
-        setData(res?.body || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -105,7 +105,7 @@ const TableData = ({ flag }: { flag: any }) => {
             ? await getLawyerCases(lang)
             : await getLawyerCasesPanigation(page, lang);
 
-        setData(res?.body || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -155,7 +155,11 @@ const TableData = ({ flag }: { flag: any }) => {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Link href={"lawyer-cases/follow-report"} className="mt-1">
+                {" "}
+                <Link
+                  href={`lawyer-cases/${row.original.id}/follow-report`}
+                  className="mt-1"
+                >
                   {" "}
                   <Button
                     size="icon"
@@ -175,7 +179,10 @@ const TableData = ({ flag }: { flag: any }) => {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Link href={"lawyer-cases/attend-report"} className="mt-1">
+                <Link
+                  href={`lawyer-cases/${row.original.id}/attend-report`}
+                  className="mt-1"
+                >
                   {" "}
                   <Button
                     size="icon"

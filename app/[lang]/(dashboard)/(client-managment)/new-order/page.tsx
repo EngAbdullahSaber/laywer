@@ -85,7 +85,15 @@ const page = () => {
                   transition={{ duration: 0.8 }}
                   className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
                 >
-                  اسم المحامى :{" "}
+                  الرد : <span className="font-bold"> {item?.reply}</span>
+                </motion.p>
+                <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                >
+                  تم الرد من قبل :{" "}
                   <span className="font-bold"> {item?.reply_from?.name}</span>
                 </motion.p>
 
@@ -114,7 +122,7 @@ const page = () => {
                   transition={{ duration: 1.4 }}
                   className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
                 >
-                  تاريح المقابلة مع المحامى:{" "}
+                  تاريح المقابلة :{" "}
                   <span className="font-bold">{item?.meeting_date} </span>
                 </motion.p>
               </div>

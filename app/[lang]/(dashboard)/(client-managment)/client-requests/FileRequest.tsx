@@ -117,7 +117,7 @@ const FileRequest = ({ id }: { id: any }) => {
       const axiosError = error as AxiosError<ErrorResponse>;
 
       // Construct the dynamic key based on field names and the current language
-      const fields = ["title"];
+      const fields = ["title", "reply_files"];
 
       let errorMessage = "Something went wrong."; // Default fallback message
 

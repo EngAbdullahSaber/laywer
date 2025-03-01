@@ -25,6 +25,7 @@ import {
 } from "@/services/tasks/tasks";
 import { getCasesPanigation } from "@/services/cases/cases";
 import { Auth } from "@/components/auth/Auth";
+import { getStaffPanigation } from "@/services/staff/staff";
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
   { id: "mid", value: "mid", label: "متوسطة الاهمية" },
@@ -110,7 +111,7 @@ const page = () => {
   const fetchCasesData = async (service: Function, page: number = 1) => {
     try {
       const data = await service(page, lang);
-      return data?.body || [];
+      return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
 
@@ -136,7 +137,6 @@ const page = () => {
     const formattedDate = `${year}-${month}-${day}`;
     setDates((prev) => ({ ...prev, [key]: formattedDate }));
   };
-  console.log(lawyerData.importance_level);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
@@ -162,10 +162,10 @@ const page = () => {
 
       // Construct the dynamic key based on field names and the current language
       const fields = [
-        "titleEn",
-        "titleAr",
-        "detailsEn",
-        "detailsAr",
+        "title.en",
+        "title.ar",
+        "details.ar",
+        "details.en",
         "lawyer_id",
         "importance_level",
         "law_suit_id",
@@ -256,9 +256,9 @@ const page = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Assigned_To">{t("Assigned To")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchData(getLawyerPanigation)}
+                      fetchData={() => fetchData(getStaffPanigation)}
                       formatOption={formatOption}
-                      placeholder={t("Select Lawyer")}
+                      placeholder={t("Select Staff")}
                       selectedValue={lawyerData.lawyer_id}
                       setSelectedValue={(value) =>
                         setLawyerData((prev) => ({

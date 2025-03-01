@@ -7,8 +7,7 @@ interface DashboardProps {
   };
 }
 const Dashboard = async ({ params: { lang } }: DashboardProps) => {
-
-  return <DashboardPageView  />;
+  return <DashboardPageView />;
 };
 
 export default Dashboard;

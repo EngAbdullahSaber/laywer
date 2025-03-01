@@ -213,7 +213,7 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              {row.original.category.name}
+              {row.original.category?.name}
             </motion.span>
           </div>
         );

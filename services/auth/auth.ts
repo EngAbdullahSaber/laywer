@@ -44,3 +44,12 @@ export async function RemoveImage(id: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
+export async function getDashBoardInfo(lang: any, data: any) {
+  let res = await api.post(`user/home`, data, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}

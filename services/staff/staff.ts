@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getStaff(lang: any) {
-  let res = await api.get(`user/staffs`, {
+  let res = await api.get(`user/staffs?per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -19,7 +19,7 @@ export async function getRoles(lang: any) {
   else return false;
 }
 export async function getFilterStaff(data: any, lang: any) {
-  let res = await api.get(`user/staffs${data}`, {
+  let res = await api.get(`user/staffs?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -55,7 +55,7 @@ export async function DeleteStaff(id: any, lang: any) {
   else return false;
 }
 export async function getStaffPanigation(page: any, lang: any) {
-  let res = await api.get(`user/staffs?page=${page}`, {
+  let res = await api.get(`user/staffs?page=${page}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -76,7 +76,7 @@ export async function UpdateStaff(queryParams: any, id: any, lang: any) {
 }
 
 export async function SearchStaff(id: any, lang: any) {
-  let res = await api.get(`user/staffs?category_filter=${id}`, {
+  let res = await api.get(`user/staffs?search=${id}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },

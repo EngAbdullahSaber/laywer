@@ -22,10 +22,8 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
     const selectedItem = list.find((item) => item.id === id);
     return selectedItem || null; // Returns the entire object or null if not found
   };
-  // Handle change event to capture the selected value
-  const handleChange = (selectedOption: any) => {
-    console.log(selectedOption);
 
+  const handleChange = (selectedOption: any) => {
     setSelectedValue(selectedOption); // This will store the selected option
   };
   return (
@@ -35,7 +33,7 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
           className="react-select"
           classNamePrefix="select"
           styles={styles}
-          defaultValue={getValueById(selectedValue, menu)}
+          value={getValueById(selectedValue, menu)}
           name="clear"
           options={menu}
           isClearable

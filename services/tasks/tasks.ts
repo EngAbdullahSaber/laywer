@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getTasks(lang: any) {
-  let res = await api.get(`user/tasks`, {
+  let res = await api.get(`user/tasks?per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -65,7 +65,7 @@ export async function DeleteTasks(id: any, lang: any) {
   else return false;
 }
 export async function getTasksPanigation(page: any, lang: any) {
-  let res = await api.get(`user/tasks?page=${page}`, {
+  let res = await api.get(`user/tasks?page=${page}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -86,7 +86,7 @@ export async function UpdateTasks(lang: any, id: any, queryParams: any) {
 }
 
 export async function SearchTasks(id: any, lang: any) {
-  let res = await api.get(`user/tasks?search=${id}`, {
+  let res = await api.get(`user/tasks?search=${id}&per_page=10`, {
     headers: {
       "Accept-Language": lang,
     },

@@ -79,7 +79,7 @@ const TableData = () => {
       try {
         const res = await getFilterClientCases(queryString, lang);
 
-        setData(res?.body || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -96,7 +96,7 @@ const TableData = () => {
             ? await getClientCases(lang)
             : await getClientCasesPanigation(page, lang);
 
-        setData(res?.body || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -115,7 +115,7 @@ const TableData = () => {
     try {
       const res = await SearchClientCases(search, lang);
 
-      setData(res?.body || []);
+      setData(res?.body?.data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -259,7 +259,27 @@ const TableData = () => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            {row.original.status}
+            <Badge
+              className="!text-center"
+              color={
+                (row.original.status === "pending" && "destructive") ||
+                (row.original.status === "in_progress" && "warning") ||
+                (row.original.status === "completed" && "success") ||
+                "default"
+              }
+            >
+              {lang == "en"
+                ? row.original.status == "completed"
+                  ? "Completed"
+                  : row.original.status == "in_progress"
+                  ? "In Progress"
+                  : "Pending"
+                : row.original.status == "completed"
+                ? "مكتملة"
+                : row.original.status == "in_progress"
+                ? "قيد التنفيذ"
+                : "قيدالانتظار"}{" "}
+            </Badge>{" "}
           </div>
         );
       },
@@ -267,24 +287,7 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
-    // {
-    //   accessorKey: "Client_Name",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={"Client_Name"} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex  items-center justify-center gap-2 mx-auto">
-    //         <span className="max-w-[500px] truncate font-medium">
-    //           {row.original.Client_Name}
-    //         </span>
-    //       </div>
-    //     );
-    //   },
-    //   filterFn: (row, id, value) => {
-    //     return value.includes(row.getValue(id));
-    //   },
-    // },
+
     {
       accessorKey: "Hearing_Dates",
       header: ({ column }) => (

@@ -31,6 +31,8 @@ interface LaywerData {
 }
 const CreateDate = ({ id }: { id: any }) => {
   const { t } = useTranslate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     details: "",
     service_id: id,
@@ -104,6 +106,7 @@ const CreateDate = ({ id }: { id: any }) => {
           invoice_file: null,
         });
         reToast.success(res.message); // Display success message
+        setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
       }
@@ -130,7 +133,7 @@ const CreateDate = ({ id }: { id: any }) => {
     }
   };
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
           {t("Ask Services")}

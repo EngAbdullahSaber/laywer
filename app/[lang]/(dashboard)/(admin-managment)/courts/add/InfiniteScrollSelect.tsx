@@ -33,11 +33,14 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
 
       // Check if there's no more data
       if (newData.length === 0) {
+        console.log(newData);
         setHasMore(false);
       } else {
         // Filter out duplicates before appending new data
+        console.log(newData);
+
         setItems((prevItems) => {
-          const uniqueNewData = newData.filter(
+          const uniqueNewData = newData?.filter(
             (newItem) =>
               !prevItems.some((prevItem) => prevItem.id === newItem.id)
           );
