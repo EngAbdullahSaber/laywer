@@ -74,6 +74,9 @@ const page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
 
       return [];
     }
@@ -84,6 +87,9 @@ const page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
 
       return [];
     }

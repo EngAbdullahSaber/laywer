@@ -62,7 +62,9 @@ const Page = () => {
       return citiesData?.body?.data || [];
     } catch (error) {
       reToast.error("Failed to fetch cities");
-
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
       return [];
     }
   };
@@ -155,6 +157,9 @@ const Page = () => {
       setRegions(regionsData?.body || []);
     } catch (error) {
       reToast.error("Failed to fetch categories or regions");
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
     }
   };
 
@@ -169,7 +174,7 @@ const Page = () => {
           <CardTitle>{t("Create Court")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Court Name */}
               <motion.div
@@ -348,7 +353,7 @@ const Page = () => {
                 {t("Create Court")}
               </Button>
             </motion.div>
-          </form>
+          </div>
         </CardContent>
       </Card>
     </div>
