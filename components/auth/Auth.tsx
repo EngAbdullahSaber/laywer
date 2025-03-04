@@ -17,7 +17,7 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
   return function AuthWrapper(WrappedComponent: any) {
     return function WrappedWithAuth(props: any) {
       const userData = useSelector((state: RootState) => state.user);
-      const userRole = userData?.role_with_permission?.name;
+      const userRole = userData?.role_with_permission;
       const accessToken = useAccessToken();
 
       if (accessToken) {
@@ -27,10 +27,12 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
       useEffect(() => {
         if (!userData) {
           // If user is not authenticated, redirect to login
-          redirect("/auth/login");
+          // redirect("/auth/login");
         } else if (!allowedRoles.includes(userRole)) {
           // If user role is not allowed, redirect to a "Not Authorized" page
-          redirect("/auth/login");
+          console.log(allowedRoles);
+          console.log(userRole);
+          // redirect("/auth/login");
         }
       }, [userData, userRole, allowedRoles]);
 

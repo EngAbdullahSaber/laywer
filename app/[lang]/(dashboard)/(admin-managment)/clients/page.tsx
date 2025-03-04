@@ -9,10 +9,17 @@ import TableData from "./TableData";
 import CreateClient from "./CreateClient";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { exportToExcel } from "@/config/ExportButoons";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import { Auth } from "@/components/auth/Auth";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 const page = () => {
   const { t, loading, error } = useTranslate();
   const [flag, setFlag] = useState(false);
@@ -36,14 +43,20 @@ const page = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          <Button color="secondary" variant="outline" onClick={exportToExcel}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export Excel")}
-          </Button>
-          <Button color="secondary" variant="outline" onClick={downloadPDF}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export PDF")}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button color="secondary" variant="outline">
+                <Icon icon="lets-icons:export" className="h-5 w-5" />
+                {t("Export Excel")}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[196px]" align="start">
+              <DropdownMenuItem onClick={exportToExcel}>
+                {t("Current Page")}
+              </DropdownMenuItem>
+              <DropdownMenuItem>{t("All Data")}</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link href={"clients/add"}>
             <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
               {t("Create Client")}

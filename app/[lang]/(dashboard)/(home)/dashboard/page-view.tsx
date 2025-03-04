@@ -48,27 +48,31 @@ const DashboardPageView = () => {
   const [loading, setLoading] = useState(true);
   const { lang } = useParams();
 
-  // const getMessagesData = async () => {
-  //   setLoading(true);
-  //   const formData = new FormData();
+  const getMessagesData = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    const now = new Date(); // Get the current date
+    const year = now.getFullYear(); // Get the full year (e.g., 2025)
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Get the month (0-11, so add 1) and pad with leading zero if necessary
 
-  //   formData.append("suit_month", "2025-03");
-  //   formData.append("next_appointments_date", "2025-03");
+    const currentDate = `${year}-${month}`; // Format as "YYYY-MM"
+    formData.append("suit_month", currentDate);
+    formData.append("next_appointments_date", "2025-03-21");
 
-  //   try {
-  //     const res = await getDashBoardInfo(lang, formData);
-  //     console.log(res?.body);
-  //     setData(res?.body || []);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching data", error);
+    try {
+      const res = await getDashBoardInfo(lang, formData);
+      console.log(res?.body);
+      setData(res?.body || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
 
-  //     setLoading(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getMessagesData();
-  // }, []);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getMessagesData();
+  }, []);
   const reports: ReportItem[] = [
     {
       id: 1,
@@ -91,7 +95,7 @@ const DashboardPageView = () => {
     {
       id: 3,
       name: "Total Case",
-      count: data.tasks || 0,
+      count: data.suits || 0,
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       href: "case",
@@ -175,3 +179,12 @@ const allowedRoles = ["super_admin"];
 const ProtectedComponent = Auth({ allowedRoles })(DashboardPageView);
 
 export default ProtectedComponent;
+// [
+//   { x: "2025-03-01T00:00:00.000Z", y: 3 },
+//   { x: "2025-03-02T00:00:00.000Z", y: 5 },
+//   { x: "2025-03-03T00:00:00.000Z", y: 7 },
+//   { x: "2025-03-04T00:00:00.000Z", y: 10 },
+//   { x: "2025-03-05T00:00:00.000Z", y: 15 },
+//   { x: "2025-03-06T00:00:00.000Z", y: 20 },
+//   { x: "2025-03-07T00:00:00.000Z", y: 25 },
+// ]

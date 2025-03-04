@@ -22,7 +22,8 @@ import { useParams } from "next/navigation";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
 import DeleteButton from "./DeleteButton";
 import UpdateContact from "./UpdateContact";
-
+import { getCategory } from "@/services/category/category";
+import { toast as reToast } from "react-hot-toast";
 interface Task {
   id: string;
   Categories?: string;
@@ -41,24 +42,45 @@ const TableData = ({ flag }: { flag: any }) => {
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const { t } = useTranslate();
-  console.log(data);
+  const [category, setCategory] = useState<any[]>([]);
+
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
-    email: "",
+    category_filter: "",
     phone: "",
   });
   const buildQueryString = (filters: { [key: string]: string }) => {
     const queryParams = Object.entries(filters)
       .filter(([key, value]) => value) // Only include filters with values
-      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .map(([key, value]) => `=${value}`) // Format as "field:key=value"
       .join("&"); // Join them with "&"
 
-    return queryParams ? `?${queryParams}` : "";
+    return queryParams ? `&category_filter${queryParams}` : "";
   };
 
   const queryString = buildQueryString(filters);
-
-  const filtersConfig = [];
+  const transformedCategories = category.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+  const fetchData = async () => {
+    try {
+      const countriesData = await getCategory("crew", lang);
+      setCategory(countriesData?.body?.data || []);
+    } catch (error) {
+      reToast.error("Failed to fetch data");
+    }
+  };
+  const filtersConfig = [
+    {
+      label: "category_filter",
+      placeholder: "Select Category",
+      type: "select",
+      values: transformedCategories,
+      value: filters.category_filter,
+    },
+  ];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -130,6 +152,7 @@ const TableData = ({ flag }: { flag: any }) => {
       SearchData();
     } else {
       getLawyerData();
+      fetchData();
     }
   }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [

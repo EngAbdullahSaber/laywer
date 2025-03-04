@@ -17,6 +17,8 @@ import { usePathname } from "next/navigation";
 const PopoverSidebar = ({ trans }: { trans: string }) => {
   const { collapsed, sidebarBg } = useSidebar();
   const { layout, isRtl } = useThemeStore();
+  const role = useRole(); // Fetch role using the custom hook
+
   const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);

@@ -18,6 +18,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
 
   const role = useRole(); // Fetch role using the custom hook
+  console.log(role);
   const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const { collapsed, setCollapsed } = useSidebar();

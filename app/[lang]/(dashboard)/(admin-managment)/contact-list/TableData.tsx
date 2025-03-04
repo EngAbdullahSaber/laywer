@@ -17,6 +17,8 @@ import {
 } from "@/services/contact-list/contact-list";
 import DeleteButton from "./DeleteButton";
 import UpdateContact from "./UpdateContact";
+import { getCategory } from "@/services/category/category";
+import { toast as reToast } from "react-hot-toast";
 
 interface Task {
   id: string;
@@ -34,24 +36,45 @@ const TableData = ({ flag }: { flag: any }) => {
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
+  const [category, setCategory] = useState<any[]>([]);
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
-    email: "",
+    category_filter: "",
     phone: "",
   });
   const buildQueryString = (filters: { [key: string]: string }) => {
     const queryParams = Object.entries(filters)
       .filter(([key, value]) => value) // Only include filters with values
-      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .map(([key, value]) => `=${value}`) // Format as "field:key=value"
       .join("&"); // Join them with "&"
 
-    return queryParams ? `?${queryParams}` : "";
+    return queryParams ? `&category_filter${queryParams}` : "";
   };
 
   const queryString = buildQueryString(filters);
-
-  const filtersConfig = [];
+  const transformedCategories = category.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+  const fetchData = async () => {
+    try {
+      const countriesData = await getCategory("contact_list", lang);
+      setCategory(countriesData?.body?.data || []);
+    } catch (error) {
+      reToast.error("Failed to fetch data");
+    }
+  };
+  const filtersConfig = [
+    {
+      label: "category_filter",
+      placeholder: "Select Category",
+      type: "select",
+      values: transformedCategories,
+      value: filters.category_filter,
+    },
+  ];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -77,7 +100,7 @@ const TableData = ({ flag }: { flag: any }) => {
       } catch (error) {
         console.error("Error fetching data", error);
         if (error?.status == 401) {
-          window.location.href = "/auth/login";
+          // window.location.href = "/auth/login";
         }
 
         setLoading(false);
@@ -95,7 +118,7 @@ const TableData = ({ flag }: { flag: any }) => {
       } catch (error) {
         console.error("Error fetching data", error);
         if (error?.status == 401) {
-          window.location.href = "/auth/login";
+          // window.location.href = "/auth/login";
         }
 
         setLoading(false);
@@ -114,7 +137,7 @@ const TableData = ({ flag }: { flag: any }) => {
     } catch (error) {
       console.error("Error fetching data", error);
       if (error?.status == 401) {
-        window.location.href = "/auth/login";
+        // window.location.href = "/auth/login";
       }
 
       setLoading(false);
@@ -126,6 +149,7 @@ const TableData = ({ flag }: { flag: any }) => {
       SearchData();
     } else {
       getContactListData();
+      fetchData();
     }
   }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
@@ -241,32 +265,6 @@ const TableData = ({ flag }: { flag: any }) => {
         return value.includes(row.getValue(id));
       },
     },
-
-    // {
-    //   accessorKey: "Gender",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={"Gender"} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex  items-center justify-center gap-2 mx-auto">
-    //         <Badge
-    //           className="!text-center"
-    //           color={
-    //             (row.original.Gender === "Male" && "success") ||
-    //             (row.original.Gender === "Female" && "warning") ||
-    //             "default"
-    //           }
-    //         >
-    //           {row.original.Gender}
-    //         </Badge>
-    //       </div>
-    //     );
-    //   },
-    //   filterFn: (row, id, value) => {
-    //     return value.includes(row.getValue(id));
-    //   },
-    // },
   ];
   const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (

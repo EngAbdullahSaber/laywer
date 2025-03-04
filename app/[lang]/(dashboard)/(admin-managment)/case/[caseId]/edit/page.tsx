@@ -91,8 +91,8 @@ const Page = () => {
       const res = await getCases(lang);
 
       // Convert the ID to a string, pad it with leading zeros, and default to '0000'
-      const caseId = String(res?.body[0].id).padStart(4, "0") || "0000";
-      // console.log(caseId);
+      String(res?.body[res?.body?.data?.length - 1].id).padStart(4, "0") ||
+        "0000";
       // const initialNumbers =
       //   Number(caseId) < 10
       //     ? "000" + Number(caseId)

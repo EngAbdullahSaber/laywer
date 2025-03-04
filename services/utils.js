@@ -7,7 +7,6 @@ export function getHeaderConfig(accessToken) {
 
   try {
     // Try to parse the token to ensure it's valid JSON
-    console.log(accessToken);
     return {
       headers: {
         "Content-Type": "multipart/form-data",

@@ -168,15 +168,15 @@ export const getMenusConfig = (role) => ({
   mainNav: [],
   sidebarNav: {
     modern:
-      role === "super_admin"
+      role == "super_admin"
         ? adminMenu
-        : role === "lawyer"
+        : role == "lawyer"
         ? lawyerMenu
         : clientMenu,
     classic:
-      role === "super_admin"
+      role == "super_admin"
         ? adminMenu
-        : role === "lawyer"
+        : role == "lawyer"
         ? lawyerMenu
         : clientMenu,
   },

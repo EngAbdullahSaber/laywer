@@ -92,24 +92,26 @@ const VerifyForm = () => {
         if (res?.message) {
           toast.success(res.message);
         }
-
+        let userRole;
         // Ensure the access_token exists before trying to store it
         if (res?.body?.access_token) {
           storeTokenInLocalStorage(res.body.access_token);
-          dispatch(changeUserData(res.body.user));
+          dispatch({
+            type: "SET_USER",
+            payload: {
+              email: res.body.user.email,
+              role_with_permission: res.body.user.role_with_permission.name,
+              verify_access_token: res.body.user.verify_access_token,
+            },
+          });
+          userRole = res.body.user.role_with_permission.name;
         } else {
           toast.error("Access token missing");
           return;
         }
 
         // Ensure the user and role information exists before using it
-        localStorage.setItem(
-          "role",
-          res?.body?.user?.role_with_permission?.name
-        );
 
-        const userRole = localStorage.getItem("role");
-        console.log(userRole);
         if (userRole) {
           // Redirect based on role
           if (userRole == "super_admin") {

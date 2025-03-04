@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { useTranslate } from "@/config/useTranslation";
 
 const ModuleSidebar = ({ trans }: { trans: any }) => {
+  const role = useRole(); // Fetch role using the custom hook
+
   const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.modern || [];
   const { subMenu, setSubmenu, collapsed, setCollapsed, sidebarBg } =

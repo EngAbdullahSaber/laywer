@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
 export async function getOrdersFromClients(lang: any) {
-  let res = await api.get(`court/service-orders`, {
+  let res = await api.get(`client/client_orders`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -10,7 +10,7 @@ export async function getOrdersFromClients(lang: any) {
   else return false;
 }
 export async function AskAboutOrdersFromClients(lang: any, data: any) {
-  let res = await api.post(`court/service-orders/ask-service`, data, {
+  let res = await api.post(`client/client_orders/ask-service`, data, {
     headers: {
       "Accept-Language": lang,
     },
@@ -19,7 +19,7 @@ export async function AskAboutOrdersFromClients(lang: any, data: any) {
   else return false;
 }
 export async function getFilterOrdersFromClients(data: any, lang: any) {
-  let res = await api.get(`court/service-orders?per_page=10${data}`, {
+  let res = await api.get(`client/client_orders?per_page=10${data}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -29,7 +29,7 @@ export async function getFilterOrdersFromClients(data: any, lang: any) {
 }
 
 export async function getOrdersFromClientsPanigation(page: any, lang: any) {
-  let res = await api.get(`court/service-orders?page=${page}`, {
+  let res = await api.get(`client/client_orders?page=${page}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -39,7 +39,7 @@ export async function getOrdersFromClientsPanigation(page: any, lang: any) {
 }
 
 export async function SearchOrdersFromClients(id: any, lang: any) {
-  let res = await api.get(`court/service-orders?search=${id}`, {
+  let res = await api.get(`client/client_orders?search=${id}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -48,7 +48,7 @@ export async function SearchOrdersFromClients(id: any, lang: any) {
   else return false;
 }
 export async function DeleteOrdersFromClients(id: any, lang: any) {
-  let res = await api.delete(`court/service-orders/${id}`, {
+  let res = await api.delete(`client/client_orders/${id}`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -57,7 +57,7 @@ export async function DeleteOrdersFromClients(id: any, lang: any) {
   else return false;
 }
 export async function CreateOrdersFromClients(data: any, lang: any) {
-  let res = await api.post(`court/service-orders`, data, {
+  let res = await api.post(`client/client_orders`, data, {
     headers: {
       "Accept-Language": lang,
     },

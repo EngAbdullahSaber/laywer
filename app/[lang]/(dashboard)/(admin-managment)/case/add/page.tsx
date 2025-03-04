@@ -86,19 +86,9 @@ const Page = () => {
       const res = await getCases(lang);
 
       // Convert the ID to a string, pad it with leading zeros, and default to '0000'
-      const caseId =
-        String(res?.body[res?.body.length - 1].id).padStart(4, "0") || "0000";
-      console.log(res?.body[res?.body.length - 1].id);
-      // const initialNumbers =
-      //   Number(caseId) < 10
-      //     ? "000" + Number(caseId)
-      //     : Number(caseId) < 100
-      //     ? "00" + Number(caseId)
-      //     : Number(caseId) < 1000
-      //     ? "0" + Number(caseId)
-      //     : Number(caseId).toString();
+      const caseId = String(res?.body?.data[0]?.id).padStart(4, "0") || "0000";
+      console.log(res?.body?.data[0]?.id);
 
-      // setNumbers(initialNumbers);
       setData(Number(caseId)); // Set the padded case ID
       setNumbers([caseId]); // Set the padded case ID
       setLoading(false);
@@ -108,6 +98,7 @@ const Page = () => {
       setLoading(false);
     }
   };
+  console.log(data);
   const charcter = Array.from({ length: 26 }, (_, i) => ({
     value: String.fromCharCode(65 + i),
     label: String.fromCharCode(65 + i),

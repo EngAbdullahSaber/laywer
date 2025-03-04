@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,42 @@ import CreateCase from "./CreateCase";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { exportToExcel } from "@/config/ExportButoons";
 import { Auth } from "@/components/auth/Auth";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useParams } from "next/navigation";
+import { getFile } from "@/services/cases/cases";
 const page = () => {
-  const { t, loading, error } = useTranslate();
+  const { t, error } = useTranslate();
   const [flag, setFlag] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>([]);
+  const { lang } = useParams();
+
+  const getExcelFileData = async () => {
+    setLoading(true);
+    try {
+      const res = await getFile(lang);
+
+      setData(res?.body?.file || []);
+      window.open(res?.body?.file, "_blank");
+      console.log(res?.body?.file);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-5">
@@ -36,14 +66,22 @@ const page = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          <Button color="secondary" variant="outline" onClick={exportToExcel}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export Excel")}
-          </Button>
-          <Button color="secondary" variant="outline" onClick={downloadPDF}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export PDF")}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button color="secondary" variant="outline">
+                <Icon icon="lets-icons:export" className="h-5 w-5" />
+                {t("Export Excel")}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[196px]" align="start">
+              <DropdownMenuItem onClick={exportToExcel}>
+                {t("Current Page")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={getExcelFileData}>
+                {t("All Data")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link href={"case/add"}>
             <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
               {t("Create Case")}

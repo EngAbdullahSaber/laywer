@@ -28,10 +28,13 @@ import {
   getFilterCases,
   SearchCases,
 } from "@/services/cases/cases";
+import { toast as reToast } from "react-hot-toast";
+
 import { useEffect, useState } from "react";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
 import { redirect, useParams } from "next/navigation";
 import DeleteButton from "./Delete";
+import { getCategory } from "@/services/category/category";
 interface Task {
   id: string;
   Case_Name?: string;
@@ -51,25 +54,88 @@ const TableData = ({ flag }: { flag: any }) => {
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const { t } = useTranslate();
+  const [category, setCategory] = useState<any[]>([]);
 
   const [filters, setFilters] = useState<Record<string, string>>({
-    full_name: "",
-    email: "",
-    phone: "",
+    status_filter: "",
+    category_filter: "",
+    claim_status_filter: "",
   });
   const buildQueryString = (filters: { [key: string]: string }) => {
     const queryParams = Object.entries(filters)
       .filter(([key, value]) => value) // Only include filters with values
-      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .map(([key, value]) => `${key}=${value}`) // Format as "field:key=value"
       .join("&"); // Join them with "&"
 
-    return queryParams ? `?${queryParams}` : "";
+    return queryParams ? `&${queryParams}` : "";
   };
 
   const queryString = buildQueryString(filters);
-
-  const filtersConfig = [];
-
+  const transformedCategories = category.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+  const status = [
+    {
+      id: "completed",
+      value: lang == "en" ? "completed" : "مكتملة",
+      label: lang == "en" ? "completed" : "مكتملة",
+    },
+    {
+      id: "pending",
+      value: lang == "en" ? "pending" : "قيدالانتظار",
+      label: lang == "en" ? "pending" : "قيدالانتظار",
+    },
+    {
+      id: "in_progress",
+      value: lang == "en" ? "in_progress" : "قيد التنفيذ",
+      label: lang == "en" ? "in_progress" : "قيد التنفيذ",
+    },
+  ];
+  const cailm_status = [
+    {
+      id: "defendant",
+      value: lang == "en" ? "defendant" : "مدعى عليه",
+      label: lang == "en" ? "defendant" : "مدعى عليه",
+    },
+    {
+      id: "claimant",
+      value: lang == "en" ? "claimant" : "مدعي",
+      label: lang == "en" ? "claimant" : "مدعي",
+    },
+  ];
+  const fetchData = async () => {
+    try {
+      const countriesData = await getCategory("cases", lang);
+      setCategory(countriesData?.body?.data || []);
+    } catch (error) {
+      reToast.error("Failed to fetch data");
+    }
+  };
+  const filtersConfig = [
+    {
+      label: "category_filter",
+      placeholder: "Select Category",
+      type: "select",
+      values: transformedCategories,
+      value: filters.category_filter,
+    },
+    {
+      label: "status_filter",
+      placeholder: "Select Status",
+      type: "select",
+      values: status,
+      value: filters.status_filter,
+    },
+    {
+      label: "claim_status_filter",
+      placeholder: "Select Status",
+      type: "select",
+      values: cailm_status,
+      value: filters.claim_status_filter,
+    },
+  ];
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -89,7 +155,7 @@ const TableData = ({ flag }: { flag: any }) => {
       try {
         const res = await getFilterCases(queryString, lang);
 
-        setData(res?.body || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -106,7 +172,7 @@ const TableData = ({ flag }: { flag: any }) => {
             ? await getCases(lang)
             : await getCasesPanigation(page, lang);
 
-        setData(res?.body || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -124,7 +190,7 @@ const TableData = ({ flag }: { flag: any }) => {
     try {
       const res = await SearchCases(search, lang);
 
-      setData(res?.body || []);
+      setData(res?.body?.data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -141,6 +207,7 @@ const TableData = ({ flag }: { flag: any }) => {
       SearchData();
     } else {
       getCasesData();
+      fetchData();
     }
   }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [

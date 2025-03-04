@@ -9,7 +9,6 @@ export let api = axios.create({
 });
 
 export function updateAxiosHeader(accessToken) {
-  console.log(accessToken);
   api.defaults.headers = getHeaderConfig(
     accessToken.verify_access_token
   ).headers;
@@ -20,7 +19,6 @@ export function updateAxiosHeader(accessToken) {
     },
     function (error) {
       if (error?.status === 401) {
-        console.log(error);
         clearAuthInfo();
         window.location.reload();
       }

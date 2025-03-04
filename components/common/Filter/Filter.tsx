@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import BasicSelect from "@/app/[lang]/(dashboard)/(store-mangement)/shared/basic-select";
+import React from "react";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,7 @@ interface FilterConfig {
   placeholder?: string;
   type: "input" | "select";
   value?: string;
-  options?: { label: string; value: string }[];
+  values?: { label: string; value: string }[]; // Ensure values is an array of objects with label and value
 }
 
 interface FilterProps {
@@ -34,11 +34,8 @@ export const Filter: React.FC<FilterProps> = ({
     onFilterChange({ [field]: value });
   };
 
-  const handleSelectChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    field: string
-  ) => {
-    onFilterChange({ [field]: e.target.value });
+  const handleSelectChange = (value: string, field: string) => {
+    onFilterChange({ [field]: value?.id });
   };
 
   const handleReset = () => {
@@ -53,18 +50,29 @@ export const Filter: React.FC<FilterProps> = ({
     <div className="mt-[20px] flex flex-col gap-[10px]">
       {filtersConfig.map((filter, i) => (
         <div key={i} className="flex items-center gap-[10px]">
-          {filter.type === "input" && (
+          {filter.type === "input" ? (
             <div className="w-full flex flex-col gap-2">
               <Label className="capitalize">{t(filter.label)}</Label>
               <Input
                 type="text"
-                placeholder={t(filter.placeholder)}
+                placeholder={t(filter.placeholder || "")}
                 value={filter.value || ""}
                 onChange={(e) => handleInputChange(e, filter.label)}
                 minLength={1}
               />
             </div>
-          )}
+          ) : filter.type === "select" ? (
+            <div className="w-full flex flex-col gap-2">
+              <Label className="capitalize">{t(filter.label)}</Label>
+              <BasicSelect
+                menu={filter.values || []} // Ensure values is an array
+                setSelectedValue={(value) =>
+                  handleSelectChange(value, filter.label)
+                }
+                selectedValue={filter.value || ""} // Use filter.value instead of contactList
+              />
+            </div>
+          ) : null}
         </div>
       ))}
 

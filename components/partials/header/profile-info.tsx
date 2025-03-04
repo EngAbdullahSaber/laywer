@@ -46,9 +46,7 @@ const ProfileInfo = () => {
           {" "}
           <Avatar>
             <AvatarImage src={``} />
-            <AvatarFallback>
-              {user?.role_with_permission?.name?.slice(0, 2)}
-            </AvatarFallback>
+            <AvatarFallback>{user?.email?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>

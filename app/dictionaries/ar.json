@@ -790,8 +790,12 @@
   "Case List Orders Details": "تفاصيل قائمة طلبات القضية",
   "Case Orders": "طلبات القضية",
   "Case List Orders": "قائمة طلبات القضية",
-  "All Data": "All Data",
-  "Current Page": "Current Page",
+  "All Data": "جميع البيانات",
+  "Current Page": "الصفحة الحالية",
+  "category_filter": " الفئة",
+  "status_filter": " الحالة",
+  "claim_status_filter": "نوع العميل",
+
   "Next Appointmet": "الموعد القادم"
 
 }

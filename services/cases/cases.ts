@@ -9,6 +9,15 @@ export async function getCases(lang: any) {
   if (res) return res.data;
   else return false;
 }
+export async function getFile(lang: any) {
+  let res = await api.get(`court/cases/export/export_xls`, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}
 export async function getSpecifiedCases(lang: any, id: any) {
   let res = await api.get(`court/cases/${id}`, {
     headers: {
