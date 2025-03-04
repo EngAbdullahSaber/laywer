@@ -100,11 +100,11 @@ const VerifyForm = () => {
             type: "SET_USER",
             payload: {
               email: res.body.user.email,
-              role_with_permission: res.body.user.role_with_permission.name,
+              role_with_permission: res.body.user?.role,
               verify_access_token: res.body.user.verify_access_token,
             },
           });
-          userRole = res.body.user.role_with_permission.name;
+          userRole = res.body.user?.role;
         } else {
           toast.error("Access token missing");
           return;
@@ -117,7 +117,7 @@ const VerifyForm = () => {
           if (userRole == "super_admin") {
             router.push("/dashboard");
           } else if (userRole == "lawyer") {
-            router.push("/lawyer-cases");
+            router.push("/lawyer-tasks");
           } else if (userRole == "client") {
             router.push("/client-cases");
           } else {

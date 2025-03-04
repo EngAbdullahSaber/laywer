@@ -291,7 +291,7 @@ const TableData = ({ flag }: { flag: any }) => {
                   "default"
                 }
               >
-                {lang == "en"
+                {lang == "ar"
                   ? row.original.status == "active"
                     ? "نشط"
                     : "تم حظره"

@@ -46,7 +46,14 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
   const renderImagesData = () => {
     const profile = row?.original;
-
+    if (
+      !profile?.subscription_image?.url &&
+      !profile?.lawyer_licence?.url &&
+      !profile?.national_id_image?.url &&
+      !profile?.driving_licence?.url
+    ) {
+      return null;
+    }
     return (
       <>
         <motion.h3
@@ -59,78 +66,86 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
           <div className="space-y-4 mt-5">
-            <motion.li
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="flex flex-row gap-6 items-center"
-            >
-              <span className="text-sm text-default-900 font-medium w-[52%]">
-                {t("Subscription Photo")}:
-              </span>
-              <a
-                href={profile?.subscription_image?.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
-                target="_blank"
-                rel="noopener noreferrer" // Added for security when opening links
+            {profile?.subscription_image?.url && (
+              <motion.li
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-row gap-6 items-center"
               >
-                {t("Show File")} {/* Display the file name */}
-              </a>
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="flex flex-row gap-6 items-center"
-            >
-              <span className="text-sm text-default-900 font-medium w-[52%]">
-                {t("Driving Licence Photo")}:
-              </span>
-              <a
-                href={profile?.driving_licence?.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
-                target="_blank"
-                rel="noopener noreferrer" // Added for security when opening links
+                <span className="text-sm text-default-900 font-medium w-[52%]">
+                  {t("Subscription Photo")}:
+                </span>
+                <a
+                  href={profile?.subscription_image?.url} // Access the file URL dynamically from the `file` object
+                  className="text-default-500 font-semibold w-[40%]"
+                  target="_blank"
+                  rel="noopener noreferrer" // Added for security when opening links
+                >
+                  {t("Show File")} {/* Display the file name */}
+                </a>
+              </motion.li>
+            )}
+            {profile?.driving_licence?.url && (
+              <motion.li
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-row gap-6 items-center"
               >
-                {t("Show File")} {/* Display the file name */}
-              </a>
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="flex flex-row gap-6 items-center"
-            >
-              <span className="text-sm text-default-900 font-medium w-[52%]">
-                {t("National Id Photo")}:
-              </span>
-              <a
-                href={profile?.national_id_image?.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
-                target="_blank"
-                rel="noopener noreferrer" // Added for security when opening links
+                <span className="text-sm text-default-900 font-medium w-[52%]">
+                  {t("Driving Licence Photo")}:
+                </span>
+                <a
+                  href={profile?.driving_licence?.url} // Access the file URL dynamically from the `file` object
+                  className="text-default-500 font-semibold w-[40%]"
+                  target="_blank"
+                  rel="noopener noreferrer" // Added for security when opening links
+                >
+                  {t("Show File")} {/* Display the file name */}
+                </a>
+              </motion.li>
+            )}
+            {profile?.national_id_image?.url && (
+              <motion.li
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-row gap-6 items-center"
               >
-                {t("Show File")} {/* Display the file name */}
-              </a>
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="flex flex-row gap-6 items-center"
-            >
-              <span className="text-sm text-default-900 font-medium w-[52%]">
-                {t("Lawyer Licence Photo")}:
-              </span>
-              <a
-                href={profile?.lawyer_licence?.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
-                target="_blank"
-                rel="noopener noreferrer" // Added for security when opening links
+                <span className="text-sm text-default-900 font-medium w-[52%]">
+                  {t("National Id Photo")}:
+                </span>
+                <a
+                  href={profile?.national_id_image?.url} // Access the file URL dynamically from the `file` object
+                  className="text-default-500 font-semibold w-[40%]"
+                  target="_blank"
+                  rel="noopener noreferrer" // Added for security when opening links
+                >
+                  {t("Show File")} {/* Display the file name */}
+                </a>
+              </motion.li>
+            )}
+            {profile?.lawyer_licence?.url && (
+              <motion.li
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-row gap-6 items-center"
               >
-                {t("Show File")} {/* Display the file name */}
-              </a>
-            </motion.li>
+                <span className="text-sm text-default-900 font-medium w-[52%]">
+                  {t("Lawyer Licence Photo")}:
+                </span>
+                <a
+                  href={profile?.lawyer_licence?.url} // Access the file URL dynamically from the `file` object
+                  className="text-default-500 font-semibold w-[40%]"
+                  target="_blank"
+                  rel="noopener noreferrer" // Added for security when opening links
+                >
+                  {t("Show File")} {/* Display the file name */}
+                </a>
+              </motion.li>
+            )}
           </div>
         </ul>
       </>
@@ -157,17 +172,16 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("Phone")} value={lawyerData?.phone || "-"} />
           <DetailItem
             label={t("Status")}
-            value={lawyerData?.status == "active" ? "Yes" : "No" || "-"}
+            value={
+              lawyerData?.status == "active" ? t("Active") : t("Blocked") || "-"
+            }
           />
           <DetailItem label={t("Address")} value={lawyerData?.address || "-"} />
           <DetailItem
             label={t("Driving Licence Number")}
             value={lawyerData?.driving_licence_number || "-"}
           />
-          <DetailItem
-            label={t("National Id Number")}
-            value={lawyerData?.national_id_number || "-"}
-          />
+
           <DetailItem
             label={t("Category")}
             value={lawyerData?.category.name || "-"}

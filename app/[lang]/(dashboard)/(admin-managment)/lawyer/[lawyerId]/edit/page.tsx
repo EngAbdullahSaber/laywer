@@ -30,7 +30,6 @@ interface LaywerData {
   name: string;
   phone: string;
   driving_licence_number: string;
-  national_id_number: string;
   email: string;
   address: string;
   category_id: string;
@@ -45,7 +44,6 @@ const page = () => {
     name: "",
     phone: "",
     driving_licence_number: "",
-    national_id_number: "",
     email: "",
     address: "",
     category_id: "",
@@ -112,7 +110,6 @@ const page = () => {
           name: lawyer.name,
           phone: lawyer.phone,
           driving_licence_number: lawyer.driving_licence_number,
-          national_id_number: lawyer.national_id_number,
           email: lawyer.email,
           address: lawyer.address,
           category_id: lawyer.category.id,
@@ -206,7 +203,6 @@ const page = () => {
         "name",
         "phone",
         "driving_licence_number",
-        "national_id_number",
         "category_id",
         "address",
         "email",
@@ -322,21 +318,6 @@ const page = () => {
                   value={lawyerData.driving_licence_number}
                   onChange={handleInputChange}
                   placeholder={t("Enter Licence Number")}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.7 }}
-                className="flex flex-col gap-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="national">{t("National Id Number")}</Label>
-                <Input
-                  type="number"
-                  value={lawyerData.national_id_number}
-                  name="national_id_number"
-                  onChange={handleInputChange}
-                  placeholder={t("Enter National Id Number")}
                 />
               </motion.div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">

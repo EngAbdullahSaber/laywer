@@ -797,7 +797,8 @@
   "claim_status_filter": "نوع العميل",
   "Search or Select a City": "ابحث أو اختر مدينة",
   "Enter National Id Number": "أدخل رقم الهوية الوطنية",
-
+  "Blocked": "تم حظره",
+  "Active": "نشط",
   "Next Appointmet": "الموعد القادم"
 
 }
