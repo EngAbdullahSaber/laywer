@@ -18,7 +18,7 @@ interface FilterProps {
   onFilterChange: (filters: Record<string, string>) => void;
   onFilterSubmit: () => void;
 }
-
+console.log(open);
 export const Filter: React.FC<FilterProps> = ({
   filtersConfig,
   onFilterChange,

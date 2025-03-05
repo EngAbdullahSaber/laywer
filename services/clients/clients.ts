@@ -18,6 +18,15 @@ export async function getSpecifiedClient(lang: any, id: any) {
   if (res) return res.data;
   else return false;
 }
+export async function getClientFile(lang: any) {
+  let res = await api.get(`user/clients/export/export_xls`, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}
 export async function getFilterClients(data: any, lang: any) {
   let res = await api.get(`user/clients?per_page=10${data}`, {
     headers: {

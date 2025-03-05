@@ -10,6 +10,7 @@ import {
   getYAxisConfig,
 } from "@/lib/appex-chart-options";
 import { useTranslate } from "@/config/useTranslation";
+import { useEffect, useState } from "react";
 
 interface ReportsChartProps {
   series: ApexAxisChartSeries;
@@ -24,9 +25,22 @@ const ReportsChart = ({
 }: ReportsChartProps) => {
   const { theme: config, setTheme: setConfig } = useThemeStore();
   const { theme: mode } = useTheme();
-
   const theme = themes.find((theme) => theme.name === config);
   const { t } = useTranslate();
+
+  // Generate an array of dates for the current month
+  const getDaysInMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get the number of days in the current month
+
+    return Array.from({ length: daysInMonth }, (_, i) =>
+      String(i + 1).padStart(2, "0")
+    ); // Format as "01", "02", ..., "31"
+  };
+
+  const [categories, setCategories] = useState<string[]>(getDaysInMonth());
 
   const options: any = {
     chart: {
@@ -61,9 +75,15 @@ const ReportsChart = ({
     yaxis: getYAxisConfig(
       `hsl(${theme?.cssVars[mode === "dark" ? "dark" : "light"].chartLabel})`
     ),
-    xaxis: getXAxisConfig(
-      `hsl(${theme?.cssVars[mode === "dark" ? "dark" : "light"].chartLabel})`
-    ),
+    xaxis: {
+      ...getXAxisConfig(
+        `hsl(${theme?.cssVars[mode === "dark" ? "dark" : "light"].chartLabel})`
+      ),
+      categories: categories, // Set custom labels for the x-axis
+      labels: {
+        formatter: (value: string) => value, // Display the date as-is (e.g., "01", "02", etc.)
+      },
+    },
     padding: {
       top: 0,
       right: 0,
@@ -71,6 +91,7 @@ const ReportsChart = ({
       left: 0,
     },
   };
+
   return (
     <>
       <div className="flex items-center gap-2 flex-wrap p-4 ">

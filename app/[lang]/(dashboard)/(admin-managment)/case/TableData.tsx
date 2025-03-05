@@ -48,6 +48,7 @@ interface Task {
 const TableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
@@ -145,8 +146,8 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    console.log("Filters submitted:", filters);
     getCasesData();
+    setOpen(false); // Close the sheet after applying filters
   };
 
   const getCasesData = async () => {
@@ -421,6 +422,8 @@ const TableData = ({ flag }: { flag: any }) => {
         setSearch={setSearch}
         searchPalsceholder={searchPalsceholder}
         page={page}
+        open={open}
+        setOpen={setOpen}
         search={search}
         filtersConfig={filtersConfig}
         onFilterChange={handleFilterChange}

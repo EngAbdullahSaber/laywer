@@ -9,15 +9,15 @@ export async function getContactList(lang: any) {
   if (res) return res.data;
   else return false;
 }
-// export async function getSpecifiedLawyer(lang:any,id:any) {
-//     let res = await api.get(`client/contact_lists?per_page=10/${id}`, {
-//         headers: {
-//             'Accept-Language': lang
-//         }
-//     });
-//     if (res) return res.data;
-//     else return false;
-// }
+export async function getContactListFile(lang: any) {
+  let res = await api.get(`client/contact_lists/export/export_xls`, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}
 export async function getFilterContactList(data: any, lang: any) {
   let res = await api.get(`client/contact_lists?per_page=10${data}`, {
     headers: {

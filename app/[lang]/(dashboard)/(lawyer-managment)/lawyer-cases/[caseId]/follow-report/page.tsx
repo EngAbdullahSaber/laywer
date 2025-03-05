@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CleaveInput } from "@/components/ui/cleave";
 import ControlledRadio from "./ControlledRadio";
+import html2pdf from "html2pdf.js";
 
 import { getSpecifiedCases } from "@/services/cases/cases";
 import { useParams } from "next/navigation";
@@ -91,236 +92,239 @@ const CaseFollowReport = () => {
 
   const generatePDF = async () => {
     const htmlContent = `
-    <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تقرير متابعة قضية</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
-
-    :root {
-      --font-color: #fff;
-      --highlight-color: #fdd472;
-      --header-bg-color: #1a1a1a;
-      --footer-bg-color: #1a1a1a;
-      --table-img-bg-color: #2c2c2c;
-      --background-gradient: linear-gradient(180deg, #31291E 0%, #000080 100%);
-    }
-
-    body {
-      margin: 0;
-      position: relative;
-      padding: 1cm 2cm;
-      background: var(--background-gradient);
-      color: var(--font-color);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 12pt;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: var(--highlight-color);
-      text-decoration: none;
-    }
-
-    hr {
-      margin: 1cm 0;
-      height: 0;
-      border: 0;
-      border-top: 1mm solid var(--highlight-color);
-    }
-
-    header {
-      padding: 1cm 0;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    header .logoAndName {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    header .logo {
-      width: 60px;
-      height: 60px;
-    }
-
-    header .title {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--highlight-color);
-    }
-
-    header h2 {
-      font-size: 20px;
-      color: var(--highlight-color);
-      margin: 10px 0;
-    }
-
-    header h3 {
-      font-size: 18px;
-      color: var(--font-color);
-      margin: 10px 0;
-    }
-
-    header p {
-      margin: 5px 0;
-    }
-
-    .details-section {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);      
-      gap: 20px;
-      margin: 20px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .details-section div {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .details-section div:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .details-section h3 {
-      font-size: 16px;
-      color: var(--highlight-color);
-      margin-bottom: 10px;
-    }
-
-    .details-section p {
-      margin: 5px 0;
-    }
-
-    /* Make the last div take full width */
-    .details-section div:last-child {
-      grid-column: 1 / -1; /* Span across all columns */
-    }
-
-    footer {
-      padding: 1cm 0;
-      text-align: center;
-      background: var(--footer-bg-color);
-      color: var(--font-color);
-      font-size: 10pt;
-      position: relative;
-      z-index: 2;
-    }
-
-    footer a {
-      margin: 0 10px;
-    }
-
-    aside {
-      text-align: center;
-      margin: 20px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    aside b {
-      display: block;
-      font-size: 16px;
-      color: var(--highlight-color);
-      margin: 10px 0;
-    }
-
-    .background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-      opacity: 0.2; /* Adjust opacity for better readability */
-    }
-  </style>
-</head>
-<body>
-  <img
-    src="https://dash-tail.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fline.c2493fdc.png&w=1080&q=75"
-    alt="background"
-    class="background"
-  />
-  <header>
-    <div class="logoAndName">
-      <img
-        src="https://msaatylaw.com/wp-content/uploads/2023/10/Capture-removebg-preview-3.png"
-        alt="logo"
-        class="logo"
-      />
-      <p class="title">ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي</p>
-    </div>
-    <h2>تقرير متابعة قضية</h2>
-  </header>
-
-  <div class="details-section">
-    <div>
-      <h3>تفاصيل القضية</h3>
-<p><b> رقم الهوية:</b> ${data?.follow_up_reports?.length || 0}</p>
-      <p><b>اسم القضية:</b> ${caseName}</p>
-      <p><b>رقم القضية:</b> ${caseNumber}</p>
-      <p><b>مكان القضية:</b> ${caseLocation}</p>
-      <p><b>المدعى:</b> ${plaintiffName}</p>
-      <p><b>المدعى عليه:</b> ${defendantName}</p>
-    </div>
-    <div>
-      <h3>التاريخ بالأيام والساعات</h3>
-      <p><b>التاريخ:</b> ${currentDate}</p>
-      <p><b>الوقت:</b> ${currentTime}</p>
-      <p><b>اليوم:</b> ${currentDay?.label || ""}</p>
-    </div>
-    <div>
-      <h3>حالة الموعد</h3>
-      <p><b>حالة الموعد:</b> ${selected}</p>
-      ${
-        selected == "يوجد موعد"
-          ? `
-              <h3>تاريخ الموعد القادم بالأيام والساعات</h3>
-              <p><b>التاريخ:</b> ${nextDate}</p>
-              <p><b>الوقت:</b> ${nextTime}</p>
-              <p><b>اليوم:</b> ${nextDay?.label || ""}</p>
-          `
-          : ""
-      }
-    </div>
-    <div>
-      <h3>الإجراءات اللازمة</h3>
-      <p><b>إجراءات المتابعة:</b> ${followUpProcedures}</p>
-      <p><b>ما يجب القيام به:</b> ${whatShouldBeDone}</p>
-    </div>
-  </div>
-
-  <footer>
-    <a href="https://msaatylaw.com/">ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي</a>
-    <a href="mailto:info@msaatylaw.com">info@msaatylaw.com</a>
-    <span>+966580033727</span>
-  </footer>
-
-  <aside>
-    <hr />
-    <b>بالتوفيق فيما هو قادم</b>
-    <b>مع أطيب التمنيات</b>
-  </aside>
-</body>
-</html>
+      <!DOCTYPE html>
+      <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>تقرير متابعة قضية</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+  
+          :root {
+            --font-color: #fff;
+            --highlight-color: #fdd472;
+            --header-bg-color: #1a1a1a;
+            --footer-bg-color: #1a1a1a;
+            --table-img-bg-color: #2c2c2c;
+            --background-gradient: linear-gradient(180deg, #31291E 0%, #000080 100%);
+          }
+  
+          body {
+            margin: 0;
+            position: relative;
+            padding: 1cm 2cm;
+            background: var(--background-gradient);
+            color: var(--font-color);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            overflow-x: hidden;
+          }
+  
+          a {
+            color: var(--highlight-color);
+            text-decoration: none;
+          }
+  
+          hr {
+            margin: 1cm 0;
+            height: 0;
+            border: 0;
+            border-top: 1mm solid var(--highlight-color);
+          }
+  
+          header {
+            padding: 1cm 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+          }
+  
+          header .logoAndName {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+          }
+  
+          header .logo {
+            width: 60px;
+            height: 60px;
+          }
+  
+          header .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--highlight-color);
+          }
+  
+          header h2 {
+            font-size: 20px;
+            color: var(--highlight-color);
+            margin: 10px 0;
+          }
+  
+          header h3 {
+            font-size: 18px;
+            color: var(--font-color);
+            margin: 10px 0;
+          }
+  
+          header p {
+            margin: 5px 0;
+          }
+  
+          .details-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);      
+            gap: 20px;
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+          }
+  
+          .details-section div {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+  
+          .details-section div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+          }
+  
+          .details-section h3 {
+            font-size: 16px;
+            color: var(--highlight-color);
+            margin-bottom: 10px;
+          }
+  
+          .details-section p {
+            margin: 5px 0;
+          }
+  
+          /* Make the last div take full width */
+          .details-section div:last-child {
+            grid-column: 1 / -1; /* Span across all columns */
+          }
+  
+          footer {
+            padding: 1cm 0;
+            text-align: center;
+            background: var(--footer-bg-color);
+            color: var(--font-color);
+            font-size: 10pt;
+            position: relative;
+            z-index: 2;
+          }
+  
+          footer a {
+            margin: 0 10px;
+          }
+  
+          aside {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+          }
+  
+          aside b {
+            display: block;
+            font-size: 16px;
+            color: var(--highlight-color);
+            margin: 10px 0;
+          }
+  
+          .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.2; /* Adjust opacity for better readability */
+          }
+        </style>
+      </head>
+      <body>
+        <img
+          src="https://dash-tail.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fline.c2493fdc.png&w=1080&q=75"
+          alt="background"
+          class="background"
+        />
+        <header>
+          <div class="logoAndName">
+            <img
+              src="https://msaatylaw.com/wp-content/uploads/2023/10/Capture-removebg-preview-3.png"
+              alt="logo"
+              class="logo"
+            />
+            <p class="title">ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي</p>
+          </div>
+          <h2>تقرير متابعة قضية</h2>
+        </header>
+  
+        <div class="details-section">
+          <div>
+            <h3>تفاصيل القضية</h3>
+            <p><b> رقم الهوية:</b> ${data?.follow_up_reports?.length || 0}</p>
+            <p><b>اسم القضية:</b> ${caseName}</p>
+            <p><b>رقم القضية:</b> ${caseNumber}</p>
+            <p><b>مكان القضية:</b> ${caseLocation}</p>
+            <p><b>المدعى:</b> ${plaintiffName}</p>
+            <p><b>المدعى عليه:</b> ${defendantName}</p>
+          </div>
+          <div>
+            <h3>التاريخ بالأيام والساعات</h3>
+            <p><b>التاريخ:</b> ${currentDate}</p>
+            <p><b>الوقت:</b> ${currentTime}</p>
+            <p><b>اليوم:</b> ${currentDay?.label || ""}</p>
+          </div>
+          <div>
+            <h3>حالة الموعد</h3>
+            <p><b>حالة الموعد:</b> ${selected}</p>
+            ${
+              selected == "يوجد موعد"
+                ? `
+                    <h3>تاريخ الموعد القادم بالأيام والساعات</h3>
+                    <p><b>التاريخ:</b> ${nextDate}</p>
+                    <p><b>الوقت:</b> ${nextTime}</p>
+                    <p><b>اليوم:</b> ${nextDay?.label || ""}</p>
+                `
+                : ""
+            }
+          </div>
+          <div>
+            <h3>الإجراءات اللازمة</h3>
+            <p><b>إجراءات المتابعة:</b> ${followUpProcedures}</p>
+            <p><b>ما يجب القيام به:</b> ${whatShouldBeDone}</p>
+          </div>
+        </div>
+  
+        <footer>
+          <a href="https://msaatylaw.com/">ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي</a>
+          <a href="mailto:info@msaatylaw.com">info@msaatylaw.com</a>
+          <span>+966580033727</span>
+        </footer>
+  
+        <aside>
+          <hr />
+          <b>بالتوفيق فيما هو قادم</b>
+          <b>مع أطيب التمنيات</b>
+        </aside>
+      </body>
+      </html>
     `;
 
+    // Create a temporary div to hold the HTML content
+    const element = document.createElement("div");
+    element.innerHTML = htmlContent;
     // Create a Blob from the HTML content
     const blob = new Blob([htmlContent], { type: "text/html" });
 
@@ -391,6 +395,20 @@ const CaseFollowReport = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    // Use html2pdf to generate and download the PDF
+    // html2pdf()
+    //   .set({
+    //     margin: [10, 10, 10, 10], // Set margins
+    //     filename: "case-follow-up-report.pdf", // Set the filename
+    //     image: { type: "jpeg", quality: 0.98 }, // Set image quality
+    //     html2canvas: { scale: 2 }, // Set scale for better quality
+    //     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // Set PDF format
+    //   })
+    //   .from(element)
+    //   .save();
+
+    // // Clean up the temporary div
+    // element.remove();
   };
   return (
     <Card>

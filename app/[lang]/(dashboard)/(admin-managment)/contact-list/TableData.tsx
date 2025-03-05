@@ -35,6 +35,8 @@ const TableData = ({ flag }: { flag: any }) => {
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
   const searchPalsceholder = "Searchs";
+  const [open, setOpen] = useState(false);
+
   const { lang } = useParams();
   const [category, setCategory] = useState<any[]>([]);
 
@@ -84,9 +86,8 @@ const TableData = ({ flag }: { flag: any }) => {
   };
 
   const handleFilterSubmit = () => {
-    // Perform filtering logic here
-    console.log("Filters submitted:", filters);
     getContactListData();
+    setOpen(false);
   };
 
   const getContactListData = async () => {
@@ -100,7 +101,7 @@ const TableData = ({ flag }: { flag: any }) => {
       } catch (error) {
         console.error("Error fetching data", error);
         if (error?.status == 401) {
-          // window.location.href = "/auth/login";
+          window.location.href = "/auth/login";
         }
 
         setLoading(false);
@@ -118,7 +119,7 @@ const TableData = ({ flag }: { flag: any }) => {
       } catch (error) {
         console.error("Error fetching data", error);
         if (error?.status == 401) {
-          // window.location.href = "/auth/login";
+          window.location.href = "/auth/login";
         }
 
         setLoading(false);
@@ -137,7 +138,7 @@ const TableData = ({ flag }: { flag: any }) => {
     } catch (error) {
       console.error("Error fetching data", error);
       if (error?.status == 401) {
-        // window.location.href = "/auth/login";
+        window.location.href = "/auth/login";
       }
 
       setLoading(false);
@@ -277,6 +278,8 @@ const TableData = ({ flag }: { flag: any }) => {
         setSearch={setSearch}
         searchPalsceholder={searchPalsceholder}
         page={page}
+        open={open}
+        setOpen={setOpen}
         search={search}
         filtersConfig={filtersConfig}
         onFilterChange={handleFilterChange}

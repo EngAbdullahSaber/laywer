@@ -19,6 +19,8 @@ interface DataTableToolbarProps {
   onFilterChange?: any;
   filtersConfig?: any[];
   setSearch?: (data: any) => void;
+  setOpen?: any;
+  open: any;
   search: string;
   searchPalsceholder: string;
 }
@@ -28,11 +30,14 @@ export function DataTableToolbar({
   filtersConfig,
   onFilterChange,
   onFilterSubmit,
+  setOpen,
+  open,
   search,
   searchPalsceholder,
   setSearch,
 }: DataTableToolbarProps) {
   const { t } = useTranslate();
+  console.log(open);
 
   return (
     <div className="flex flex-1 flex-wrap items-center gap-2">
@@ -48,6 +53,8 @@ export function DataTableToolbar({
       )}
       <DataTableViewOptions table={table} />
       <LayoutFilter
+        setOpen={setOpen}
+        open={open}
         onFilterChange={onFilterChange}
         filtersConfig={filtersConfig}
         onFilterSubmit={onFilterSubmit}

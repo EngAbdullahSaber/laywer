@@ -37,6 +37,8 @@ interface DataTableProps<TData> {
   page: number;
   search: string;
   searchPalsceholder: string;
+  open: any;
+  setOpen?: any;
   setPage?: (pageId: any) => void;
   setSearch?: (data: any) => void;
   isPaginationDisabled: boolean;
@@ -49,6 +51,8 @@ export function DataTable<TData>({
   onFilterSubmit,
   filtersConfig,
   setPage,
+  setOpen,
+  open,
   searchPalsceholder,
   setSearch,
   isPaginationDisabled,
@@ -89,6 +93,8 @@ export function DataTable<TData>({
     <div className="space-y-4">
       <DataTableToolbar
         setSearch={setSearch}
+        setOpen={setOpen}
+        open={open}
         search={search}
         table={table}
         onFilterChange={onFilterChange}

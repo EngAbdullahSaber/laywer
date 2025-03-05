@@ -39,6 +39,7 @@ interface ReportItem {
     | "default"
     | "dark";
 }
+
 const DashboardPageView = () => {
   const { t } = useTranslate();
   const { theme: config, setTheme: setConfig } = useThemeStore();
@@ -66,13 +67,37 @@ const DashboardPageView = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-
       setLoading(false);
     }
   };
+
   useEffect(() => {
     getMessagesData();
   }, []);
+
+  // Transform `suits_this_month` data for the chart
+  const transformChartData = (suitsThisMonth: any[]) => {
+    if (!suitsThisMonth || suitsThisMonth.length === 0) return [];
+
+    // Group cases by day
+    const casesByDay: Record<string, number> = {};
+
+    suitsThisMonth.forEach((suit) => {
+      const date = new Date(suit.created_at).toISOString().split("T")[0]; // Extract YYYY-MM-DD
+      if (casesByDay[date]) {
+        casesByDay[date]++;
+      } else {
+        casesByDay[date] = 1;
+      }
+    });
+    console.log(casesByDay);
+    // Convert to ApexCharts format
+    return Object.entries(casesByDay).map(([date, count]) => ({
+      x: date,
+      y: count,
+    }));
+  };
+
   const reports: ReportItem[] = [
     {
       id: 1,
@@ -101,7 +126,6 @@ const DashboardPageView = () => {
       href: "case",
       color: "destructive",
     },
-
     {
       id: 4,
       name: "Total Task",
@@ -112,11 +136,7 @@ const DashboardPageView = () => {
       color: "destructive",
     },
   ];
-  const allUsersSeries = [
-    {
-      data: [90, 70, 85, 60, 80, 70, 90, 75, 60, 80],
-    },
-  ];
+
   const primary = `hsl(${
     theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
   })`;
@@ -134,6 +154,7 @@ const DashboardPageView = () => {
       <div className="flex flex-row justify-between items-center   ">
         {reports.map((item) => (
           <Card
+            key={item.id}
             className={`service-card hover:bg-lawyer before:absolute before:h-[110px] before:w-[110px]   before:opacity-60 before:rounded-full before:z-[-1] before:bottom-[-73px] before:right-[-28px] lg:w-[24%] md:w-[45%] w-full p-6 relative z-10 rounded-xl overflow-hidden bg-white dark:bg-slate-800 dark:text-white`}
           >
             <Link href={item.href}>
@@ -166,9 +187,25 @@ const DashboardPageView = () => {
           </Card>
         ))}
       </div>
-      <Card title="Analysis">
-        <ReportsChart series={allUsersSeries} chartColor={primary} />
+
+      {/* Chart Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("Number of Cases This Month")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ReportsChart
+            series={[
+              {
+                name: "Cases",
+                data: transformChartData(data.suits_this_month || []),
+              },
+            ]}
+            chartColor={primary}
+          />
+        </CardContent>
       </Card>
+
       <CalendarPage />
     </div>
   );
@@ -179,12 +216,3 @@ const allowedRoles = ["super_admin"];
 const ProtectedComponent = Auth({ allowedRoles })(DashboardPageView);
 
 export default ProtectedComponent;
-//suits_this_month= [
-//   { x: "2025-03-01T00:00:00.000Z", y: 3 },
-//   { x: "2025-03-02T00:00:00.000Z", y: 5 },
-//   { x: "2025-03-03T00:00:00.000Z", y: 7 },
-//   { x: "2025-03-04T00:00:00.000Z", y: 10 },
-//   { x: "2025-03-05T00:00:00.000Z", y: 15 },
-//   { x: "2025-03-06T00:00:00.000Z", y: 20 },
-//   { x: "2025-03-07T00:00:00.000Z", y: 25 },
-// ]

@@ -50,6 +50,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const { lang } = useParams();
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
+  const [open, setOpen] = useState(false);
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -97,8 +98,8 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    console.log("Filters submitted:", filters);
     getLawyerData();
+    setOpen(false); // Close the sheet after applying filters
   };
 
   const getLawyerData = async () => {
@@ -367,6 +368,8 @@ const TableData = ({ flag }: { flag: any }) => {
         setSearch={setSearch}
         searchPalsceholder={searchPalsceholder}
         page={page}
+        open={open}
+        setOpen={setOpen}
         search={search}
         filtersConfig={filtersConfig}
         onFilterChange={handleFilterChange}

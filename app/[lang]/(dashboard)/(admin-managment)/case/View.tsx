@@ -129,7 +129,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   };
   const renderCaseFilesData = () => {
     const lawyerData = row?.original?.files;
-    console.log(typeof lawyerData);
     // If lawyerData is not an array or is empty, return a fallback message
     if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
       return (

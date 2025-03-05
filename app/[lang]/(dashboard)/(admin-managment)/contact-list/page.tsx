@@ -19,10 +19,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useParams } from "next/navigation";
+import { getContactListFile } from "@/services/contact-list/contact-list";
 const page = () => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>([]);
+  const { lang } = useParams();
 
+  const getExcelFileData = async () => {
+    setLoading(true);
+    try {
+      const res = await getContactListFile(lang);
+
+      setData(res?.body?.file || []);
+      window.open(res?.body?.file, "_blank");
+      console.log(res?.body?.file);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      if (error?.status == 401) {
+        window.location.href = "/auth/login";
+      }
+      setLoading(false);
+    }
+  };
   return (
     <div className="space-y-5">
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
@@ -53,7 +75,9 @@ const page = () => {
               <DropdownMenuItem onClick={exportToExcel}>
                 {t("Current Page")}
               </DropdownMenuItem>
-              <DropdownMenuItem>{t("All Data")}</DropdownMenuItem>
+              <DropdownMenuItem onClick={getExcelFileData}>
+                {t("All Data")}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <CreateContact setFlag={setFlag} flag={flag} />
