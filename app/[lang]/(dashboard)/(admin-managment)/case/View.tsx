@@ -28,10 +28,10 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3 }}
   >
-    <span className="text-sm text-default-900 font-medium w-[52%]">
+    <span className="text-sm text-default-900 font-medium w-[40%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 font-semibold w-[55%]">{value}</span>
   </motion.li>
 );
 
@@ -43,37 +43,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   const { t, loading, error } = useTranslate();
   const { lang } = useParams();
 
-  // const renderClientsData = () => {
-  //   const profile = row?.original;
-
-  //   return (
-  //     <>
-  //       <motion.h3
-  //         className="font-semibold text-lg"
-  //         initial={{ opacity: 0 }}
-  //         animate={{ opacity: 1 }}
-  //         transition={{ duration: 0.5 }}
-  //       >
-  //         {t("Cases Files")}
-  //       </motion.h3>
-  //       <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-  //         <motion.li
-  //           initial={{ opacity: 0 }}
-  //           animate={{ opacity: 1 }}
-  //           transition={{ delay: 0.3, duration: 0.5 }}
-  //           className="flex flex-row gap-6 items-center"
-  //         >
-  //           <span className="text-sm text-default-900 font-medium w-[52%]">
-  //             {t("Cases Files")}:
-  //           </span>
-  //           <span className="text-default-500 font-semibold w-[40%]">
-  //             {profile?.client_files}
-  //           </span>
-  //         </motion.li>
-  //       </ul>
-  //     </>
-  //   );
-  // };
   const renderLawyerData = () => {
     const casesData = row?.original?.lawyer;
 
@@ -143,13 +112,13 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             value={casesData?.room_number || "-"}
           />
           <DetailItem
-            label="Date Of Create"
+            label={t("Date Of Create")}
             value={
               new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
             }
           />
           <DetailItem
-            label="Date Of Update"
+            label={t("Date Of Update")}
             value={
               new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
             }
@@ -248,10 +217,29 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             value={casesData?.session_date || "-"}
           />
 
-          <DetailItem label={t("status")} value={casesData?.status || "-"} />
+          <DetailItem
+            label={t("status")}
+            value={
+              lang == "en"
+                ? casesData?.status == "completed"
+                  ? "Completed"
+                  : casesData?.status == "in_progress"
+                  ? "In Progress"
+                  : "Pending"
+                : casesData?.status == "completed"
+                ? "مكتملة"
+                : casesData?.status == "in_progress"
+                ? "قيد التنفيذ"
+                : "قيدالانتظار" || "-"
+            }
+          />
           <DetailItem
             label={t("claim_status")}
-            value={casesData?.claim_status || "-"}
+            value={
+              casesData?.claim_status == "claimant"
+                ? t("claimant")
+                : t("defendant") || "-"
+            }
           />
           <DetailItem label={t("details")} value={casesData?.details || "-"} />
           {/* <DetailItem
@@ -291,18 +279,22 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
           <DetailItem
             label={t("client_type")}
-            value={casesData?.client_type || "-"}
+            value={
+              casesData?.client_type == "company"
+                ? t("company")
+                : t("individual") || "-"
+            }
           />
           <DetailItem label={t("address")} value={casesData?.address || "-"} />
 
           <DetailItem
-            label="Date Of Create"
+            label={t("Date Of Create")}
             value={
               new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
             }
           />
           <DetailItem
-            label="Date Of Create"
+            label={t("Date Of Update")}
             value={
               new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
             }

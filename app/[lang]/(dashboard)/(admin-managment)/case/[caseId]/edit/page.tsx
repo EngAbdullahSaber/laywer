@@ -75,6 +75,7 @@ const Page = () => {
   const [flag, setFlag] = useState(true);
   const [category, setCategory] = useState<any[]>([]);
   const [caseNumbers, setCaseNumbers] = useState<any[]>([]); // Store the final case numbers structure
+  const [loading1, setLoading1] = useState(true);
 
   const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
   const [dates, setDates] = useState({
@@ -93,16 +94,7 @@ const Page = () => {
       // Convert the ID to a string, pad it with leading zeros, and default to '0000'
       String(res?.body[res?.body?.data?.length - 1].id).padStart(4, "0") ||
         "0000";
-      // const initialNumbers =
-      //   Number(caseId) < 10
-      //     ? "000" + Number(caseId)
-      //     : Number(caseId) < 100
-      //     ? "00" + Number(caseId)
-      //     : Number(caseId) < 1000
-      //     ? "0" + Number(caseId)
-      //     : Number(caseId).toString();
 
-      // setNumbers(initialNumbers);
       setData(Number(caseId)); // Set the padded case ID
       setNumbers([caseId]); // Set the padded case ID
       setLoading(false);
@@ -131,6 +123,8 @@ const Page = () => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setLoading1(false);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -142,6 +136,8 @@ const Page = () => {
           ...prevState,
           files: [...prevState.files, res.body.image_id],
         }));
+        setLoading1(true);
+
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
@@ -417,7 +413,7 @@ const Page = () => {
           <CardTitle>{t("Update Case")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <div>
             {/* Case Info Section */}
             <motion.p
               initial={{ y: -30 }}
@@ -891,13 +887,15 @@ const Page = () => {
               className="flex justify-center gap-3 mt-4"
             >
               <Button
-                type="submit"
+                type="button"
+                disabled={!loading1}
+                onClick={handleSubmit}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Update Case")}
+                {!loading1 ? t("Loading") : t("Update Case")}
               </Button>
             </motion.div>
-          </form>
+          </div>
         </CardContent>
       </Card>
     </div>

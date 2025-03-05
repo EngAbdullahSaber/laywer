@@ -799,8 +799,12 @@
   "Enter National Id Number": "أدخل رقم الهوية الوطنية",
   "Blocked": "تم حظره",
   "Active": "نشط",
-  "Date of Update Request": "Date of Update Request",
-  "Date of Create Request": "Date of Create Request",
+  "Date of Update Request": "تاريخ طلب التحديث",
+  "Date of Create Request": "تاريخ طلب الإنشاء",
+  "Client file": "ملف العميل",
+  "Replying": "الرد",
+  "Orders Info": "معلومات الطلبات",
+  "Orders Details": "تفاصيل الطلبات",
   "Next Appointmet": "الموعد القادم"
 
 }

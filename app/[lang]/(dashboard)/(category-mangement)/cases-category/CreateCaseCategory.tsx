@@ -157,7 +157,7 @@ const CreateCaseCategory = ({
             </DialogTitle>
           </DialogHeader>
           <div>
-            <form onSubmit={(e) => e.preventDefault()}>
+            <div>
               <ScrollArea className="h-full">
                 {" "}
                 <Tabs
@@ -284,7 +284,7 @@ const CreateCaseCategory = ({
                   {t("Create Case Category")}
                 </Button>
               </motion.div>
-            </form>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

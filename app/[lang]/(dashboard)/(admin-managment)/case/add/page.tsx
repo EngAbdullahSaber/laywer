@@ -70,6 +70,7 @@ const Page = () => {
   const [flag, setFlag] = useState(true);
   const [category, setCategory] = useState<any[]>([]);
   const [caseNumbers, setCaseNumbers] = useState<any[]>([]); // Store the final case numbers structure
+  const [loading1, setLoading1] = useState(true);
 
   const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
   const [dates, setDates] = useState({
@@ -101,7 +102,6 @@ const Page = () => {
       setLoading(false);
     }
   };
-  console.log(data);
   const charcter = Array.from({ length: 26 }, (_, i) => ({
     value: String.fromCharCode(65 + i),
     label: String.fromCharCode(65 + i),
@@ -119,6 +119,8 @@ const Page = () => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setLoading1(false);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -130,6 +132,8 @@ const Page = () => {
           ...prevState,
           files: [...prevState.files, res.body.image_id],
         }));
+        setLoading1(true);
+
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
@@ -364,7 +368,7 @@ const Page = () => {
           <CardTitle>{t("Create a New Case")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <div>
             {/* Case Info Section */}
             <motion.p
               initial={{ y: -30 }}
@@ -835,13 +839,15 @@ const Page = () => {
               className="flex justify-center gap-3 mt-4"
             >
               <Button
-                type="submit"
+                type="button"
+                disabled={!loading1}
+                onClick={handleSubmit}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Case")}
+                {!loading1 ? t("Loading") : t("Create Case")}
               </Button>
             </motion.div>
-          </form>
+          </div>
         </CardContent>
       </Card>
     </div>

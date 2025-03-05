@@ -156,7 +156,7 @@ const CreateLawyerCategory = ({
             </DialogTitle>
           </DialogHeader>
           <div>
-            <form onSubmit={(e) => e.preventDefault()}>
+            <div>
               <ScrollArea className="h-full">
                 <Tabs
                   defaultValue={lang == "en" ? "English" : "Arabic"}
@@ -282,7 +282,7 @@ const CreateLawyerCategory = ({
                   {t("Create Staff Category")}
                 </Button>
               </motion.div>
-            </form>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

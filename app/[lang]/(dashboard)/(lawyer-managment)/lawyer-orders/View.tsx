@@ -76,7 +76,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {t("Appointment Info")}
+          {t("Orders Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
           <DetailItem
@@ -86,25 +86,38 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           />
           <DetailItem
             transitionDuration={0.9}
-            label={t("Service Title")}
-            value={lawyerData?.service?.title || "-"}
+            label={t("Title")}
+            value={lawyerData?.title || "-"}
           />
           <DetailItem
             transitionDuration={1}
-            label={t("Service price")}
-            value={lawyerData?.price || "-"}
+            label={t("status")}
+            value={lawyerData?.status || "-"}
           />
           <DetailItem
             transitionDuration={1.1}
             label={t("Client")}
-            value={lawyerData?.client?.name || "-"}
+            value={lawyerData?.client || "-"}
+          />
+          <DetailItem
+            transitionDuration={1.1}
+            label={t("details")}
+            value={lawyerData?.details || "-"}
           />
 
           <DetailItem
             transitionDuration={1.3}
-            label={t("Date Of Ask Services")}
+            label={t("Date Of Create")}
             value={
               new Date(lawyerData?.created_at).toLocaleDateString("en-GB") ||
+              "-"
+            }
+          />
+          <DetailItem
+            transitionDuration={1.3}
+            label={t("Date Of Update")}
+            value={
+              new Date(lawyerData?.updated_at).toLocaleDateString("en-GB") ||
               "-"
             }
           />
@@ -124,6 +137,36 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             {lawyerData.details} {/* Display the file name */}
           </span>
         </motion.p>
+      </>
+    );
+  };
+  const renderReplyData = () => {
+    const lawyerData = row?.original?.reply;
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Replying")}
+        </motion.h3>
+        <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
+          <DetailItem
+            transitionDuration={0.8}
+            label={t("Id")}
+            value={lawyerData?.id || "-"}
+          />
+          <DetailItem
+            transitionDuration={0.9}
+            label={t("Title")}
+            value={lawyerData?.title || "-"}
+          />
+        </ul>
+        <hr className="my-8" />
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -131,10 +174,10 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           className="flex flex-row gap-6 my-5 items-center"
         >
           <span className="text-sm text-default-900 font-medium w-[52%]">
-            {t("invoice file")}:
+            {t("Client file")}:
           </span>
           <a
-            href={lawyerData.invoice_file?.url} // Access the file URL dynamically from the `file` object
+            href={lawyerData?.files?.url} // Access the file URL dynamically from the `file` object
             className="text-default-500 font-semibold w-[40%]"
             target="_blank"
             rel="noopener noreferrer" // Added for security when opening links
@@ -145,7 +188,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
       </>
     );
   };
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -164,10 +206,13 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>{t("Appointment Details")}</SheetTitle>
+          <SheetTitle>{t("Orders Details")}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[100%]">
-          <div className="py-6">{renderAppointementData()}</div>
+          <div className="py-6">
+            {renderAppointementData()} <hr className="my-8" />
+            {renderReplyData()}
+          </div>
         </ScrollArea>
         <SheetFooter>
           <SheetClose asChild>footer content</SheetClose>
