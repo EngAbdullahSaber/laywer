@@ -72,7 +72,7 @@ const TableData = () => {
     // Perform filtering logic here
     getClientData();
     setOpen(false); // Close the sheet after applying filters  };
-
+  };
   const getClientData = async () => {
     setLoading(true);
     if (queryString.length > 0) {
