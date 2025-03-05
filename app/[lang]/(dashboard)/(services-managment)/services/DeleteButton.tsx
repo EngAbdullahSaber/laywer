@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -69,14 +70,22 @@ const DeleteButton: React.FC<DeleteUser> = ({ id, getCategoryData }) => {
           </p>
         </div>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              {t("Disagree")}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.7 }}
+            className="flex flex-row gap-5 justify-center w-full"
+          >
+            {" "}
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                {t("Disagree")}
+              </Button>
+            </DialogClose>
+            <Button type="button" color="warning" onClick={deleteCategoryData}>
+              {t("Agree")}
             </Button>
-          </DialogClose>
-          <Button type="button" color="warning" onClick={deleteCategoryData}>
-            {t("Agree")}
-          </Button>
+          </motion.div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

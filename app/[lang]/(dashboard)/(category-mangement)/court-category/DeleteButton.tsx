@@ -13,6 +13,7 @@ import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 import { AxiosError } from "axios";
 import { DeleteCategory } from "@/services/category/category";
@@ -68,14 +69,22 @@ const DeleteButton: React.FC<DeleteUser> = ({ id, getCategoryData }) => {
           </p>
         </div>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              {t("Disagree")}
-            </Button>
-          </DialogClose>
-          <Button type="button" color="warning" onClick={deleteCategoryData}>
-            {t("Agree")}
-          </Button>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.7 }}
+            className="flex flex-row gap-5 justify-center w-full"
+          >
+            {" "}
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                {t("Disagree")}
+              </Button>
+            </DialogClose>
+            <Button type="button" color="warning" onClick={deleteCategoryData}>
+              {t("Agree")}
+            </Button>{" "}
+          </motion.div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

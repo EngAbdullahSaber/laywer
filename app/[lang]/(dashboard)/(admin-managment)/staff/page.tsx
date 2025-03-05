@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react";
 import TableData from "./TableData";
 import CreateContact from "./CreateContact";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { exportToExcel } from "@/config/ExportButoons";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import { Auth } from "@/components/auth/Auth";
 

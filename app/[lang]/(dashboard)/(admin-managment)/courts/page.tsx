@@ -9,7 +9,7 @@ import CreateCourt from "./CreateCourt";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
+import { exportToExcel } from "@/config/ExportButoons";
 import TableData from "./TableData";
 import { Auth } from "@/components/auth/Auth";
 

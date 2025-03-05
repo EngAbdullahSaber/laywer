@@ -9,7 +9,6 @@ import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbCom
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {

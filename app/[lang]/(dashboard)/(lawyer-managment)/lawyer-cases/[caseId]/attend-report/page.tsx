@@ -52,7 +52,14 @@ const CaseFollowReport = () => {
     try {
       const res = await getSpecifiedCases(lang, caseId);
 
-      setData(res?.body?.data || []);
+      setData(res?.body || []);
+      setCaseName(res?.body?.title);
+      setCaseNumber(res?.body?.main_case_number);
+
+      setPlaintiffName(res?.body?.client?.name);
+
+      setDefendantName(res?.body?.defendants);
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -337,8 +344,13 @@ const CaseFollowReport = () => {
         const updateFormData = new FormData();
 
         // Append the file ID to FormData
+        const reportsLength = Array.isArray(data?.attendance_reports)
+          ? data.attendance_reports.length
+          : 0;
+
+        // Append the new file with the correct index
         updateFormData.append(
-          `attendance_reports[${data?.attendance_reports?.length || 0}]`,
+          `attendance_reports[${reportsLength}]`, // Use the correct index
           fileId
         );
 
@@ -349,6 +361,20 @@ const CaseFollowReport = () => {
 
         if (updateResponse?.body) {
           reToast.success(updateResponse.message); // Show success toast
+          setWhatShouldBeDone("");
+          setFollowUpProcedures("");
+          setNextDay("");
+          setNextTime("");
+          setNextDate("");
+          setCurrentDay("");
+          setCurrentTime("");
+          setCurrentDate("");
+          setDefendantName("");
+          setPlaintiffName("");
+          setCaseLocation("");
+          setCaseName("");
+          setCaseNumber("");
+          setSelected("");
         } else {
           reToast.error(t("Failed to update case")); // Show failure toast
         }
@@ -378,7 +404,7 @@ const CaseFollowReport = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
+  console.log(data?.attendance_reports?.length);
   return (
     <Card>
       <CardHeader>
@@ -508,8 +534,12 @@ const CaseFollowReport = () => {
               <Label htmlFor="Time">{t("Time")}</Label>
               <CleaveInput
                 id="time"
-                options={{ time: true, timePattern: ["h", "m", "s"] }}
-                placeholder="HH:MM:SS"
+                options={{
+                  time: true,
+                  timePattern: ["h", "m"], // Only hours and minutes
+                  timeFormat: "24", // Use 24-hour format (optional)
+                }}
+                placeholder="HH:MM" // Updated placeholder
                 value={currentTime}
                 onChange={(e) => setCurrentTime(e.target.value)}
               />
@@ -579,8 +609,12 @@ const CaseFollowReport = () => {
                   <Label htmlFor="Time1">{t("Time")}</Label>
                   <CleaveInput
                     id="time1"
-                    options={{ time: true, timePattern: ["h", "m", "s"] }}
-                    placeholder="HH:MM:SS"
+                    options={{
+                      time: true,
+                      timePattern: ["h", "m"], // Only hours and minutes
+                      timeFormat: "24", // Use 24-hour format (optional)
+                    }}
+                    placeholder="HH:MM" // Updated placeholder
                     value={nextTime}
                     onChange={(e) => setNextTime(e.target.value)}
                   />

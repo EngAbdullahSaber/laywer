@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./TableData";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import { Auth } from "@/components/auth/Auth";
 
@@ -36,14 +35,6 @@ const page = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {" "}
-          <Button color="secondary" variant="outline" onClick={exportToExcel}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export Excel")}
-          </Button>
-          <Button color="secondary" variant="outline" onClick={downloadPDF}>
-            <Icon icon="lets-icons:export" className="h-5 w-5" />
-            {t("Export PDF")}
-          </Button>
         </motion.div>{" "}
       </div>
 

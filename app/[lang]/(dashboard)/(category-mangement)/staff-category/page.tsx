@@ -10,7 +10,6 @@ import { Icon } from "@iconify/react";
 import TableData from "./TableData";
 import CreateStaffCategory from "./CreateStaffCategory";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {

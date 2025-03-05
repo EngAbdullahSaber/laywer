@@ -8,7 +8,6 @@ import TableData from "./TableData";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { downloadPDF, exportToExcel } from "@/config/ExportButoons";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import { Auth } from "@/components/auth/Auth";
 
