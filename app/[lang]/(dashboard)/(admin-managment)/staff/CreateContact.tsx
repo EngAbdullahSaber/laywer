@@ -161,6 +161,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     id="Name"
                     type="text"
                     placeholder={t("Enter User")}
+                    value={lawyerData.name}
                     name="name"
                     onChange={handleInputChange}
                   />
@@ -176,6 +177,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                   <Input
                     id="Email"
                     type="text"
+                    value={lawyerData.email}
                     placeholder={t("Enter email address")}
                     name="email"
                     onChange={handleInputChange}
@@ -192,6 +194,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     type="Password"
                     placeholder={t("Enter passowrd")}
                     name="password"
+                    value={lawyerData.passowrd}
                     onChange={handleInputChange}
                   />
                 </motion.div>
@@ -213,6 +216,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     }}
                     type="tel"
                     placeholder={t("Your phone number")}
+                    value={lawyerData.phone}
                     name="phone"
                     onChange={handleInputChange}
                   />

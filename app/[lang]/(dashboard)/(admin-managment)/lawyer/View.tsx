@@ -29,10 +29,10 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3 }}
   >
-    <span className="text-sm text-default-900 font-medium w-[52%]">
+    <span className="text-sm text-default-900 font-medium w-[40%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 font-semibold w-[55%]">{value}</span>
   </motion.li>
 );
 

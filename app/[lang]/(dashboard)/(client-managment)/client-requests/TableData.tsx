@@ -35,6 +35,7 @@ interface Task {
 const TableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [flag1, setFlag1] = useState(true);
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
@@ -134,14 +135,14 @@ const TableData = ({ flag }: { flag: any }) => {
     } else {
       getClientData();
     }
-  }, [debouncedSearch, page, filters, flag]);
+  }, [debouncedSearch, page, filters, flag, flag1]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <FileRequest id={row.original.id} />
+          <FileRequest id={row.original.id} flag1={flag1} setFlag1={setFlag1} />
           {/* <RequestStatus /> */}
         </div>
       ),
@@ -212,7 +213,22 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.status}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.status === "not_replied" && "destructive") ||
+                  (row.original.status === "replied" && "success") ||
+                  "default"
+                }
+              >
+                {lang == "en"
+                  ? row.original.status == "replied"
+                    ? "Replied"
+                    : "Not Replied"
+                  : row.original.status !== "not_replied"
+                  ? "تم الرد"
+                  : "لم يتم الرد"}{" "}
+              </Badge>{" "}
             </motion.span>
           </div>
         );

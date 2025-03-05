@@ -44,6 +44,7 @@ const page = () => {
   const [category, setCategory] = useState<any[]>([]);
   const { lang } = useParams();
   const [flag, setFlag] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
@@ -81,6 +82,8 @@ const page = () => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setLoading(false);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -92,6 +95,8 @@ const page = () => {
           ...prevState,
           client_files: [...prevState.client_files, res.body.image_id],
         }));
+        setLoading(true);
+
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
@@ -420,10 +425,11 @@ const page = () => {
               </Button>
               <Button
                 type="button"
+                disabled={!loading}
                 onClick={handleSubmit}
                 className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Client")}
+                {!loading ? t("Loading") : t("Create Client")}
               </Button>
             </motion.div>
           </div>{" "}

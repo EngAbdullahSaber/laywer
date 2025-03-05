@@ -44,6 +44,7 @@ const FileRequest = ({ id }: { id: any }) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const [loading, setLoading] = useState(true);
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     title: "",
@@ -69,6 +70,8 @@ const FileRequest = ({ id }: { id: any }) => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setLoading(false);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -80,6 +83,8 @@ const FileRequest = ({ id }: { id: any }) => {
           ...prevState,
           reply_files: [...prevState.order_files, res.body.image_id],
         }));
+        setLoading(true);
+
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
@@ -237,9 +242,10 @@ const FileRequest = ({ id }: { id: any }) => {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Ask Client")}
+                {!loading ? t("Loading") : t("Ask Client")}
               </Button>
             </motion.div>
           </form>

@@ -117,7 +117,7 @@ const VerifyForm = () => {
           if (userRole == "super_admin") {
             router.push("/dashboard");
           } else if (userRole == "lawyer") {
-            router.push("/lawyer-tasks");
+            router.push("/lawyer-cases");
           } else if (userRole == "client") {
             router.push("/client-cases");
           } else {

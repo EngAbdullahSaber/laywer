@@ -41,10 +41,19 @@ interface ErrorResponse {
 interface LaywerData {
   title: string;
 }
-const FileRequest = ({ id }: { id: any }) => {
+const FileRequest = ({
+  id,
+  flag1,
+  setFlag1,
+}: {
+  id: any;
+  flag1: any;
+  setFlag1: any;
+}) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const [loading, setLoading] = useState(true);
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     title: "",
@@ -67,6 +76,8 @@ const FileRequest = ({ id }: { id: any }) => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setLoading(false);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -78,6 +89,8 @@ const FileRequest = ({ id }: { id: any }) => {
           ...prevState,
           reply_files: [...prevState.reply_files, res.body.image_id],
         }));
+        setLoading(true);
+
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
@@ -109,6 +122,7 @@ const FileRequest = ({ id }: { id: any }) => {
           title: "",
         });
         reToast.success(res.message); // Display success message
+        setFlag1(!flag1);
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -211,9 +225,10 @@ const FileRequest = ({ id }: { id: any }) => {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Send Response")}
+                {!loading ? t("Loading") : t("Send Response")}
               </Button>
             </motion.div>
           </form>

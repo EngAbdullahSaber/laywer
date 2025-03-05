@@ -137,6 +137,9 @@ const page = () => {
           importance_level: "",
           law_suit_id: "",
         });
+        setDates({
+          due_date: "",
+        });
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -194,6 +197,7 @@ const page = () => {
                   type="text"
                   placeholder={t("Enter Task Name In English")}
                   name="titleEn"
+                  value={lawyerData.titleEn}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -207,6 +211,7 @@ const page = () => {
                 <Input
                   type="text"
                   placeholder={t("Enter Task Name In Arabic")}
+                  value={lawyerData.titleAr}
                   name="titleAr"
                   onChange={handleInputChange}
                 />
@@ -320,6 +325,7 @@ const page = () => {
                   placeholder={t("Type Here")}
                   rows={7}
                   name="detailsEn"
+                  value={lawyerData.detailsEn}
                   onChange={handleInputChange}
                 />
               </div>
@@ -336,6 +342,7 @@ const page = () => {
                   placeholder={t("Type Here")}
                   rows={7}
                   name="detailsAr"
+                  value={lawyerData.detailsAr}
                   onChange={handleInputChange}
                 />
               </div>

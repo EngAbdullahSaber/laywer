@@ -51,6 +51,7 @@ const page = () => {
   });
 
   const { lang, lawyerId } = useParams();
+  const [loading, setLoading] = useState(true);
 
   const [images, setImages] = useState<{
     lawyer_licence: File | null;
@@ -138,6 +139,8 @@ const page = () => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setLoading(false);
+
     const formData = new FormData();
     formData.append("image", file);
     try {
@@ -149,6 +152,8 @@ const page = () => {
           ...prevState,
           [imageType]: res.body.image_id,
         }));
+        setLoading(true);
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
@@ -460,10 +465,11 @@ const page = () => {
             >
               <Button
                 type="button"
+                disabled={!loading}
                 onClick={handleSubmit}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Update Lawyer")}
+                {!loading ? t("Loading") : t("Update Lawyer")}
               </Button>
             </motion.div>
           </div>

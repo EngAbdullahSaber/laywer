@@ -131,6 +131,11 @@ const lawyerMenu = [
     href: "/lawyer-cases",
   },
   {
+    title: "Orders",
+    icon: Appointments,
+    href: "/lawyer-orders",
+  },
+  {
     title: "Tasks",
     icon: Tasks,
     href: "/lawyer-tasks",
