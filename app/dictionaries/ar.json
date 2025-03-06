@@ -805,6 +805,11 @@
   "Replying": "الرد",
   "Orders Info": "معلومات الطلبات",
   "Orders Details": "تفاصيل الطلبات",
+  "Reset Password": "إعادة تعيين كلمة المرور",
+  "Confirm Password": "تأكيد كلمة المرور",
+  "Enter your password to unlock the screen!": "أدخل كلمة المرور الخاصة بك لفتح الشاشة!",
+  "Create New Password": "إنشاء كلمة مرور جديدة",
+  "Resetting...": "يتم إعادة التعيين...",
   "Next Appointmet": "الموعد القادم"
 
 }

@@ -10,43 +10,73 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import Image from "next/image";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
-
+import { AxiosError } from "axios";
+import { ForgetPassword1 } from "@/services/auth/auth";
+interface ErrorResponse {
+  errors?: {
+    [key: string]: string[]; // This allows us to map error fields to an array of error messages
+  };
+}
 const schema = z.object({
   email: z.string().email({ message: "Your email is invalid." }),
 });
 const ForgotForm = () => {
   const [isPending, startTransition] = React.useTransition();
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
+  const [email, setEmail] = React.useState("");
+  const { lang } = useParams();
+
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-    mode: "all",
-  });
+
   const [isVisible, setIsVisible] = React.useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const onSubmit = (data: any) => {
-    startTransition(async () => {
-      toast.success(
-        "تم إرسال رمز إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await ForgetPassword1(
+        {
+          email: email,
+        },
+        lang
       );
-      reset();
-      router.push("/auth/verify");
-    });
+      if (res) {
+        toast.success(res?.message);
+        startTransition(true);
+        localStorage.setItem("forgetToken1", res?.body?.token);
+        localStorage.setItem("email", email);
+
+        router.push("/auth/verifyPassword");
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>; // Cast the error
+
+      // Check if we have errors in the response
+      const errors = axiosError.response?.data?.errors;
+      if (errors) {
+        // Loop through each field in the errors object
+        for (const field in errors) {
+          if (Object.prototype.hasOwnProperty.call(errors, field)) {
+            // Assuming the first error in the array is the most important one
+            const errorMessage = errors[field][0];
+            toast.error(`${field}: ${errorMessage}`); // Display the error in a toast
+          }
+        }
+      } else {
+        // If no field-specific errors, display a general error message
+        toast.error("Something went wrong.");
+      }
+    }
   };
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
 
   return (
     <div className="w-full">
@@ -81,7 +111,7 @@ const ForgotForm = () => {
       >
         {t("Enter your email & instructions will be sent to you!")}
       </motion.div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-5 xl:mt-7">
+      <form onSubmit={handleSubmit} className="mt-5 xl:mt-7">
         <motion.div
           initial={{ y: -50 }}
           whileInView={{ y: 0 }}
@@ -92,19 +122,12 @@ const ForgotForm = () => {
           </Label>
           <Input
             disabled={isPending}
-            {...register("email")}
             type="email"
             id="email"
-            className={cn("", {
-              "border-destructive": errors.email,
-            })}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             size={!isDesktop2xl ? "xl" : "lg"}
           />
-          {errors.email && (
-            <div className=" text-destructive mt-2">
-              {errors.email.message as string}
-            </div>
-          )}
         </motion.div>
 
         <motion.div

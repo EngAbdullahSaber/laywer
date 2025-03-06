@@ -16,43 +16,67 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import Image from "next/image";
+import { AxiosError } from "axios";
+import { CreateNewPassword } from "@/services/auth/auth";
+import { useTranslate } from "@/config/useTranslation";
+interface ErrorResponse {
+  errors?: {
+    [key: string]: string[];
+  };
+}
 
-const schema = z.object({
-  password: z
-    .string()
-    .min(4, { message: "Your password must be at least 4 characters." }),
-  confirmPassword: z
-    .string()
-    .min(4, { message: "Your password must be at least 4 characters." }),
-});
 const CreatePasswordForm = () => {
   const [isPending, startTransition] = React.useTransition();
   const [newPasswordType, setNewPasswordType] = React.useState<boolean>(false);
+  const [newPassword, setNewPassword] = React.useState<string>("");
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   const [confirmPasswordType, setConfirmPasswordType] =
     React.useState<boolean>(false);
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-    mode: "all",
-  });
+  const { t } = useTranslate();
+
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const tokenOtp = localStorage.getItem("forgetToken1");
 
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-    startTransition(async () => {
-      toast.success("reset successful");
-      reset();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Send username and OTP to the API
+      const res = await CreateNewPassword(
+        {
+          password: newPassword,
+          password_confirmation: confirmPassword, // Send OTP as a string
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${tokenOtp}`, // Set token in the Authorization header
+          },
+        }
+      );
+      toast.success(res?.message);
       router.push("/auth/login");
-    });
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      // Check if we have errors in the response
+      const errors = axiosError.response?.data?.errors;
+      if (errors) {
+        // Loop through each field in the errors object
+        for (const field in errors) {
+          if (Object.prototype.hasOwnProperty.call(errors, field)) {
+            const errorMessage = errors[field][0];
+            toast.error(`${field}: ${errorMessage}`); // Display the error in a toast
+          }
+        }
+      } else {
+        // If no field-specific errors, display a general error message
+        toast.error("Something went wrong.");
+      }
+    }
   };
+
   return (
     <div className="w-full">
       <Image
@@ -64,31 +88,29 @@ const CreatePasswordForm = () => {
         priority={true}
       />
       <div className="2xl:mt-8 mt-6 2xl:text-3xl lg:text-2xl text-xl font-bold text-default-900">
-        Create New Password
+        {t("Create New Password")}
       </div>
       <div className="2xl:text-lg text-base text-default-600 mt-2 leading-6">
-        Enter your password to unlock the screen!
+        {t("Enter your password to unlock the screen!")}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-5 xl:mt-7">
+      <form onSubmit={handleSubmit} className="mt-5 xl:mt-7">
         <div className="space-y-4">
           <div>
             <Label
               htmlFor="password"
               className="mb-2 font-medium text-default-600"
             >
-              Password
+              {t("Password")}
             </Label>
             <div className="relative">
               <Input
                 disabled={isPending}
-                {...register("password")}
                 type={newPasswordType ? "text" : "password"}
                 id="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 size={!isDesktop2xl ? "xl" : "lg"}
-                className={cn("", {
-                  "border-destructive": errors.password,
-                })}
               />
               <div
                 className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 cursor-pointer"
@@ -107,29 +129,22 @@ const CreatePasswordForm = () => {
                 )}
               </div>
             </div>
-            {errors.password && (
-              <div className=" text-destructive mt-2">
-                {errors.password.message as string}
-              </div>
-            )}
           </div>
           <div>
             <Label
               htmlFor="confirmPassword"
               className="mb-2 font-medium text-default-600"
             >
-              Confirm Password
+              {t("Confirm Password")}
             </Label>
             <div className="relative">
               <Input
                 disabled={isPending}
-                {...register("confirmPassword")}
                 type={confirmPasswordType ? "text" : "password"}
                 id="confirmPassword"
-                className={cn("", {
-                  "border-destructive": errors.confirmPassword,
-                })}
                 size={!isDesktop2xl ? "xl" : "lg"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <div
                 className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 cursor-pointer"
@@ -148,39 +163,14 @@ const CreatePasswordForm = () => {
                 )}
               </div>
             </div>
-            {errors.confirmPassword && (
-              <div className=" text-destructive mt-2">
-                {errors.confirmPassword.message as string}
-              </div>
-            )}
           </div>
         </div>
 
-        {/* <div className="flex-1 flex  items-center gap-1.5 mt-5 ">
-          <Checkbox
-            size="sm"
-            className="border-default-300 mt-[1px]"
-            id="terms"
-          />
-          <Label
-            htmlFor="terms"
-            className="text-sm text-default-600 cursor-pointer whitespace-nowrap"
-          >
-            You accept our Terms & Conditions
-          </Label>
-        </div> */}
         <Button className="w-full mt-8" size="lg">
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isPending ? "Resetting..." : "Reset Password"}
+          {isPending ? t("Resetting...") : t("Reset Password")}
         </Button>
       </form>
-      <div className="mt-5 2xl:mt-8 text-center text-base text-default-600">
-        Not now? Return{" "}
-        <Link href="/auth/register" className="text-primary">
-          {" "}
-          Sign In{" "}
-        </Link>
-      </div>
     </div>
   );
 };
