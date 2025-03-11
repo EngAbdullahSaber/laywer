@@ -6,7 +6,7 @@ import * as React from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { useTranslate } from "@/config/useTranslation";
 
-const CalendarPage = () => {
+const CalendarPage = ({ calenderDate }: { calenderDate: any }) => {
   // Initialize the state with actual Date objects
   const [dates, setDates] = React.useState<Date[]>([
     new Date("2024-12-13"),
@@ -40,14 +40,12 @@ const CalendarPage = () => {
 
   const { t } = useTranslate();
 
-  console.log(dates); // For debugging to check the selected dates
-
   return (
     <div className="space-y-5">
-      <Card title={t("Upcoming Appointments")}>
+      <Card title={t("Upcoming Session Dates")}>
         <Calendar
           mode="multiple" // Use 'multiple' mode to select multiple dates
-          selected={dates}
+          selected={calenderDate}
           className="rounded-md border"
         />
       </Card>

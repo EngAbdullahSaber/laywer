@@ -3,18 +3,23 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { useTranslate } from "@/config/useTranslation";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  selected?: { title: string; date: string }[]; // Expected format: [{title, date}]
+};
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  selected = [], // Default to empty array if no selected dates are passed
   ...props
 }: CalendarProps) {
   const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null);
   const [clickedDate, setClickedDate] = React.useState<Date | null>(null);
   const [showPopup, setShowPopup] = React.useState(false);
+  const { t } = useTranslate();
 
   // Handle hover event
   const handleHover = (date: Date | undefined) => {
@@ -39,10 +44,21 @@ function Calendar({
   const getPopupMessage = (date: Date | null) => {
     if (!date) return "";
 
-    const dateString = date.toDateString();
-    return dateString.includes("1")
-      ? "الترافع عن قضية فى المحكمة"
-      : "مقابلة العميل";
+    // Find all selected items that match the date
+    const selectedItems = selected.filter(
+      (item) => new Date(item.date).toDateString() === date.toDateString()
+    );
+
+    if (selectedItems.length > 0) {
+      // If there are selected items, return each title as a separate line
+      return selectedItems.map((item, index) => (
+        <p key={index}>
+          {t("Case Name")} : {item.title}
+        </p>
+      ));
+    }
+
+    return <p>No events for this day</p>;
   };
 
   // Function to show pop-up for 30 seconds
@@ -53,6 +69,9 @@ function Calendar({
       setHoveredDate(null); // Clear hovered date
     }, 30000); // 30 seconds
   };
+
+  // Convert selected dates (from props.selected) into Date objects
+  const selectedDates = selected.map((item) => new Date(item.date));
 
   return (
     <div className="relative">
@@ -92,6 +111,7 @@ function Calendar({
           IconLeft: () => <ChevronLeft className="h-4 w-4" />,
           IconRight: () => <ChevronRight className="h-4 w-4" />,
         }}
+        selected={selectedDates} // Pass the selected dates here
         onDayHover={handleHover}
         onDayClick={handleClick}
         {...props}
@@ -110,15 +130,12 @@ function Calendar({
             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <p>
-            {` ${
-              clickedDate
-                ? `${getPopupMessage(clickedDate)}`
-                : hoveredDate
-                ? ` ${getPopupMessage(hoveredDate)}`
-                : ""
-            }`}
-          </p>
+          {/* Render each title in the popup on a new line */}
+          {clickedDate
+            ? getPopupMessage(clickedDate)
+            : hoveredDate
+            ? getPopupMessage(hoveredDate)
+            : ""}
         </div>
       )}
     </div>

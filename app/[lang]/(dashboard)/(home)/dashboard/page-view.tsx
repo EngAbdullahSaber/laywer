@@ -46,6 +46,7 @@ const DashboardPageView = () => {
   const { theme: mode } = useTheme();
   const theme = themes.find((theme) => theme.name === config);
   const [data, setData] = useState<any>([]);
+  const [calenderDate, setCalenderDate] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const { lang } = useParams();
 
@@ -62,8 +63,13 @@ const DashboardPageView = () => {
 
     try {
       const res = await getDashBoardInfo(lang, formData);
-      console.log(res?.body);
       setData(res?.body || []);
+      setCalenderDate(
+        res?.body?.suits_this_month?.map((item) => ({
+          title: item.title,
+          date: new Date(item.created_at).toISOString().split("T")[0], // Convert string to Date and format
+        }))
+      );
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -74,7 +80,6 @@ const DashboardPageView = () => {
   useEffect(() => {
     getMessagesData();
   }, []);
-
   // Transform `suits_this_month` data for the chart
   const transformChartData = (suitsThisMonth: any[]) => {
     if (!suitsThisMonth || suitsThisMonth.length === 0) return [];
@@ -90,7 +95,6 @@ const DashboardPageView = () => {
         casesByDay[date] = 1;
       }
     });
-    console.log(casesByDay);
     // Convert to ApexCharts format
     return Object.entries(casesByDay).map(([date, count]) => ({
       x: date,
@@ -206,7 +210,7 @@ const DashboardPageView = () => {
         </CardContent>
       </Card>
 
-      <CalendarPage />
+      <CalendarPage calenderDate={calenderDate} />
     </div>
   );
 };
