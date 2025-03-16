@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,9 +40,10 @@ const UpdateLawyerCategory: React.FC<UpdateLawyerCategoryProps> = ({
   row,
   getCategoryData,
 }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   // Explicitly type `currentLang` as "ar" | "en"
   const currentLang: "ar" | "en" =
@@ -98,6 +98,7 @@ const UpdateLawyerCategory: React.FC<UpdateLawyerCategoryProps> = ({
 
   const handleUpdateCategory = async () => {
     const formData = new FormData();
+    setIsloading(false);
 
     // Loop through userData and append values to the FormData object
     const queryParams = buildQueryParams();
@@ -118,6 +119,7 @@ const UpdateLawyerCategory: React.FC<UpdateLawyerCategoryProps> = ({
         });
         setOpen(false); // Close the modal after success
         getCategoryData(); // Reload the category data
+        setIsloading(true);
       } else {
         reToast.error(t("Failed to update Lawyer Category"));
       }
@@ -213,10 +215,11 @@ const UpdateLawyerCategory: React.FC<UpdateLawyerCategoryProps> = ({
                 </DialogClose>
                 <Button
                   type="button"
+                  disabled={!loading}
                   onClick={handleUpdateCategory}
                   className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Update Lawyer Category")}
+                  {!loading ? t("Loading") : t("Update Lawyer Category")}
                 </Button>
               </motion.div>
             </form>

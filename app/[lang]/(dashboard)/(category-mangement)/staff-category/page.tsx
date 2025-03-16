@@ -5,8 +5,7 @@ import BreadcrumbComponent from "../shared/BreadcrumbComponent";
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/react";
+
 import TableData from "./TableData";
 import CreateStaffCategory from "./CreateStaffCategory";
 import { motion } from "framer-motion";

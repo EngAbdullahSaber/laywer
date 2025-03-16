@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
@@ -34,9 +34,6 @@ const page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       setLoading(false);
     }
@@ -120,14 +117,7 @@ const page = () => {
                     >
                       الحالة : <span className="font-bold"> تم الرد</span>
                     </motion.p>
-                    {/* <motion.p
-                    initial={{ x: 15, opacity: 0 }}
-                    whileInView={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 1.1 }}
-                    className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
-                  >
-                    العنوان <span className="font-bold">الرياض</span>
-                  </motion.p> */}
+
                     <motion.p
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
@@ -143,9 +133,52 @@ const page = () => {
                       transition={{ duration: 1.2 }}
                       className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
                     >
+                      تاريخ الرد:{" "}
+                      <span className="font-bold">
+                        {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
+                      </span>{" "}
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.2 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      وقت الرد:{" "}
+                      <span className="font-bold">
+                        {new Date(item?.created_at)
+                          .toISOString()
+                          .split("T")[1]
+                          .split(":")
+                          .slice(0, 2)
+                          .join(":")}
+                      </span>{" "}
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.2 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
                       تاريخ الارسال:{" "}
                       <span className="font-bold">
                         {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
+                      </span>{" "}
+                    </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.2 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      وقت الارسال:{" "}
+                      <span className="font-bold">
+                        {new Date(item?.created_at)
+                          .toISOString()
+                          .split("T")[1]
+                          .split(":")
+                          .slice(0, 2)
+                          .join(":")}
                       </span>{" "}
                     </motion.p>
                   </div>
@@ -224,14 +257,7 @@ const page = () => {
                     >
                       الحالة : <span className="font-bold"> لم يتم الرد</span>
                     </motion.p>
-                    {/* <motion.p
-                      initial={{ x: 15, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 1.1 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
-                    >
-                      العنوان <span className="font-bold">الرياض</span>
-                    </motion.p> */}
+
                     <motion.p
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
@@ -243,12 +269,28 @@ const page = () => {
                         {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
                       </span>{" "}
                     </motion.p>
+                    <motion.p
+                      initial={{ x: 15, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 1.2 }}
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                    >
+                      وقت الارسال:{" "}
+                      <span className="font-bold">
+                        {new Date(item?.created_at)
+                          .toISOString()
+                          .split("T")[1]
+                          .split(":")
+                          .slice(0, 2)
+                          .join(":")}
+                      </span>{" "}
+                    </motion.p>
                   </div>
                   <div className="flex flex-col justify-center items-center gap-6">
                     {/* Pass correct props for CreateDate */}
                     <CreateDate
-                      flag={item.flag}
-                      setFlag={item.setFlag}
+                      flag={flag}
+                      setFlag={setFlag}
                       id={item.id}
                     />{" "}
                     {/* Assuming `flag` and `setFlag` are part of `item` */}

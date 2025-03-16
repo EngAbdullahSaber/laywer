@@ -9,7 +9,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-
 import Flatpickr from "react-flatpickr";
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
@@ -40,13 +39,14 @@ const CreateDate = ({
   const { t } = useTranslate();
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
-
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     reply: "",
     meeting_date: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -71,7 +71,7 @@ const CreateDate = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
-
+    setIsloading(false);
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
@@ -90,6 +90,8 @@ const CreateDate = ({
         });
 
         reToast.success(res.message); // Display success message
+        setIsloading(true);
+
         setIsDialogOpen(false); // Close the dialog after successful deletion
 
         setFlag(!flag);
@@ -198,9 +200,10 @@ const CreateDate = ({
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Send")}
+                {!loading ? t("Loading") : t("Send")}
               </Button>
             </motion.div>
           </form>

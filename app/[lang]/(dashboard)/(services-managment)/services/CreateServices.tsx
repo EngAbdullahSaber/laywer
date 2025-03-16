@@ -1,7 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -17,12 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { toast } from "sonner";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ImageUploader from "../../(admin-managment)/lawyer/add/ImageUploader";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { UploadImage } from "@/services/auth/auth";
@@ -53,6 +47,7 @@ const CreateLawyerCategory = ({
 }) => {
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     titleEn: "",
@@ -72,36 +67,32 @@ const CreateLawyerCategory = ({
     file: File,
     imageType: keyof typeof images
   ) => {
+    setIsloading(false);
+
     const formData = new FormData();
     formData.append("image", file);
     try {
       const res = await UploadImage(formData, lang); // Call API to create the lawyer
       if (res) {
-        // Reset data after successful creation
-        console.log(res.body.image_id);
         setImages((prevState) => ({
           ...prevState,
           [imageType]: res.body.image_id,
         }));
         reToast.success(res.message); // Display success message
+        setIsloading(true);
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
-
-      // Construct the dynamic key based on field names and the current language
-
       let errorMessage = "Something went wrong."; // Default fallback message
-
-      // Loop through the fields to find the corresponding error message
-
-      // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -112,11 +103,6 @@ const CreateLawyerCategory = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
-
-    // Append form data
-    Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
 
     const data = {
       title: {
@@ -130,7 +116,6 @@ const CreateLawyerCategory = ({
       price: lawyerData.price,
       service_file: images.service_file,
     };
-    formData.append(`service_file`, images.service_file);
     try {
       const res = await CreateServices(data, lang); // Call API to create the lawyer
       if (res) {
@@ -147,7 +132,6 @@ const CreateLawyerCategory = ({
         });
         reToast.success(res.message); // Display success message
         setFlag(!flag);
-
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create services")); // Show a fallback failure message
@@ -266,7 +250,7 @@ const CreateLawyerCategory = ({
                         placeholder={t("Type Here")}
                         rows={3}
                         name="descriptionAr"
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     </motion.div>
                     <motion.div
@@ -317,7 +301,7 @@ const CreateLawyerCategory = ({
                         placeholder={t("Type Here")}
                         rows={3}
                         name="descriptionEn"
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     </motion.div>
                   </div>{" "}
@@ -341,9 +325,10 @@ const CreateLawyerCategory = ({
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Services")}
+                {!loading ? t("Loading") : t("Create Services")}
               </Button>
             </motion.div>
           </form>

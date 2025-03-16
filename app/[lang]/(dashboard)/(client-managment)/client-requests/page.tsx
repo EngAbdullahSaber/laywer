@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
 
   return (

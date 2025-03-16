@@ -1,19 +1,16 @@
 "use client";
 
 import BreadcrumbComponent from "../shared/BreadcrumbComponent";
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/react";
 import TableData from "./TableData";
 import CreateCaseCategory from "./CreateCaseCategory";
 import { motion } from "framer-motion";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
 
   return (

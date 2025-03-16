@@ -203,7 +203,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                 ? "مكتملة"
                 : casesData?.status == "in_progress"
                 ? "قيد التنفيذ"
-                : "قيدالانتظار" || "-"
+                : "قيدالانتظار"
             }
           />
           <DetailItem

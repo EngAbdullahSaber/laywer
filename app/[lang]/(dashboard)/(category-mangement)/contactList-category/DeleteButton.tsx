@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +13,6 @@ import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
-
 import { AxiosError } from "axios";
 import { DeleteCategory } from "@/services/category/category";
 interface DeleteUser {

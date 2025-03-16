@@ -10,14 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
-import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   Tooltip,

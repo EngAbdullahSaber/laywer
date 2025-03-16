@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,9 +41,10 @@ const UpdateContactlistCategory: React.FC<UpdateContactlistCategoryProps> = ({
   row,
   getCategoryData,
 }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   // Explicitly type `currentLang` as "ar" | "en"
   const currentLang: "ar" | "en" =
@@ -101,6 +101,7 @@ const UpdateContactlistCategory: React.FC<UpdateContactlistCategoryProps> = ({
 
   const handleUpdateCategory = async () => {
     const formData = new FormData();
+    setIsloading(false);
 
     // Loop through userData and append values to the FormData object
     const queryParams = buildQueryParams();
@@ -115,11 +116,8 @@ const UpdateContactlistCategory: React.FC<UpdateContactlistCategoryProps> = ({
       if (res) {
         reToast.success(res.message);
         // Reset the form and close the dialog
-        setUserData({
-          name: "",
-          description: "",
-          type: "contact_list",
-        });
+        setIsloading(true);
+
         setOpen(false); // Close the modal after success
         getCategoryData(); // Reload the category data
       } else {
@@ -219,10 +217,11 @@ const UpdateContactlistCategory: React.FC<UpdateContactlistCategoryProps> = ({
                 </DialogClose>
                 <Button
                   type="button"
+                  disabled={!loading}
                   onClick={handleUpdateCategory}
                   className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Update Contact List Category")}
+                  {!loading ? t("Loading") : t("Update Contact List Category")}
                 </Button>
               </motion.div>
             </form>

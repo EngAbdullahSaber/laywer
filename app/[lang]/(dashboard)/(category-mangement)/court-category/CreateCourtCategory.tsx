@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,6 +45,7 @@ const CreateCourtCategory = ({
   const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   // Explicitly type `currentLang` as "ar" | "en"
   const currentLang: "ar" | "en" =
@@ -86,6 +86,7 @@ const CreateCourtCategory = ({
 
   const handleCreateCategory = async () => {
     const formData = new FormData();
+    setIsloading(false);
 
     Object.entries(userData).forEach(([key, value]) => {
       if (typeof value === "object") {
@@ -110,6 +111,8 @@ const CreateCourtCategory = ({
           type: "courts",
         });
         setFlag(!flag);
+        setIsloading(true);
+
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Court Category"));
@@ -275,10 +278,11 @@ const CreateCourtCategory = ({
                 </DialogClose>
                 <Button
                   type="button"
+                  disabled={!loading}
                   onClick={handleCreateCategory}
                   className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Court Category")}
+                  {!loading ? t("Loading") : t("Create Court Category")}
                 </Button>
               </motion.div>
             </div>

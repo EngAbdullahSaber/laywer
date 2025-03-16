@@ -20,7 +20,7 @@ export function updateAxiosHeader(accessToken) {
     function (error) {
       if (error?.status === 401) {
         clearAuthInfo();
-        window.location.reload();
+        window.location.replace("/auth/login");
       }
       return Promise.reject(error);
     }

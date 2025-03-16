@@ -1,12 +1,5 @@
 "use client";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DataTable } from "../../tables/advanced/components/data-table";
@@ -55,7 +48,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig = [];
+  const filtersConfig: any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -66,11 +59,11 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    getCategoryData();
+    getServicesData();
     setOpen(false); // Close the sheet after applying filters
   };
 
-  const getCategoryData = async () => {
+  const getServicesData = async () => {
     setLoading(true);
     if (queryString.length > 0) {
       try {
@@ -80,9 +73,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -98,9 +88,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -117,9 +104,6 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       setLoading(false);
     }
@@ -129,7 +113,7 @@ const TableData = ({ flag }: { flag: any }) => {
     if (debouncedSearch) {
       SearchData();
     } else {
-      getCategoryData();
+      getServicesData();
     }
   }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
@@ -137,16 +121,9 @@ const TableData = ({ flag }: { flag: any }) => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          {/* <Actions viewBtn={false} title={"Users Details"} row={row} /> */}
-
-          {/* <UpdateContactlistCategory
-            row={row}
-            getCategoryData={getCategoryData}
-          /> */}
-
           <DeleteButton
             id={row.original.id}
-            getCategoryData={getCategoryData}
+            getServicesData={getServicesData}
           />
         </div>
       ),

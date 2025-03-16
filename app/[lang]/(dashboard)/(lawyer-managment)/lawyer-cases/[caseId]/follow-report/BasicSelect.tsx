@@ -10,10 +10,8 @@ const styles = {
 
 interface BasicSelectProps {
   menu: { value: string; label: string }[];
-  selectedValue: { value: string; label: string } | null;
-  setSelectedValue: (
-    selectedOption: SingleValue<{ value: string; label: string }>
-  ) => void;
+  selectedValue: any;
+  setSelectedValue: (selectedOption: any) => void;
 }
 
 const BasicSelect: React.FC<BasicSelectProps> = ({

@@ -14,7 +14,6 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 
@@ -46,7 +45,7 @@ const DetailItemLink = ({
   transitionDuration,
 }: {
   label: string;
-  value: string;
+  value: React.ReactNode; // Allow JSX elements
   transitionDuration: number;
 }) => (
   <motion.li
@@ -174,7 +173,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           />
         </ul>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-          {clientFiles.map((file, index) => (
+          {clientFiles.map((file: any, index: number) => (
             <DetailItemLink
               key={index}
               transitionDuration={1.9}

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
-
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import CreateDate from "./CreateDate";
 import { motion } from "framer-motion";
@@ -12,7 +11,7 @@ import { getOrders } from "@/services/new-orders/new-orders";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
-  const { t, error } = useTranslate();
+  const { t } = useTranslate();
   const [loading, setLoading] = useState(true);
   const { lang } = useParams();
   const [data, setData] = useState<any>([]);
@@ -22,15 +21,10 @@ const page = () => {
 
     try {
       const res = await getOrders(lang);
-
       setData(res?.body?.data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
-
       setLoading(false);
     }
   };
@@ -97,14 +91,6 @@ const page = () => {
                   <span className="font-bold"> {item?.reply_from?.name}</span>
                 </motion.p>
 
-                {/* <motion.p
-                  initial={{ x: 15, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 1 }}
-                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
-                >
-                  العنوان <span className="font-bold">الرياض</span>
-                </motion.p> */}
                 <motion.p
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}

@@ -14,7 +14,6 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 
@@ -83,7 +82,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                   : "Not Replied"
                 : lawyerData?.status == "not_replied"
                 ? "لم يتم الرد"
-                : "تم الرد" || "-"
+                : "تم الرد"
             }
           />
 

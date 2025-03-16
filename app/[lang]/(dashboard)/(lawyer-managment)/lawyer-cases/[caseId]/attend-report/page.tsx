@@ -22,6 +22,7 @@ interface ErrorResponse {
   errors: {
     [key: string]: string[];
   };
+  message: any;
 }
 
 const CaseFollowReport = () => {
@@ -31,24 +32,21 @@ const CaseFollowReport = () => {
   const [caseNumber, setCaseNumber] = useState("");
   const [plaintiffName, setPlaintiffName] = useState("");
   const [defendantName, setDefendantName] = useState("");
-  const [notes, setNotes] = useState("");
   const [currentDate, setCurrentDate] = useState("");
   const [currentTime, setCurrentTime] = useState("");
-  const [currentDay, setCurrentDay] = useState("");
+  const [currentDay, setCurrentDay] = useState<any>("");
   const [nextDate, setNextDate] = useState("");
   const [nextTime, setNextTime] = useState("");
-  const [nextDay, setNextDay] = useState("");
+  const [nextDay, setNextDay] = useState<any>("");
   const [followUpProcedures, setFollowUpProcedures] = useState("");
   const [whatShouldBeDone, setWhatShouldBeDone] = useState("");
   const [fileId, setFileId] = useState("");
   const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const { lang, caseId } = useParams();
 
   const getCasesData = async () => {
-    setLoading(true);
-
     try {
       const res = await getSpecifiedCases(lang, caseId);
 
@@ -59,12 +57,8 @@ const CaseFollowReport = () => {
       setPlaintiffName(res?.body?.client?.name);
 
       setDefendantName(res?.body?.defendants);
-
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-
-      setLoading(false);
     }
   };
   useEffect(() => {
@@ -88,6 +82,8 @@ const CaseFollowReport = () => {
   };
 
   const generatePDF = async () => {
+    setIsloading(false);
+
     const htmlContent = `
     <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -354,8 +350,6 @@ const CaseFollowReport = () => {
           fileId
         );
 
-        console.log(updateFormData);
-
         // Update the case with the file ID
         const updateResponse = await UpdateCases(updateFormData, caseId, lang);
 
@@ -375,6 +369,7 @@ const CaseFollowReport = () => {
           setCaseName("");
           setCaseNumber("");
           setSelected("");
+          setIsloading(true);
         } else {
           reToast.error(t("Failed to update case")); // Show failure toast
         }
@@ -693,10 +688,11 @@ const CaseFollowReport = () => {
             </Button>
             <Button
               type="button"
+              disabled={!loading}
               onClick={handleSubmit}
               className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
             >
-              {t("Create Report")}
+              {!loading ? t("Loading") : t("Create Report")}
             </Button>
           </motion.div>
         </div>

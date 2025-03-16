@@ -196,18 +196,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             value={casesData?.claim_status || "-"}
           />
           <DetailItem label={t("details")} value={casesData?.details || "-"} />
-          {/* <DetailItem
-             label="Date Of Create Account"
-             value={
-               new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
-             }
-           />
-           <DetailItem
-             label="Last Update of Account"
-             value={
-               new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
-             }
-           /> */}
         </ul>
         {renderCaseFilesData()}
       </>

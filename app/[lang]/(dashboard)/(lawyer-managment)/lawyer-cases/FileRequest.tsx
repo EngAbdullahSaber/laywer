@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
@@ -45,7 +44,6 @@ const FileRequest = ({ id }: { id: any }) => {
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [loading, setLoading] = useState(true);
-
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     title: "",
     requested_data: "",
@@ -58,7 +56,9 @@ const FileRequest = ({ id }: { id: any }) => {
     order_files: [],
   });
   // Handle Flatpickr change event and set value in react-hook-form
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -95,6 +95,7 @@ const FileRequest = ({ id }: { id: any }) => {
       reToast.error(errorMessage); // Show error toast
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
@@ -152,6 +153,7 @@ const FileRequest = ({ id }: { id: any }) => {
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>

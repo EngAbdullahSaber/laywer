@@ -1,15 +1,9 @@
 "use client";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../../tables/advanced/components/data-table";
 import View from "./View";
-import RequestStatus from "./RequestStatus";
 import FileRequest from "./FileRequest";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -30,6 +24,8 @@ interface Task {
   status?: string;
   Required_Action?: string;
   Associated_Case?: string;
+  lawyer?: string;
+  law_suit?: string;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -60,7 +56,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig = [];
+  const filtersConfig: any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -85,9 +81,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -103,9 +96,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -122,9 +112,6 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       setLoading(false);
     }
@@ -191,7 +178,9 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {new Date(row.original.created_at).toLocaleDateString("en-GB")}
+              {row.original.created_at
+                ? new Date(row.original.created_at).toLocaleDateString("en-GB")
+                : "Date not available"}{" "}
             </motion.span>
           </div>
         );

@@ -1,7 +1,6 @@
 "use client";
 
 import BreadcrumbComponent from "../shared/BreadcrumbComponent";
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
@@ -10,7 +9,7 @@ import { Icon } from "@iconify/react";
 import TableData from "./TableData";
 import CreateContactListCategory from "./CreateContactListCategory";
 import { motion } from "framer-motion";
-import {  exportToExcel } from "@/config/ExportButoons";
+import { exportToExcel } from "@/config/ExportButoons";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {

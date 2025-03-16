@@ -32,6 +32,7 @@ interface LaywerData {
 const CreateDate = ({ id }: { id: any }) => {
   const { t } = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     details: "",
@@ -48,17 +49,19 @@ const CreateDate = ({ id }: { id: any }) => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setIsloading(false);
+
     const formData = new FormData();
     formData.append("image", file);
     try {
       const res = await UploadImage(formData, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
-        console.log(res.body.image_id);
         setImages((prevState) => ({
           ...prevState,
           [imageType]: res.body.image_id,
         }));
+        setIsloading(true);
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
@@ -66,13 +69,8 @@ const CreateDate = ({ id }: { id: any }) => {
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 
-      // Construct the dynamic key based on field names and the current language
-
       let errorMessage = "Something went wrong."; // Default fallback message
 
-      // Loop through the fields to find the corresponding error message
-
-      // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
@@ -86,6 +84,8 @@ const CreateDate = ({ id }: { id: any }) => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -105,6 +105,8 @@ const CreateDate = ({ id }: { id: any }) => {
         setImages({
           invoice_file: null,
         });
+        setIsloading(true);
+
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
@@ -193,9 +195,10 @@ const CreateDate = ({ id }: { id: any }) => {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Ask Services")}
+                {!loading ? t("Loading") : t("Ask Services")}
               </Button>
             </div>
           </form>

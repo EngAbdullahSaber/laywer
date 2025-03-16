@@ -31,7 +31,6 @@ interface LaywerData {
   name: string;
   phone: string;
   email: string;
-  client_type: string;
   address: string;
   category_id: string;
   national_id_number: string;
@@ -51,7 +50,6 @@ const page = () => {
     phone: "",
     details: "",
     email: "",
-    client_type: "",
     national_id_number: "",
     category_id: "",
     address: "",
@@ -116,7 +114,6 @@ const page = () => {
           email: lawyer.email,
           details: lawyer.details,
           category_id: lawyer.category.id,
-          client_type: lawyer.client_type,
           address: lawyer.address,
         });
         setImages({
@@ -169,12 +166,12 @@ const page = () => {
     }
   };
 
-  const handleRadioChange = (value: string) => {
-    setLawyerData((prevData) => ({
-      ...prevData,
-      client_type: value, // Update client_type with selected radio value
-    }));
-  };
+  // const handleRadioChange = (value: string) => {
+  //   setLawyerData((prevData) => ({
+  //     ...prevData,
+  //     client_type: value, // Update client_type with selected radio value
+  //   }));
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,7 +203,6 @@ const page = () => {
         "phone",
         "details",
         "email",
-        "client_type",
         "client_files",
         "national_id_number",
         "category_id",
@@ -346,7 +342,7 @@ const page = () => {
                   placeholder={t("Enter Client Address")}
                 />
               </motion.div>
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.9 }}
@@ -359,7 +355,7 @@ const page = () => {
                   checkedValue={lawyerData.client_type}
                   keyData={handleRadioChange} // Pass handleRadioChange function to the Radio component
                 />
-              </motion.div>
+              </motion.div> */}
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}

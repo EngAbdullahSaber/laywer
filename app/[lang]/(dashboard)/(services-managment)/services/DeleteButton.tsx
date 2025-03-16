@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,18 +13,16 @@ import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
-
 import { AxiosError } from "axios";
-import { DeleteCategory } from "@/services/category/category";
 import { DeleteServices } from "@/services/services/services";
-interface DeleteUser {
+interface DeleteServices {
   id: string;
-  getCategoryData: () => Promise<void>;
+  getServicesData: () => Promise<void>;
 }
 interface ErrorResponse {
   errors?: string[];
 }
-const DeleteButton: React.FC<DeleteUser> = ({ id, getCategoryData }) => {
+const DeleteButton: React.FC<DeleteServices> = ({ id, getServicesData }) => {
   const { t } = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const { lang } = useParams();
@@ -35,7 +32,7 @@ const DeleteButton: React.FC<DeleteUser> = ({ id, getCategoryData }) => {
       const res = await DeleteServices(id, lang); // Delete user
       reToast.success(res.message);
       setIsDialogOpen(false); // Close the dialog after successful deletion
-      getCategoryData(); // Re-fetch the user data after deletion
+      getServicesData(); // Re-fetch the user data after deletion
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>; // Cast to AxiosError with your expected response type
       const errorMessage =

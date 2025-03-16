@@ -6,11 +6,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast as reToast } from "react-hot-toast";
 import { Label } from "@/components/ui/label";
-
 import { useState } from "react";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,10 +32,14 @@ const CreateDate = ({
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     message: "",
   });
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -46,6 +48,8 @@ const CreateDate = ({
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -62,6 +66,8 @@ const CreateDate = ({
         });
         reToast.success(res.message); // Display success message
         getCourtData();
+        setIsloading(true);
+
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -139,9 +145,10 @@ const CreateDate = ({
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Send")}
+                  {!loading ? t("Loading") : t("Send")}
                 </Button>
               </div>
             </form>

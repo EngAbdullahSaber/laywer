@@ -44,6 +44,8 @@ interface ErrorResponse {
 const CreateDate = ({ id }: { id: any }) => {
   const { t } = useTranslate();
   const { lang } = useParams();
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LawyerData>({
     title: "",
@@ -80,6 +82,8 @@ const CreateDate = ({ id }: { id: any }) => {
   // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const formData = new FormData();
     console.log(typeof lawyerData.appointment_date);
     // Append form data
@@ -100,6 +104,8 @@ const CreateDate = ({ id }: { id: any }) => {
           law_suit_id: id,
           appointment_date: "",
         });
+        setIsloading(true);
+
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
@@ -257,9 +263,10 @@ const CreateDate = ({ id }: { id: any }) => {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Date")}
+                {!loading ? t("Loading") : t("Create Date")}
               </Button>
             </motion.div>
           </form>

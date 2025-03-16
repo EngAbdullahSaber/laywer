@@ -6,15 +6,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { useState } from "react";
@@ -47,6 +41,8 @@ const TaskStatus = ({
 }) => {
   const { t } = useTranslate();
   const { lang } = useParams();
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     status: "",
@@ -59,7 +55,7 @@ const TaskStatus = ({
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsloading(false);
     // Append form data
     const data = {
       status: lawyerData.status, //pending, in_progress, completed
@@ -76,6 +72,7 @@ const TaskStatus = ({
         reToast.success(res.message); // Display success message
         getClientData();
         setIsDialogOpen(false); // Close the dialog after successful deletion
+        setIsloading(true);
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
       }
@@ -173,9 +170,10 @@ const TaskStatus = ({
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Change Staus")}
+                  {!loading ? t("Loading") : t("Change Staus")}
                 </Button>
               </motion.div>
             </form>

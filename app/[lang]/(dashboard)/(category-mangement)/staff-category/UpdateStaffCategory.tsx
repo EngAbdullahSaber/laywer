@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,9 +41,10 @@ const UpdateStaffCategory: React.FC<UpdateStaffCategoryProps> = ({
   row,
   getCategoryData,
 }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   // Explicitly type `currentLang` as "ar" | "en"
   const currentLang: "ar" | "en" =
@@ -101,6 +101,7 @@ const UpdateStaffCategory: React.FC<UpdateStaffCategoryProps> = ({
 
   const handleUpdateCategory = async () => {
     const formData = new FormData();
+    setIsloading(false);
 
     // Loop through userData and append values to the FormData object
     const queryParams = buildQueryParams();
@@ -120,6 +121,8 @@ const UpdateStaffCategory: React.FC<UpdateStaffCategoryProps> = ({
           description: "",
           type: "crew",
         });
+        setIsloading(true);
+
         setOpen(false); // Close the modal after success
         getCategoryData(); // Reload the category data
       } else {
@@ -217,10 +220,11 @@ const UpdateStaffCategory: React.FC<UpdateStaffCategoryProps> = ({
                 </DialogClose>
                 <Button
                   type="button"
+                  disabled={!loading}
                   onClick={handleUpdateCategory}
                   className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Update Staff Category")}
+                  {!loading ? t("Loading") : t("Update Staff Category")}
                 </Button>
               </motion.div>
             </form>

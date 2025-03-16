@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,7 +41,7 @@ const CreateContactListCategory = ({
   setFlag: any;
   flag: any;
 }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
 

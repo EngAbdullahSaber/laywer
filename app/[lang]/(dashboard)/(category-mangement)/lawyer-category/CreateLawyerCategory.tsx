@@ -41,9 +41,10 @@ const CreateLawyerCategory = ({
   setFlag: any;
   flag: any;
 }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   // Explicitly type `currentLang` as "ar" | "en"
   const currentLang: "ar" | "en" =
@@ -83,6 +84,7 @@ const CreateLawyerCategory = ({
 
   const handleCreateCategory = async () => {
     const formData = new FormData();
+    setIsloading(false);
 
     Object.entries(userData).forEach(([key, value]) => {
       if (typeof value === "object") {
@@ -107,6 +109,8 @@ const CreateLawyerCategory = ({
           type: "lawyer",
         });
         setFlag(!flag);
+        setIsloading(true);
+
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Lawyer Category"));
@@ -279,10 +283,11 @@ const CreateLawyerCategory = ({
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   onClick={handleCreateCategory}
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Lawyer Category")}
+                  {!loading ? t("Loading") : t("Create Lawyer Category")}
                 </Button>
               </motion.div>
             </div>

@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,9 +42,10 @@ const CreateCaseCategory = ({
   setFlag: any;
   flag: any;
 }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   // Explicitly type `currentLang` as "ar" | "en"
   const currentLang: "ar" | "en" =
@@ -86,6 +86,7 @@ const CreateCaseCategory = ({
 
   const handleCreateCategory = async () => {
     const formData = new FormData();
+    setIsloading(false);
 
     Object.entries(userData).forEach(([key, value]) => {
       if (typeof value === "object") {
@@ -110,6 +111,8 @@ const CreateCaseCategory = ({
           type: "cases",
         });
         setFlag(!flag);
+        setIsloading(true);
+
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Case Category"));
@@ -278,10 +281,11 @@ const CreateCaseCategory = ({
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   onClick={handleCreateCategory}
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Case Category")}
+                  {!loading ? t("Loading") : t("Create Case Category")}
                 </Button>
               </motion.div>
             </div>

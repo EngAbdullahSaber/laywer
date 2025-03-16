@@ -1,7 +1,17 @@
 "use client";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-const ControlledRadio = ({ setSelected, selected, text1, text2 }) => {
-  const handleSelect = (value) => {
+const ControlledRadio = ({
+  setSelected,
+  selected,
+  text1,
+  text2,
+}: {
+  setSelected: any;
+  selected: any;
+  text1: string;
+  text2: string;
+}) => {
+  const handleSelect = (value: any) => {
     setSelected(value);
   };
   return (

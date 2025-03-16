@@ -32,7 +32,6 @@ interface LaywerData {
   phone: string;
   password: string;
   email: string;
-  client_type: string;
   category_id: string;
   national_id_number: string;
   address: string;
@@ -52,7 +51,6 @@ const page = () => {
     password: "",
     address: "",
     email: "",
-    client_type: "",
     national_id_number: "",
     category_id: "",
   });
@@ -108,12 +106,12 @@ const page = () => {
     }
   };
 
-  const handleRadioChange = (value: string) => {
-    setLawyerData((prevData) => ({
-      ...prevData,
-      client_type: value, // Update client_type with selected radio value
-    }));
-  };
+  // const handleRadioChange = (value: string) => {
+  //   setLawyerData((prevData) => ({
+  //     ...prevData,
+  //     client_type: value, // Update client_type with selected radio value
+  //   }));
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,7 +142,6 @@ const page = () => {
           password: "",
           address: "",
           email: "",
-          client_type: "",
           national_id_number: "",
           category_id: "",
         });
@@ -164,7 +161,6 @@ const page = () => {
         "address",
         "email",
         "category_id",
-        "client_type",
         "details",
         "national_id_number",
         "client_files",
@@ -299,7 +295,7 @@ const page = () => {
                   placeholder={t("Enter Client Address")}
                 />
               </motion.div>
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.9 }}
@@ -311,7 +307,7 @@ const page = () => {
                   text2={"individual"}
                   keyData={handleRadioChange} // Pass handleRadioChange function to the Radio component
                 />
-              </motion.div>
+              </motion.div> */}
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}

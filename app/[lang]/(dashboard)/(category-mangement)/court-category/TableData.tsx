@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { data } from ".";
 import { DataTable } from "../../tables/advanced/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
@@ -47,7 +46,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig = [];
+  const filtersConfig:any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -72,9 +71,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+       
 
         setLoading(false);
       }
@@ -89,9 +86,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+       
 
         setLoading(false);
       }
@@ -108,9 +103,7 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+     
 
       setLoading(false);
     }

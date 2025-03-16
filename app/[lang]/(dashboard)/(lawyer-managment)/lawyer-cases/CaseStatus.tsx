@@ -6,21 +6,13 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import Flatpickr from "react-flatpickr";
+
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { useTranslate } from "@/config/useTranslation";
-import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import {
   Tooltip,
@@ -45,6 +37,8 @@ interface LaywerData {
 const CaseStatus = ({ id }: { id: any }) => {
   const { t } = useTranslate();
   const { lang } = useParams();
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     status: "",
@@ -57,6 +51,8 @@ const CaseStatus = ({ id }: { id: any }) => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -71,6 +67,8 @@ const CaseStatus = ({ id }: { id: any }) => {
         setLawyerData({
           status: "",
         });
+        setIsloading(true);
+
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
@@ -170,9 +168,10 @@ const CaseStatus = ({ id }: { id: any }) => {
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Change Staus")}
+                  {!loading ? t("Loading") : t("Change Staus")}
                 </Button>
               </motion.div>
             </form>

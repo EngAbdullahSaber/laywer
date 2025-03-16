@@ -1,12 +1,5 @@
 "use client";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../../tables/advanced/components/data-table";
 import View from "./View";
@@ -59,7 +52,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig = [];
+  const filtersConfig: any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -84,9 +77,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -102,9 +92,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -121,9 +108,6 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       setLoading(false);
     }

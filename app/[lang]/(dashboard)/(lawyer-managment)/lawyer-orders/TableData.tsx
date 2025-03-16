@@ -1,8 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../../tables/advanced/components/data-table";
@@ -55,7 +53,7 @@ const TableData = () => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig = [];
+  const filtersConfig: any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -80,9 +78,6 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -98,9 +93,7 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+
         setLoading(false);
       }
     }
@@ -116,9 +109,7 @@ const TableData = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       setLoading(false);
     }
   };
@@ -244,7 +235,9 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {new Date(row.original.created_at).toLocaleDateString("en-GB")}
+              {row.original.created_at
+                ? new Date(row.original.created_at).toLocaleDateString("en-GB")
+                : "Date not available"}{" "}
             </motion.span>{" "}
           </div>
         );
