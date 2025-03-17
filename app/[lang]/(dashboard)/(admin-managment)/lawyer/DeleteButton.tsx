@@ -1,14 +1,11 @@
 "use client";
 import React, { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useTranslate } from "@/config/useTranslation";
@@ -22,7 +19,6 @@ import {
 } from "@/components/ui/tooltip";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
-
 import { AxiosError } from "axios";
 import { DeleteLawyer } from "@/services/lawyer/lawyer";
 

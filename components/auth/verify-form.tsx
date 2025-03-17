@@ -16,6 +16,7 @@ import { storeTokenInLocalStorage } from "@/services/utils";
 import { changeUserData } from "@/store/Action";
 import { updateAxiosHeader } from "@/services/axios";
 import { useAccessToken } from "@/config/accessToken";
+import LayoutLoader from "../layout-loader";
 
 interface ErrorResponse {
   errors?: {
@@ -33,6 +34,8 @@ const VerifyForm = () => {
   const totalOtpField = 6; // Total number of OTP fields
   const otpArray: string[] = Array.from({ length: totalOtpField }, () => "");
   const [otp, setOtp] = useState<string[]>(otpArray);
+  const [loading, setLoading] = useState<boolean>();
+
   const otpFields = Array.from({ length: totalOtpField }, (_, index) => index);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
@@ -73,7 +76,7 @@ const VerifyForm = () => {
   const handleSubmit = async () => {
     const enteredOtp = otp.join(""); // Join OTP array into a string
     setOtp(otpArray); // Reset OTP input
-
+    setLoading(false);
     try {
       // Send username and OTP to the API
       const res = await VerifyLogin(
@@ -115,11 +118,11 @@ const VerifyForm = () => {
         if (userRole) {
           // Redirect based on role
           if (userRole == "super_admin") {
-            router.push("/dashboard");
+            router.replace("/dashboard");
           } else if (userRole == "lawyer") {
-            router.push("/lawyer-cases");
+            router.replace("/lawyer-cases");
           } else if (userRole == "client") {
-            router.push("/client-cases");
+            router.replace("/client-cases");
           } else {
             toast.error("Unknown role");
           }
@@ -129,6 +132,7 @@ const VerifyForm = () => {
       } else {
         toast.error("Response is invalid or missing");
       }
+      setLoading(true);
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 
@@ -156,6 +160,9 @@ const VerifyForm = () => {
       updateAxiosHeader(accessToken);
     }
   }, [accessToken]);
+  if (loading) {
+    return <LayoutLoader />;
+  }
   return (
     <div className="w-full md:w-[480px] py-5">
       <motion.div

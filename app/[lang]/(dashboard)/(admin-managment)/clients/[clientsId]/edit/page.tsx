@@ -1,13 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-
 import BasicSelect from "@/app/[lang]/(dashboard)/(admin-managment)/lawyer/[lawyerId]/edit/BasicSelect";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
-import { Radio } from "./Radio";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
@@ -55,13 +52,15 @@ const page = () => {
     address: "",
   });
   const [images, setImages] = useState<{
-    client_files: string[]; // Array of file IDs instead of a single file ID
+    client_files: any; // Array of file IDs instead of a single file ID
   }>({
     client_files: [],
   });
   console.log(images.client_files);
   // Handle input change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -122,14 +121,11 @@ const page = () => {
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 
   // Handle select change
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -166,30 +162,17 @@ const page = () => {
     }
   };
 
-  // const handleRadioChange = (value: string) => {
-  //   setLawyerData((prevData) => ({
-  //     ...prevData,
-  //     client_type: value, // Update client_type with selected radio value
-  //   }));
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
+    setLoading(false);
+
     const queryParams = buildQueryParams();
-
-    // // Append form data
-    // Object.entries(lawyerData).forEach(([key, value]) => {
-    //   formData.append(key, value);
-    // });
-
-    // images.client_files.forEach((fileId, index) => {
-    //   formData.append(`client_files[${index}]`, fileId);
-    // });
 
     try {
       const res = await UpdateClients(lang, clientsId, queryParams); // Call API to create the lawyer
       if (res) {
+        setLoading(true);
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -237,9 +220,6 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
   useEffect(() => {
@@ -342,20 +322,7 @@ const page = () => {
                   placeholder={t("Enter Client Address")}
                 />
               </motion.div>
-              {/* <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.9 }}
-                className="flex flex-col gap-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="Role">{t("Role")}</Label>
-                <Radio
-                  text1={"company"}
-                  text2={"individual"}
-                  checkedValue={lawyerData.client_type}
-                  keyData={handleRadioChange} // Pass handleRadioChange function to the Radio component
-                />
-              </motion.div> */}
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -410,7 +377,7 @@ const page = () => {
                 className="flex flex-col gap-2 w-full"
               >
                 <FileUploaderMultiple
-                  imageType="driving_licence"
+                  imageType="client_files"
                   id={images.client_files}
                   onFileChange={handleImageChange}
                 />

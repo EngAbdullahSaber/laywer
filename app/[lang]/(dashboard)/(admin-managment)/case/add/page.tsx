@@ -56,7 +56,7 @@ const Page = () => {
     category_id: "",
   });
   const [images, setImages] = useState<{
-    files: string[]; // Array of file IDs instead of a single file ID
+    files: any; // Array of file IDs instead of a single file ID
   }>({
     files: [],
   });
@@ -95,9 +95,6 @@ const Page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       setLoading(false);
     }
@@ -220,7 +217,7 @@ const Page = () => {
     // Update the state with the new array
     setNumbers(updatedNumbers);
   };
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -267,6 +264,8 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading1(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -274,7 +273,7 @@ const Page = () => {
       formData.append(key, value);
     });
 
-    images.files.forEach((fileId, index) => {
+    images.files.forEach((fileId: any, index: any) => {
       formData.append(`files[${index}]`, fileId);
     });
     oppositeParties.forEach((fileId, index) => {
@@ -320,6 +319,8 @@ const Page = () => {
           claim_status: "",
           category_id: "",
         });
+        setLoading1(true);
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -662,8 +663,8 @@ const Page = () => {
             >
               <Label>
                 <FileUploaderMultiple
-                  imageType="reply_files"
-                  id={images.reply_files}
+                  imageType="files"
+                  id={images.files}
                   onFileChange={handleImageChange}
                 />{" "}
               </Label>

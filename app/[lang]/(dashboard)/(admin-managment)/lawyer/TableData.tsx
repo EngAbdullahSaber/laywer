@@ -2,9 +2,7 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 import { useEffect, useState } from "react";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
 import { useParams } from "next/navigation";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
@@ -30,6 +28,8 @@ import {
 import { getCategory } from "@/services/category/category";
 import { toast as reToast } from "react-hot-toast";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
+
+
 interface Task {
   id: string;
   name?: string;
@@ -40,7 +40,7 @@ interface Task {
   status?: any;
 }
 
-const TableData = ({ flag }: { flag: any }) => {
+const TableData = () => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState<string>("");
@@ -112,10 +112,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
-
+       
         setLoading(false);
       }
     } else {
@@ -130,9 +127,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+      
 
         setLoading(false);
       }
@@ -149,9 +144,7 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+   
 
       setLoading(false);
     }
@@ -164,7 +157,7 @@ const TableData = ({ flag }: { flag: any }) => {
       getLawyerData();
       fetchData();
     }
-  }, [debouncedSearch, page, filters, flag]);
+  }, [debouncedSearch, page, filters]);
 
   const columns: ColumnDef<Task>[] = [
     {

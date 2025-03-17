@@ -1,12 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import View from "./View";
 import DeleteButton from "./Delete";
 import { motion } from "framer-motion";
@@ -40,6 +35,7 @@ interface Task {
   email?: string;
   Email?: string;
   national_id_number?: string;
+  created_at?: any;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -117,9 +113,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+
         setLoading(false);
       }
     } else {
@@ -134,9 +128,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+
         setLoading(false);
       }
     }
@@ -152,9 +144,7 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       setLoading(false);
     }
   };

@@ -21,18 +21,14 @@ interface ErrorResponse {
 
 interface ImageUploaderProps {
   imageType:
-    | "lawyer_licence"
-    | "driving_licence"
-    | "national_id_image"
-    | "subscription_image"; // Restrict imageType to allowed literals
+    | "client_files"
+
   id: File | null;
   onFileChange: (
     file: File,
     imageType:
-      | "lawyer_licence"
-      | "driving_licence"
-      | "national_id_image"
-      | "subscription_image"
+      | "client_files"
+ 
   ) => Promise<void>;
 }
 // Define accepted file types (image formats and common file formats)

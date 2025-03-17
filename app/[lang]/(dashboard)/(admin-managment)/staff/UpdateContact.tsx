@@ -7,14 +7,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -36,12 +32,13 @@ interface LaywerData {
 }
 interface UpdateStaffProps {
   row: any; // This is passed in from the parent, and contains the data for the category to update
-  getLawyerData: () => void; // Function to reload the category data after the update
+  getStaffData: () => void; // Function to reload the category data after the update
 }
-const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
+const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
   const [roles, setRoles] = useState([]);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
@@ -57,7 +54,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
       [name]: value,
     }));
   };
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       role_id: value?.id,
@@ -78,6 +75,8 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
   }));
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const data = {
       name: lawyerData.name,
       phone: lawyerData.phone,
@@ -94,9 +93,10 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getLawyerData }) => {
           phone: "",
           role_id: "",
         });
+        setIsloading(true);
 
         reToast.success(res.message); // Display success message
-        getLawyerData();
+        getStaffData();
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to update employee")); // Show a fallback failure message

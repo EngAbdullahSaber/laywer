@@ -1,13 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-
 import BasicSelect from "@/components/common/Select/BasicSelect";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
-import { Radio } from "./Radio";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
@@ -60,7 +57,9 @@ const page = () => {
     client_files: [],
   });
   // Handle input change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -69,7 +68,7 @@ const page = () => {
   };
 
   // Handle select change
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -106,15 +105,10 @@ const page = () => {
     }
   };
 
-  // const handleRadioChange = (value: string) => {
-  //   setLawyerData((prevData) => ({
-  //     ...prevData,
-  //     client_type: value, // Update client_type with selected radio value
-  //   }));
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -145,6 +139,7 @@ const page = () => {
           national_id_number: "",
           category_id: "",
         });
+        setLoading(true);
 
         reToast.success(res.message); // Display success message
       } else {
@@ -194,9 +189,6 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
   useEffect(() => {
@@ -295,19 +287,7 @@ const page = () => {
                   placeholder={t("Enter Client Address")}
                 />
               </motion.div>
-              {/* <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 0.9 }}
-                className="flex flex-col gap-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="Role">{t("Role")}</Label>
-                <Radio
-                  text1={"company"}
-                  text2={"individual"}
-                  keyData={handleRadioChange} // Pass handleRadioChange function to the Radio component
-                />
-              </motion.div> */}
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -373,7 +353,7 @@ const page = () => {
                 className="flex flex-col gap-2 w-full"
               >
                 <FileUploaderMultiple
-                  imageType="driving_licence"
+                  imageType="client_files"
                   id={images.client_files}
                   onFileChange={handleImageChange}
                 />

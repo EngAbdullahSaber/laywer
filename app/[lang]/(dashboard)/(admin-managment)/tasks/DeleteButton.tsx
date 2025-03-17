@@ -26,12 +26,12 @@ import { AxiosError } from "axios";
 import { DeleteTasks } from "@/services/tasks/tasks";
 interface DeleteTasks {
   id: string;
-  getLawyerData: () => Promise<void>;
+  getTasksData: () => Promise<void>;
 }
 interface ErrorResponse {
   errors?: string[];
 }
-const DeleteButton: React.FC<DeleteTasks> = ({ id, getLawyerData }) => {
+const DeleteButton: React.FC<DeleteTasks> = ({ id, getTasksData }) => {
   const { t } = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const { lang } = useParams();
@@ -41,7 +41,7 @@ const DeleteButton: React.FC<DeleteTasks> = ({ id, getLawyerData }) => {
       const res = await DeleteTasks(id, lang); // Delete user
       reToast.success(res.message);
       setIsDialogOpen(false); // Close the dialog after successful deletion
-      getLawyerData(); // Re-fetch the user data after deletion
+      getTasksData(); // Re-fetch the user data after deletion
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>; // Cast to AxiosError with your expected response type
       const errorMessage =

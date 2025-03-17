@@ -2,13 +2,8 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import View from "./View";
-import Add from "./Add";
 import FileRequest from "./FileRequest";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -19,7 +14,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTranslate } from "@/config/useTranslation";
-import Delete from "./Delete";
 import { DataTable } from "../../tables/advanced/components/data-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import {
@@ -29,23 +23,25 @@ import {
   SearchCases,
 } from "@/services/cases/cases";
 import { toast as reToast } from "react-hot-toast";
-
 import { useEffect, useState } from "react";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import DeleteButton from "./Delete";
 import { getCategory } from "@/services/category/category";
+import Add from "./Add";
+
 interface Task {
   id: string;
   Case_Name?: string;
   main_case_number?: string;
   client?: any;
-  category?: string;
+  category?: any;
   lawyer?: any;
   session_date?: string;
   status?: string;
 }
-const TableData = ({ flag }: { flag: any }) => {
+
+const TableData = () => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -160,9 +156,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
 
         setLoading(false);
       }
@@ -177,9 +170,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+
         setLoading(false);
       }
     }
@@ -195,9 +186,6 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       setLoading(false);
     }
@@ -210,7 +198,7 @@ const TableData = ({ flag }: { flag: any }) => {
       getCasesData();
       fetchData();
     }
-  }, [debouncedSearch, page, filters, flag]);
+  }, [debouncedSearch, page, filters]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",

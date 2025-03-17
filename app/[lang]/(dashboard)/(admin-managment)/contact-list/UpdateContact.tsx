@@ -1,19 +1,16 @@
 "use Contact List";
 import BasicSelect from "./BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useTranslate } from "@/config/useTranslation";
 import { getCategory } from "@/services/category/category";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
@@ -23,6 +20,7 @@ import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { UpdateContactList } from "@/services/contact-list/contact-list";
 import { CleaveInput } from "@/components/ui/cleave";
+import { useTranslate } from "@/config/useTranslation";
 
 interface ErrorResponse {
   errors: {
@@ -33,7 +31,7 @@ interface ContactListData {
   name: string;
   phone: string;
   email: string;
-  category_id: string;
+  category_id: any;
 }
 const UpdateContact = ({
   getContactListData,
@@ -45,6 +43,7 @@ const UpdateContact = ({
   const [category, setCategory] = useState<any[]>([]);
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [contactList, setContactList] = useState<ContactListData>({
     name: "",
@@ -52,7 +51,7 @@ const UpdateContact = ({
     email: "",
     category_id: "",
   });
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setContactList((prevData) => ({
@@ -84,7 +83,7 @@ const UpdateContact = ({
     return params.toString();
   };
   // Handle select change
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setContactList((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -93,6 +92,7 @@ const UpdateContact = ({
   console.log(contactList.category_id);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
 
     const queryParams = buildQueryParams();
     try {
@@ -107,6 +107,7 @@ const UpdateContact = ({
         });
         getContactListData();
         setOpen(false); // Close the modal after success
+        setIsloading(true);
 
         reToast.success(res.message); // Display success message
       } else {
@@ -278,9 +279,10 @@ const UpdateContact = ({
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Update Contact List")}{" "}
+                  {!loading ? t("Loading") : t("Update Contact List")}{" "}
                 </Button>
               </motion.div>
             </div>

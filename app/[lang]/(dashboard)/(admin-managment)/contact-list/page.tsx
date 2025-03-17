@@ -15,8 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useParams } from "next/navigation";
@@ -29,20 +27,13 @@ const page = () => {
   const { lang } = useParams();
 
   const getExcelFileData = async () => {
-    setLoading(true);
     try {
       const res = await getContactListFile(lang);
 
       setData(res?.body?.file || []);
       window.open(res?.body?.file, "_blank");
-      console.log(res?.body?.file);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
-      setLoading(false);
     }
   };
   return (

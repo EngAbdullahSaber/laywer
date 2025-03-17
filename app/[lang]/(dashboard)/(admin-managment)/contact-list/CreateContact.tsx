@@ -1,25 +1,22 @@
 "use Contact List";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslate } from "@/config/useTranslation";
 import { getCategory } from "@/services/category/category";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CreateContactList } from "@/services/contact-list/contact-list";
 import { CleaveInput } from "@/components/ui/cleave";
 
@@ -38,6 +35,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   const [category, setCategory] = useState<any[]>([]);
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [contactList, setContactList] = useState<ContactListData>({
     name: "",
@@ -45,7 +43,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
     email: "",
     category_id: "",
   });
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setContactList((prevData) => ({
@@ -55,7 +53,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   };
 
   // Handle select change
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setContactList((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -63,6 +61,8 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const formData = new FormData();
 
     // Append images if they exist
@@ -83,6 +83,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
           category_id: "",
         });
         setFlag(!flag);
+        setIsloading(true);
 
         setOpen(false); // Close the modal after success
 
@@ -215,14 +216,6 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     selectedValue={contactList["category_id"]}
                   />
                 </motion.div>
-                {/* <div className="flex flex-col gap-2 w-[48%]">
-        
-       </div> */}
-
-                {/* <div className="flex flex-col gap-2">
-           <Label>{t("Select Gender")}</Label>
-           <Radio text1={"Female"} text2={"Male"} />
-         </div> */}
               </div>
 
               <motion.div
@@ -242,9 +235,10 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Contact List")}{" "}
+                  {!loading ? t("Loading") : t("Create Contact List")}{" "}
                 </Button>
               </motion.div>
             </div>

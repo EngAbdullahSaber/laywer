@@ -1,10 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useParams } from "next/navigation";
-
 import { useTranslate } from "@/config/useTranslation";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { motion } from "framer-motion";
@@ -73,7 +71,7 @@ const page = () => {
   };
 
   // Handle select change
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -102,19 +100,16 @@ const page = () => {
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 
-      // Construct the dynamic key based on field names and the current language
-
       let errorMessage = "Something went wrong."; // Default fallback message
 
-      // Loop through the fields to find the corresponding error message
-
-      // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(false);
+
     const formData = new FormData();
 
     // Append images if they exist
@@ -170,6 +165,8 @@ const page = () => {
           national_id_image: null,
           subscription_image: null,
         });
+        setLoading(true);
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -220,9 +217,6 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
   useEffect(() => {

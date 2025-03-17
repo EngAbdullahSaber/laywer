@@ -14,7 +14,6 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 
@@ -75,7 +74,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                 ? "مكتملة"
                 : TaskData?.importance_level == "in_progress"
                 ? "قيد التنفيذ"
-                : "قيدالانتظار" || "-"
+                : "قيدالانتظار"
             }
           />
           <DetailItem
@@ -85,7 +84,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                 ? " مهمة جدا"
                 : TaskData?.importance_level == "mid"
                 ? "متوسطة الاهمية"
-                : "ذات اهمية ضعيفة" || "-"
+                : "ذات اهمية ضعيفة"
             }
           />
           <DetailItem label={t("due_date")} value={TaskData?.due_date || "-"} />

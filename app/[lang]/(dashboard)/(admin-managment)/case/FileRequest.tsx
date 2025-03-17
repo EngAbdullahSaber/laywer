@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
@@ -43,8 +42,9 @@ interface LaywerData {
 const FileRequest = ({ id }: { id: any }) => {
   const { t } = useTranslate();
   const { lang } = useParams();
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     title: "",
     requested_data: "",
@@ -57,7 +57,9 @@ const FileRequest = ({ id }: { id: any }) => {
     order_files: [],
   });
   // Handle Flatpickr change event and set value in react-hook-form
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -69,6 +71,8 @@ const FileRequest = ({ id }: { id: any }) => {
     file: File,
     imageType: keyof typeof images
   ) => {
+    setIsloading(false);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -80,6 +84,8 @@ const FileRequest = ({ id }: { id: any }) => {
           ...prevState,
           reply_files: [...prevState.order_files, res.body.image_id],
         }));
+        setIsloading(true);
+
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
@@ -92,6 +98,7 @@ const FileRequest = ({ id }: { id: any }) => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
     const formData = new FormData();
 
     // Append form data
@@ -114,6 +121,8 @@ const FileRequest = ({ id }: { id: any }) => {
           details: "",
           law_suit_id: id,
         });
+        setIsloading(true);
+
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
@@ -237,9 +246,10 @@ const FileRequest = ({ id }: { id: any }) => {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Ask Client")}
+                {!loading ? t("Loading") : t("Ask Client")}
               </Button>
             </motion.div>
           </form>

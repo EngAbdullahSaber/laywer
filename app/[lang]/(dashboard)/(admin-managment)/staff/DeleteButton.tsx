@@ -1,14 +1,11 @@
 "use client";
 import React, { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useTranslate } from "@/config/useTranslation";
@@ -22,19 +19,18 @@ import {
 } from "@/components/ui/tooltip";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
-
 import { AxiosError } from "axios";
 import { DeleteLawyer } from "@/services/lawyer/lawyer";
 
 interface DeleteLawyer {
   id: string;
-  getLawyerData: () => Promise<void>;
+  getStaffData: () => Promise<void>;
 }
 interface ErrorResponse {
   errors?: string[];
 }
 
-const DeleteButton: React.FC<DeleteLawyer> = ({ id, getLawyerData }) => {
+const DeleteButton: React.FC<DeleteLawyer> = ({ id, getStaffData }) => {
   const { t } = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const { lang } = useParams();
@@ -44,7 +40,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getLawyerData }) => {
       const res = await DeleteLawyer(id, lang); // Delete user
       reToast.success(res.message);
       setIsDialogOpen(false); // Close the dialog after successful deletion
-      getLawyerData(); // Re-fetch the user data after deletion
+      getStaffData(); // Re-fetch the user data after deletion
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>; // Cast to AxiosError with your expected response type
       const errorMessage =

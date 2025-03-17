@@ -229,7 +229,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                 ? "مكتملة"
                 : casesData?.status == "in_progress"
                 ? "قيد التنفيذ"
-                : "قيدالانتظار" || "-"
+                : "قيدالانتظار"
             }
           />
           <DetailItem
@@ -241,18 +241,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             }
           />
           <DetailItem label={t("details")} value={casesData?.details || "-"} />
-          {/* <DetailItem
-             label="Date Of Create Account"
-             value={
-               new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
-             }
-           />
-           <DetailItem
-             label="Last Update of Account"
-             value={
-               new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
-             }
-           /> */}
+        
         </ul>
         {renderCaseFilesData()}
       </>

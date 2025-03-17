@@ -20,20 +20,10 @@ interface ErrorResponse {
 }
 
 interface ImageUploaderProps {
-  imageType:
-    | "lawyer_licence"
-    | "driving_licence"
-    | "national_id_image"
-    | "subscription_image"; // Restrict imageType to allowed literals
+  imageType: "client_files";
+  // Restrict imageType to allowed literals
   id: File[] | null; // Allow `id` to be an array of files or null
-  onFileChange: (
-    file: File,
-    imageType:
-      | "lawyer_licence"
-      | "driving_licence"
-      | "national_id_image"
-      | "subscription_image"
-  ) => Promise<void>;
+  onFileChange: (file: File, imageType: "client_files") => Promise<void>;
 }
 
 const acceptedFileTypes = [

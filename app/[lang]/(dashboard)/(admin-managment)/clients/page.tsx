@@ -6,8 +6,6 @@ import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./TableData";
-import CreateClient from "./CreateClient";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { exportToExcel } from "@/config/ExportButoons";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
@@ -17,33 +15,27 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useParams } from "next/navigation";
 import { getClientFile } from "@/services/clients/clients";
+import Link from "next/link";
 const page = () => {
   const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
 
   const getExcelFileData = async () => {
-    setLoading(true);
     try {
       const res = await getClientFile(lang);
 
       setData(res?.body?.file || []);
       window.open(res?.body?.file, "_blank");
       console.log(res?.body?.file);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
-      setLoading(false);
+     
     }
   };
   return (

@@ -6,7 +6,6 @@ import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./TableData";
-import CreateLawyer from "./CreateLawyer";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -16,34 +15,24 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useParams } from "next/navigation";
 import { getLawyerFile } from "@/services/lawyer/lawyer";
 const page = () => {
   const { t } = useTranslate();
-  const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
 
   const getExcelFileData = async () => {
-    setLoading(true);
     try {
       const res = await getLawyerFile(lang);
 
       setData(res?.body?.file || []);
       window.open(res?.body?.file, "_blank");
       console.log(res?.body?.file);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
-      setLoading(false);
     }
   };
   return (
@@ -94,7 +83,7 @@ const page = () => {
           <CardTitle> {t("Lawyer Details")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <TableData flag={flag} />
+          <TableData />
         </CardContent>
       </Card>
     </div>

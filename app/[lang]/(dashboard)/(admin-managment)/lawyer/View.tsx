@@ -14,7 +14,6 @@ import {
 import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 
@@ -266,7 +265,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                   value={
                     suit?.case_numbers
                       ?.map(
-                        (caseNum) =>
+                        (caseNum: any) =>
                           `${caseNum.first_letter}${caseNum.second_letter}/${caseNum.case_year}/${caseNum.case_number_id}`
                       )
                       .join(", ") || "-"

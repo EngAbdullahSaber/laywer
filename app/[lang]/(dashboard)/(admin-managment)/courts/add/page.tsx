@@ -38,12 +38,11 @@ interface CourtData {
 const Page = () => {
   const { t } = useTranslate();
   const { lang } = useParams();
-
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [category, setCategory] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
   const [regions, setRegions] = useState<any[]>([]);
   const [flag, setFlag] = useState(false);
-
   const [courtData, setCourtData] = useState<CourtData>({
     name: "",
     category_id: "",
@@ -62,9 +61,7 @@ const Page = () => {
       return citiesData?.body?.data || [];
     } catch (error) {
       reToast.error("Failed to fetch cities");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       return [];
     }
   };
@@ -100,6 +97,7 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
 
     const formData = new FormData();
     Object.entries(courtData).forEach(([key, value]) => {
@@ -119,6 +117,8 @@ const Page = () => {
           region_id: "",
           city_id: "",
         });
+        setIsloading(true);
+
         reToast.success(res.message);
       } else {
         reToast.error(t("Failed to create Court"));
@@ -157,9 +157,6 @@ const Page = () => {
       setRegions(regionsData?.body || []);
     } catch (error) {
       reToast.error("Failed to fetch categories or regions");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 
@@ -214,7 +211,11 @@ const Page = () => {
                     />
                   </div>
                   <div className="w-[8%] mt-5">
-                    <CreateCourtCategory buttonShape={false} />
+                    <CreateCourtCategory
+                      buttonShape={false}
+                      setFlag={setFlag}
+                      flag={flag}
+                    />
                   </div>{" "}
                 </motion.div>
               </div>
@@ -348,9 +349,10 @@ const Page = () => {
               <Button
                 type="submit"
                 onClick={handleSubmit}
+                disabled={!loading}
                 className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Court")}
+                {!loading ? t("Loading") : t("Create Court")}
               </Button>
             </motion.div>
           </div>

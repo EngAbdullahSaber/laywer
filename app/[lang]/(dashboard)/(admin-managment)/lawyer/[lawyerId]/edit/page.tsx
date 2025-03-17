@@ -2,11 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { useTranslate } from "@/config/useTranslation";
 import BasicSelect from "./BasicSelect";
 import { motion } from "framer-motion";
-
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -128,7 +126,7 @@ const page = () => {
     }
   };
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -173,6 +171,8 @@ const page = () => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(false);
+
     const formData = new FormData();
     const queryParams = buildQueryParams();
     // Append images if they exist
@@ -196,6 +196,8 @@ const page = () => {
     try {
       const res = await UpdateLawyer(queryParams, lawyerId, lang); // Call API to create the lawyer
       if (res) {
+        setLoading(true);
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to update Lawyer"));
@@ -242,9 +244,6 @@ const page = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {
       reToast.error("Failed to fetch data");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 
@@ -340,9 +339,7 @@ const page = () => {
                     {/* <BasicSelect name="CourtCategory" menu={Lawyer_Category} /> */}
                     <BasicSelect
                       menu={transformedCategories}
-                      setSelectedValue={(value) =>
-                        handleSelectChange(value, "category_id")
-                      }
+                      setSelectedValue={(value) => handleSelectChange(value)}
                       selectedValue={lawyerData["category_id"]}
                     />
                   </div>

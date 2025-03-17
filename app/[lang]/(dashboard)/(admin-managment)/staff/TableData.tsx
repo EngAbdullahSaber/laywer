@@ -1,12 +1,6 @@
 "use client";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { data } from ".";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "@/components/common/Actions/Actions";
 import { motion } from "framer-motion";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../../tables/advanced/components/data-table";
@@ -92,11 +86,11 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    getLawyerData();
+    getStaffData();
     setOpen(false); // Close the sheet after applying filters
   };
 
-  const getLawyerData = async () => {
+  const getStaffData = async () => {
     setLoading(true);
     if (queryString.length > 0) {
       try {
@@ -106,9 +100,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+
         setLoading(false);
       }
     } else {
@@ -123,9 +115,7 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-        if (error?.status == 401) {
-          window.location.href = "/auth/login";
-        }
+
         setLoading(false);
       }
     }
@@ -141,9 +131,7 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       setLoading(false);
     }
   };
@@ -152,7 +140,7 @@ const TableData = ({ flag }: { flag: any }) => {
     if (debouncedSearch) {
       SearchData();
     } else {
-      getLawyerData();
+      getStaffData();
       fetchData();
     }
   }, [debouncedSearch, page, filters, flag]);
@@ -161,8 +149,8 @@ const TableData = ({ flag }: { flag: any }) => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <DeleteButton id={row.original.id} getLawyerData={getLawyerData} />
-          <UpdateContact row={row} getLawyerData={getLawyerData} />
+          <DeleteButton id={row.original.id} getStaffData={getStaffData} />
+          <UpdateContact row={row} getStaffData={getStaffData} />
         </div>
       ),
     },
@@ -195,39 +183,6 @@ const TableData = ({ flag }: { flag: any }) => {
         );
       },
     },
-    // {
-    //   accessorKey: "Categories",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={"Categories"} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex  items-center justify-center gap-2 mx-auto">
-    //         <motion.span
-    //           initial={{ opacity: 0 }}
-    //           whileInView={{ opacity: 1 }}
-    //           transition={{ duration: 1.7 }}
-    //         >
-    //           {" "}
-    //           <Badge
-    //             className="!text-center"
-    //             color={
-    //               (row.original.Categories === "سكرتير" && "destructive") ||
-    //               (row.original.Categories === "محامى" && "info") ||
-    //               (row.original.Categories === "مساعد" && "warning") ||
-    //               "default"
-    //             }
-    //           >
-    //             {row.original.Categories}
-    //           </Badge>
-    //         </motion.span>{" "}
-    //       </div>
-    //     );
-    //   },
-    //   filterFn: (row, id, value) => {
-    //     return value.includes(row.getValue(id));
-    //   },
-    // },
 
     {
       accessorKey: "Email",

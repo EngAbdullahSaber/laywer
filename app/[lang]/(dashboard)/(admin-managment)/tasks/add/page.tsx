@@ -3,7 +3,6 @@ import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getLawyerPanigation } from "@/services/lawyer/lawyer";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import Flatpickr from "react-flatpickr";
@@ -22,6 +21,7 @@ import { CreateTasks } from "@/services/tasks/tasks";
 import { getCasesPanigation } from "@/services/cases/cases";
 import { Auth } from "@/components/auth/Auth";
 import { getStaffPanigation } from "@/services/staff/staff";
+
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
   { id: "mid", value: "mid", label: "متوسطة الاهمية" },
@@ -34,7 +34,7 @@ interface LawyerData {
   detailsEn: string;
   detailsAr: string;
   lawyer_id: string;
-  importance_level: string;
+  importance_level: any;
   law_suit_id: string;
 }
 interface ErrorResponse {
@@ -45,6 +45,7 @@ interface ErrorResponse {
 const page = () => {
   const { t } = useTranslate();
   const { lang } = useParams();
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LawyerData>({
     titleEn: "",
     titleAr: "",
@@ -57,7 +58,7 @@ const page = () => {
   const [dates, setDates] = useState({
     due_date: "",
   });
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       importance_level: value?.id,
@@ -74,9 +75,6 @@ const page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       return [];
     }
@@ -87,9 +85,6 @@ const page = () => {
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
 
       return [];
     }
@@ -115,6 +110,8 @@ const page = () => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const data = {
       title: { en: lawyerData.titleEn, ar: lawyerData.titleAr },
       details: { en: lawyerData.detailsEn, ar: lawyerData.detailsAr },
@@ -140,6 +137,8 @@ const page = () => {
         setDates({
           due_date: "",
         });
+        setIsloading(true);
+
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
@@ -363,9 +362,10 @@ const page = () => {
               </Button>
               <Button
                 type="submit"
+                disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Create Task")}
+                {!loading ? t("Loading") : t("Create Task")}
               </Button>
             </motion.div>
           </form>{" "}

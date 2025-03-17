@@ -61,7 +61,7 @@ const Page = () => {
     category_id: "",
   });
   const [images, setImages] = useState<{
-    files: string[]; // Array of file IDs instead of a single file ID
+    files: any; // Array of file IDs instead of a single file ID
   }>({
     files: [],
   });
@@ -76,7 +76,6 @@ const Page = () => {
   const [category, setCategory] = useState<any[]>([]);
   const [caseNumbers, setCaseNumbers] = useState<any[]>([]); // Store the final case numbers structure
   const [loading1, setLoading1] = useState(true);
-
   const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
   const [dates, setDates] = useState({
     receive_date: "",
@@ -100,9 +99,7 @@ const Page = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       setLoading(false);
     }
   };
@@ -224,7 +221,7 @@ const Page = () => {
     // Update the state with the new array
     setNumbers(updatedNumbers);
   };
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
@@ -270,18 +267,18 @@ const Page = () => {
         setOppositeParties(lawyer.defendants);
         setCaseNumbers(lawyer.case_numbers);
         const caseNumbers = lawyer.case_numbers.map(
-          (item) => item.case_number_id
+          (item: any) => item.case_number_id
         );
         setNumbers(caseNumbers);
         const secondLetters = lawyer.case_numbers.map(
-          (item) => item.second_letter
+          (item: any) => item.second_letter
         );
         setSelectedValue1(secondLetters);
         const firstLetters = lawyer.case_numbers.map(
-          (item) => item.first_letter
+          (item: any) => item.first_letter
         );
         setSelectedValue(firstLetters);
-        const years = lawyer.case_numbers.map((item) => item.case_year);
+        const years = lawyer.case_numbers.map((item: any) => item.case_year);
         setCaseYears(years);
 
         setImages({
@@ -320,6 +317,8 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading1(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -327,7 +326,7 @@ const Page = () => {
       formData.append(key, value);
     });
 
-    images.files.forEach((fileId, index) => {
+    images.files.forEach((fileId: any, index: any) => {
       formData.append(`files[${index}]`, fileId.image_id);
     });
     oppositeParties.forEach((fileId, index) => {
@@ -360,6 +359,7 @@ const Page = () => {
       const res = await UpdateCases(formData, caseId, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
+        setLoading1(true);
 
         reToast.success(res.message); // Display success message
       } else {

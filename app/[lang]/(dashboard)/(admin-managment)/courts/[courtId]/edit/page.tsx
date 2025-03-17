@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { toast as reToast } from "react-hot-toast";
 import { useTranslate } from "@/config/useTranslation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,6 +46,7 @@ const Page = () => {
   const [category, setCategory] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
   const [flag, setFlag] = useState(false);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [regions, setRegions] = useState<any[]>([]);
   const [courtData, setCourtData] = useState<CourtData>({
@@ -67,9 +67,7 @@ const Page = () => {
       return citiesData?.body?.data || [];
     } catch (error) {
       reToast.error("Failed to fetch cities");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
+
       return [];
     }
   };
@@ -105,6 +103,7 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
 
     const formData = new FormData();
     Object.entries(courtData).forEach(([key, value]) => {
@@ -125,6 +124,7 @@ const Page = () => {
           city_id: "",
         });
         reToast.success(res.message);
+        setIsloading(true);
       } else {
         reToast.error(t("Failed to create Court"));
       }
@@ -154,7 +154,7 @@ const Page = () => {
     label: item.name,
   }));
 
-  const getLawyerData = async () => {
+  const getCourtData = async () => {
     try {
       const res = await getSpecifiedCourts(lang, courtId);
       if (res?.body) {
@@ -183,14 +183,11 @@ const Page = () => {
       setRegions(regionsData?.body || []);
     } catch (error) {
       reToast.error("Failed to fetch categories or regions");
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
     }
   };
 
   useEffect(() => {
-    getLawyerData();
+    getCourtData();
     fetchData();
   }, [flag]);
 
@@ -379,9 +376,10 @@ const Page = () => {
               <Button
                 type="button"
                 onClick={handleSubmit}
+                disabled={!loading}
                 className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {t("Update Court")}
+                {!loading ? t("Loading") : t("Update Court")}
               </Button>
             </motion.div>
           </div>

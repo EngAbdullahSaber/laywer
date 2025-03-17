@@ -40,40 +40,9 @@ interface ViewUserData {
 }
 
 const ViewMore: React.FC<ViewUserData> = ({ row }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const { lang } = useParams();
 
-  // const renderImagesData = () => {
-  //   const profile = row?.original;
-
-  //   return (
-  //     <>
-  //       <motion.h3
-  //         className="font-semibold text-lg"
-  //         initial={{ opacity: 0 }}
-  //         animate={{ opacity: 1 }}
-  //         transition={{ duration: 0.5 }}
-  //       >
-  //         {t("Client Files")}
-  //       </motion.h3>
-  //       <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-  //         <motion.li
-  //           initial={{ opacity: 0 }}
-  //           animate={{ opacity: 1 }}
-  //           transition={{ delay: 0.3, duration: 0.5 }}
-  //           className="flex flex-row gap-6 items-center"
-  //         >
-  //           <span className="text-sm text-default-900 font-medium w-[52%]">
-  //             {t("Client Files")}:
-  //           </span>
-  //           <span className="text-default-500 font-semibold w-[40%]">
-  //             {profile?.client_files}
-  //           </span>
-  //         </motion.li>
-  //       </ul>
-  //     </>
-  //   );
-  // };
   const renderLawyerCasesData = () => {
     const lawyerData = row?.original?.client_files;
     console.log(typeof lawyerData);
@@ -143,7 +112,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("Phone")} value={clientData?.phone || "-"} />
           <DetailItem
             label={t("Status")}
-            value={clientData?.status == "active" ? "Yes" : "No" || "-"}
+            value={clientData?.status == "active" ? "Yes" : "No" }
           />
           <DetailItem label={t("Address")} value={clientData?.address || "-"} />
           <DetailItem

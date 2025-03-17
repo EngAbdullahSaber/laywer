@@ -6,7 +6,6 @@ import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
 import TableData from "./TableData";
-import CreateCase from "./CreateCase";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -23,27 +22,20 @@ import {
 import { useParams } from "next/navigation";
 import { getFile } from "@/services/cases/cases";
 const page = () => {
-  const { t, error } = useTranslate();
+  const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
 
   const getExcelFileData = async () => {
-    setLoading(true);
     try {
       const res = await getFile(lang);
 
       setData(res?.body?.file || []);
       window.open(res?.body?.file, "_blank");
       console.log(res?.body?.file);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-      if (error?.status == 401) {
-        window.location.href = "/auth/login";
-      }
-      setLoading(false);
     }
   };
 
@@ -95,7 +87,7 @@ const page = () => {
           <CardTitle> {t("Case List Details")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <TableData flag={flag} />
+          <TableData />
         </CardContent>
       </Card>
     </div>

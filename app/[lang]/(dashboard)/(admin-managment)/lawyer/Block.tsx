@@ -1,14 +1,11 @@
 "use client";
 import React, { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useTranslate } from "@/config/useTranslation";
@@ -24,6 +21,7 @@ import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { blockLawyer } from "@/services/lawyer/lawyer";
 import { toast as reToast } from "react-hot-toast";
+
 interface BlockUser {
   id: string;
   status: any;
@@ -34,7 +32,7 @@ interface ErrorResponse {
 }
 
 const Block: React.FC<BlockUser> = ({ id, getLawyerData, status }) => {
-  const { t, loading, error } = useTranslate();
+  const { t } = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const { lang } = useParams();
 

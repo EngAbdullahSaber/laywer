@@ -54,7 +54,9 @@ const Add = ({ id }: { id: any }) => {
   });
 
   // Handle title input change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setLawyerData({ ...lawyerData, [name]: value });

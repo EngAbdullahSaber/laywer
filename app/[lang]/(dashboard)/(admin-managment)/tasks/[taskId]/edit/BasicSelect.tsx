@@ -10,7 +10,7 @@ const styles = {
 interface BasicSelectProps {
   menu: any[]; // Array of options passed to the select
   setSelectedValue: (selectedOption: any) => void; // Function to update selected options
-  selectedValue: MultiValue<any>; // Array of selected options
+  selectedValue: any; // Array of selected options
 }
 const BasicSelect: React.FC<BasicSelectProps> = ({
   menu,

@@ -12,11 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -31,23 +28,19 @@ interface LaywerData {
   name: string;
   email: string;
   phone: string;
-  password: string;
+  passowrd: string;
   role_id: string;
 }
 const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
-  const category: { value: string; label: string }[] = [
-    { value: "مسئول", label: "مسئول" },
-    { value: "محامى", label: "محامى" },
-    { value: "عميل", label: "عميل" },
-  ];
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
   const [roles, setRoles] = useState([]);
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
-    password: "",
+    passowrd: "",
     email: "",
     role_id: "",
   });
@@ -59,7 +52,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
       [name]: value,
     }));
   };
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       role_id: value?.id,
@@ -80,6 +73,8 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   }));
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsloading(false);
+
     const formData = new FormData();
 
     // Append form data
@@ -95,12 +90,13 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
           name: "",
           email: "",
           phone: "",
-          password: "",
+          passowrd: "",
           role_id: "",
         });
 
         reToast.success(res.message); // Display success message
         setFlag(!flag);
+        setIsloading(true);
 
         setOpen(false); // Close the modal after success
       } else {
@@ -253,9 +249,10 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                 </DialogClose>
                 <Button
                   type="submit"
+                  disabled={!loading}
                   className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
                 >
-                  {t("Create Staff")}{" "}
+                  {!loading ? t("Loading") : t("Create Staff")}{" "}
                 </Button>
               </motion.div>
             </div>
