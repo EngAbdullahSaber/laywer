@@ -96,6 +96,7 @@ const page = () => {
         setLoading(true);
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
+        setLoading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -103,6 +104,7 @@ const page = () => {
       let errorMessage = "Something went wrong."; // Default fallback message
 
       reToast.error(errorMessage); // Display the error message in the toast
+      setLoading(true);
     }
   };
 
@@ -170,6 +172,7 @@ const page = () => {
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setLoading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -203,6 +206,7 @@ const page = () => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setLoading(true);
     }
   };
 
@@ -215,9 +219,7 @@ const page = () => {
     try {
       const countriesData = await getCategory("lawyer", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchData();
@@ -458,7 +460,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

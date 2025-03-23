@@ -23,6 +23,7 @@ const page = () => {
   const { t } = useTranslate();
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const getExcelFileData = async () => {
     try {
@@ -70,11 +71,15 @@ const page = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Link href={"lawyer/add"}>
-            <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-              {t("Create Lawyer")}
-            </Button>
-          </Link>{" "}
+          {permission
+            .find((item: any) => item.id === 20)
+            .permissions.some((item: any) => item.id === 22) && (
+            <Link href={"lawyer/add"}>
+              <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+                {t("Create Lawyer")}
+              </Button>
+            </Link>
+          )}
         </motion.div>
       </div>
 
@@ -90,7 +95,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

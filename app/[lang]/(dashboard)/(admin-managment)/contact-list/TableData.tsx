@@ -34,6 +34,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
   const searchPalsceholder = "Searchs";
   const [open, setOpen] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const { lang } = useParams();
   const [category, setCategory] = useState<any[]>([]);
@@ -62,9 +63,7 @@ const TableData = ({ flag }: { flag: any }) => {
     try {
       const countriesData = await getCategory("contact_list", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const filtersConfig = [
     {
@@ -147,12 +146,19 @@ const TableData = ({ flag }: { flag: any }) => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <UpdateContact row={row} getContactListData={getContactListData} />
-
-          <DeleteButton
-            id={row.original.id}
-            getContactListData={getContactListData}
-          />
+          {permission
+            .find((item: any) => item.id === 45)
+            .permissions.some((item: any) => item.id === 48) && (
+            <UpdateContact row={row} getContactListData={getContactListData} />
+          )}{" "}
+          {permission
+            .find((item: any) => item.id === 45)
+            .permissions.some((item: any) => item.id === 49) && (
+            <DeleteButton
+              id={row.original.id}
+              getContactListData={getContactListData}
+            />
+          )}
         </div>
       ),
     },

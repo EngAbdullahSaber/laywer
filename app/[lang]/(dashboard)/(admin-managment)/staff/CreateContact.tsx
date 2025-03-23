@@ -28,7 +28,7 @@ interface LaywerData {
   name: string;
   email: string;
   phone: string;
-  passowrd: string;
+  password: string;
   role_id: string;
 }
 const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
@@ -40,7 +40,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
-    passowrd: "",
+    password: "",
     email: "",
     role_id: "",
   });
@@ -62,9 +62,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
     try {
       const countriesData = await getRoles(lang);
       setRoles(countriesData?.body?.roles_and_permissions || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const transformedRoles = roles?.map((item: any) => ({
     id: item.id,
@@ -90,7 +88,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
           name: "",
           email: "",
           phone: "",
-          passowrd: "",
+          password: "",
           role_id: "",
         });
 
@@ -101,9 +99,11 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create services")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
+      setIsloading(true);
 
       // Construct the dynamic key based on field names and the current language
       const fields = ["name", "email", "phone", "password", "role_id"];
@@ -122,6 +122,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
   const handleOpen = () => {
@@ -187,10 +188,11 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                 >
                   <Label htmlFor="Password">{t("Password")}</Label>
                   <Input
-                    type="Password"
+                    id="Password"
+                    type="text"
                     placeholder={t("Enter passowrd")}
                     name="password"
-                    value={lawyerData.passowrd}
+                    value={lawyerData.password}
                     onChange={handleInputChange}
                   />
                 </motion.div>

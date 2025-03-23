@@ -29,7 +29,6 @@ import { getCategory } from "@/services/category/category";
 import { toast as reToast } from "react-hot-toast";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
 
-
 interface Task {
   id: string;
   name?: string;
@@ -51,6 +50,7 @@ const TableData = () => {
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -76,9 +76,7 @@ const TableData = () => {
     try {
       const countriesData = await getCategory("lawyer", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const filtersConfig = [
     {
@@ -112,7 +110,7 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-       
+
         setLoading(false);
       }
     } else {
@@ -127,7 +125,6 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-      
 
         setLoading(false);
       }
@@ -144,7 +141,6 @@ const TableData = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-   
 
       setLoading(false);
     }
@@ -165,32 +161,44 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <Block
-            id={row.original.id}
-            status={row.original.status}
-            getLawyerData={getLawyerData}
-          />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className=" h-7 w-7"
-                  color="secondary"
-                >
-                  {" "}
-                  <Link href={`lawyer/${row.original.id}/edit`}>
-                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                  </Link>{" "}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p> {t("Update Laywer")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Delete id={row.original.id} getLawyerData={getLawyerData} />
+          {permission
+            .find((item: any) => item.id === 20)
+            .permissions.some((item: any) => item.id === 26) && (
+            <Block
+              id={row.original.id}
+              status={row.original.status}
+              getLawyerData={getLawyerData}
+            />
+          )}
+          {permission
+            .find((item: any) => item.id === 20)
+            .permissions.some((item: any) => item.id === 23) && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    {" "}
+                    <Link href={`lawyer/${row.original.id}/edit`}>
+                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                    </Link>{" "}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p> {t("Update Laywer")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {permission
+            .find((item: any) => item.id === 20)
+            .permissions.some((item: any) => item.id === 24) && (
+            <Delete id={row.original.id} getLawyerData={getLawyerData} />
+          )}
         </div>
       ),
     },

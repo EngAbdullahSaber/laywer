@@ -1,7 +1,7 @@
 // Action to store user data
 export function changeUserData(data) {
   return {
-    type: "SET_USER",
+    type: "SET_USER_DATA",
     payload: data,
   };
 }

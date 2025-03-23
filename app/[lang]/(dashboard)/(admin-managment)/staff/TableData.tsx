@@ -38,6 +38,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -63,9 +64,7 @@ const TableData = ({ flag }: { flag: any }) => {
     try {
       const countriesData = await getCategory("crew", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const filtersConfig = [
     {
@@ -149,8 +148,16 @@ const TableData = ({ flag }: { flag: any }) => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <DeleteButton id={row.original.id} getStaffData={getStaffData} />
-          <UpdateContact row={row} getStaffData={getStaffData} />
+          {permission
+            .find((item: any) => item.id === 51)
+            .permissions.some((item: any) => item.id === 55) && (
+            <DeleteButton id={row.original.id} getStaffData={getStaffData} />
+          )}
+          {permission
+            .find((item: any) => item.id === 51)
+            .permissions.some((item: any) => item.id === 54) && (
+            <UpdateContact row={row} getStaffData={getStaffData} />
+          )}
         </div>
       ),
     },

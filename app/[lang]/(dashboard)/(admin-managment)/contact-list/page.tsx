@@ -25,6 +25,7 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const getExcelFileData = async () => {
     try {
@@ -71,7 +72,11 @@ const page = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <CreateContact setFlag={setFlag} flag={flag} />
+          {permission
+            .find((item: any) => item.id === 45)
+            .permissions.some((item: any) => item.id === 47) && (
+            <CreateContact setFlag={setFlag} flag={flag} />
+          )}
         </motion.div>
       </div>
 
@@ -87,7 +92,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

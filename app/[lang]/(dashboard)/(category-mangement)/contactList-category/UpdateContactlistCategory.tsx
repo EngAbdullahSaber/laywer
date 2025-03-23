@@ -122,6 +122,7 @@ const UpdateContactlistCategory: React.FC<UpdateContactlistCategoryProps> = ({
         getCategoryData(); // Reload the category data
       } else {
         reToast.error(t("Failed to update Contact List Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -132,6 +133,7 @@ const UpdateContactlistCategory: React.FC<UpdateContactlistCategoryProps> = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 

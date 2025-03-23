@@ -116,6 +116,7 @@ const CreateCaseCategory = ({
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Case Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -126,6 +127,7 @@ const CreateCaseCategory = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
   const handleOpen = () => {

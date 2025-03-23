@@ -127,6 +127,7 @@ const UpdateStaffCategory: React.FC<UpdateStaffCategoryProps> = ({
         getCategoryData(); // Reload the category data
       } else {
         reToast.error(t("Failed to update Staff Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -137,6 +138,7 @@ const UpdateStaffCategory: React.FC<UpdateStaffCategoryProps> = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 

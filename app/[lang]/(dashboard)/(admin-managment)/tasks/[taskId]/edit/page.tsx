@@ -160,6 +160,7 @@ const page = () => {
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -189,6 +190,7 @@ const page = () => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
   return (
@@ -394,7 +396,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

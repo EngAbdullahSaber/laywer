@@ -124,6 +124,7 @@ const UpdateCaseCategory: React.FC<UpdateCaseCategoryProps> = ({
         setIsloading(true);
       } else {
         reToast.error(t("Failed to update Case Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -134,6 +135,7 @@ const UpdateCaseCategory: React.FC<UpdateCaseCategoryProps> = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 

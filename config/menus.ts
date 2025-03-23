@@ -38,6 +38,11 @@ const adminMenu = [
     href: "/dashboard",
   },
   {
+    title: "Roles and Permission",
+    icon: Dashboard,
+    href: "/roles",
+  },
+  {
     title: "New Orders",
     icon: ContactList,
     href: "/neworder",
@@ -173,17 +178,9 @@ export const getMenusConfig = (role) => ({
   mainNav: [],
   sidebarNav: {
     modern:
-      role == "super_admin"
-        ? adminMenu
-        : role == "lawyer"
-        ? lawyerMenu
-        : clientMenu,
+      role == "client" ? clientMenu : role == "lawyer" ? lawyerMenu : adminMenu,
     classic:
-      role == "super_admin"
-        ? adminMenu
-        : role == "lawyer"
-        ? lawyerMenu
-        : clientMenu,
+      role == "client" ? clientMenu : role == "lawyer" ? lawyerMenu : adminMenu,
   },
 });
 

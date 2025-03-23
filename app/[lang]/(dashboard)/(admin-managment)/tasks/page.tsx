@@ -12,6 +12,7 @@ import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
   const { t } = useTranslate();
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   return (
     <div className="space-y-5">
@@ -32,11 +33,15 @@ const page = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          <Link href={"tasks/add"}>
-            <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-              {t("Create Task")}
-            </Button>
-          </Link>{" "}
+          {permission
+            .find((item: any) => item.id === 27)
+            .permissions.some((item: any) => item.id === 29) && (
+            <Link href={"tasks/add"}>
+              <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+                {t("Create Task")}
+              </Button>
+            </Link>
+          )}
         </motion.div>
       </div>
 
@@ -52,7 +57,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

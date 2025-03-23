@@ -71,6 +71,7 @@ const CreateDate = ({
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -92,6 +93,7 @@ const CreateDate = ({
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
   // Handle Flatpickr change event and set value in react-hook-form

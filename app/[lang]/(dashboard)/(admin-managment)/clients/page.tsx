@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ const page = () => {
   const [flag, setFlag] = useState(false);
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
-
+  const permission = JSON.parse(localStorage.getItem("permissions"));
   const getExcelFileData = async () => {
     try {
       const res = await getClientFile(lang);
@@ -35,9 +35,9 @@ const page = () => {
       console.log(res?.body?.file);
     } catch (error) {
       console.error("Error fetching data", error);
-     
     }
   };
+
   return (
     <div className="space-y-5">
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
@@ -73,11 +73,15 @@ const page = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Link href={"clients/add"}>
-            <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-              {t("Create Client")}
-            </Button>
-          </Link>{" "}
+          {permission
+            .find((item: any) => item.id === 6)
+            .permissions.some((item: any) => item.id === 8) && (
+            <Link href={"clients/add"}>
+              <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+                {t("Create Client")}
+              </Button>
+            </Link>
+          )}
         </motion.div>
       </div>
 
@@ -93,7 +97,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

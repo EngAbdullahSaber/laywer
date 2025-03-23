@@ -10,9 +10,15 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import VerfiyForm from "@/components/auth/verify-form";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import { motion } from "framer-motion";
+import LayoutLoader from "@/components/layout-loader";
 
 const VerifyPage = () => {
   const [openVideo, setOpenVideo] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>();
+
+  if (loading) {
+    return <LayoutLoader />;
+  }
   return (
     <Fragment>
       <div className="min-h-screen bg-card  flex items-center  overflow-hidden w-full">
@@ -60,7 +66,7 @@ const VerifyPage = () => {
 
           <div className="min-h-screen basis-full md:basis-1/2 w-full px-4 flex justify-center items-center">
             <div className="lg:w-[480px]">
-              <VerfiyForm />
+              <VerfiyForm loading={loading} setLoading={setLoading} />
             </div>
           </div>
         </div>

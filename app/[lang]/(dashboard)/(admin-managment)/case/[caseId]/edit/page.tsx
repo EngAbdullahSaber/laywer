@@ -138,11 +138,13 @@ const Page = () => {
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
+        setLoading1(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
       let errorMessage = "Something went wrong."; // Default fallback message
       reToast.error(errorMessage); // Show error toast
+      setLoading1(true);
     }
   };
   // Handle date changes
@@ -232,9 +234,7 @@ const Page = () => {
     try {
       const countriesData = await getCategory("cases", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const transformedCategories = category.map((item) => ({
     id: item.id,
@@ -902,7 +902,7 @@ const Page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(Page);
 

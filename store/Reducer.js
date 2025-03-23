@@ -10,8 +10,9 @@ const initialState = {
 
 export default function dataReducer(state = initialState, action) {
   switch (action.type) {
-    case "SET_USER":
-      Cookies.set("user", JSON.stringify(action.payload)); // Ensure cookie name is "user"
+    case "SET_USER_DATA":
+      // Set the cookie with the user data
+      Cookies.set("user", JSON.stringify(action.payload), { path: "/" });
 
       return {
         ...state,

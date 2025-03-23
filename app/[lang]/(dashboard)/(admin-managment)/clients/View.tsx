@@ -45,7 +45,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
   const renderLawyerCasesData = () => {
     const lawyerData = row?.original?.client_files;
-    console.log(typeof lawyerData);
     // If lawyerData is not an array or is empty, return a fallback message
     if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
       return (
@@ -112,7 +111,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("Phone")} value={clientData?.phone || "-"} />
           <DetailItem
             label={t("Status")}
-            value={clientData?.status == "active" ? "Yes" : "No" }
+            value={clientData?.status == "active" ? "Yes" : "No"}
           />
           <DetailItem label={t("Address")} value={clientData?.address || "-"} />
           <DetailItem
@@ -166,6 +165,21 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         <ScrollArea className="h-[100%]">
           <div className="py-6">
             {renderClientData()}
+            <div className="space-y-4 mt-5">
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="flex flex-row gap-6 items-center"
+              >
+                <span className="text-sm text-default-900 font-medium w-[25%]">
+                  {t("details")}:
+                </span>
+                <p className="text-default-500 font-semibold w-[70%]">
+                  {row.original.details}
+                </p>
+              </motion.p>
+            </div>
             <hr className="my-8" />
             {renderLawyerCasesData()}
           </div>

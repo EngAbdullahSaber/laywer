@@ -32,6 +32,7 @@ interface LaywerData {
   category_id: string;
   national_id_number: string;
   address: string;
+  details: string;
 }
 // Zod validation schema
 
@@ -47,6 +48,7 @@ const page = () => {
     phone: "",
     password: "",
     address: "",
+    details: "",
     email: "",
     national_id_number: "",
     category_id: "",
@@ -138,12 +140,14 @@ const page = () => {
           email: "",
           national_id_number: "",
           category_id: "",
+          details: "",
         });
         setLoading(true);
 
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setLoading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -175,6 +179,7 @@ const page = () => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setLoading(true);
     }
   };
 
@@ -187,9 +192,7 @@ const page = () => {
     try {
       const countriesData = await getCategory("client", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchData();
@@ -223,6 +226,7 @@ const page = () => {
                 <Input
                   type="text"
                   name="name"
+                  value={lawyerData.name}
                   onChange={handleInputChange}
                   placeholder={t("Enter Client Name")}
                 />
@@ -245,6 +249,7 @@ const page = () => {
                     uppercase: true,
                   }}
                   type="tel"
+                  value={lawyerData.phone}
                   name="phone"
                   onChange={handleInputChange}
                   placeholder={t("Enter Client Mobile Number")}
@@ -282,6 +287,7 @@ const page = () => {
                 <Label htmlFor="Address">{t("Client Address")}</Label>
                 <Input
                   type="text"
+                  value={lawyerData.address}
                   name="address"
                   onChange={handleInputChange}
                   placeholder={t("Enter Client Address")}
@@ -297,6 +303,7 @@ const page = () => {
                 <Label htmlFor="Email">{t("Email Address")}</Label>
                 <Input
                   type="text"
+                  value={lawyerData.email}
                   name="email"
                   onChange={handleInputChange}
                   placeholder={t("Enter Email Address")}
@@ -311,6 +318,7 @@ const page = () => {
                 <Label htmlFor="password">{t("Password")}</Label>
                 <Input
                   type="password"
+                  value={lawyerData.password}
                   name="password"
                   onChange={handleInputChange}
                   placeholder={t("Enter Password")}
@@ -326,6 +334,7 @@ const page = () => {
                   {t("Identity Number *")}
                 </Label>
                 <Input
+                  value={lawyerData.national_id_number}
                   type="text"
                   name="national_id_number"
                   onChange={handleInputChange}
@@ -381,6 +390,7 @@ const page = () => {
                 <Label htmlFor="Details">{t("Details *")}</Label>
                 <Textarea
                   placeholder={t("Enter Details")}
+                  value={lawyerData.details}
                   name="details"
                   onChange={handleInputChange}
                 />
@@ -415,7 +425,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

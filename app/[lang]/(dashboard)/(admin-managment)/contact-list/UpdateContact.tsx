@@ -112,6 +112,7 @@ const UpdateContact = ({
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -133,6 +134,7 @@ const UpdateContact = ({
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
 
@@ -145,9 +147,7 @@ const UpdateContact = ({
     try {
       const countriesData = await getCategory("contact_list", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     setContactList({

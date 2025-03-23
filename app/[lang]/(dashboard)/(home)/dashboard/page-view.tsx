@@ -56,16 +56,18 @@ const DashboardPageView = () => {
     const now = new Date(); // Get the current date
     const year = now.getFullYear(); // Get the full year (e.g., 2025)
     const month = String(now.getMonth() + 1).padStart(2, "0"); // Get the month (0-11, so add 1) and pad with leading zero if necessary
+    const day = String(now.getDate()).padStart(2, "0"); // Get the day of the month and pad with leading zero if necessary
 
     const currentDate = `${year}-${month}`; // Format as "YYYY-MM"
+    const currentDate1 = `${year}-${month}-${day}`; // Format as "YYYY-MM-DD"
     formData.append("suit_month", currentDate);
-    formData.append("next_appointments_date", "2025-03-21");
+    formData.append("next_appointments_date", currentDate1);
 
     try {
       const res = await getDashBoardInfo(lang, formData);
       setData(res?.body || []);
       setCalenderDate(
-        res?.body?.suits_this_month?.map((item) => ({
+        res?.body?.next_appointments_date?.map((item) => ({
           title: item.title,
           date: new Date(item.created_at).toISOString().split("T")[0], // Convert string to Date and format
         }))
@@ -215,7 +217,7 @@ const DashboardPageView = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(DashboardPageView);
 

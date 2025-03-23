@@ -90,6 +90,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -111,6 +112,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
 
@@ -123,9 +125,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
     try {
       const countriesData = await getCategory("contact_list", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const handleOpen = () => {
     setOpen(!open);

@@ -122,6 +122,7 @@ const UpdateClientCategory: React.FC<UpdateClientCategoryProps> = ({
         getCategoryData(); // Reload the category data
       } else {
         reToast.error(t("Failed to update Client Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -132,6 +133,7 @@ const UpdateClientCategory: React.FC<UpdateClientCategoryProps> = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 

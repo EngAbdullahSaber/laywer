@@ -30,6 +30,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -132,12 +133,19 @@ const TableData = ({ flag }: { flag: any }) => {
         <div className="flex flex-row gap-2 items-center justify-center">
           {/* <Actions viewBtn={false} title={"Users Details"} row={row} /> */}
 
-          <UpdateClientCategory row={row} getCategoryData={getCategoryData} />
-
-          <DeleteButton
-            id={row.original.id}
-            getCategoryData={getCategoryData}
-          />
+          {permission
+            .find((item: any) => item.id === 81)
+            .permissions.some((item: any) => item.id === 84) && (
+            <UpdateClientCategory row={row} getCategoryData={getCategoryData} />
+          )}
+          {permission
+            .find((item: any) => item.id === 81)
+            .permissions.some((item: any) => item.id === 85) && (
+            <DeleteButton
+              id={row.original.id}
+              getCategoryData={getCategoryData}
+            />
+          )}
         </div>
       ),
     },

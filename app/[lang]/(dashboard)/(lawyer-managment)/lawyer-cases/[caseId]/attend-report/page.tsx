@@ -372,9 +372,11 @@ const CaseFollowReport = () => {
           setIsloading(true);
         } else {
           reToast.error(t("Failed to update case")); // Show failure toast
+          setIsloading(true);
         }
       } else {
         reToast.error(t("Failed to upload file")); // Show failure toast
+        setIsloading(true);
       }
     } catch (error) {
       // Handle errors that occur during the API call
@@ -387,6 +389,7 @@ const CaseFollowReport = () => {
       }
 
       reToast.error(errorMessage); // Show error toast
+      setIsloading(true);
     }
 
     // Download the HTML file

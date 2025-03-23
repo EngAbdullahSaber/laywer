@@ -82,11 +82,13 @@ const CreateLawyerCategory = ({
         setIsloading(true);
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
       let errorMessage = "Something went wrong."; // Default fallback message
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
 

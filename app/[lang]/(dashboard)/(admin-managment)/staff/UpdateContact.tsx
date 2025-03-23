@@ -64,9 +64,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
     try {
       const countriesData = await getRoles(lang);
       setRoles(countriesData?.body?.roles_and_permissions || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const transformedRoles = roles?.map((item: any) => ({
     id: item.id,
@@ -100,6 +98,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to update employee")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -121,6 +120,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
   console.log(row.original?.role_with_permission?.id);

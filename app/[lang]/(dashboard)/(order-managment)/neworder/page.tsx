@@ -21,6 +21,7 @@ const page = () => {
   const [replyedMessages, setReplyedMessages] = useState<any>([]);
   const [flag, setFlag] = useState<any>([]);
   const [notReplyedMessages, setNotReplyedMessages] = useState<any>([]);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const getMessagesData = async () => {
     setLoading(true);
@@ -38,7 +39,6 @@ const page = () => {
       setLoading(false);
     }
   };
-  console.log(replyedMessages);
 
   useEffect(() => {
     getMessagesData();
@@ -133,27 +133,10 @@ const page = () => {
                       transition={{ duration: 1.2 }}
                       className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
                     >
-                      تاريخ الرد:{" "}
-                      <span className="font-bold">
-                        {new Date(item?.created_at).toLocaleDateString("en-GB")}{" "}
-                      </span>{" "}
+                      وقت المقابلة:{" "}
+                      <span className="font-bold">{item?.meeting_time} </span>{" "}
                     </motion.p>
-                    <motion.p
-                      initial={{ x: 15, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 1.2 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
-                    >
-                      وقت الرد:{" "}
-                      <span className="font-bold">
-                        {new Date(item?.created_at)
-                          .toISOString()
-                          .split("T")[1]
-                          .split(":")
-                          .slice(0, 2)
-                          .join(":")}
-                      </span>{" "}
-                    </motion.p>
+
                     <motion.p
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
@@ -288,11 +271,11 @@ const page = () => {
                   </div>
                   <div className="flex flex-col justify-center items-center gap-6">
                     {/* Pass correct props for CreateDate */}
-                    <CreateDate
-                      flag={flag}
-                      setFlag={setFlag}
-                      id={item.id}
-                    />{" "}
+                    {permission
+                      .find((item: any) => item.id === 3)
+                      .permissions.some((item: any) => item.id === 5) && (
+                      <CreateDate flag={flag} setFlag={setFlag} id={item.id} />
+                    )}
                     {/* Assuming `flag` and `setFlag` are part of `item` */}
                   </div>
                 </div>
@@ -305,7 +288,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

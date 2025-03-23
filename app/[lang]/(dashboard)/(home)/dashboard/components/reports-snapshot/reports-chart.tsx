@@ -94,14 +94,7 @@ const ReportsChart = ({
 
   return (
     <>
-      <div className="flex items-center gap-2 flex-wrap p-4 ">
-        <div className="flex-1">
-          <div className="text-xl font-semibold text-default-900 whitespace-nowrap">
-            {t("Number of Cases This Month")}
-          </div>
-        </div>
-        <div className="flex-none"></div>
-      </div>
+      <div className="flex items-center gap-2 flex-wrap p-4 "></div>
       <Chart
         options={options}
         series={series}

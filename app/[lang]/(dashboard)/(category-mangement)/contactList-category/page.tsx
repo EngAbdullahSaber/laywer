@@ -15,6 +15,8 @@ import { Auth } from "@/components/auth/Auth";
 const page = () => {
   const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
+
   return (
     <div className="space-y-5">
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
@@ -37,6 +39,7 @@ const page = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
+          {" "}
           <CreateContactListCategory
             buttonShape={true}
             setFlag={setFlag}
@@ -57,7 +60,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

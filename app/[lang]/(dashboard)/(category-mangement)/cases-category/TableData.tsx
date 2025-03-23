@@ -30,6 +30,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -47,7 +48,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig:any = [];
+  const filtersConfig: any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -72,7 +73,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-      
 
         setLoading(false);
       }
@@ -88,7 +88,6 @@ const TableData = ({ flag }: { flag: any }) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-       
 
         setLoading(false);
       }
@@ -105,7 +104,6 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-     
 
       setLoading(false);
     }
@@ -135,12 +133,19 @@ const TableData = ({ flag }: { flag: any }) => {
         <div className="flex flex-row gap-2 items-center justify-center">
           {/* <Actions viewBtn={false} title={"Users Details"} row={row} /> */}
 
-          <UpdateCaseCategory row={row} getCategoryData={getCategoryData} />
-
-          <DeleteButton
-            id={row.original.id}
-            getCategoryData={getCategoryData}
-          />
+          {permission
+            .find((item: any) => item.id === 75)
+            .permissions.some((item: any) => item.id === 78) && (
+            <UpdateCaseCategory row={row} getCategoryData={getCategoryData} />
+          )}
+          {permission
+            .find((item: any) => item.id === 75)
+            .permissions.some((item: any) => item.id === 79) && (
+            <DeleteButton
+              id={row.original.id}
+              getCategoryData={getCategoryData}
+            />
+          )}
         </div>
       ),
     },

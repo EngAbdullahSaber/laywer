@@ -114,6 +114,7 @@ const CreateLawyerCategory = ({
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Lawyer Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -124,6 +125,7 @@ const CreateLawyerCategory = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 

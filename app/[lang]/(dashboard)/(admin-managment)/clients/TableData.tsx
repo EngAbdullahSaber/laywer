@@ -42,7 +42,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-
+  const permission = JSON.parse(localStorage.getItem("permissions"));
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
@@ -75,9 +75,7 @@ const TableData = ({ flag }: { flag: any }) => {
     try {
       const countriesData = await getCategory("client", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const filtersConfig = [
     {
@@ -148,6 +146,7 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     }
   };
+  console.log(permission.find((item: any) => item.id === 6));
 
   useEffect(() => {
     if (debouncedSearch) {
@@ -163,27 +162,35 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className=" h-7 w-7"
-                  color="secondary"
-                >
-                  {" "}
-                  <Link href={`clients/${row.original.id}/edit`}>
-                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                  </Link>{" "}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p> {t("Edit Client")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <DeleteButton getClientData={getClientData} id={row.original.id} />{" "}
+          {permission
+            .find((item: any) => item.id === 6)
+            .permissions.some((item: any) => item.id === 9) && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    {" "}
+                    <Link href={`clients/${row.original.id}/edit`}>
+                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                    </Link>{" "}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p> {t("Edit Client")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {permission
+            .find((item: any) => item.id === 6)
+            .permissions.some((item: any) => item.id === 10) && (
+            <DeleteButton getClientData={getClientData} id={row.original.id} />
+          )}{" "}
         </div>
       ),
     },

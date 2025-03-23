@@ -116,6 +116,7 @@ const CreateCourtCategory = ({
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Court Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -126,6 +127,7 @@ const CreateCourtCategory = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
   const handleOpen = () => {

@@ -89,11 +89,13 @@ const FileRequest = ({
         reToast.success(res.message); // Show success toast
       } else {
         reToast.error(t("Failed to upload image")); // Show failure toast
+        setLoading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
       let errorMessage = "Something went wrong."; // Default fallback message
       reToast.error(errorMessage); // Show error toast
+      setLoading(true);
     }
   };
   const handleSubmit = async (e: React.FormEvent) => {

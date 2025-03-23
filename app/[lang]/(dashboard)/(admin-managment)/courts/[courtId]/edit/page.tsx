@@ -127,6 +127,7 @@ const Page = () => {
         setIsloading(true);
       } else {
         reToast.error(t("Failed to create Court"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -139,6 +140,7 @@ const Page = () => {
         }
       });
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 
@@ -389,7 +391,7 @@ const Page = () => {
   );
 };
 
-const allowedRoles = ["super_admin"];
+const allowedRoles = ["super_admin", "admin"];
 
 const ProtectedComponent = Auth({ allowedRoles })(Page);
 

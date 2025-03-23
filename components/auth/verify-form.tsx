@@ -30,11 +30,16 @@ interface RootState {
 interface RootState1 {
   accessToken: string;
 }
-const VerifyForm = () => {
+const VerifyForm = ({
+  loading,
+  setLoading,
+}: {
+  loading: any;
+  setLoading: any;
+}) => {
   const totalOtpField = 6; // Total number of OTP fields
   const otpArray: string[] = Array.from({ length: totalOtpField }, () => "");
   const [otp, setOtp] = useState<string[]>(otpArray);
-  const [loading, setLoading] = useState<boolean>();
 
   const otpFields = Array.from({ length: totalOtpField }, (_, index) => index);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -98,15 +103,29 @@ const VerifyForm = () => {
         let userRole;
         // Ensure the access_token exists before trying to store it
         if (res?.body?.access_token) {
-          storeTokenInLocalStorage(res.body.access_token);
-          dispatch({
-            type: "SET_USER",
-            payload: {
+          dispatch(
+            changeUserData({
               email: res.body.user.email,
               role_with_permission: res.body.user?.role,
               verify_access_token: res.body.user.verify_access_token,
-            },
-          });
+            })
+          );
+          localStorage.setItem(
+            "permissions",
+            JSON.stringify(res?.body?.user?.role_with_permission?.permissions)
+          );
+          if (res.body.user?.role) {
+            // Redirect based on role
+            if (res.body.user?.role == "lawyer") {
+              router.replace("/lawyer-cases");
+            } else if (res.body.user?.role == "client") {
+              router.replace("/client-cases");
+            } else {
+              router.replace("/dashboard");
+            }
+          } else {
+            toast.error("User role information is missing");
+          }
           userRole = res.body.user?.role;
         } else {
           toast.error("Access token missing");
@@ -114,21 +133,7 @@ const VerifyForm = () => {
         }
 
         // Ensure the user and role information exists before using it
-
-        if (userRole) {
-          // Redirect based on role
-          if (userRole == "super_admin") {
-            router.replace("/dashboard");
-          } else if (userRole == "lawyer") {
-            router.replace("/lawyer-cases");
-          } else if (userRole == "client") {
-            router.replace("/client-cases");
-          } else {
-            toast.error("Unknown role");
-          }
-        } else {
-          toast.error("User role information is missing");
-        }
+        console.log(res.body.user?.role);
       } else {
         toast.error("Response is invalid or missing");
       }
@@ -144,11 +149,13 @@ const VerifyForm = () => {
           if (Object.prototype.hasOwnProperty.call(errors, field)) {
             const errorMessage = errors[field][0];
             toast.error(`${field}: ${errorMessage}`); // Display the error in a toast
+            setLoading(true);
           }
         }
       } else {
         // If no field-specific errors, display a general error message
         toast.error("Something went wrong.");
+        setLoading(true);
       }
     }
   };

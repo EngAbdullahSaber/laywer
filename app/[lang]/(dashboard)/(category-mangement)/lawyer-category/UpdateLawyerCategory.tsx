@@ -122,6 +122,7 @@ const UpdateLawyerCategory: React.FC<UpdateLawyerCategoryProps> = ({
         setIsloading(true);
       } else {
         reToast.error(t("Failed to update Lawyer Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -132,6 +133,7 @@ const UpdateLawyerCategory: React.FC<UpdateLawyerCategoryProps> = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
 

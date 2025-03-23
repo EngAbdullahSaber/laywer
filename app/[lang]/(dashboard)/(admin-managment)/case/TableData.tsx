@@ -52,6 +52,7 @@ const TableData = () => {
   const { lang } = useParams();
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const [filters, setFilters] = useState<Record<string, string>>({
     status_filter: "",
@@ -106,9 +107,7 @@ const TableData = () => {
     try {
       const countriesData = await getCategory("cases", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {
-      reToast.error("Failed to fetch data");
-    }
+    } catch (error) {}
   };
   const filtersConfig = [
     {
@@ -205,29 +204,43 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <Add id={row.original.id} />{" "}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className=" h-7 w-7"
-                  color="secondary"
-                >
-                  {" "}
-                  <Link href={`case/${row.original.id}/edit`}>
-                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                  </Link>{" "}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p> {t("Edit Case")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <FileRequest id={row.original.id} />
-          <DeleteButton getCasesData={getCasesData} id={row.original.id} />{" "}
+
+          <Add id={row.original.id} />
+
+          {permission
+            .find((item: any) => item.id === 12)
+            .permissions.some((item: any) => item.id === 15) && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    {" "}
+                    <Link href={`case/${row.original.id}/edit`}>
+                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                    </Link>{" "}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p> {t("Edit Case")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {permission
+            .find((item: any) => item.id === 12)
+            .permissions.some((item: any) => item.id === 18) && (
+            <FileRequest id={row.original.id} />
+          )}
+          {permission
+            .find((item: any) => item.id === 12)
+            .permissions.some((item: any) => item.id === 16) && (
+            <DeleteButton getCasesData={getCasesData} id={row.original.id} />
+          )}
         </div>
       ),
     },

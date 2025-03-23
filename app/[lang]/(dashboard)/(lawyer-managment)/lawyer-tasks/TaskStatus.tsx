@@ -75,6 +75,7 @@ const TaskStatus = ({
         setIsloading(true);
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -96,6 +97,7 @@ const TaskStatus = ({
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
   const Task_Status: { value: string; label: string }[] = [

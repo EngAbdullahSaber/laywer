@@ -46,6 +46,7 @@ const TableData = () => {
   const { lang } = useParams();
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
+  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -137,27 +138,35 @@ const TableData = () => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className=" h-7 w-7"
-                  color="secondary"
-                >
-                  {" "}
-                  <Link href={`tasks/${row.original.id}/edit`}>
-                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                  </Link>{" "}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p> {t("Edit Task")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Delete id={row.original.id} getTasksData={getTasksData} />
+          {permission
+            .find((item: any) => item.id === 27)
+            .permissions.some((item: any) => item.id === 30) && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    {" "}
+                    <Link href={`tasks/${row.original.id}/edit`}>
+                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                    </Link>{" "}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p> {t("Edit Task")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {permission
+            .find((item: any) => item.id === 27)
+            .permissions.some((item: any) => item.id === 31) && (
+            <Delete id={row.original.id} getTasksData={getTasksData} />
+          )}
         </div>
       ),
     },

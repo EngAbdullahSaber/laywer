@@ -65,6 +65,7 @@ const CreateDate = ({ id }: { id: any }) => {
         reToast.success(res.message); // Display success message
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -72,6 +73,7 @@ const CreateDate = ({ id }: { id: any }) => {
       let errorMessage = "Something went wrong."; // Default fallback message
 
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
 
@@ -111,6 +113,7 @@ const CreateDate = ({ id }: { id: any }) => {
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -132,6 +135,7 @@ const CreateDate = ({ id }: { id: any }) => {
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(true);
     }
   };
   return (

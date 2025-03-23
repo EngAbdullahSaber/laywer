@@ -18,6 +18,10 @@ import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { ReplyOnMessages } from "@/services/messages/messages";
 import { useParams } from "next/navigation";
+import "./TimeInputStyles.css";
+import { Input } from "@/components/ui/input";
+import { format, parse } from "date-fns";
+
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -44,9 +48,22 @@ const CreateDate = ({
     reply: "",
     meeting_date: "",
   });
+  const [time, setTime] = useState("");
 
+  const handleTimeChange = (e) => {
+    setTime(e.target.value);
+    console.log("Selected Time:", e.target.value);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Format the time
+    const formattedTime = format(
+      parse(e.target.value, "HH:mm", new Date()),
+      "h:mm a"
+    );
+    console.log("Formatted Time:", formattedTime);
+  };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -68,17 +85,20 @@ const CreateDate = ({
       meeting_date: formattedDate.toString(),
     });
   };
+  console.log(loading);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
-    setIsloading(false);
+    setIsloading(true);
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });
+    formData.append("meeting_time", time);
     const data = {
       reply: lawyerData.reply,
       meeting_date: lawyerData.meeting_date,
+      meeting_time: time,
     };
     try {
       const res = await ReplyOnMessages(data, id, lang); // Call API to create the lawyer
@@ -97,6 +117,7 @@ const CreateDate = ({
         setFlag(!flag);
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        setIsloading(false);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -118,6 +139,7 @@ const CreateDate = ({
 
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
+      setIsloading(false);
     }
   };
   return (
@@ -179,6 +201,18 @@ const CreateDate = ({
                   onClick={(e) => e.preventDefault()}
                   id="default-picker"
                 />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2"
+              >
+                <Label htmlFor="Title" className="my-4">
+                  {t("meeting_time")}
+                </Label>
+
+                <Input type="time" value={time} onChange={handleTimeChange} />
               </motion.div>
             </div>
 

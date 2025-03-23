@@ -116,6 +116,7 @@ const CreateClientCategory = ({
         setOpen(false); // Close the modal after success
       } else {
         reToast.error(t("Failed to create Client Category"));
+        setIsloading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -126,6 +127,7 @@ const CreateClientCategory = ({
         ]?.[0] ||
         "Something went wrong.";
       reToast.error(errorMessage);
+      setIsloading(true);
     }
   };
   const handleOpen = () => {
