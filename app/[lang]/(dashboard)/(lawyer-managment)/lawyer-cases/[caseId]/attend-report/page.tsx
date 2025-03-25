@@ -402,7 +402,18 @@ const CaseFollowReport = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  console.log(data?.attendance_reports?.length);
+  const convertTo24Hour = (time12h) => {
+    let [hours, minutes] = time12h.split(":");
+    let ampm = time12h.slice(-2).toLowerCase();
+
+    if (ampm === "pm" && hours !== "12") {
+      hours = parseInt(hours, 10) + 12;
+    } else if (ampm === "am" && hours === "12") {
+      hours = "00";
+    }
+
+    return `${hours}:${minutes}`;
+  };
   return (
     <Card>
       <CardHeader>
@@ -530,16 +541,13 @@ const CaseFollowReport = () => {
               className="flex flex-col gap-2 w-[32%]"
             >
               <Label htmlFor="Time">{t("Time")}</Label>
-              <CleaveInput
-                id="time"
-                options={{
-                  time: true,
-                  timePattern: ["h", "m"], // Only hours and minutes
-                  timeFormat: "24", // Use 24-hour format (optional)
-                }}
+              <Input
+                type="time"
                 placeholder="HH:MM" // Updated placeholder
                 value={currentTime}
-                onChange={(e) => setCurrentTime(e.target.value)}
+                onChange={(e) =>
+                  setCurrentTime(convertTo24Hour(e.target.value))
+                }
               />
             </motion.div>
             <motion.div
@@ -605,16 +613,13 @@ const CaseFollowReport = () => {
                   className="flex flex-col gap-2 w-[32%]"
                 >
                   <Label htmlFor="Time1">{t("Time")}</Label>
-                  <CleaveInput
-                    id="time1"
-                    options={{
-                      time: true,
-                      timePattern: ["h", "m"], // Only hours and minutes
-                      timeFormat: "24", // Use 24-hour format (optional)
-                    }}
+                  <Input
+                    type="time"
                     placeholder="HH:MM" // Updated placeholder
                     value={nextTime}
-                    onChange={(e) => setNextTime(e.target.value)}
+                    onChange={(e) =>
+                      setNextTime(convertTo24Hour(e.target.value))
+                    }
                   />
                 </motion.div>
                 <motion.div

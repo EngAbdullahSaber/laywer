@@ -1,38 +1,30 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DataTable } from "../../tables/advanced/components/data-table";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+import { DataTable } from "../../tables/advanced/components/data-table";
+import View from "./View";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
-
-import {
-  getAllRoles,
-  getAllRolesPanigation,
-  getFilterAllRoles,
-  SearchAllRoles,
-} from "@/services/permissionsAndRoles/permissionsAndRoles";
-import DeleteButton from "./DeleteButton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Icon } from "@iconify/react";
+import { useParams } from "next/navigation";
 import { useTranslate } from "@/config/useTranslation";
+import {
+  getFilterLawyerAppointements,
+  getLawyerAppointements,
+  getLawyerAppointementsPanigation,
+  SearchLawyerAppointements,
+} from "@/services/lawyer-appointments/lawyer-appointments";
 
 interface Task {
   id: string;
-  role?: any;
-  price?: string;
-  description?: string;
-  title?: string;
+  appointment_date?: string;
+  requested_details?: string;
+  Time?: string;
+  Case_Name?: string;
+  client?: any;
+  appointment_time?: string;
 }
+
 const TableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -41,8 +33,8 @@ const TableData = ({ flag }: { flag: any }) => {
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
-  const [open, setOpen] = useState(false);
   const { t } = useTranslate();
+  const [open, setOpen] = useState(false);
 
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
@@ -71,17 +63,17 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    getServicesData();
+    getClientData();
     setOpen(false); // Close the sheet after applying filters
   };
 
-  const getServicesData = async () => {
+  const getClientData = async () => {
     setLoading(true);
     if (queryString.length > 0) {
       try {
-        const res = await getFilterAllRoles(queryString, lang);
+        const res = await getFilterLawyerAppointements(queryString, lang);
 
-        setData(res?.body?.roles_and_permissions || []);
+        setData(res?.body?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -92,15 +84,11 @@ const TableData = ({ flag }: { flag: any }) => {
       try {
         const res =
           page === 1
-            ? await getAllRoles(lang)
-            : await getAllRolesPanigation(page, lang);
+            ? await getLawyerAppointements(lang)
+            : await getLawyerAppointementsPanigation(page, lang);
 
-        setData(
-          res?.body?.roles_and_permissions.filter((role) =>
-            [9, 8].includes(role.id)
-          ) || []
-        );
-        console.log(res.body);
+        setData(res?.body?.data || []);
+        console.log(res.body.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -114,9 +102,9 @@ const TableData = ({ flag }: { flag: any }) => {
     setLoading(true);
 
     try {
-      const res = await SearchAllRoles(search, lang);
+      const res = await SearchLawyerAppointements(search, lang);
 
-      setData(res?.body?.roles_and_permissions || []);
+      setData(res?.body?.data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -129,7 +117,7 @@ const TableData = ({ flag }: { flag: any }) => {
     if (debouncedSearch) {
       SearchData();
     } else {
-      getServicesData();
+      getClientData();
     }
   }, [debouncedSearch, page, filters, flag]);
   const columns: ColumnDef<Task>[] = [
@@ -137,30 +125,7 @@ const TableData = ({ flag }: { flag: any }) => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className=" h-7 w-7"
-                  color="secondary"
-                >
-                  {" "}
-                  <Link href={`roles/${row.original.id}/edit`}>
-                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                  </Link>{" "}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p> {t("Edit Permissions For Roles")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          {/* <DeleteButton
-            id={row.original.id}
-            getServicesData={getServicesData}
-          /> */}
+          <View row={row} />
         </div>
       ),
     },
@@ -173,11 +138,10 @@ const TableData = ({ flag }: { flag: any }) => {
       enableSorting: false,
       enableHiding: false,
     },
-
     {
-      accessorKey: "Roles Name",
+      accessorKey: "Appointment_Title",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Roles Name"} />
+        <DataTableColumnHeader column={column} title={"Appointment_Title"} />
       ),
       cell: ({ row }) => {
         return (
@@ -188,10 +152,81 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original?.role}
+              {row.original.requested_details}
             </motion.span>
           </div>
         );
+      },
+    },
+    {
+      accessorKey: "Date",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Date"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.appointment_date}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+
+    {
+      accessorKey: "appointment_time",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"appointment_time"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.appointment_time}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+
+    {
+      accessorKey: "Client_Name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Client_Name"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.client?.name}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
       },
     },
   ];

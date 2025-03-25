@@ -6,7 +6,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { useTranslate } from "@/config/useTranslation";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
-  selected?: { title: string; date: string }[]; // Expected format: [{title, date}]
+  selected?: {
+    title: string;
+    name: string;
+    appointment_time: string;
+    date: string;
+  }[]; // Expected format: [{title, date}]
 };
 
 function Calendar({
@@ -48,12 +53,13 @@ function Calendar({
     const selectedItems = selected.filter(
       (item) => new Date(item.date).toDateString() === date.toDateString()
     );
-
+    console.log(selectedItems);
     if (selectedItems.length > 0) {
       // If there are selected items, return each title as a separate line
       return selectedItems.map((item, index) => (
         <p key={index}>
-          {t("Case Name")} : {item.title}
+          {t("Case Name")} : {item.title} / {t("Time")} :{item.appointment_time}{" "}
+          / {t("lawyer name")} : {item.name}
         </p>
       ));
     }
@@ -67,9 +73,9 @@ function Calendar({
       setShowPopup(false); // Hide pop-up after 30 seconds
       setClickedDate(null); // Clear clicked date
       setHoveredDate(null); // Clear hovered date
-    }, 30000); // 30 seconds
+    }, 5000); // 30 seconds
   };
-
+  console.log(showPopup);
   // Convert selected dates (from props.selected) into Date objects
   const selectedDates = selected.map((item) => new Date(item.date));
 

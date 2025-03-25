@@ -22,7 +22,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useParams } from "next/navigation";
-import { CleaveInput } from "@/components/ui/cleave";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Textarea } from "@/components/ui/textarea";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -34,6 +34,7 @@ interface LawyerData {
   details: string;
   appointment_date: string;
   law_suit_id: string;
+  importance_level: any;
 }
 
 interface ErrorResponse {
@@ -41,6 +42,11 @@ interface ErrorResponse {
     [key: string]: string[];
   };
 }
+const importance_level: { value: string; label: string }[] = [
+  { value: "high", label: "ذو اهمية عالية" }, // High - more concise translation
+  { value: "medium", label: "ذو اهمية متوسطة" }, // Medium - more concise translation
+  { value: "normal", label: "ذو اهمية عادية" }, // Normal - clearer and more common term
+];
 const CreateDate = ({ id }: { id: any }) => {
   const { t } = useTranslate();
   const { lang } = useParams();
@@ -53,13 +59,34 @@ const CreateDate = ({ id }: { id: any }) => {
     details: "",
     law_suit_id: id,
     appointment_date: "",
+    importance_level: "",
   });
+  const convertTo24Hour = (time12h: any) => {
+    let [hours, minutes] = time12h.split(":");
+    let ampm = time12h.slice(-2).toLowerCase();
 
+    if (ampm === "pm" && hours !== "12") {
+      hours = parseInt(hours, 10) + 12;
+    } else if (ampm === "am" && hours === "12") {
+      hours = "00";
+    }
+
+    return `${hours}:${minutes}`;
+  };
+  const handleSelectChange = (value: string) => {
+    setLawyerData((prevData) => ({
+      ...prevData,
+      importance_level: value.value,
+    }));
+  };
   // Handle title input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setLawyerData({ ...lawyerData, [name]: value });
+    if (name == "appointment_time") {
+      setLawyerData({ ...lawyerData, [name]: convertTo24Hour(value) });
+    } else {
+      setLawyerData({ ...lawyerData, [name]: value });
+    }
   };
 
   // Handle date change from Flatpickr
@@ -103,6 +130,7 @@ const CreateDate = ({ id }: { id: any }) => {
           details: "",
           law_suit_id: id,
           appointment_date: "",
+          importance_level: "",
         });
         setIsloading(true);
 
@@ -123,6 +151,7 @@ const CreateDate = ({ id }: { id: any }) => {
         "law_suit_id",
         "appointment_date",
         "appointment_time",
+        "importance_level",
       ];
 
       let errorMessage = "Something went wrong."; // Default fallback message
@@ -227,25 +256,35 @@ const CreateDate = ({ id }: { id: any }) => {
                   id="default-picker"
                 />
               </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2"
-              >
-                <Label htmlFor="titimetle">{t("Time")}</Label>
-                <CleaveInput
-                  id="time"
-                  options={{
-                    time: true,
-                    timePattern: ["h", "m"], // Only hours and minutes
-                    timeFormat: "24", // Use 24-hour format
-                  }}
-                  placeholder="HH:MM"
-                  name="appointment_time"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
+              <div className="flex flex-row justify-between">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-[48%]"
+                >
+                  <Label htmlFor="titimetle">{t("Time")}</Label>
+                  <Input
+                    type="time"
+                    placeholder="HH:MM"
+                    name="appointment_time"
+                    onChange={handleInputChange}
+                  />
+                </motion.div>{" "}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-[48%]"
+                >
+                  <Label htmlFor="">{t("importance_level")}</Label>
+                  <BasicSelect
+                    menu={importance_level}
+                    setSelectedValue={(value) => handleSelectChange(value)}
+                    selectedValue={lawyerData["importance_level"]}
+                  />
+                </motion.div>{" "}
+              </div>
             </div>
 
             <motion.div

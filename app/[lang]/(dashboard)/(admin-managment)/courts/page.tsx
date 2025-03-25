@@ -58,7 +58,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin", "admin"];
+const allowedRoles = ["super_admin", "admin", "secretary"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

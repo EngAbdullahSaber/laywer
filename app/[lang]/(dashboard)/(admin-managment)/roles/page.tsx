@@ -33,11 +33,11 @@ const page = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          <Link href={"roles/add"}>
+          {/* <Link href={"roles/add"}>
             <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
               {t("Create Roles")}
             </Button>
-          </Link>{" "}
+          </Link>{" "} */}
         </motion.div>
       </div>
 
@@ -53,7 +53,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin", "admin"];
+const allowedRoles = ["super_admin", "admin", "secretary"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

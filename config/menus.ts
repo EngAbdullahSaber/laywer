@@ -158,6 +158,11 @@ const clientMenu = [
     href: "/client-cases",
   },
   {
+    title: "Appointments",
+    icon: Appointments,
+    href: "/client-appointments",
+  },
+  {
     title: "Requests",
     icon: Requests,
     href: "/client-requests",

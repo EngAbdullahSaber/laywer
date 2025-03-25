@@ -111,6 +111,17 @@ const page = () => {
                   تاريح المقابلة :{" "}
                   <span className="font-bold">{item?.meeting_date} </span>
                 </motion.p>
+                <motion.p
+                  initial={{ x: 15, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 1.4 }}
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                >
+                  وقت المقابلة :{" "}
+                  <span className="font-bold">
+                    {item?.meeting_time?.substring(0, 5)}{" "}
+                  </span>
+                </motion.p>
               </div>
               <div className="flex flex-col justify-center items-center gap-6">
                 {/* Add any other content here */}

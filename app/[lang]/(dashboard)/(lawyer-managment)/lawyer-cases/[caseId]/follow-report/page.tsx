@@ -530,13 +530,8 @@ const CaseFollowReport = () => {
               className="flex flex-col gap-2 w-[32%]"
             >
               <Label htmlFor="Time">{t("Time")}</Label>
-              <CleaveInput
-                id="time"
-                options={{
-                  time: true,
-                  timePattern: ["h", "m"], // Only hours and minutes
-                  timeFormat: "24", // Use 24-hour format (optional)
-                }}
+              <Input
+                type="time"
                 placeholder="HH:MM" // Updated placeholder
                 value={currentTime}
                 onChange={(e) => setCurrentTime(e.target.value)}
@@ -605,13 +600,8 @@ const CaseFollowReport = () => {
                   className="flex flex-col gap-2 w-[32%]"
                 >
                   <Label htmlFor="Time1">{t("Time")}</Label>
-                  <CleaveInput
-                    id="time1"
-                    options={{
-                      time: true,
-                      timePattern: ["h", "m"], // Only hours and minutes
-                      timeFormat: "24", // Use 24-hour format (optional)
-                    }}
+                  <Input
+                    type="time"
                     placeholder="HH:MM" // Updated placeholder
                     value={nextTime}
                     onChange={(e) => setNextTime(e.target.value)}

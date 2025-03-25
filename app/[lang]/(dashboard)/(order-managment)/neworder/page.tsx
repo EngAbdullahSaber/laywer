@@ -134,7 +134,9 @@ const page = () => {
                       className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
                     >
                       وقت المقابلة:{" "}
-                      <span className="font-bold">{item?.meeting_time} </span>{" "}
+                      <span className="font-bold">
+                        {item?.meeting_time?.substring(0, 5)}{" "}
+                      </span>{" "}
                     </motion.p>
 
                     <motion.p
@@ -288,7 +290,7 @@ const page = () => {
   );
 };
 
-const allowedRoles = ["super_admin", "admin"];
+const allowedRoles = ["super_admin", "admin", "secretary"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

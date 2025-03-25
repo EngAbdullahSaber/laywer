@@ -21,13 +21,18 @@ export function updateAxiosHeader(accessToken) {
     function (error) {
       if (
         error.response?.status === 401 &&
-        error.response?.data?.message == "please login first"
+        error.response?.data?.message === "please login first"
       ) {
         console.log(error.message);
         clearAuthInfo();
         window.location.replace("/auth/login");
-      } else {
+      } else if (
+        (error.response?.status === 401 &&
+          error.response?.data?.message === "Unauthorized") ||
+        error.response?.data?.message === "غير مصرح"
+      ) {
         window.location.replace("/error-page/403");
+      } else {
       }
       return Promise.reject(error);
     }

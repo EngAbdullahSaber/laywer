@@ -25,7 +25,7 @@ interface ErrorResponse {
 
 const Page = () => {
   const [RolesAndpermissions, setRolesAndpermissions] = useState<any[]>([]); // All permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<any[]>([]); // Selected permissions
+  const [selectedPermissions, setSelectedPermissions] = useState<any[]>([2]); // Selected permissions
   const [roleName, setRoleName] = useState(""); // Role name
   const [roleData, setRoleData] = useState<any>(null); // Role data
   const [loading, setLoading] = useState(true);
@@ -42,7 +42,7 @@ const Page = () => {
         Array.isArray(permissionsRes?.body?.permissions)
           ? permissionsRes.body.permissions.filter((permission: any) =>
               [
-                1, 3, 6, 12, 20, 27, 33, 39, 42, 45, 51, 57, 63, 69, 75, 81, 87,
+                3, 6, 12, 20, 27, 33, 39, 42, 45, 51, 57, 63, 69, 75, 81, 87,
               ].includes(permission.id)
             )
           : []
@@ -164,7 +164,7 @@ const Page = () => {
   );
 };
 
-const allowedRoles = ["super_admin", "admin"];
+const allowedRoles = ["super_admin", "admin", "secretary"];
 const ProtectedComponent = Auth({ allowedRoles })(Page);
 
 export default ProtectedComponent;

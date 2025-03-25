@@ -4,15 +4,13 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
 import TableData from "./TableData";
-import CreateContact from "./CreateContact";
 import { motion } from "framer-motion";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
 import { Auth } from "@/components/auth/Auth";
 
 const page = () => {
-  const { t } = useTranslate();
+  const { t, loading, error } = useTranslate();
   const [flag, setFlag] = useState(false);
-  const permission = JSON.parse(localStorage.getItem("permissions"));
 
   return (
     <div className="space-y-5">
@@ -23,27 +21,24 @@ const page = () => {
           transition={{ duration: 1.7 }}
         >
           <div className=" text-default-900 text-2xl font-bold my-2">
-            {t("Staff List")}
+            {t("Client Appoinments")}
           </div>{" "}
-          <BreadcrumbComponent header={"Staff"} body={"Staff List"} />
+          <BreadcrumbComponent
+            header={"Appoinments"}
+            body={"Client Appoinments"}
+          />
         </motion.div>
         <motion.div
           initial={{ x: -15 }}
           whileInView={{ x: 0 }}
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
-        >
-          {permission
-            .find((item: any) => item.id === 51)
-            .permissions.some((item: any) => item.id === 53) && (
-            <CreateContact flag={flag} setFlag={setFlag} />
-          )}
-        </motion.div>
+        ></motion.div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle> {t("Staff List Details")}</CardTitle>
+          <CardTitle> {t("Client Appoinments")}</CardTitle>
         </CardHeader>
         <CardContent>
           <TableData flag={flag} />
@@ -52,8 +47,7 @@ const page = () => {
     </div>
   );
 };
-
-const allowedRoles = ["super_admin", "admin", "secretary"];
+const allowedRoles = ["client"];
 
 const ProtectedComponent = Auth({ allowedRoles })(page);
 

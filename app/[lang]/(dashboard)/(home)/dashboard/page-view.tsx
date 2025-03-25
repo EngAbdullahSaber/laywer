@@ -61,6 +61,7 @@ const DashboardPageView = () => {
     const currentDate = `${year}-${month}`; // Format as "YYYY-MM"
     const currentDate1 = `${year}-${month}-${day}`; // Format as "YYYY-MM-DD"
     formData.append("suit_month", currentDate);
+    // formData.append("next_appointments_date", "2025-03-06");
     formData.append("next_appointments_date", currentDate1);
 
     try {
@@ -69,7 +70,9 @@ const DashboardPageView = () => {
       setCalenderDate(
         res?.body?.next_appointments_date?.map((item) => ({
           title: item.title,
-          date: new Date(item.created_at).toISOString().split("T")[0], // Convert string to Date and format
+          appointment_time: item.appointment_time,
+          name: item.lawyer?.name,
+          date: new Date(item.appointment_date).toISOString().split("T")[0], // Convert string to Date and format
         }))
       );
       setLoading(false);
@@ -78,7 +81,7 @@ const DashboardPageView = () => {
       setLoading(false);
     }
   };
-
+  console.log(calenderDate);
   useEffect(() => {
     getMessagesData();
   }, []);
@@ -217,7 +220,7 @@ const DashboardPageView = () => {
   );
 };
 
-const allowedRoles = ["super_admin", "admin"];
+const allowedRoles = ["super_admin", "admin", "secretary"];
 
 const ProtectedComponent = Auth({ allowedRoles })(DashboardPageView);
 

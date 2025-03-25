@@ -85,7 +85,18 @@ const CreateDate = ({
       meeting_date: formattedDate.toString(),
     });
   };
-  console.log(loading);
+  const convertTo24Hour = (time12h) => {
+    let [hours, minutes] = time12h.split(":");
+    let ampm = time12h.slice(-2).toLowerCase();
+
+    if (ampm === "pm" && hours !== "12") {
+      hours = parseInt(hours, 10) + 12;
+    } else if (ampm === "am" && hours === "12") {
+      hours = "00";
+    }
+
+    return `${hours}:${minutes}`;
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
@@ -98,7 +109,7 @@ const CreateDate = ({
     const data = {
       reply: lawyerData.reply,
       meeting_date: lawyerData.meeting_date,
-      meeting_time: time,
+      meeting_time: convertTo24Hour(time),
     };
     try {
       const res = await ReplyOnMessages(data, id, lang); // Call API to create the lawyer

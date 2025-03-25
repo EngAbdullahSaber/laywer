@@ -27,7 +27,7 @@ const ErrorPage = () => {
           </div>
           <div className="mt-3 text-default-600 text-sm md:text-base">
             {t(
-              "The page you are looking for might have been removed had its name changed or is temporarily unavailable."
+              "The page you are looking for might have been removed had its name changed or is temporarily unavailable"
             )}
           </div>
           <Button asChild className="mt-9  md:min-w-[300px]" size="lg">
