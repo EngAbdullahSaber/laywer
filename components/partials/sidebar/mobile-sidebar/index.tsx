@@ -25,6 +25,12 @@ const MobileSidebar = ({
   const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const { collapsed } = useSidebar();
+  const handleItemClick = () => {
+    if (collapsed === false) {
+      setMobileMenu(true);
+    }
+  };
+  console.log(collapsed);
 
   const toggleSubmenu = (i: number) => {
     if (activeSubmenu === i) {
@@ -42,7 +48,7 @@ const MobileSidebar = ({
     }
   };
   const locationName = usePathname();
-
+  console.log(mobileMenu);
   React.useEffect(() => {
     let subMenuIndex = null;
     let multiMenuIndex = null;
@@ -103,7 +109,11 @@ const MobileSidebar = ({
                 {/* single menu  */}
 
                 {!item.child && !item.isHeader && (
-                  <SingleMenuItem item={item} collapsed={collapsed} />
+                  <SingleMenuItem
+                    item={item}
+                    collapsed={collapsed}
+                    onItemClick={handleItemClick} // Add this prop
+                  />
                 )}
 
                 {/* menu label */}

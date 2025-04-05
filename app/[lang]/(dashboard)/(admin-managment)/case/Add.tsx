@@ -27,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { CreateNewDate } from "@/services/cases/cases";
+import BasicSelect from "../../(lawyer-managment)/lawyer-cases/[caseId]/follow-report/BasicSelect";
 // Interface for lawyer data
 interface LawyerData {
   title: string;
@@ -34,6 +35,7 @@ interface LawyerData {
   details: string;
   appointment_date: string;
   law_suit_id: string;
+  importance_level: any;
 }
 
 interface ErrorResponse {
@@ -51,8 +53,13 @@ const Add = ({ id }: { id: any }) => {
     details: "",
     law_suit_id: id,
     appointment_date: "",
+    importance_level: "",
   });
-
+  const importance_level: { value: string; label: string }[] = [
+    { value: "high", label: "ذو اهمية عالية" }, // High - more concise translation
+    { value: "medium", label: "ذو اهمية متوسطة" }, // Medium - more concise translation
+    { value: "normal", label: "ذو اهمية عادية" }, // Normal - clearer and more common term
+  ];
   // Handle title input change
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -78,7 +85,12 @@ const Add = ({ id }: { id: any }) => {
       appointment_date: formattedDate.toString(),
     });
   };
-
+  const handleSelectChange = (value: any) => {
+    setLawyerData((prevData) => ({
+      ...prevData,
+      importance_level: value.value,
+    }));
+  };
   // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +113,7 @@ const Add = ({ id }: { id: any }) => {
           details: "",
           law_suit_id: id,
           appointment_date: "",
+          importance_level: "",
         });
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
@@ -118,6 +131,7 @@ const Add = ({ id }: { id: any }) => {
         "law_suit_id",
         "appointment_date",
         "appointment_time",
+        "importance_level",
       ];
 
       let errorMessage = "Something went wrong."; // Default fallback message
@@ -221,25 +235,38 @@ const Add = ({ id }: { id: any }) => {
                   id="default-picker"
                 />
               </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2"
-              >
-                <Label htmlFor="titimetle">{t("Time")}</Label>
-                <CleaveInput
-                  id="time"
-                  options={{
-                    time: true,
-                    timePattern: ["h", "m"], // Only hours and minutes
-                    timeFormat: "24", // Use 24-hour format
-                  }}
-                  placeholder="HH:MM"
-                  name="appointment_time"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
+              <div className="flex flex-row justify-between">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-[48%]"
+                >
+                  <Label htmlFor="titimetle">{t("Time")}</Label>
+
+                  <Input
+                    type="time"
+                    id="time"
+                    name="appointment_time"
+                    placeholder="HH:MM" // Updated placeholder
+                    value={lawyerData.appointment_date}
+                    onChange={handleInputChange}
+                  />
+                </motion.div>{" "}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-[48%]"
+                >
+                  <Label htmlFor="">{t("importance_level")}</Label>
+                  <BasicSelect
+                    menu={importance_level}
+                    setSelectedValue={(value) => handleSelectChange(value)}
+                    selectedValue={lawyerData["importance_level"]}
+                  />
+                </motion.div>{" "}
+              </div>
             </div>
 
             <motion.div

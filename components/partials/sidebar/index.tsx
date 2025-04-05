@@ -25,7 +25,9 @@ const Sidebar = ({ trans }: { trans: string }) => {
       classic: <ClassicSidebar trans={trans} />,
     };
 
-    selectedSidebar = sidebarComponents[sidebarType] || <ModuleSidebar trans={trans} />;
+    selectedSidebar = sidebarComponents[sidebarType] || (
+      <ModuleSidebar trans={trans} />
+    );
   }
 
   return <div>{selectedSidebar}</div>;

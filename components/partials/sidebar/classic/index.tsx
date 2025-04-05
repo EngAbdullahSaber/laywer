@@ -18,7 +18,6 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
 
   const role = useRole(); // Fetch role using the custom hook
-  console.log(role);
   const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
   const menus = menusConfig?.sidebarNav?.classic || [];
   const { collapsed, setCollapsed } = useSidebar();
@@ -26,6 +25,11 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const [hovered, setHovered] = useState<boolean>(false);
   const { lang } = useParams();
 
+  const handleItemClick = () => {
+    if (collapsed === false) {
+      setCollapsed(true);
+    }
+  };
   const toggleSubmenu = (i: number) => {
     if (activeSubmenu === i) {
       setActiveSubmenu(null);
@@ -33,7 +37,6 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
       setActiveSubmenu(i);
     }
   };
-
   const toggleMultiMenu = (subIndex: number) => {
     if (activeMultiMenu === subIndex) {
       setMultiMenu(null);
@@ -113,6 +116,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
                   collapsed={collapsed}
                   hovered={hovered}
                   trans={trans}
+                  onItemClick={handleItemClick} // Add this prop
                 />
               )}
 

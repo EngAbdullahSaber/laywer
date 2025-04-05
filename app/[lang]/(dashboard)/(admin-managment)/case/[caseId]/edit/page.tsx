@@ -65,6 +65,14 @@ const Page = () => {
   }>({
     files: [],
   });
+  const Case_Status: { value: string; id: string; label: string }[] = [
+    { value: "claimant", id: "claimant", label: "مدعي" },
+    { value: "appellant", id: "appellant", label: " مدعي عليه" },
+    { value: "defendant", id: "defendant", label: "مستأنف" },
+    { value: "respondent", id: "respondent", label: "مستأنف ضده" },
+    { value: "executor", id: "executor", label: "منفذ" },
+    { value: "judgment_debtor", id: "judgment_debtor", label: "منفذ ضده" },
+  ];
   const [selectedValue, setSelectedValue] = useState<any[]>([]); // Store an array for first character selections
   const [selectedValue1, setSelectedValue1] = useState<any[]>([]); // Store an array for second character selections
   const [numbers, setNumbers] = useState<any[]>([]); // Store the formatted case numbers
@@ -115,7 +123,12 @@ const Page = () => {
     const { name, value } = e.target;
     setLawyerData((prev) => ({ ...prev, [name]: value }));
   };
-
+  const handleSelectChanges = (value: any) => {
+    setLawyerData((prevData) => ({
+      ...prevData,
+      claim_status: value?.id,
+    }));
+  };
   const handleImageChange = async (
     file: File,
     imageType: keyof typeof images
@@ -279,7 +292,6 @@ const Page = () => {
         );
         setSelectedValue(firstLetters);
         const years = lawyer.case_numbers.map((item: any) => item.case_year);
-        setCaseYears(years);
 
         setImages({
           files: lawyer.files,
@@ -402,10 +414,7 @@ const Page = () => {
       reToast.error(errorMessage); // Display the error message in the toast
     }
   };
-  console.log(selectedValue);
-  console.log(selectedValue1);
-  console.log(caseYears);
-  console.log(numbers);
+
   return (
     <div>
       <Card>
@@ -775,11 +784,10 @@ const Page = () => {
                 className="flex flex-col gap-2 my-2 w-full sm:w-[48%]"
               >
                 <Label htmlFor="category">{t("Status")}</Label>
-                <RadioRight
-                  text1="claimant"
-                  text2="defendant"
-                  setValue={setLawyerData}
-                  claim_status={lawyerData.claim_status}
+                <BasicSelect
+                  menu={Case_Status}
+                  setSelectedValue={(value) => handleSelectChanges(value)}
+                  selectedValue={lawyerData["claim_status"]}
                 />
               </motion.div>
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
