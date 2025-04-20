@@ -145,7 +145,7 @@ const TableData = ({ flag }: { flag: any }) => {
             <Tooltip>
               <TooltipTrigger>
                 {" "}
-                <Link
+                <a
                   href={`lawyer-cases/${row.original.id}/follow-report`}
                   className="mt-1"
                 >
@@ -158,7 +158,7 @@ const TableData = ({ flag }: { flag: any }) => {
                   >
                     <Icon icon="gridicons:create" width="24" height="24" />{" "}
                   </Button>
-                </Link>{" "}
+                </a>{" "}
               </TooltipTrigger>
               <TooltipContent>
                 <p>{t("Case follow-up report")}</p>
@@ -168,7 +168,7 @@ const TableData = ({ flag }: { flag: any }) => {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Link
+                <a
                   href={`lawyer-cases/${row.original.id}/attend-report`}
                   className="mt-1"
                 >
@@ -185,7 +185,7 @@ const TableData = ({ flag }: { flag: any }) => {
                       height="24"
                     />{" "}
                   </Button>
-                </Link>{" "}
+                </a>{" "}
               </TooltipTrigger>
               <TooltipContent>
                 <p> {t("Report of attendance at a judicial hearing")}</p>

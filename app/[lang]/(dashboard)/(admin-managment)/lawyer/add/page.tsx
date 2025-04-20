@@ -117,25 +117,15 @@ const page = () => {
     // Append images if they exist
     if (images.national_id_image) {
       formData.append("national_id_image", images.national_id_image);
-    } else {
-      formData.append("national_id_image", " 1");
     }
     if (images.driving_licence) {
       formData.append("driving_licence", images.driving_licence);
-    } else {
-      {
-        formData.append("driving_licence", "1");
-      }
     }
     if (images.subscription_image) {
       formData.append("subscription_image", images.subscription_image);
-    } else {
-      formData.append("subscription_image", "1");
     }
     if (images.lawyer_licence) {
       formData.append("lawyer_licence", images.lawyer_licence);
-    } else {
-      formData.append("lawyer_licence", "1");
     }
 
     // Append form data
