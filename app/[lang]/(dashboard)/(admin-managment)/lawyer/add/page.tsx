@@ -438,7 +438,7 @@ const page = () => {
                 type="button"
                 disabled={!loading}
                 onClick={handleSubmit}
-                className="w-28 !bg-[#dfc77d] px-2 hover:!bg-[#fef0be] text-black"
+                className="w-32 !bg-[#dfc77d] px-2 hover:!bg-[#fef0be] text-black"
               >
                 {!loading ? t("Loading") : t("Create Lawyer")}
               </Button>
