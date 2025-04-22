@@ -26,7 +26,6 @@ import {
 
 import { useTranslate } from "@/config/useTranslation";
 import ImageUploader from "./ImageUploader";
-import CreateLawyer from "../(admin-managment)/lawyer/CreateLawyer";
 interface UserInfoItem {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
@@ -92,10 +91,7 @@ const UserInfo = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="px-4 py-8">
-        <div className="flex flex-row justify-end">
-          {" "}
-          <CreateLawyer />
-        </div>
+        <div className="flex flex-row justify-end"> </div>
         <ul className="mt-6 space-y-4">
           {userInfo.map((item, index) => (
             <li
