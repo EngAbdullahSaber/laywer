@@ -123,11 +123,11 @@ const adminMenu = [
     icon: Reports,
     href: "/contactList-category",
   },
-  {
-    title: "Staff Categories",
-    icon: Property,
-    href: "/staff-category",
-  },
+  // {
+  //   title: "Staff Categories",
+  //   icon: Property,
+  //   href: "/staff-category",
+  // },
 ];
 const lawyerMenu = [
   {
@@ -157,11 +157,11 @@ const clientMenu = [
     icon: Case,
     href: "/client-cases",
   },
-  {
-    title: "Appointments",
-    icon: Appointments,
-    href: "/client-appointments",
-  },
+  // {
+  //   title: "Appointments",
+  //   icon: Appointments,
+  //   href: "/client-appointments",
+  // },
   {
     title: "Requests",
     icon: Requests,

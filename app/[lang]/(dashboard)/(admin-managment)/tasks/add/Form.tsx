@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,19 +11,16 @@ import { useTranslate } from "@/config/useTranslation";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import InfiniteScrollSelect from "../../../courts/add/InfiniteScrollSelect";
-import {
-  CreateTasks,
-  getSpecifiedTasks,
-  UpdateTasks,
-} from "@/services/tasks/tasks";
+import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
+import { useParams } from "next/navigation";
+import { CreateTasks } from "@/services/tasks/tasks";
 import { getCasesPanigation } from "@/services/cases/cases";
 import { Auth } from "@/components/auth/Auth";
 import { getStaffPanigation } from "@/services/staff/staff";
-import { useParams } from "next/navigation";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 
 const Importance_Level: { id: string; value: string; label: string }[] = [
@@ -38,7 +35,7 @@ interface LawyerData {
   detailsEn: string;
   detailsAr: string;
   lawyer_id: string;
-  importance_level: string;
+  importance_level: any;
   law_suit_id: string;
 }
 interface ErrorResponse {
@@ -46,13 +43,13 @@ interface ErrorResponse {
     [key: string]: string[];
   };
 }
-const PageWithAuth = () => {
+const Form = () => {
   const { t } = useTranslate();
-  const { lang, taskId } = useParams();
-  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+  const { lang } = useParams();
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
 
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LawyerData>({
     titleEn: "",
     titleAr: "",
@@ -86,32 +83,6 @@ const PageWithAuth = () => {
       return [];
     }
   };
-  const getCasesData = async () => {
-    try {
-      const res = await getSpecifiedTasks(lang, taskId);
-      if (res?.body) {
-        const lawyer = res.body;
-        console.log(lawyer);
-        setLawyerData({
-          law_suit_id: lawyer.law_suit?.id,
-          importance_level: lawyer.importance_level,
-          titleEn: lawyer.title,
-          titleAr: lawyer.title,
-          lawyer_id: lawyer.lawyer?.id,
-          detailsAr: lawyer.details,
-          detailsEn: lawyer.details,
-        });
-        setDates({
-          due_date: lawyer.due_date,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching lawyer data", error);
-    }
-  };
-  useEffect(() => {
-    getCasesData();
-  }, []);
   const fetchCasesData = async (service: Function, page: number = 1) => {
     try {
       const data = await service(page, lang);
@@ -155,9 +126,21 @@ const PageWithAuth = () => {
     };
 
     try {
-      const res = await UpdateTasks(lang, taskId, data); // Call API to create the lawyer
+      const res = await CreateTasks(data, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
+        setLawyerData({
+          titleEn: "",
+          titleAr: "",
+          detailsEn: "",
+          detailsAr: "",
+          lawyer_id: "",
+          importance_level: "",
+          law_suit_id: "",
+        });
+        setDates({
+          due_date: "",
+        });
         setIsloading(true);
 
         reToast.success(res.message); // Display success message
@@ -196,51 +179,11 @@ const PageWithAuth = () => {
       setIsloading(true);
     }
   };
-  const getServicesData = async () => {
-    try {
-      const res = await getAllRoles(lang);
-
-      const roles = Array.isArray(res?.body?.roles_and_permissions)
-        ? res.body.roles_and_permissions.filter(
-            (role: any) => role.role !== "client" && role.role !== "lawyer"
-          )
-        : [];
-
-      setAllowedRoles(["super_admin", ...roles.map((r: any) => r.role)]);
-    } catch (error: any) {
-      const message = error?.response?.data?.message;
-      const status = error?.response?.status;
-
-      if (status === 401) {
-        if (message === "please login first") {
-          console.warn("User not authenticated, redirecting to login...");
-          clearAuthInfo();
-          window.location.replace("/auth/login");
-        } else if (message === "Unauthorized" || message === "غير مصرح") {
-          console.warn("User unauthorized, redirecting to 403 page...");
-          window.location.replace("/error-page/403");
-        }
-      } else {
-        console.error("An unexpected error occurred:", error);
-        // You can add a fallback or show a toast here if needed
-      }
-    }
-  };
-
-  useEffect(() => {
-    getServicesData();
-  }, []);
-
-  // Loading state while allowedRoles is being fetched
-  if (!allowedRoles) {
-    return; // Or <Loading />
-  }
-
-  const ProtectedPage = Auth({ allowedRoles })(() => (
+  return (
     <div>
       <Card>
         <CardHeader>
-          <CardTitle> {t("Edit Task")}</CardTitle>
+          <CardTitle> {t("Create a New Task")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form
@@ -258,8 +201,8 @@ const PageWithAuth = () => {
                 <Input
                   type="text"
                   placeholder={t("Enter Task Name In English")}
-                  value={lawyerData.titleEn}
                   name="titleEn"
+                  value={lawyerData.titleEn}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -273,8 +216,8 @@ const PageWithAuth = () => {
                 <Input
                   type="text"
                   placeholder={t("Enter Task Name In Arabic")}
-                  name="titleAr"
                   value={lawyerData.titleAr}
+                  name="titleAr"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -291,7 +234,7 @@ const PageWithAuth = () => {
                 <BasicSelect
                   menu={Importance_Level}
                   setSelectedValue={(value) => handleSelectChange(value)}
-                  selectedValue={lawyerData.importance_level}
+                  selectedValue={lawyerData["importance_level"]}
                 />
               </motion.div>
 
@@ -317,7 +260,7 @@ const PageWithAuth = () => {
                       }
                     />{" "}
                   </div>
-                  <Link href={"/lawyer"} className="w-[10%] mt-5">
+                  <Link href={"/staff"} className="w-[10%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
@@ -375,7 +318,6 @@ const PageWithAuth = () => {
                 />{" "}
               </motion.div>
             </div>
-
             <motion.div
               initial={{ y: -50 }}
               whileInView={{ y: 0 }}
@@ -386,9 +328,9 @@ const PageWithAuth = () => {
                 <Label>{t("Details In English")}</Label>
                 <Textarea
                   placeholder={t("Type Here")}
-                  value={lawyerData.detailsEn}
                   rows={7}
                   name="detailsEn"
+                  value={lawyerData.detailsEn}
                   onChange={handleInputChange}
                 />
               </div>
@@ -403,9 +345,9 @@ const PageWithAuth = () => {
                 <Label>{t("Details In Arabic")}</Label>
                 <Textarea
                   placeholder={t("Type Here")}
-                  value={lawyerData.detailsAr}
                   rows={7}
                   name="detailsAr"
+                  value={lawyerData.detailsAr}
                   onChange={handleInputChange}
                 />
               </div>
@@ -429,16 +371,14 @@ const PageWithAuth = () => {
                 disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {!loading ? t("Loading") : t("Edit Task")}
+                {!loading ? t("Loading") : t("Create Task")}
               </Button>
             </motion.div>
           </form>{" "}
         </CardContent>
       </Card>
     </div>
-  ));
-
-  return <ProtectedPage />;
+  );
 };
 
-export default PageWithAuth;
+export default Form;

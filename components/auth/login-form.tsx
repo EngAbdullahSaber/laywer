@@ -104,14 +104,7 @@ const LogInForm = () => {
           priority={true}
         />
       </motion.div>
-      <motion.div
-        initial={{ y: -50, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900"
-      >
-        {t("Hey, Hello")}
-      </motion.div>
+    
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}

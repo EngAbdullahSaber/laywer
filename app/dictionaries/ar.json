@@ -33,8 +33,8 @@
   "Create a New Services": "انشاء خدمة جديدة",
   "Services Price": "سعر الخدمة",
   "Enter Price": "ادخل سعر الخدمة",  
-  "Your Describtion": "وصفك",
-  "Ask Services": " اطلب الخدمة",
+  "Your Describtion": "وصف الخدمة",
+  "Ask Services": " طلب الخدمة ",
   "Ask About Services": "استفسر عن الخدمات",
   "Services List": "قائمة الخدمات",
   "Services Details": "تفاصيل الخدمات",
@@ -54,7 +54,7 @@
   "Enter Location of the case": "أدخل مكان القضية",
   "Licence Number": "رقم الرخصة",
   "Enter Licence Number": "أدخل رقم الرخصة",
-  "Staff": "الطاقم",
+  "Staff": "الموظفين",
   "Update Lawyer": "تحديث ملف المحامي",
   "Update Lawyer Data": "تحديث بيانات المحامي",
   "ID photo": "صورة الهوية",
@@ -195,7 +195,7 @@
   "Requests": "الطلبات ",
   "Location": "الموقع",
   "Court Category": "تصنيف المحكمة",
-  "Court Name": "اسم المحكمة",
+  "Court Name": " المحكمة",
   "Courts Locations": "مواقع المحاكم",
   "Family": "الأسرة",
   "Criminal": "جنائي",
@@ -216,7 +216,7 @@
   "Deleting Client": "حذف العميل",
   "Create Client": "إنشاء عميل",
   "Export Excel": "تصدير Excel",
-  "Room Number": "رقم الغرفة",
+  "Room Number": " الدائرة",
   "Email Address": " البريد الإلكتروني",
   "Phone Number": "رقم الهاتف",
   "Deleting Case": "حذف القضية",
@@ -512,11 +512,11 @@
 "Choose File": " الملف",
 "Case Description": "وصف القضية",
 "Lawyer Details": "تفاصيل المحامي",
-"Create a New Lawyer": "إنشاء محامي جديد",
+"Create a New Lawyer": "إنشاء عميل جديد",
 "Enter Mobile Number": "أدخل رقم الهاتف المحمول",
 "Enter Address": "أدخل العنوان",
 "Enter Email": "أدخل البريد الإلكتروني",
-"Create Lawyer": "إنشاء ملف محامي",
+"Create Lawyer": "إنشاء عميل ",
 "Lawyers List": "قائمة المحامين",
 "Lawyers": "المحامون",
 "court website link": "رابط موقع المحكمة",
@@ -543,9 +543,9 @@
 "Courts Details": "تفاصيل المحاكم",
 "Create Court": "إنشاء محكمة",
 "Create a New Court": "إنشاء محكمة جديدة",
-"Enter Court Name": "أدخل اسم المحكمة",
+"Enter Court Name": "أدخل  المحكمة",
 "Court Category Level": "تصنيف المحكمة",
-"Enter Room Number": "أدخل رقم الغرفة",
+"Enter Room Number": "أدخل الدائرة ",
 "Enter Region": "أدخل المنطقة",
 "Region": "المنطقة",
 "Enter City": "أدخل المدينة",
@@ -636,7 +636,7 @@
   "Enter the 4 figure confirmation code shown on the email": "أدخل رمز التأكيد المكون من 4 أرقام الموضح في رسالة على جوالك ",
   "Two Factor Verification": "التحقق  من المستخدم",
   "Hey, Hello": "مرحباً، أهلاً 👋",
-  "Enter the information you entered while registering": "أدخل المعلومات لتسجيل الدخول.",
+  "Enter the information you entered while registering": "تسجيل الدخول.",
   "Verify Now": "تحقق الآن",
   "Send Recovery Email": "أرسل بريد استرداد",
   "sending": "جاري الإرسال...",
@@ -655,8 +655,8 @@
   "lawyer name": "اسم المحامي",
   "Select Lawyer": "اختيار المحامي",
   "Assign Case To Lawyer": "تعيين القضية للمحامي",
-  "New Orders": " استفسارات العميل",
-  "Inquiries": "استفسارات",
+  "New Orders": "  تذاكر العملاء",
+  "Inquiries": "تذاكر",
   "services image": "صورة الخدمة ",
 
   "Send": "إرسال",
@@ -667,8 +667,8 @@
   "Ask": "اسأل",
   "Your Answer": "إجابتك",
   "Reply to Client": "الرد على العميل",
-  "Quiestions Not Answered": "استفسارات لم يتم الرد عليها",
-  "Quiestions Answered": "استفسارات تم الرد عليها",
+  "Quiestions Not Answered": "تذاكر قيد الاجراء ",
+  "Quiestions Answered": "تذاكر منتهية",
   "Your Question": "سؤالك",
   "Send Your Message": "أرسل رسالتك",
   "Communication": "التواصل",
@@ -703,8 +703,8 @@
   "Something went wrong.": "حدث خطأ ما.",
   "Deleting Contact List": "حذف قائمة الاتصال",
   "Are You Sure For Delete This Contact List?": "هل أنت متأكد من حذف قائمة الاتصال هذه؟",
-  "Create a New Contact List": "إنشاء قائمة اتصال جديدة",
-  "Create Contact List": "إنشاء قائمة الاتصال",
+  "Create a New Contact List": "اضافة جهة اتصال جديدة",
+  "Create Contact List": "اضافة جهة اتصال",
   "Update a New Contact List": "تحديث قائمة الاتصال الجديدة",
   "Search By Email ,Phone and Name": "البحث بواسطة البريد الإلكتروني أو الهاتف أو الاسم",
   "Update Contact List": "تحديث قائمة الاتصال",
@@ -825,31 +825,31 @@
   "cases": "القضايا",
   "clients": "العملاء",
   "home": "الرئيسية",
-  "Roles and Permission": "الأدوار والصلاحيات",
-  "client inquiries": "استفسارات العملاء",
+  "Roles and Permission": "الاداراة والصلاحيات",
+  "client inquiries": "تذاكر العملاء",
   "communications": "الاتصالات",
   "lawyerTimeTable": "جدول المحامي",
-  "roles": "الأدوار",
+  "roles": "الاداراة",
   "cases categories": "فئات القضايا",
   "clients categories": "فئات العملاء",
-  "Roles": "الأدوار",
-  "Roles List": "قائمة الأدوار",
-  "Create Roles": "إنشاء أدوار",
+  "Roles": "الاداراة",
+  "Roles List": "قائمة الاداراة",
+  "Create Roles": "إنشاء الادارة",
   "block": "حظر",
   "meeting_time": "وقت الاجتماع",
   "Go to Homepage": "الذهاب إلى الصفحة الرئيسية",
   "The page you are looking for might have been removed had its name changed or is temporarily unavailable": "قد تكون الصفحة التي تبحث عنها قد أزيلت أو تم تغيير اسمها أو أنها غير متاحة مؤقتًا.",
   "Ops! Access Denied": "عذرًا! الوصول مرفوض",
-  "roles name": "اسم الأدوار",
-  "Update Permission For Role": "تحديث الأذونات للدور",
-  "Create Role": "إنشاء دور",
-  "Role Info": "معلومات الدور",
-  "Edit Permissions For Roles": "تعديل الأذونات للأدوار",
-  "Enter Role Name": "أدخل اسم الدور",
-  "Role Name": "اسم الدور",
-  "Are You Sure You Want To Delete This Role?": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
-  "Deleting Role": "جارٍ حذف الدور",
-  "Roles Details": "تفاصيل الأدوار"
+  "roles name": "اسم الاداراة",
+  "Update Permission For Role": "تحديث الأذونات للادارة",
+  "Create Role": "إنشاء الادارة",
+  "Role Info": "معلومات الادارة",
+  "Edit Permissions For Roles": "تعديل اذونات الادارة",
+  "Enter Role Name": "أدخل اسم الادارة",
+  "Role Name": "اسم الادارة",
+  "Are You Sure You Want To Delete This Role?": "هل أنت متأكد أنك تريد حذف هذه الادارة",
+  "Deleting Role": "جارٍ حذف الادارة",
+  "Roles Details": "تفاصيل الادارة"
 
 }
 

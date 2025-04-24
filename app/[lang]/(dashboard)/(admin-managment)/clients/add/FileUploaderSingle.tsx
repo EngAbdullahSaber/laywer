@@ -20,16 +20,10 @@ interface ErrorResponse {
 }
 
 interface ImageUploaderProps {
-  imageType:
-    | "client_files"
+  imageType: "client_files";
 
   id: File | null;
-  onFileChange: (
-    file: File,
-    imageType:
-      | "client_files"
- 
-  ) => Promise<void>;
+  onFileChange: (file: File, imageType: "client_files") => Promise<void>;
 }
 // Define accepted file types (image formats and common file formats)
 const acceptedFileTypes = [

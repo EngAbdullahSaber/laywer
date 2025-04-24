@@ -42,7 +42,8 @@ const TableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const permission = JSON.parse(localStorage.getItem("permissions"));
+  const permissionString = localStorage.getItem("permissions");
+  const permission = permissionString ? JSON.parse(permissionString) : null;
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
@@ -146,7 +147,6 @@ const TableData = ({ flag }: { flag: any }) => {
       setLoading(false);
     }
   };
-  console.log(permission.find((item: any) => item.id === 6));
 
   useEffect(() => {
     if (debouncedSearch) {
@@ -167,21 +167,22 @@ const TableData = ({ flag }: { flag: any }) => {
             .permissions.some((item: any) => item.id === 9) && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className=" h-7 w-7"
-                    color="secondary"
-                  >
-                    {" "}
-                    <Link href={`clients/${row.original.id}/edit`}>
-                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                    </Link>{" "}
-                  </Button>
+                <TooltipTrigger asChild>
+                  <div className="inline-block">
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-7 w-7"
+                      color="secondary"
+                    >
+                      <a href={`clients/${row.original.id}/edit`}>
+                        <Icon icon="heroicons:pencil" className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p> {t("Edit Client")}</p>
+                  <p>{t("Edit Client")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -212,14 +213,9 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
+            <span className="max-w-[500px] truncate font-medium">
               {row.original.name}
-            </motion.span>
+            </span>
           </div>
         );
       },
@@ -232,13 +228,7 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-            >
-              {row.original.category?.name}
-            </motion.span>
+            <span>{row.original.category?.name}</span>
           </div>
         );
       },
@@ -255,15 +245,9 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-              dir="ltr"
-            >
+            <span className="max-w-[500px] truncate font-medium" dir="ltr">
               {row.original.phone}
-            </motion.span>
+            </span>
           </div>
         );
       },
@@ -280,14 +264,9 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
+            <span className="max-w-[500px] truncate font-medium">
               {row.original.email}
-            </motion.span>
+            </span>
           </div>
         );
       },
@@ -303,14 +282,9 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
+            <span className="max-w-[500px] truncate font-medium">
               {row.original.national_id_number}
-            </motion.span>
+            </span>
           </div>
         );
       },
@@ -326,19 +300,14 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
+            <span className="max-w-[500px] truncate font-medium">
               {new Date(row.original.created_at).toLocaleDateString("en-GB", {
                 weekday: "long", // "Monday"
                 year: "numeric", // "2025"
                 month: "long", // "February"
                 day: "numeric", // "14"
               })}
-            </motion.span>
+            </span>
           </div>
         );
       },

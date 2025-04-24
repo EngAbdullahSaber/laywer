@@ -19,7 +19,6 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
       const userData = useSelector((state: RootState) => state.user);
       const userRole = userData?.role_with_permission;
       const accessToken = useAccessToken();
-
       if (accessToken) {
         updateAxiosHeader(accessToken);
       }
@@ -38,7 +37,7 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
 
       // If there is no user or the role is not allowed, render nothing or loading state
       if (!userData || !allowedRoles.includes(userRole)) {
-        return null; // or <Loading /> for a better UX
+        redirect("/auth/login"); // or <Loading /> for a better UX
       }
 
       // If the user is authenticated and has an allowed role, render the WrappedComponent

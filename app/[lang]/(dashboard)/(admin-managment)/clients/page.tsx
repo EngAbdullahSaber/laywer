@@ -19,13 +19,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useParams } from "next/navigation";
 import { getClientFile } from "@/services/clients/clients";
+import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+
 import Link from "next/link";
-const page = () => {
+import { clearAuthInfo } from "@/services/utils";
+const PageWithAuth = () => {
   const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
   const [data, setData] = useState<any>([]);
   const { lang } = useParams();
-  const permission = JSON.parse(localStorage.getItem("permissions"));
+  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const permissionString = localStorage.getItem("permissions");
+  const permission = permissionString ? JSON.parse(permissionString) : null;
   const getExcelFileData = async () => {
     try {
       const res = await getClientFile(lang);
@@ -37,8 +42,47 @@ const page = () => {
       console.error("Error fetching data", error);
     }
   };
+  const getServicesData = async () => {
+    try {
+      const res = await getAllRoles(lang);
 
-  return (
+      const roles = Array.isArray(res?.body?.roles_and_permissions)
+        ? res.body.roles_and_permissions.filter(
+            (role: any) => role.role !== "client" && role.role !== "lawyer"
+          )
+        : [];
+
+      setAllowedRoles(["super_admin", ...roles.map((r: any) => r.role)]);
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      const status = error?.response?.status;
+
+      if (status === 401) {
+        if (message === "please login first") {
+          console.warn("User not authenticated, redirecting to login...");
+          clearAuthInfo();
+          window.location.replace("/auth/login");
+        } else if (message === "Unauthorized" || message === "غير مصرح") {
+          console.warn("User unauthorized, redirecting to 403 page...");
+          window.location.replace("/error-page/403");
+        }
+      } else {
+        console.error("An unexpected error occurred:", error);
+        // You can add a fallback or show a toast here if needed
+      }
+    }
+  };
+
+  useEffect(() => {
+    getServicesData();
+  }, []);
+
+  // Loading state while allowedRoles is being fetched
+  if (!allowedRoles) {
+    return; // Or <Loading />
+  }
+
+  const ProtectedPage = Auth({ allowedRoles })(() => (
     <div className="space-y-5">
       <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
         <motion.div
@@ -94,11 +138,9 @@ const page = () => {
         </CardContent>
       </Card>
     </div>
-  );
+  ));
+
+  return <ProtectedPage />;
 };
 
-const allowedRoles = ["super_admin", "admin", "secretary"];
-
-const ProtectedComponent = Auth({ allowedRoles })(page);
-
-export default ProtectedComponent;
+export default PageWithAuth;

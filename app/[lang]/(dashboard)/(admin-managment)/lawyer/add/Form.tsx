@@ -2,58 +2,55 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useTranslate } from "@/config/useTranslation";
-import BasicSelect from "./BasicSelect";
-import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
+import { useTranslate } from "@/config/useTranslation";
+import BasicSelect from "@/components/common/Select/BasicSelect";
+import { motion } from "framer-motion";
 import { toast as reToast } from "react-hot-toast";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ImageUploader from "./ImageUploader";
-import { AxiosError } from "axios";
-import React, { useEffect, useState } from "react";
-import { UpdateLawyer, getSpecifiedLawyer } from "@/services/lawyer/lawyer";
+import CreateLawyerCategory from "../../../(category-mangement)/lawyer-category/CreateLawyerCategory";
 import { getCategory } from "@/services/category/category";
+import { AxiosError } from "axios";
+import { CreateLawyer } from "@/services/lawyer/lawyer";
 import { UploadImage } from "@/services/auth/auth";
-import CreateLawyerCategory from "@/app/[lang]/(dashboard)/(category-mangement)/lawyer-category/CreateLawyerCategory";
 import { CleaveInput } from "@/components/ui/cleave";
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
-
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
   };
 }
-
 interface LaywerData {
   name: string;
   phone: string;
   driving_licence_number: string;
+  password: string;
   email: string;
   address: string;
   category_id: string;
   status: string;
 }
-
-const PageWithAuth = () => {
+const Form = () => {
   const [category, setCategory] = useState<any[]>([]);
   const [flag, setFlag] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>([]);
+  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
     driving_licence_number: "",
+    password: "",
     email: "",
     address: "",
     category_id: "",
     status: "active",
   });
-  const [data, setData] = useState<any>([]);
-  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
-
-  const { lang, lawyerId } = useParams();
-  const [loading, setLoading] = useState(true);
-
+  const { lang } = useParams();
   const [images, setImages] = useState<{
     lawyer_licence: File | null;
     driving_licence: File | null;
@@ -66,6 +63,8 @@ const PageWithAuth = () => {
     subscription_image: null,
   });
 
+  const { t } = useTranslate();
+  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
@@ -74,88 +73,30 @@ const PageWithAuth = () => {
     }));
   };
 
-  const buildQueryParams = () => {
-    const params = new URLSearchParams();
-
-    // Iterate over all lawyerData fields to dynamically create query params
-    Object.entries(lawyerData).forEach(([key, value]) => {
-      if (value && value !== "") {
-        // Handle the name and description fields dynamically for localization
-
-        params.append(key, value);
-      }
-    });
-
-    // Append images separately as form data for file uploads
-    if (images.national_id_image && typeof images.national_id_image != "object")
-      params.append("national_id_image", images.national_id_image);
-    if (images.driving_licence && typeof images.driving_licence != "object")
-      params.append("driving_licence", images.driving_licence);
-    if (
-      images.subscription_image &&
-      typeof images.subscription_image != "object"
-    )
-      params.append("subscription_image", images.subscription_image);
-    if (images.lawyer_licence && typeof images.lawyer_licence != "object")
-      params.append("lawyer_licence", images.lawyer_licence);
-
-    return params.toString();
-  };
-
-  const getLawyerData = async () => {
-    try {
-      const res = await getSpecifiedLawyer(lang, lawyerId);
-      if (res?.body["0"]) {
-        const lawyer = res.body["0"];
-
-        setLawyerData({
-          name: lawyer.name,
-          phone: lawyer.phone,
-          driving_licence_number: lawyer.driving_licence_number,
-          email: lawyer.email,
-          address: lawyer.address,
-          category_id: lawyer.category.id,
-          status: lawyer.status,
-        });
-        setImages({
-          national_id_image: lawyer.national_id_image,
-          driving_licence: lawyer.driving_licence,
-          subscription_image: lawyer.subscription_image,
-          lawyer_licence: lawyer.lawyer_licence,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching lawyer data", error);
-    }
-  };
-
+  // Handle select change
   const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
     }));
   };
-
   const handleImageChange = async (
     file: File,
     imageType: keyof typeof images
   ) => {
     setLoading(false);
-
     const formData = new FormData();
     formData.append("image", file);
     try {
       const res = await UploadImage(formData, lang); // Call API to create the lawyer
       if (res) {
         // Reset data after successful creation
-        console.log(res.body.image_id);
         setImages((prevState) => ({
           ...prevState,
           [imageType]: res.body.image_id,
         }));
-        setLoading(true);
-
         reToast.success(res.message); // Display success message
+        setLoading(true);
       } else {
         reToast.error(t("Failed to create upload image")); // Show a fallback failure message
         setLoading(true);
@@ -163,55 +104,73 @@ const PageWithAuth = () => {
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 
-      // Construct the dynamic key based on field names and the current language
-
       let errorMessage = "Something went wrong."; // Default fallback message
 
-      // Loop through the fields to find the corresponding error message
-
-      // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
       setLoading(true);
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(false);
 
     const formData = new FormData();
-    const queryParams = buildQueryParams();
+
     // Append images if they exist
-    if (images.national_id_image && typeof images.national_id_image != "object")
+    if (images.national_id_image) {
       formData.append("national_id_image", images.national_id_image);
-    if (images.driving_licence && typeof images.driving_licence != "object")
+    }
+    if (images.driving_licence) {
       formData.append("driving_licence", images.driving_licence);
-    if (
-      images.subscription_image &&
-      typeof images.subscription_image != "object"
-    )
+    }
+    if (images.subscription_image) {
       formData.append("subscription_image", images.subscription_image);
-    if (images.lawyer_licence && typeof images.lawyer_licence != "object")
+    }
+    if (images.lawyer_licence) {
       formData.append("lawyer_licence", images.lawyer_licence);
+    }
 
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (key == "phone") {
+        formData.append(key, value.replace("+", ""));
+      } else {
+        formData.append(key, value);
+      }
     });
 
     try {
-      const res = await UpdateLawyer(queryParams, lawyerId, lang); // Call API to create the lawyer
+      const res = await CreateLawyer(formData, lang); // Call API to create the lawyer
       if (res) {
+        // Reset data after successful creation
+        setLawyerData({
+          name: "",
+          phone: "",
+          driving_licence_number: "",
+          password: "",
+          address: "",
+          email: "",
+          category_id: "",
+          status: "active",
+        });
+        setImages({
+          lawyer_licence: null,
+          driving_licence: null,
+          national_id_image: null,
+          subscription_image: null,
+        });
         setLoading(true);
 
         reToast.success(res.message); // Display success message
       } else {
-        reToast.error(t("Failed to update Lawyer"));
+        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setLoading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
 
+      // Construct the dynamic key based on field names and the current language
       const fields = [
         "name",
         "phone",
@@ -219,21 +178,26 @@ const PageWithAuth = () => {
         "category_id",
         "address",
         "email",
+        "password",
         "lawyer_licence",
         "national_id_image",
         "driving_licence",
         "subscription_image",
       ];
 
+      let errorMessage = "Something went wrong."; // Default fallback message
+
       // Loop through the fields to find the corresponding error message
       for (let field of fields) {
-        const error = axiosError.response?.data?.errors?.[field];
+        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
         if (error) {
           errorMessage = error[0]; // Retrieve the first error message for the field
-          break;
+          break; // Exit the loop once the error is found
         }
       }
 
+      // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
       setLoading(true);
     }
@@ -244,65 +208,21 @@ const PageWithAuth = () => {
     value: item.name,
     label: item.name,
   }));
-
   const fetchData = async () => {
     try {
       const countriesData = await getCategory("lawyer", lang);
       setCategory(countriesData?.body?.data || []);
     } catch (error) {}
   };
-
-  // On mount, fetch data
   useEffect(() => {
-    getLawyerData();
     fetchData();
-  }, [lang, lawyerId, flag]);
-
-  const { t } = useTranslate();
-  const getServicesData = async () => {
-    try {
-      const res = await getAllRoles(lang);
-
-      const roles = Array.isArray(res?.body?.roles_and_permissions)
-        ? res.body.roles_and_permissions.filter(
-            (role: any) => role.role !== "client" && role.role !== "lawyer"
-          )
-        : [];
-
-      setAllowedRoles(["super_admin", ...roles.map((r: any) => r.role)]);
-    } catch (error: any) {
-      const message = error?.response?.data?.message;
-      const status = error?.response?.status;
-
-      if (status === 401) {
-        if (message === "please login first") {
-          console.warn("User not authenticated, redirecting to login...");
-          clearAuthInfo();
-          window.location.replace("/auth/login");
-        } else if (message === "Unauthorized" || message === "غير مصرح") {
-          console.warn("User unauthorized, redirecting to 403 page...");
-          window.location.replace("/error-page/403");
-        }
-      } else {
-        console.error("An unexpected error occurred:", error);
-        // You can add a fallback or show a toast here if needed
-      }
-    }
-  };
-
-  useEffect(() => {
-    getServicesData();
-  }, []);
-
-  // Loading state while allowedRoles is being fetched
-  if (!allowedRoles) {
-    return; // Or <Loading />
-  }
-  const ProtectedPage = Auth({ allowedRoles })(() => (
+  }, [flag]);
+  return (
     <div>
+      {" "}
       <Card>
         <CardHeader>
-          <CardTitle>{t("Update Lawyer")}</CardTitle>
+          <CardTitle> {t("Create a New Lawyer")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col justify-between ">
@@ -324,9 +244,9 @@ const PageWithAuth = () => {
                 <Label htmlFor="Name">{t("Lawyer Name")}</Label>
                 <Input
                   type="text"
+                  placeholder={t("Enter Lawyer Name")}
                   name="name"
                   value={lawyerData.name}
-                  placeholder={t("Enter Lawyer Name")}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -346,9 +266,9 @@ const PageWithAuth = () => {
                     numericOnly: true,
                     uppercase: true,
                   }}
+                  value={lawyerData.phone}
                   type="tel"
                   name="phone"
-                  value={lawyerData.phone}
                   placeholder={t("Enter Mobile Number")}
                   onChange={handleInputChange}
                 />
@@ -361,9 +281,9 @@ const PageWithAuth = () => {
               >
                 <Label htmlFor="Licence">{t("Licence Number")}</Label>
                 <Input
+                  value={lawyerData.driving_licence_number}
                   type="number"
                   name="driving_licence_number"
-                  value={lawyerData.driving_licence_number}
                   onChange={handleInputChange}
                   placeholder={t("Enter Licence Number")}
                 />
@@ -406,8 +326,8 @@ const PageWithAuth = () => {
                 <Input
                   type="text"
                   placeholder={t("Enter Address")}
-                  name="address"
                   value={lawyerData.address}
+                  name="address"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -421,8 +341,23 @@ const PageWithAuth = () => {
                 <Input
                   type="email"
                   placeholder={t("Enter Email")}
-                  name="email"
                   value={lawyerData.email}
+                  name="email"
+                  onChange={handleInputChange}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ y: -50 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.1 }}
+                className="flex flex-col gap-2 w-full sm:w-[48%]"
+              >
+                <Label htmlFor="password">{t("Password")}</Label>
+                <Input
+                  type="password"
+                  placeholder={t("Enter Password")}
+                  value={lawyerData.password}
+                  name="password"
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -449,7 +384,6 @@ const PageWithAuth = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("Licensing photo")}</Label>
-
                 <ImageUploader
                   imageType="driving_licence"
                   id={images.driving_licence}
@@ -476,7 +410,6 @@ const PageWithAuth = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("Membership photo")}</Label>
-
                 <ImageUploader
                   imageType="subscription_image"
                   id={images.subscription_image}
@@ -490,7 +423,6 @@ const PageWithAuth = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("ID photo")}</Label>
-
                 <ImageUploader
                   imageType="national_id_image"
                   id={images.national_id_image}
@@ -498,6 +430,7 @@ const PageWithAuth = () => {
                 />
               </motion.div>
             </div>
+            {/* Submit Button inside form */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -510,16 +443,14 @@ const PageWithAuth = () => {
                 onClick={handleSubmit}
                 className="w-32 !bg-[#dfc77d] px-2 hover:!bg-[#fef0be] text-black"
               >
-                {!loading ? t("Loading") : t("Update Lawyer")}
+                {!loading ? t("Loading") : t("Create Lawyer")}
               </Button>
             </motion.div>
-          </div>
+          </div>{" "}
         </CardContent>
       </Card>
     </div>
-  ));
-
-  return <ProtectedPage />;
+  );
 };
 
-export default PageWithAuth;
+export default Form;

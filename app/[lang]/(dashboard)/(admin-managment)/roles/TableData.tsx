@@ -96,8 +96,8 @@ const TableData = ({ flag }: { flag: any }) => {
             : await getAllRolesPanigation(page, lang);
 
         setData(
-          res?.body?.roles_and_permissions.filter((role) =>
-            [9, 8].includes(role.id)
+          res?.body?.roles_and_permissions.filter(
+            (role: any) => role.role !== "client" && role.role !== "lawyer"
           ) || []
         );
         console.log(res.body);
@@ -109,7 +109,6 @@ const TableData = ({ flag }: { flag: any }) => {
       }
     }
   };
-
   const SearchData = async () => {
     setLoading(true);
 
