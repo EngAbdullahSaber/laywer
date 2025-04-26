@@ -47,7 +47,7 @@ const TaskStatus = ({
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     status: "",
   });
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       status: value?.value,

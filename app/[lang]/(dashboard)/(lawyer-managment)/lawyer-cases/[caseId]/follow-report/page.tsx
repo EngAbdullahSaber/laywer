@@ -93,12 +93,12 @@ const CaseFollowReport = () => {
           @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
   
           :root {
-            --font-color: #fff;
-            --highlight-color: #fdd472;
+            --font-color: #070707;
+            --highlight-color: #af9c5e;
             --header-bg-color: #1a1a1a;
             --footer-bg-color: #1a1a1a;
             --table-img-bg-color: #2c2c2c;
-            --background-gradient: linear-gradient(180deg, #31291E 0%, #000080 100%);
+            --background-gradient: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
           }
   
           body {
@@ -145,13 +145,13 @@ const CaseFollowReport = () => {
           }
   
           header .title {
-            font-size: 24px;
+            font-size: 30px;
             font-weight: bold;
             color: var(--highlight-color);
           }
   
           header h2 {
-            font-size: 20px;
+            font-size: 24px;
             color: var(--highlight-color);
             margin: 10px 0;
           }
@@ -179,7 +179,7 @@ const CaseFollowReport = () => {
             background: rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgb(0 0 0 / 39%);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
           }
   
@@ -189,13 +189,15 @@ const CaseFollowReport = () => {
           }
   
           .details-section h3 {
-            font-size: 16px;
+            font-size: 22px;
             color: var(--highlight-color);
             margin-bottom: 10px;
           }
   
           .details-section p {
             margin: 5px 0;
+            font-size: 20px;
+
           }
   
           /* Make the last div take full width */
@@ -206,9 +208,11 @@ const CaseFollowReport = () => {
           footer {
             padding: 1cm 0;
             text-align: center;
-            background: var(--footer-bg-color);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--font-color);
-            font-size: 10pt;
+                        box-shadow: 0 4px 6px rgb(0 0 0 / 39%);
+
+            font-size: 12pt;
             position: relative;
             z-index: 2;
           }
@@ -226,7 +230,7 @@ const CaseFollowReport = () => {
   
           aside b {
             display: block;
-            font-size: 16px;
+            font-size: 18px;
             color: var(--highlight-color);
             margin: 10px 0;
           }
@@ -391,7 +395,6 @@ const CaseFollowReport = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    // Use html2pdf to generate and download the PDF
     // html2pdf()
     //   .set({
     //     margin: [10, 10, 10, 10], // Set margins
@@ -405,6 +408,18 @@ const CaseFollowReport = () => {
 
     // // Clean up the temporary div
     // element.remove();
+  };
+  const convertTo24Hour = (time12h: any) => {
+    let [hours, minutes] = time12h.split(":");
+    let ampm = time12h.slice(-2).toLowerCase();
+
+    if (ampm === "pm" && hours !== "12") {
+      hours = parseInt(hours, 10) + 12;
+    } else if (ampm === "am" && hours === "12") {
+      hours = "00";
+    }
+
+    return `${hours}:${minutes}`;
   };
   return (
     <Card>
@@ -534,7 +549,9 @@ const CaseFollowReport = () => {
                 type="time"
                 placeholder="HH:MM" // Updated placeholder
                 value={currentTime}
-                onChange={(e) => setCurrentTime(e.target.value)}
+                onChange={(e) =>
+                  setCurrentTime(convertTo24Hour(e.target.value))
+                }
               />
             </motion.div>
             <motion.div
@@ -604,7 +621,9 @@ const CaseFollowReport = () => {
                     type="time"
                     placeholder="HH:MM" // Updated placeholder
                     value={nextTime}
-                    onChange={(e) => setNextTime(e.target.value)}
+                    onChange={(e) =>
+                      setNextTime(convertTo24Hour(e.target.value))
+                    }
                   />
                 </motion.div>
                 <motion.div

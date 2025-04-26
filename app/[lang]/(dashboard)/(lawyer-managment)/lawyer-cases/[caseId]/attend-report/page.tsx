@@ -93,156 +93,159 @@ const CaseFollowReport = () => {
   <title>تقرير حضور جلسة قضائية</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+       :root {
+            --font-color: #070707;
+            --highlight-color: #af9c5e;
+            --header-bg-color: #1a1a1a;
+            --footer-bg-color: #1a1a1a;
+            --table-img-bg-color: #2c2c2c;
+            --background-gradient: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+          }
+  
+          body {
+            margin: 0;
+            position: relative;
+            padding: 1cm 2cm;
+            background: var(--background-gradient);
+            color: var(--font-color);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            overflow-x: hidden;
+          }
+  
+          a {
+            color: var(--highlight-color);
+            text-decoration: none;
+          }
+  
+          hr {
+            margin: 1cm 0;
+            height: 0;
+            border: 0;
+            border-top: 1mm solid var(--highlight-color);
+          }
+  
+          header {
+            padding: 1cm 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+          }
+  
+          header .logoAndName {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+          }
+  
+          header .logo {
+            width: 60px;
+            height: 60px;
+          }
+  
+          header .title {
+            font-size: 30px;
+            font-weight: bold;
+            color: var(--highlight-color);
+          }
+  
+          header h2 {
+            font-size: 24px;
+            color: var(--highlight-color);
+            margin: 10px 0;
+          }
+  
+          header h3 {
+            font-size: 18px;
+            color: var(--font-color);
+            margin: 10px 0;
+          }
+  
+          header p {
+            margin: 5px 0;
+          }
+  
+          .details-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);      
+            gap: 20px;
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+          }
+  
+          .details-section div {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgb(0 0 0 / 39%);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+  
+          .details-section div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+          }
+  
+          .details-section h3 {
+            font-size: 22px;
+            color: var(--highlight-color);
+            margin-bottom: 10px;
+          }
+  
+          .details-section p {
+            margin: 5px 0;
+            font-size: 20px;
 
-    :root {
-      --font-color: #fff;
-      --highlight-color: #fdd472;
-      --header-bg-color: #1a1a1a;
-      --footer-bg-color: #1a1a1a;
-      --table-img-bg-color: #2c2c2c;
-      --background-gradient: linear-gradient(180deg, #31291E 0%, #000080 100%);
-    }
+          }
+  
+          /* Make the last div take full width */
+          .details-section div:last-child {
+            grid-column: 1 / -1; /* Span across all columns */
+          }
+  
+          footer {
+            padding: 1cm 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--font-color);
+                        box-shadow: 0 4px 6px rgb(0 0 0 / 39%);
 
-    body {
-      margin: 0;
-      position: relative;
-      padding: 1cm 2cm;
-      background: var(--background-gradient);
-      color: var(--font-color);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 12pt;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: var(--highlight-color);
-      text-decoration: none;
-    }
-
-    hr {
-      margin: 1cm 0;
-      height: 0;
-      border: 0;
-      border-top: 1mm solid var(--highlight-color);
-    }
-
-    header {
-      padding: 1cm 0;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    header .logoAndName {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    header .logo {
-      width: 60px;
-      height: 60px;
-    }
-
-    header .title {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--highlight-color);
-    }
-
-    header h2 {
-      font-size: 20px;
-      color: var(--highlight-color);
-      margin: 10px 0;
-    }
-
-    header h3 {
-      font-size: 18px;
-      color: var(--font-color);
-      margin: 10px 0;
-    }
-
-    header p {
-      margin: 5px 0;
-    }
-
-    .details-section {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);      
-      gap: 20px;
-      margin: 20px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .details-section div {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .details-section div:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .details-section h3 {
-      font-size: 16px;
-      color: var(--highlight-color);
-      margin-bottom: 10px;
-    }
-
-    .details-section p {
-      margin: 5px 0;
-    }
-
-    /* Make the last div take full width */
-    .details-section div:last-child {
-      grid-column: 1 / -1; /* Span across all columns */
-    }
-
-    footer {
-      padding: 1cm 0;
-      text-align: center;
-      background: var(--footer-bg-color);
-      color: var(--font-color);
-      font-size: 10pt;
-      position: relative;
-      z-index: 2;
-    }
-
-    footer a {
-      margin: 0 10px;
-    }
-
-    aside {
-      text-align: center;
-      margin: 20px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    aside b {
-      display: block;
-      font-size: 16px;
-      color: var(--highlight-color);
-      margin: 10px 0;
-    }
-
-    .background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-      opacity: 0.2; /* Adjust opacity for better readability */
-    }
+            font-size: 12pt;
+            position: relative;
+            z-index: 2;
+          }
+  
+          footer a {
+            margin: 0 10px;
+          }
+  
+          aside {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+          }
+  
+          aside b {
+            display: block;
+            font-size: 18px;
+            color: var(--highlight-color);
+            margin: 10px 0;
+          }
+  
+          .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.2; /* Adjust opacity for better readability */
+          }
   </style>
 </head>
 <body>
@@ -402,7 +405,7 @@ const CaseFollowReport = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  const convertTo24Hour = (time12h) => {
+  const convertTo24Hour = (time12h: any) => {
     let [hours, minutes] = time12h.split(":");
     let ampm = time12h.slice(-2).toLowerCase();
 

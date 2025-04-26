@@ -4,7 +4,10 @@ import Logo from "@/public/images/auth/LawyerLogo.png";
 import Image from "next/image";
 
 import { Loader2 } from "lucide-react";
+import { useTranslate } from "@/config/useTranslation";
 const LayoutLoader = () => {
+  const { t } = useTranslate();
+
   return (
     <div
       className=" h-screen flex items-center justify-center  flex-col space-y-2"
@@ -22,7 +25,7 @@ const LayoutLoader = () => {
       />{" "}
       <span className=" inline-flex gap-1 text-white text-xl">
         <Loader2 className="mr-2 h-4 w-4 animate-spin  " />
-        Loading...
+        {t("Loading")}
       </span>
     </div>
   );
