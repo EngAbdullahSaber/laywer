@@ -29,8 +29,6 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
           // redirect("/auth/login");
         } else if (!allowedRoles.includes(userRole)) {
           // If user role is not allowed, redirect to a "Not Authorized" page
-          console.log(allowedRoles);
-          console.log(userRole);
           // redirect("/auth/login");
         }
       }, [userData, userRole, allowedRoles]);

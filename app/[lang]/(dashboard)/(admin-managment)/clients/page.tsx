@@ -1,15 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTranslate } from "@/config/useTranslation";
-
 import { Auth } from "@/components/auth/Auth";
-
 import { useParams } from "next/navigation";
-import { getClientFile } from "@/services/clients/clients";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 
-import Link from "next/link";
 import { clearAuthInfo } from "@/services/utils";
 import Strcuture from "./Strcuture";
 const PageWithAuth = () => {
