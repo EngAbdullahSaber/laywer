@@ -86,11 +86,11 @@ const Strcuture = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           {hasCreatePermission && (
-            <Link href={"clients/add"}>
+            <a href={"clients/add"}>
               <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
                 {t("Create Client")}
               </Button>
-            </Link>
+            </a>
           )}
         </motion.div>
       </div>
