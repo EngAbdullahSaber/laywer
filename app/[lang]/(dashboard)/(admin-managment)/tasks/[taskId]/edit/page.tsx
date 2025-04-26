@@ -25,6 +25,9 @@ import { Auth } from "@/components/auth/Auth";
 import { getStaffPanigation } from "@/services/staff/staff";
 import { useParams } from "next/navigation";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { useAccessToken } from "@/config/accessToken";
+import { updateAxiosHeader } from "@/services/axios";
+import { clearAuthInfo } from "@/services/utils";
 
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
@@ -196,7 +199,11 @@ const PageWithAuth = () => {
       setIsloading(true);
     }
   };
+
+  const accessToken = useAccessToken();
+
   const getServicesData = async () => {
+    updateAxiosHeader(accessToken);
     try {
       const res = await getAllRoles(lang);
 

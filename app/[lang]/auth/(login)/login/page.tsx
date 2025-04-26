@@ -21,11 +21,11 @@ const LoginPage = () => {
                 "linear-gradient(180deg, #31291E 0%, #000080 100%)",
             }}
           >
-            <Image
+            {/* <Image
               src={background}
               alt="image"
               className="absolute top-0 left-0 w-full h-full "
-            />
+            /> */}
             <motion.div
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
@@ -53,9 +53,22 @@ const LoginPage = () => {
             >
               ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي
             </motion.p>
+            <motion.p
+              initial={{ filter: "blur(20px)", opacity: 0 }}
+              animate={{ filter: "blur(0px)", opacity: 1 }}
+              transition={{ duration: 1.2 }}
+              className="!text-[#fdd472] text-center font-extrabold mt-7 text-3xl z-50 block"
+              style={{
+                color: "#fdd472",
+                fontWeight: "800",
+                fontSize: "34px",
+              }}
+            >
+              Law Office of Mohammed bin Sami Saati
+            </motion.p>
           </div>
 
-          <div className=" min-h-screen basis-full md:basis-1/2 w-full px-4 py-5 flex justify-center items-center">
+          <div className=" min-h-screen basis-full md:basis-1/2 w-full px-4 bg-[#e8e6dc] py-5 flex justify-center items-center">
             <div className="lg:w-[480px] ">
               <LogInForm />
             </div>

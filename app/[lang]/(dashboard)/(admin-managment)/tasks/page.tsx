@@ -82,11 +82,11 @@ const PageWithAuth = () => {
           {permission
             .find((item: any) => item.id === 27)
             .permissions.some((item: any) => item.id === 29) && (
-            <Link href={"tasks/add"}>
+            <a href={"tasks/add"}>
               <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
                 {t("Create Task")}
               </Button>
-            </Link>
+            </a>
           )}
         </motion.div>
       </div>

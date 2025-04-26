@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Form from "./Form";
 import { clearAuthInfo } from "@/services/utils";
+import { updateAxiosHeader } from "@/services/axios";
+import { useAccessToken } from "@/config/accessToken";
 
 // Zod validation schema
 
@@ -13,7 +15,11 @@ const PageWithAuth = () => {
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
   const { lang } = useParams();
 
+  const accessToken = useAccessToken();
+
   const getServicesData = async () => {
+    updateAxiosHeader(accessToken);
+
     try {
       const res = await getAllRoles(lang);
 

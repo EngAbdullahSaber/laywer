@@ -18,6 +18,9 @@ import CreateLawyerCategory from "@/app/[lang]/(dashboard)/(category-mangement)/
 import { CleaveInput } from "@/components/ui/cleave";
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { useAccessToken } from "@/config/accessToken";
+import { updateAxiosHeader } from "@/services/axios";
+import { clearAuthInfo } from "@/services/utils";
 
 interface ErrorResponse {
   errors: {
@@ -259,7 +262,12 @@ const PageWithAuth = () => {
   }, [lang, lawyerId, flag]);
 
   const { t } = useTranslate();
+
+  const accessToken = useAccessToken();
+
   const getServicesData = async () => {
+    updateAxiosHeader(accessToken);
+
     try {
       const res = await getAllRoles(lang);
 

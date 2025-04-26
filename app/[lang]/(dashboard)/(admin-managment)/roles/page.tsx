@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { clearAuthInfo } from "@/services/utils";
+import { useAccessToken } from "@/config/accessToken";
+import { updateAxiosHeader } from "@/services/axios";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
@@ -19,7 +21,10 @@ const PageWithAuth = () => {
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
   const { lang } = useParams();
 
+  const accessToken = useAccessToken();
+
   const getServicesData = async () => {
+    updateAxiosHeader(accessToken);
     try {
       const res = await getAllRoles(lang);
 
@@ -79,11 +84,11 @@ const PageWithAuth = () => {
           transition={{ duration: 1.7 }}
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
-          <Link href={"roles/add"}>
+          <a href={"roles/add"}>
             <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
               {t("Create Roles")}
             </Button>
-          </Link>
+          </a>
         </motion.div>
       </div>
 

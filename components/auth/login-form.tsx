@@ -88,7 +88,7 @@ const LogInForm = () => {
   const { t } = useTranslate();
 
   return (
-    <div className="w-full py-10">
+    <div className="w-full py-10 ">
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
@@ -104,7 +104,7 @@ const LogInForm = () => {
           priority={true}
         />
       </motion.div>
-    
+
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
@@ -126,6 +126,7 @@ const LogInForm = () => {
             disabled={isPending}
             type="text"
             id="email"
+            className="bg-[#e8e6dc] border-[#fdd472]"
             size={!isDesktop2xl ? "xl" : "lg"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -149,7 +150,7 @@ const LogInForm = () => {
               disabled={isPending}
               type={passwordType}
               id="password"
-              className="peer "
+              className="peer bg-[#e8e6dc] border-[#fdd472]"
               size={!isDesktop2xl ? "xl" : "lg"}
               placeholder=" "
               value={password}

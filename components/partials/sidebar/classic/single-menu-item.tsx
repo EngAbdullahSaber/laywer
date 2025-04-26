@@ -32,7 +32,7 @@ const SingleMenuItem = ({
   };
   const { Navigate, t } = useTranslate();
   return (
-    <Link href={Navigate(href)}>
+    <a href={Navigate(href)}>
       <>
         {!collapsed || hovered ? (
           <div
@@ -71,7 +71,7 @@ const SingleMenuItem = ({
           </div>
         )}
       </>
-    </Link>
+    </a>
   );
 };
 
