@@ -35,8 +35,8 @@ const PageWithAuth = () => {
       if (status === 401) {
         if (message === "please login first") {
           console.warn("User not authenticated, redirecting to login...");
-          clearAuthInfo();
-          window.location.replace("/auth/login");
+          // clearAuthInfo();
+          // window.location.replace("/auth/login");
         } else if (message === "Unauthorized" || message === "غير مصرح") {
           console.warn("User unauthorized, redirecting to 403 page...");
           window.location.replace("/error-page/403");

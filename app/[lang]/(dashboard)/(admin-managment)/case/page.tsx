@@ -23,6 +23,8 @@ import { useParams } from "next/navigation";
 import { getFile } from "@/services/cases/cases";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { clearAuthInfo } from "@/services/utils";
+import { useAccessToken } from "@/config/accessToken";
+import { updateAxiosHeader } from "@/services/axios";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
@@ -43,7 +45,10 @@ const PageWithAuth = () => {
     }
   };
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
-
+  const accessToken = useAccessToken();
+  if (accessToken) {
+    updateAxiosHeader(accessToken);
+  }
   const getServicesData = async () => {
     try {
       const res = await getAllRoles(lang);
@@ -62,8 +67,8 @@ const PageWithAuth = () => {
       if (status === 401) {
         if (message === "please login first") {
           console.warn("User not authenticated, redirecting to login...");
-          clearAuthInfo();
-          window.location.replace("/auth/login");
+          // clearAuthInfo();
+          // window.location.replace("/auth/login");
         } else if (message === "Unauthorized" || message === "غير مصرح") {
           console.warn("User unauthorized, redirecting to 403 page...");
           window.location.replace("/error-page/403");
