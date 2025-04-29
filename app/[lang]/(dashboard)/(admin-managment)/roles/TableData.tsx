@@ -138,18 +138,20 @@ const TableData = ({ flag }: { flag: any }) => {
         <div className="flex flex-row gap-2 items-center justify-center">
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className=" h-7 w-7"
-                  color="secondary"
-                >
-                  {" "}
-                  <Link href={`roles/${row.original.id}/edit`}>
-                    <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                  </Link>{" "}
-                </Button>
+              <TooltipTrigger asChild>
+                <div className="inline-block">
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className=" h-7 w-7"
+                    color="secondary"
+                  >
+                    {" "}
+                    <a href={`roles/${row.original.id}/edit`}>
+                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                    </a>{" "}
+                  </Button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 <p> {t("Edit Permissions For Roles")}</p>

@@ -46,8 +46,8 @@ const TableData = () => {
   const { lang } = useParams();
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
-  const permission = JSON.parse(localStorage.getItem("permissions"));
-
+  const permissionString = localStorage.getItem("permissions");
+  const permission = permissionString ? JSON.parse(permissionString) : null;
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
     email: "",
@@ -143,18 +143,21 @@ const TableData = () => {
             .permissions.some((item: any) => item.id === 30) && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className=" h-7 w-7"
-                    color="secondary"
-                  >
-                    {" "}
-                    <Link href={`tasks/${row.original.id}/edit`}>
-                      <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                    </Link>{" "}
-                  </Button>
+                <TooltipTrigger asChild>
+                  {" "}
+                  <div className="inline-block">
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className=" h-7 w-7"
+                      color="secondary"
+                    >
+                      {" "}
+                      <Link href={`tasks/${row.original.id}/edit`}>
+                        <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
+                      </Link>{" "}
+                    </Button>{" "}
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p> {t("Edit Task")}</p>
