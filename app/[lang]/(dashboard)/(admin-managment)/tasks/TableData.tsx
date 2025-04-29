@@ -144,7 +144,6 @@ const TableData = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  {" "}
                   <div className="inline-block">
                     <Button
                       size="icon"
@@ -152,11 +151,10 @@ const TableData = () => {
                       className=" h-7 w-7"
                       color="secondary"
                     >
-                      {" "}
-                      <Link href={`tasks/${row.original.id}/edit`}>
-                        <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                      </Link>{" "}
-                    </Button>{" "}
+                      <a href={`tasks/${row.original.id}/edit`}>
+                        <Icon icon="heroicons:pencil" className="h-4 w-4" />
+                      </a>
+                    </Button>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
