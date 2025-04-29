@@ -10,12 +10,18 @@ import { Auth } from "@/components/auth/Auth";
 import { useParams } from "next/navigation";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { clearAuthInfo } from "@/services/utils";
+import { useAccessToken } from "@/config/accessToken";
+import { updateAxiosHeader } from "@/services/axios";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
 
+  const accessToken = useAccessToken();
+  if (accessToken) {
+    updateAxiosHeader(accessToken);
+  }
   const getServicesData = async () => {
     try {
       const res = await getAllRoles(lang);

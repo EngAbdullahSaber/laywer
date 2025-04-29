@@ -40,7 +40,7 @@ export function DataTableToolbar({
   console.log(open);
 
   return (
-    <div className="flex flex-1 flex-wrap items-center gap-2">
+    <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
       {searchPalsceholder ? (
         <Input
           placeholder={t(searchPalsceholder)}
