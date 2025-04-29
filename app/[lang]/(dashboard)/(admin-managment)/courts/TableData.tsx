@@ -141,7 +141,7 @@ const TableData = ({ flag }: { flag: any }) => {
             .permissions.some((item: any) => item.id === 36) && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   {" "}
                   <div className="inline-block">
                     <Button

@@ -91,10 +91,10 @@ const DeleteButton: React.FC<IDeleteContact> = ({ id, getClientData }) => {
             {t("Deleting Client")}{" "}
           </motion.h3>
           <motion.p
-            initial={{ y: -30 }}
+            initial={{ y: -50 }}
             whileInView={{ y: 0 }}
             transition={{ duration: 1.4 }}
-            className="text-sm text-default-300 "
+            className="text-sm text-default-500 "
           >
             {t("Are You Sure For Delete This Client?")}
           </motion.p>
