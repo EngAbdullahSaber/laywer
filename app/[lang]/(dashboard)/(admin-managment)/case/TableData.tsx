@@ -52,8 +52,8 @@ const TableData = () => {
   const { lang } = useParams();
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
-  const permission = JSON.parse(localStorage.getItem("permissions"));
-
+  const permissionString = localStorage.getItem("permissions");
+  const permission = permissionString ? JSON.parse(permissionString) : null;
   const [filters, setFilters] = useState<Record<string, string>>({
     status_filter: "",
     category_filter: "",

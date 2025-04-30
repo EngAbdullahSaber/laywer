@@ -216,6 +216,7 @@ const CreateLawyerCategory = ({
                       <Input
                         id="Name"
                         type="text"
+                        value={lawyerData.titleAr}
                         placeholder={t("Enter Services Name")}
                         name="titleAr"
                         onChange={handleInputChange}
@@ -231,6 +232,7 @@ const CreateLawyerCategory = ({
                       <Input
                         id="Price"
                         type="number"
+                        value={lawyerData.price}
                         placeholder={t("Enter Price")}
                         name="price"
                         onChange={handleInputChange}
@@ -250,6 +252,7 @@ const CreateLawyerCategory = ({
                       <Textarea
                         id="Description"
                         placeholder={t("Type Here")}
+                        value={lawyerData.descriptionAr}
                         rows={3}
                         name="descriptionAr"
                         onChange={(e) => handleInputChange(e)}
@@ -284,6 +287,7 @@ const CreateLawyerCategory = ({
                         id="Name"
                         type="text"
                         placeholder={t("Enter Services Name")}
+                        value={lawyerData.titleEn}
                         name="titleEn"
                         onChange={handleInputChange}
                       />
@@ -299,6 +303,7 @@ const CreateLawyerCategory = ({
                         {t("Services Description")}
                       </Label>
                       <Textarea
+                        value={lawyerData.descriptionEn}
                         id="Description"
                         placeholder={t("Type Here")}
                         rows={3}

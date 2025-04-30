@@ -45,7 +45,7 @@ const ImageUploader = ({ imageType, id, onFileChange }: ImageUploaderProps) => {
     maxFiles: 1, // Only allow 1 file per upload
     maxSize: 2000000, // 2 MB max size
     accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif"],
+      "*/*": [], // Accept all file types
     },
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0]; // We only allow one file per drop

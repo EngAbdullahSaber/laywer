@@ -90,7 +90,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem
             transitionDuration={1}
             label={t("status")}
-            value={lawyerData?.status || "-"}
+            value={lawyerData?.status === "replied" ? "تم الرد" : "لم يتم الرد"}
           />
           <DetailItem
             transitionDuration={1.1}
@@ -169,24 +169,27 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         </ul>
         <hr className="my-8" />
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="flex flex-row gap-6 my-5 items-center"
-        >
-          <span className="text-sm text-default-900 font-medium w-[52%]">
-            {t("Client file")}:
-          </span>
-          <a
-            href={lawyerData?.files?.url} // Access the file URL dynamically from the `file` object
-            className="text-default-500 font-semibold w-[40%]"
-            target="_blank"
-            rel="noopener noreferrer" // Added for security when opening links
+        {lawyerData?.files?.map((file, idx) => (
+          <motion.p
+            key={idx}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 + idx * 0.1, duration: 0.5 }}
+            className="flex flex-row gap-6 my-5 items-center"
           >
-            {t("Show File")} {/* Display the file name */}
-          </a>
-        </motion.p>
+            <span className="text-sm text-default-900 font-medium w-[52%]">
+              {t("Client file")} {idx + 1}:
+            </span>
+            <a
+              href={file.url}
+              className="text-default-500 cursor-pointer font-semibold w-[40%]"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("Show File")}{" "}
+            </a>
+          </motion.p>
+        ))}
       </>
     );
   };

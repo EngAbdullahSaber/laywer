@@ -123,7 +123,7 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
       setIsloading(true);
     }
   };
-  console.log(row.original?.role_with_permission?.id);
+  console.log(lawyerData);
   useEffect(() => {
     if (row?.original) {
       setLawyerData({
@@ -201,7 +201,6 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
                 >
                   <Label htmlFor="phone">{t("Phone Number")}</Label>
                   <CleaveInput
-                    id="prefix"
                     options={{
                       prefix: "+966",
                       delimiter: " ",
@@ -210,8 +209,13 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
                       uppercase: true,
                     }}
                     type="tel"
+                    id="phone"
                     placeholder={t("Your phone number")}
-                    value={lawyerData.phone}
+                    value={
+                      lawyerData.phone.startsWith("+966")
+                        ? lawyerData.phone
+                        : `+966 ${lawyerData.phone.replace(/^966/, "")}`
+                    }
                     name="phone"
                     onChange={handleInputChange}
                   />

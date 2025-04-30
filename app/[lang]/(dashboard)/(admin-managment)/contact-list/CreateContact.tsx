@@ -203,6 +203,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     onChange={handleInputChange}
                   />
                 </motion.div>
+
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}

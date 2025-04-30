@@ -47,7 +47,15 @@ const importance_level: { value: string; label: string }[] = [
   { value: "medium", label: "ذو اهمية متوسطة" }, // Medium - more concise translation
   { value: "normal", label: "ذو اهمية عادية" }, // Normal - clearer and more common term
 ];
-const CreateDate = ({ id }: { id: any }) => {
+const CreateDate = ({
+  id,
+  setFlags,
+  flags,
+}: {
+  id: any;
+  flags: any;
+  setFlags: any;
+}) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [loading, setIsloading] = useState(true); // State to control dialog visibility
@@ -73,14 +81,16 @@ const CreateDate = ({ id }: { id: any }) => {
 
     return `${hours}:${minutes}`;
   };
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       importance_level: value.value,
     }));
   };
   // Handle title input change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     if (name == "appointment_time") {
       setLawyerData({ ...lawyerData, [name]: convertTo24Hour(value) });
@@ -133,6 +143,7 @@ const CreateDate = ({ id }: { id: any }) => {
           importance_level: "",
         });
         setIsloading(true);
+        setFlags(flags);
 
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion

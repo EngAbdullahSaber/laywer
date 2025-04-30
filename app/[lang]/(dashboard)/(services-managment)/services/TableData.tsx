@@ -28,7 +28,7 @@ const TableData = ({ flag }: { flag: any }) => {
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
-  const searchPalsceholder = "Searchs";
+  const searchPalsceholder = "";
   const { lang } = useParams();
   const [open, setOpen] = useState(false);
 

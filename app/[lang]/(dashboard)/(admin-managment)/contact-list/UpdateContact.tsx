@@ -233,7 +233,11 @@ const UpdateContact = ({
                     }}
                     type="tel"
                     id="phone"
-                    value={contactList.phone}
+                    value={
+                      lawyerData.phone.startsWith("+966")
+                        ? lawyerData.phone
+                        : `+966 ${contactList.phone.replace(/^966/, "")}`
+                    }
                     name="phone"
                     placeholder={t("Your phone number")}
                     onChange={handleInputChange}

@@ -658,7 +658,10 @@
   "New Orders": "  تذاكر العملاء",
   "Inquiries": "تذاكر",
   "services image": "صورة الخدمة ",
-
+  "Archived Case List": "قائمة القضايا المؤرشفة",
+  "Archived Cases": "القضايا المؤرشفة",
+  "Archived Case List Details": "تفاصيل قائمة القضايا المؤرشفة",
+  "Archived Case": "القضايا المؤرشفة",
   "Send": "إرسال",
   "Create Date With Client": "تحديد موعد مع العميل",
   "New Order List": "قائمة الطلبات الجديدة",

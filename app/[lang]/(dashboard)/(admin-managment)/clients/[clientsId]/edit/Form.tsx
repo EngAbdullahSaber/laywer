@@ -258,7 +258,11 @@ const Form = () => {
                   }}
                   type="tel"
                   name="phone"
-                  value={lawyerData.phone}
+                  value={
+                    lawyerData.phone.startsWith("+966")
+                      ? lawyerData.phone
+                      : `+966 ${lawyerData.phone.replace(/^966/, "")}`
+                  }
                   onChange={handleInputChange}
                   placeholder={t("Enter Client Mobile Number")}
                 />

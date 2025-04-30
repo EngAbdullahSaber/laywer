@@ -1,80 +1,63 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
+import View from "./View";
 import { motion } from "framer-motion";
-import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+
+import { useTranslate } from "@/config/useTranslation";
 import { DataTable } from "../../tables/advanced/components/data-table";
-import { useParams } from "next/navigation";
+import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
+import {
+  getArchivedCases,
+  getArchivedCasesPanigation,
+  SearchArchivedCases,
+} from "@/services/cases/cases";
 import { useEffect, useState } from "react";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
-import {
-  SearchContactList,
-  getContactList,
-  getContactListPanigation,
-  getFilterContactList,
-} from "@/services/contact-list/contact-list";
-import DeleteButton from "./DeleteButton";
-import UpdateContact from "./UpdateContact";
-import { getCategory } from "@/services/category/category";
-import { toast as reToast } from "react-hot-toast";
+import { useParams } from "next/navigation";
+import DeleteButton from "./Delete";
 
 interface Task {
   id: string;
+  Case_Name?: string;
+  main_case_number?: string;
+  client?: any;
   category?: any;
-  name?: string;
-  email?: string;
-  Gender?: string;
-  phone?: string;
+  lawyer?: any;
+  session_date?: string;
+  status?: string;
 }
-const TableData = ({ flag }: { flag: any }) => {
+
+const TableData = () => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
   const searchPalsceholder = "Searchs";
-  const [open, setOpen] = useState(false);
+  const { lang } = useParams();
+  const { t } = useTranslate();
   const permissionString = localStorage.getItem("permissions");
   const permission = permissionString ? JSON.parse(permissionString) : null;
-  const { lang } = useParams();
-  const [category, setCategory] = useState<any[]>([]);
-
   const [filters, setFilters] = useState<Record<string, string>>({
-    full_name: "",
+    status_filter: "",
     category_filter: "",
-    phone: "",
+    claim_status_filter: "",
   });
   const buildQueryString = (filters: { [key: string]: string }) => {
     const queryParams = Object.entries(filters)
       .filter(([key, value]) => value) // Only include filters with values
-      .map(([key, value]) => `=${value}`) // Format as "field:key=value"
+      .map(([key, value]) => `${key}=${value}`) // Format as "field:key=value"
       .join("&"); // Join them with "&"
 
-    return queryParams ? `&category_filter${queryParams}` : "";
+    return queryParams ? `&${queryParams}` : "";
   };
 
   const queryString = buildQueryString(filters);
-  const transformedCategories = category.map((item) => ({
-    id: item.id,
-    value: item.name,
-    label: item.name,
-  }));
-  const fetchData = async () => {
-    try {
-      const countriesData = await getCategory("contact_list", lang);
-      setCategory(countriesData?.body?.data || []);
-    } catch (error) {}
-  };
-  const filtersConfig = [
-    {
-      label: "category_filter",
-      placeholder: "Select Category",
-      type: "select",
-      values: transformedCategories,
-      value: filters.category_filter,
-    },
-  ];
 
+  const filtersConfig: any = [];
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -83,38 +66,26 @@ const TableData = ({ flag }: { flag: any }) => {
   };
 
   const handleFilterSubmit = () => {
-    getContactListData();
-    setOpen(false);
+    // Perform filtering logic here
+    getCasesData();
+    setOpen(false); // Close the sheet after applying filters
   };
 
-  const getContactListData = async () => {
+  const getCasesData = async () => {
     setLoading(true);
-    if (queryString.length > 0) {
-      try {
-        const res = await getFilterContactList(queryString, lang);
 
-        setData(res?.body?.data || []);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data", error);
+    try {
+      const res =
+        page === 1
+          ? await getArchivedCases(lang)
+          : await getArchivedCasesPanigation(page, lang);
 
-        setLoading(false);
-      }
-    } else {
-      try {
-        const res =
-          page === 1
-            ? await getContactList(lang)
-            : await getContactListPanigation(page, lang);
+      setData(res?.body?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data", error);
 
-        setData(res?.body?.data || []);
-        console.log(res.body.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data", error);
-
-        setLoading(false);
-      }
+      setLoading(false);
     }
   };
 
@@ -122,7 +93,7 @@ const TableData = ({ flag }: { flag: any }) => {
     setLoading(true);
 
     try {
-      const res = await SearchContactList(search, lang);
+      const res = await SearchArchivedCases(search, lang);
 
       setData(res?.body?.data || []);
       setLoading(false);
@@ -137,27 +108,20 @@ const TableData = ({ flag }: { flag: any }) => {
     if (debouncedSearch) {
       SearchData();
     } else {
-      getContactListData();
-      fetchData();
+      getCasesData();
     }
-  }, [debouncedSearch, page, filters, flag]);
+  }, [debouncedSearch, page, filters]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
+          <View row={row} />
+
           {permission
-            .find((item: any) => item.id === 45)
-            .permissions.some((item: any) => item.id === 48) && (
-            <UpdateContact row={row} getContactListData={getContactListData} />
-          )}{" "}
-          {permission
-            .find((item: any) => item.id === 45)
-            .permissions.some((item: any) => item.id === 49) && (
-            <DeleteButton
-              id={row.original.id}
-              getContactListData={getContactListData}
-            />
+            .find((item: any) => item.id === 12)
+            .permissions.some((item: any) => item.id === 16) && (
+            <DeleteButton getCasesData={getCasesData} id={row.original.id} />
           )}
         </div>
       ),
@@ -172,9 +136,9 @@ const TableData = ({ flag }: { flag: any }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "Userss",
+      accessorKey: "Client_Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Userss"} />
+        <DataTableColumnHeader column={column} title={"Client_Name"} />
       ),
       cell: ({ row }) => {
         return (
@@ -185,16 +149,62 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.name}
-            </motion.span>{" "}
+              {row.original.client?.name}
+            </motion.span>
           </div>
         );
       },
     },
     {
-      accessorKey: "Categories",
+      accessorKey: "Lawyer_Name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Categories"} />
+        <DataTableColumnHeader column={column} title={"Lawyer_Name"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.lawyer?.name}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "case_number",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"case_number"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.main_case_number}
+            </motion.span>
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "Category",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Category"} />
       ),
       cell: ({ row }) => {
         return (
@@ -204,8 +214,8 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              {row.original.category.name}
-            </motion.span>{" "}
+              {row.original.category?.name}
+            </motion.span>
           </div>
         );
       },
@@ -215,9 +225,12 @@ const TableData = ({ flag }: { flag: any }) => {
     },
 
     {
-      accessorKey: "Email",
+      accessorKey: "Next_Appointment_Date",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Email"} />
+        <DataTableColumnHeader
+          column={column}
+          title={"Next_Appointment_Date"}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -228,8 +241,8 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.email}
-            </motion.span>{" "}
+              {row.original.session_date}
+            </motion.span>
           </div>
         );
       },
@@ -237,10 +250,11 @@ const TableData = ({ flag }: { flag: any }) => {
         return value.includes(row.getValue(id));
       },
     },
+
     {
-      accessorKey: "Mobile Number",
+      accessorKey: "Status",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Mobile Number"} />
+        <DataTableColumnHeader column={column} title={"Status"} />
       ),
       cell: ({ row }) => {
         return (
@@ -249,11 +263,29 @@ const TableData = ({ flag }: { flag: any }) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-              dir="ltr"
             >
-              {row.original.phone}
-            </motion.span>{" "}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.status === "pending" && "destructive") ||
+                  (row.original.status === "in_progress" && "warning") ||
+                  (row.original.status === "completed" && "success") ||
+                  "default"
+                }
+              >
+                {lang == "en"
+                  ? row.original.status == "completed"
+                    ? "Completed"
+                    : row.original.status == "in_progress"
+                    ? "In Progress"
+                    : "Pending"
+                  : row.original.status == "completed"
+                  ? "مكتملة"
+                  : row.original.status == "in_progress"
+                  ? "قيد التنفيذ"
+                  : "قيدالانتظار"}{" "}
+              </Badge>{" "}
+            </motion.span>
           </div>
         );
       },

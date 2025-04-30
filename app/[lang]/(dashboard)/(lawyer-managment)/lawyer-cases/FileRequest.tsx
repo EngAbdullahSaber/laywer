@@ -39,7 +39,15 @@ interface LaywerData {
   details: string;
   law_suit_id: string;
 }
-const FileRequest = ({ id }: { id: any }) => {
+const FileRequest = ({
+  id,
+  setFlags,
+  flags,
+}: {
+  id: any;
+  flags: any;
+  setFlags: any;
+}) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
@@ -124,6 +132,7 @@ const FileRequest = ({ id }: { id: any }) => {
         });
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
+        setFlags(flags);
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
       }

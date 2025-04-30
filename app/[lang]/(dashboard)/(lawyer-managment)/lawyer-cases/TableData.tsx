@@ -41,6 +41,7 @@ interface Task {
 const TableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [flags, setFlags] = useState(true);
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
@@ -131,16 +132,16 @@ const TableData = ({ flag }: { flag: any }) => {
     } else {
       getClientData();
     }
-  }, [debouncedSearch, page, filters, flag]);
+  }, [debouncedSearch, page, filters, flag, flags]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
-          <CaseStatus id={row.original.id} />
-          <CreateDate id={row.original.id} />
-          <FileRequest id={row.original.id} />
+          <CaseStatus flags={flags} setFlags={setFlags} id={row.original.id} />
+          <CreateDate flags={flags} setFlags={setFlags} id={row.original.id} />
+          <FileRequest flags={flags} setFlags={setFlags} id={row.original.id} />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>

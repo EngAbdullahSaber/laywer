@@ -34,7 +34,15 @@ interface ErrorResponse {
 interface LaywerData {
   status: string;
 }
-const CaseStatus = ({ id }: { id: any }) => {
+const CaseStatus = ({
+  id,
+  setFlags,
+  flags,
+}: {
+  id: any;
+  flags: any;
+  setFlags: any;
+}) => {
   const { t } = useTranslate();
   const { lang } = useParams();
   const [loading, setIsloading] = useState(true); // State to control dialog visibility
@@ -43,7 +51,7 @@ const CaseStatus = ({ id }: { id: any }) => {
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     status: "",
   });
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       status: value.value,
@@ -70,11 +78,12 @@ const CaseStatus = ({ id }: { id: any }) => {
         setIsloading(true);
 
         reToast.success(res.message); // Display success message
+        setFlags(flags);
+
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setIsloading(true);
-
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -97,7 +106,6 @@ const CaseStatus = ({ id }: { id: any }) => {
       // Show the error in a toast notification
       reToast.error(errorMessage); // Display the error message in the toast
       setIsloading(true);
-
     }
   };
   const Case_Status: { value: string; label: string }[] = [

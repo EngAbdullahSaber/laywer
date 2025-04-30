@@ -49,7 +49,7 @@ const FileUploaderMultiple = ({
     maxFiles: 5,
     maxSize: 2000000, // 2 MB max size for each file
     accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif"],
+      "*/*": [], // Accept all file types
     },
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0]; // We only allow one file per drop

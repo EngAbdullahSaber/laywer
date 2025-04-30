@@ -112,3 +112,46 @@ export async function SearchCases(id: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
+/*   archived Cases  */
+export async function getArchivedCases(lang: any) {
+  let res = await api.get(`court/cases?per_page=10&status_filter=completed`, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}
+export async function SearchArchivedCases(id: any, lang: any) {
+  let res = await api.get(
+    `court/cases?per_page=10&status_filter=completed&search=${id}&per_page=10`,
+    {
+      headers: {
+        "Accept-Language": lang,
+      },
+    }
+  );
+  if (res) return res.data;
+  else return false;
+}
+export async function getArchivedCasesPanigation(page: any, lang: any) {
+  let res = await api.get(
+    `court/cases?per_page=10&status_filter=completed&page=${page}&per_page=10`,
+    {
+      headers: {
+        "Accept-Language": lang,
+      },
+    }
+  );
+  if (res) return res.data;
+  else return false;
+}
+export async function DeleteArchivedCases(id: any, lang: any) {
+  let res = await api.delete(`court/cases/${id}`, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}
