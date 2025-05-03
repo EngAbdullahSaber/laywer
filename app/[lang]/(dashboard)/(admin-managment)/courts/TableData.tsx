@@ -279,7 +279,7 @@ const TableData = ({ flag }: { flag: any }) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
-              className="max-w-[500px] text-blue-700 truncate font-medium"
+              className="max-w-[500px] text-blue-700 dark:text-[#dfc77d] truncate font-medium"
               href={row?.original?.website}
             >
               رابط المحكمة

@@ -31,7 +31,9 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+      {value}
+    </span>
   </motion.li>
 );
 
@@ -93,7 +95,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <span className="text-sm text-default-900 font-medium w-[52%]">
+            <span className="text-sm text-default-900 dark:text-white font-medium w-[52%]">
               {t("Court Website Link")}:
             </span>
             <a

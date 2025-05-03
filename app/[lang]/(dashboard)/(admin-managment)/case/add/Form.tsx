@@ -98,9 +98,8 @@ const Form = () => {
       const res = await getCases(lang);
 
       // Convert the ID to a string, pad it with leading zeros, and default to '0000'
-      const caseId = String(res?.body?.data[0]?.id).padStart(4, "0") || "0000";
-      console.log(res?.body?.data[0]?.id);
-
+      const id = res?.body?.data?.[0]?.id;
+      const caseId = id ? String(id).padStart(4, "0") : "0001";
       setData(Number(caseId)); // Set the padded case ID
       setNumbers([caseId]); // Set the padded case ID
       setLoading(false);

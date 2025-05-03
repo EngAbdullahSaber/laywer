@@ -98,7 +98,7 @@ const page = () => {
                 </div>
 
                 <div className="p-4 flex justify-end">
-                  <CreateDate id={item.id} />
+                  <CreateDate getCourtData={getCourtData} id={item.id} />
                 </div>
               </CardContent>
             </Card>

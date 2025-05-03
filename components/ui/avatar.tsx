@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { faker } from "@faker-js/faker";
@@ -42,13 +42,18 @@ const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
         {...props}
       >
         {avatars.slice(0, max).map((avatar, index) => (
-          <React.Fragment key={`avatar-group-key-${faker.string.uuid()}`}>{avatar}</React.Fragment>
+          <React.Fragment key={`avatar-group-key-${faker.string.uuid()}`}>
+            {avatar}
+          </React.Fragment>
         ))}
         {avatars.length > max && (
           <>
             {custom ? (
               <div className=" inline-block">
-                <span className="ltr:ml-5 rtl:mr-5 inline-block"> +{avatars.length - max} more</span>
+                <span className="ltr:ml-5 rtl:mr-5 inline-block">
+                  {" "}
+                  +{avatars.length - max} more
+                </span>
               </div>
             ) : (
               <Avatar
@@ -89,7 +94,7 @@ const AvatarFallback = React.forwardRef<
   <AvatarPrimitive.Fallback
     ref={ref}
     className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted font-semibold text-sm",
+      "flex h-full w-full items-center justify-center rounded-full dark:bg-slate-700 bg-muted font-semibold text-sm",
       className
     )}
     {...props}

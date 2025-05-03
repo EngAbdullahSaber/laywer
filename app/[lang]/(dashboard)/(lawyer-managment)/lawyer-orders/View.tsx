@@ -34,7 +34,9 @@ const DetailItem = ({
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+      {value}
+    </span>
   </motion.li>
 );
 const ListItem = ({
@@ -132,7 +134,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <span className="text-sm text-default-900 font-medium w-[52%]">
             {t("details")}:
           </span>
-          <span className="text-default-500 font-semibold w-[40%]">
+          <span className="text-default-500 dark:text-white font-semibold w-[40%]">
             {lawyerData.details} {/* Display the file name */}
           </span>
         </motion.p>
@@ -177,7 +179,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           </span>
           <a
             href={lawyerData?.files?.url} // Access the file URL dynamically from the `file` object
-            className="text-default-500 font-semibold w-[40%]"
+            className="text-default-500 dark:text-white font-semibold w-[40%]"
             target="_blank"
             rel="noopener noreferrer" // Added for security when opening links
           >

@@ -65,15 +65,15 @@ const RadioGroup = React.forwardRef<
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
-interface RadioGroupItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
-  VariantProps<typeof radioVariants> {
+interface RadioGroupItemProps
+  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
+    VariantProps<typeof radioVariants> {
   icon?: React.ReactNode;
-  color?: color
-
+  color?: color;
 }
-const RadioGroupItem = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>,
+const RadioGroupItem = React.forwardRef<
+  React.ElementRef<typeof RadioGroupPrimitive.Item>,
   RadioGroupItemProps
-
 >(
   (
     {
@@ -106,7 +106,7 @@ const RadioGroupItem = React.forwardRef<React.ElementRef<typeof RadioGroupPrimit
             </RadioGroupPrimitive.Item>
             <Label
               htmlFor={props.id}
-              className="font-normal text-default-600 cursor-pointer"
+              className="font-normal dark:text-white text-default-600 cursor-pointer"
             >
               {children}
             </Label>

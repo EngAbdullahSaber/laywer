@@ -382,13 +382,6 @@ const Form = () => {
               className="flex justify-center gap-3 mt-4"
             >
               <Button
-                type="button"
-                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                variant="outline"
-              >
-                {t("Cancel")}
-              </Button>
-              <Button
                 type="submit"
                 disabled={!loading}
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"

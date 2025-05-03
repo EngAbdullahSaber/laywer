@@ -151,7 +151,7 @@ export function DataTable<TData>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 !text-center"
+                  className="h-24 !text-center dark:text-[#fff]"
                 >
                   {t("No results")}
                 </TableCell>

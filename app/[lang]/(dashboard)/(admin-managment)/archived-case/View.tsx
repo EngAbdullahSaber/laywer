@@ -31,7 +31,9 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     <span className="text-sm text-default-900 font-medium w-[40%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[55%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[55%]">
+      {value}
+    </span>
   </motion.li>
 );
 
@@ -141,7 +143,9 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           >
             {t("Client Files")}
           </motion.h3>
-          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+          <p className="text-gray-500 dark:text-white mt-2">
+            {t("No Files found")}
+          </p>
         </>
       );
     }
@@ -241,7 +245,6 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             }
           />
           <DetailItem label={t("details")} value={casesData?.details || "-"} />
-        
         </ul>
         {renderCaseFilesData()}
       </>

@@ -29,7 +29,7 @@ export function DataTablePagination({
   const { t } = useTranslate();
   return (
     <div className="flex items-center flex-wrap gap-2 justify-between px-2">
-      <div className="flex-1 text-sm text-muted-foreground whitespace-nowrap">
+      <div className="flex-1 text-sm text-muted-foreground whitespace-nowrap dark:text-[#fff]">
         {table.getFilteredSelectedRowModel().rows.length} {t("of")}
         {table.getFilteredRowModel().rows.length} {t("row(s) selected")}
       </div>
@@ -54,7 +54,7 @@ export function DataTablePagination({
             </SelectContent>
           </Select> */}
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium text-muted-foreground">
+        <div className="flex w-[100px] items-center justify-center text-sm font-medium text-muted-foreground dark:text-[#fff]">
           {t("Page")} {page}
         </div>
         <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export function DataTablePagination({
           </Button> */}
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0  dark:border-[#dfc77d] dark:text-[#dfc77d] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]"
             onClick={() => (page == 1 ? setPage(1) : setPage(page - 1))}
             disabled={page <= 1}
           >
@@ -78,7 +78,7 @@ export function DataTablePagination({
           </Button>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0  dark:border-[#dfc77d] dark:text-[#dfc77d] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]"
             disabled={isPaginationDisabled || data.length < 10}
             onClick={() => (page >= 1 ? setPage(page + 1) : setPage(page + 1))}
           >

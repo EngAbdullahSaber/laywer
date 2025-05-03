@@ -16,11 +16,15 @@ const ControlledRadio = ({
   };
   return (
     <>
-      <RadioGroup defaultValue={selected} onValueChange={handleSelect}>
-        <RadioGroupItem value={text1} id={text1}>
+      <RadioGroup
+        defaultValue={selected}
+        onValueChange={handleSelect}
+        className="dark:text-white"
+      >
+        <RadioGroupItem value={text1} id={text1} className="dark:text-white">
           {text1}{" "}
         </RadioGroupItem>
-        <RadioGroupItem value={text2} id={text2}>
+        <RadioGroupItem value={text2} id={text2} className="dark:text-white">
           {text2}{" "}
         </RadioGroupItem>
       </RadioGroup>

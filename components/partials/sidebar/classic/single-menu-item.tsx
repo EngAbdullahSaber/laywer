@@ -37,9 +37,9 @@ const SingleMenuItem = ({
         {!collapsed || hovered ? (
           <div
             className={cn(
-              "flex  gap-3 group  text-default-700 dark:text-default-950  font-medium  text-sm capitalize px-[10px] py-3 rounded cursor-pointer hover:bg-primary hover:text-primary-foreground",
+              "flex  gap-3 group  text-default-700 dark:text-default-950    dark:hover:bg-[#dfc77d] dark:hover:text-[#000] font-medium  text-sm capitalize px-[10px] py-3 rounded cursor-pointer hover:bg-primary hover:text-primary-foreground",
               {
-                "bg-primary text-primary-foreground ": isLocationMatch(
+                "dark:bg-[#dfc77d] dark:text-[#000] ": isLocationMatch(
                   href,
                   locationName
                 ),
@@ -56,9 +56,9 @@ const SingleMenuItem = ({
           <div>
             <span
               className={cn(
-                "h-12 w-12 mx-auto rounded-md  transition-all duration-300 inline-flex flex-col items-center justify-center  relative  ",
+                "h-12 w-12 mx-auto rounded-md dark:hover:bg-[#dfc77d] dark:hover:text-[#000] transition-all duration-300 inline-flex flex-col items-center justify-center  relative  ",
                 {
-                  "bg-primary text-primary-foreground ": isLocationMatch(
+                  "dark:bg-[#dfc77d] dark:text-[#000] ": isLocationMatch(
                     href,
                     locationName
                   ),

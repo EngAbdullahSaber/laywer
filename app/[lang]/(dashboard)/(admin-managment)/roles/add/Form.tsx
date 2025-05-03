@@ -128,7 +128,7 @@ const Form = () => {
                       />
                       <Label
                         htmlFor={permission?.id}
-                        className="text-base mx-3 text-muted-foreground font-normal"
+                        className="text-base mx-3 text-muted-foreground dark:text-slate-200 font-normal"
                       >
                         {permission?.name}
                       </Label>

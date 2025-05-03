@@ -31,7 +31,9 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+      {value}
+    </span>
   </motion.li>
 );
 
@@ -115,7 +117,9 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           >
             {t("Client Files")}
           </motion.h3>
-          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+          <p className="text-gray-500 dark:text-white mt-2">
+            {t("No Files found")}
+          </p>
         </>
       );
     }
@@ -136,7 +140,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
               </span>
               <a
                 href={file.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
+                className="text-default-500 dark:text-white font-semibold w-[40%]"
                 target="_blank"
                 rel="noopener noreferrer" // Added for security when opening links
               >
@@ -257,7 +261,9 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           >
             {t("Report of attendance at a judicial hearing")}
           </motion.h3>
-          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+          <p className="text-gray-500 dark:text-white mt-2">
+            {t("No Files found")}
+          </p>
         </>
       );
     }
@@ -278,7 +284,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
               </span>
               <a
                 href={file.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
+                className="text-default-500 dark:text-white font-semibold w-[40%]"
                 target="_blank"
                 rel="noopener noreferrer" // Added for security when opening links
               >
@@ -305,7 +311,9 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           >
             {t("Case follow-up report")}
           </motion.h3>
-          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+          <p className="text-gray-500 dark:text-white mt-2">
+            {t("No Files found")}
+          </p>
         </>
       );
     }
@@ -326,7 +334,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
               </span>
               <a
                 href={file.url} // Access the file URL dynamically from the `file` object
-                className="text-default-500 font-semibold w-[40%]"
+                className="text-default-500 dark:text-white font-semibold w-[40%]"
                 target="_blank"
                 rel="noopener noreferrer" // Added for security when opening links
               >

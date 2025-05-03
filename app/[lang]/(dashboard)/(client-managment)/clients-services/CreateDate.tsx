@@ -29,7 +29,13 @@ interface LaywerData {
   details: string;
   service_id: string;
 }
-const CreateDate = ({ id }: { id: any }) => {
+const CreateDate = ({
+  getCourtData,
+  id,
+}: {
+  id: any;
+  getCourtData: () => Promise<void>;
+}) => {
   const { t } = useTranslate();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [loading, setIsloading] = useState(true); // State to control dialog visibility
@@ -40,7 +46,7 @@ const CreateDate = ({ id }: { id: any }) => {
   });
   const { lang } = useParams();
   const [images, setImages] = useState<{
-    invoice_file: File | null;
+    invoice_file: any;
   }>({
     invoice_file: null,
   });
@@ -77,7 +83,9 @@ const CreateDate = ({ id }: { id: any }) => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
       ...prevData,
@@ -94,7 +102,6 @@ const CreateDate = ({ id }: { id: any }) => {
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    console.log(images.invoice_file);
     formData.append(`invoice_file`, images.invoice_file);
     try {
       const res = await AskAboutServices(lang, formData); // Call API to create the lawyer
@@ -108,7 +115,7 @@ const CreateDate = ({ id }: { id: any }) => {
           invoice_file: null,
         });
         setIsloading(true);
-
+        getCourtData();
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
@@ -191,7 +198,7 @@ const CreateDate = ({ id }: { id: any }) => {
               <DialogClose asChild>
                 <Button
                   type="button"
-                  className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
+                  className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] text-[#fff] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] "
                   variant="outline"
                 >
                   {t("Cancel")}

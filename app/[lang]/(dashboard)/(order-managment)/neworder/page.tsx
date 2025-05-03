@@ -78,7 +78,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.6 }}
-                      className="font-bold text-xl text-[#1A1A1A] dark:text-slate-400"
+                      className="font-bold text-xl text-[#1A1A1A] dark:text-white"
                     >
                       {item?.message}{" "}
                     </motion.p>
@@ -86,7 +86,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.7 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الرد : <span className="font-bold"> {item?.reply}</span>
                     </motion.p>
@@ -95,7 +95,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.8 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الرقم التعريفى للعميل :{" "}
                       <span className="font-bold"> 68786</span>
@@ -104,7 +104,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.9 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الرقم التعريفى للطلب :{" "}
                       <span className="font-bold"> {item?.id}</span>
@@ -113,7 +113,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الحالة : <span className="font-bold"> تم الرد</span>
                     </motion.p>
@@ -122,7 +122,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1.1 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       تاريح المقابلة مع المحامى:{" "}
                       <span className="font-bold">{item?.meeting_date} </span>
@@ -131,7 +131,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1.2 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       وقت المقابلة:{" "}
                       <span className="font-bold">
@@ -143,7 +143,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1.2 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       تاريخ الارسال:{" "}
                       <span className="font-bold">
@@ -154,7 +154,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1.2 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       وقت الارسال:{" "}
                       <span className="font-bold">
@@ -203,7 +203,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.6 }}
-                      className="font-bold text-xl text-[#1A1A1A] dark:text-slate-400"
+                      className="font-bold text-xl text-[#1A1A1A] dark:text-white"
                     >
                       {item?.message}{" "}
                     </motion.p>
@@ -211,7 +211,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.7 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       اسم العميل : <span className="font-bold">احمد على</span>
                     </motion.p>
@@ -220,7 +220,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.8 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الرقم التعريفى للعميل :{" "}
                       <span className="font-bold"> 68786</span>
@@ -229,7 +229,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.9 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الرقم التعريفى للطلب :{" "}
                       <span className="font-bold"> {item?.id}</span>
@@ -238,7 +238,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       الحالة : <span className="font-bold"> لم يتم الرد</span>
                     </motion.p>
@@ -247,7 +247,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1.2 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       تاريخ الارسال:{" "}
                       <span className="font-bold">
@@ -258,7 +258,7 @@ const page = () => {
                       initial={{ x: 15, opacity: 0 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       transition={{ duration: 1.2 }}
-                      className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                      className="font-semibold text-base text-[#1A1A1A] dark:text-white"
                     >
                       وقت الارسال:{" "}
                       <span className="font-bold">

@@ -25,7 +25,7 @@ const LayoutLoader = () => {
       />{" "}
       <span className=" inline-flex gap-1 text-white text-xl">
         <Loader2 className="mr-2 h-4 w-4 animate-spin  " />
-        {t("Loading")}
+        جارى التحميل...
       </span>
     </div>
   );

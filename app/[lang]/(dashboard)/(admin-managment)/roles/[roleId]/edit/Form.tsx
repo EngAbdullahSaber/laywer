@@ -129,7 +129,7 @@ const Form = () => {
                     />
                     <Label
                       htmlFor={permission?.id}
-                      className="text-base mx-3 text-muted-foreground font-normal"
+                      className="text-base mx-3 dark:text-slate-200 text-muted-foreground font-normal"
                     >
                       {permission?.name === "api.block"
                         ? t(permission?.name.split(".")[1])

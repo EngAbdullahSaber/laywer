@@ -7,12 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Check } from "lucide-react";
 
 const checkboxVariants = cva(
-  "peer group  shrink-0   ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:stroke-primary-foreground ",
+  "peer group  shrink-0    ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:stroke-primary-foreground [&_svg]:dark:stroke-[#000] ",
   {
     variants: {
       color: {
         default:
-          "border border-default-400 data-[state=checked]:border-primary data-[state=checked]:bg-primary  ",
+          "border border-default-400 data-[state=checked]:border-primary data-[state=checked]:text-[#000] data-[state=checked]:bg-[#dfc77d]  ",
         secondary:
           "border border-default-300 data-[state=checked]:bg-default-300/90 ",
 
@@ -60,7 +60,7 @@ const checkboxVariants = cva(
       {
         variant: "outline",
         color: "success",
-        className: " [&_svg]:stroke-success border-success",
+        className: " [&_svg]:text-[#000] border-success",
       },
       {
         variant: "outline",
@@ -98,13 +98,13 @@ const checkboxVariants = cva(
   }
 );
 
-type CheckboxProps = React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> &
+type CheckboxProps = React.ComponentPropsWithoutRef<
+  typeof CheckboxPrimitive.Root
+> &
   VariantProps<typeof checkboxVariants> & {
     lineThrough?: boolean;
     icon?: React.ReactNode;
-
   };
-
 
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -119,7 +119,7 @@ const Checkbox = React.forwardRef<
       variant,
       children,
       lineThrough,
-      icon = <Check />,
+      icon = <Check className="dark:text-[#000]" />,
       ...props
     },
     ref
@@ -136,7 +136,9 @@ const Checkbox = React.forwardRef<
             {...props}
           >
             <CheckboxPrimitive.Indicator
-              className={cn("flex items-center justify-center text-current ")}
+              className={cn(
+                "flex items-center justify-center text-current dark:text-[#000]"
+              )}
             >
               {icon}
             </CheckboxPrimitive.Indicator>
@@ -144,7 +146,7 @@ const Checkbox = React.forwardRef<
           <Label
             htmlFor={props.id}
             className={cn(
-              " font-normal text-muted-foreground  flex-1 transition-colors-opacity before:transition-width motion-reduce:transition-none ltr:pl-2.5 rtl:pr-2.5 cursor-pointer",
+              " font-normal text-muted-foreground dark:text-[#000] flex-1 transition-colors-opacity before:transition-width motion-reduce:transition-none ltr:pl-2.5 rtl:pr-2.5 cursor-pointer",
               {
                 "text-xs": size === "xs",
                 "text-sm": size === "sm",

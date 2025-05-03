@@ -1,9 +1,4 @@
-import {
-  ChevronDown,
-  ChevronUp,
-  XCircle,
-  Eye,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, XCircle, Eye } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -22,7 +17,11 @@ interface DataTableColumnHeaderProps {
   className?: string;
 }
 
-export function DataTableColumnHeader({ column, title, className }:DataTableColumnHeaderProps) {
+export function DataTableColumnHeader({
+  column,
+  title,
+  className,
+}: DataTableColumnHeaderProps) {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -34,7 +33,7 @@ export function DataTableColumnHeader({ column, title, className }:DataTableColu
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
+            className="-ml-3 h-8 data-[state=open]:bg-accent "
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (

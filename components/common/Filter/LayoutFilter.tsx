@@ -62,7 +62,7 @@ export function LayoutFilter({
         variant="outline"
         onClick={() => setOpen(!open)}
         size="sm"
-        className="ltr:ml-2 rtl:mr-2 h-8"
+        className="ltr:ml-2 rtl:mr-2 h-8  dark:border-[#dfc77d] dark:text-[#dfc77d] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]"
       >
         <FilterIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" /> {t("Filters")}
       </Button>

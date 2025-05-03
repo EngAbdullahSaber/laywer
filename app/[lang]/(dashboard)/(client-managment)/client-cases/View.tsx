@@ -31,7 +31,9 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+      {value}
+    </span>
   </motion.li>
 );
 
@@ -85,13 +87,13 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             value={casesData?.room_number || "-"}
           />
           <DetailItem
-            label="Date Of Create"
+            label={t("Date Of Create")}
             value={
               new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
             }
           />
           <DetailItem
-            label="Date Of Update"
+            label={t("Date Of Update")}
             value={
               new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
             }
@@ -115,7 +117,9 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           >
             {t("Client Files")}
           </motion.h3>
-          <p className="text-gray-500 mt-2">{t("No Files found")}</p>
+          <p className="text-gray-500 dark:text-white mt-2">
+            {t("No Files found")}
+          </p>
         </>
       );
     }

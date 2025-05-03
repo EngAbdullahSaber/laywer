@@ -31,7 +31,9 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+      {value}
+    </span>
   </motion.li>
 );
 

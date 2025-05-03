@@ -69,7 +69,7 @@ const page = () => {
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.6 }}
-                  className="font-bold text-xl text-[#1A1A1A] dark:text-slate-400"
+                  className="font-bold text-xl text-[#1A1A1A] dark:text-slate-200"
                 >
                   {item?.message}{" "}
                 </motion.p>
@@ -77,7 +77,7 @@ const page = () => {
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
-                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-200"
                 >
                   الرد : <span className="font-bold"> {item?.reply}</span>
                 </motion.p>
@@ -85,7 +85,7 @@ const page = () => {
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
-                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-200"
                 >
                   تم الرد من قبل :{" "}
                   <span className="font-bold"> {item?.reply_from?.name}</span>
@@ -95,7 +95,7 @@ const page = () => {
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 1.2 }}
-                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-200"
                 >
                   تاريح الارسال:{" "}
                   <span className="font-bold">
@@ -106,7 +106,7 @@ const page = () => {
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 1.4 }}
-                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-200"
                 >
                   تاريح المقابلة :{" "}
                   <span className="font-bold">{item?.meeting_date} </span>
@@ -115,7 +115,7 @@ const page = () => {
                   initial={{ x: 15, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 1.4 }}
-                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-400"
+                  className="font-semibold text-base text-[#1A1A1A] dark:text-slate-200"
                 >
                   وقت المقابلة :{" "}
                   <span className="font-bold">

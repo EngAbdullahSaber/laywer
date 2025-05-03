@@ -37,7 +37,9 @@ const DetailItem = ({
     <span className="text-sm text-default-900 font-medium w-[52%]">
       {label}:
     </span>
-    <span className="text-default-500 font-semibold w-[40%]">{value}</span>
+    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+      {value}
+    </span>
   </motion.li>
 );
 const DetailItemLink = ({
@@ -77,8 +79,10 @@ const ListItem = ({
     transition={{ duration: transitionDuration }}
     className="flex flex-row !flex-nowrap justify-between items-center"
   >
-    <span className="text-sm text-default-600 w-[30%]">{label}:</span>
-    <span className="text-default-900 font-semibold w-[67%]">{value}</span>
+    <span className="text-sm  text-default-900 w-[30%]">{label}:</span>
+    <span className="text-default-900  dark:text-white font-semibold w-[67%]">
+      {value}
+    </span>
   </motion.li>
 );
 interface ViewUserData {

@@ -37,137 +37,137 @@ interface CourtData {
 }
 
 const Form = () => {
-    const { t } = useTranslate();
-    const { lang } = useParams();
-    const [loading, setIsloading] = useState(true); // State to control dialog visibility
-    const [category, setCategory] = useState<any[]>([]);
-    const [cities, setCities] = useState<any[]>([]);
-    const [regions, setRegions] = useState<any[]>([]);
-    const [flag, setFlag] = useState(false);
-    const [courtData, setCourtData] = useState<CourtData>({
-      name: "",
-      category_id: "",
-      email: "",
-      address: "",
-      website: "",
-      room_number: "",
-      region_id: "",
-      city_id: "",
-    });
-    const [data, setData] = useState<any>([]);
-    const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
-  
-    // Fetch cities when region changes
-    const fetchCitiesData = async (regionId: string, page: number = 1) => {
-      try {
-        const citiesData = await getCities(regionId, lang);
-        return citiesData?.body?.data || [];
-      } catch (error) {
-        reToast.error("Failed to fetch cities");
-  
-        return [];
-      }
-    };
-  
-    // Format city options for the select component
-    const formatCityOption = (city: any) => ({
-      value: city.id,
-      label: city.name,
-    });
-  
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
+  const { t } = useTranslate();
+  const { lang } = useParams();
+  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+  const [category, setCategory] = useState<any[]>([]);
+  const [cities, setCities] = useState<any[]>([]);
+  const [regions, setRegions] = useState<any[]>([]);
+  const [flag, setFlag] = useState(false);
+  const [courtData, setCourtData] = useState<CourtData>({
+    name: "",
+    category_id: "",
+    email: "",
+    address: "",
+    website: "",
+    room_number: "",
+    region_id: "",
+    city_id: "",
+  });
+  const [data, setData] = useState<any>([]);
+  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+
+  // Fetch cities when region changes
+  const fetchCitiesData = async (regionId: string, page: number = 1) => {
+    try {
+      const citiesData = await getCities(regionId, lang);
+      return citiesData?.body?.data || [];
+    } catch (error) {
+      reToast.error("Failed to fetch cities");
+
+      return [];
+    }
+  };
+
+  // Format city options for the select component
+  const formatCityOption = (city: any) => ({
+    value: city.id,
+    label: city.name,
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCourtData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (selectedValue: any, field: string) => {
+    setCourtData((prevData) => ({
+      ...prevData,
+      [field]: selectedValue?.id,
+    }));
+
+    if (field === "region_id") {
+      setCities([]); // Clear cities when region changes
       setCourtData((prevData) => ({
         ...prevData,
-        [name]: value,
+        city_id: "", // Reset city when region changes
       }));
-    };
-  
-    const handleSelectChange = (selectedValue: any, field: string) => {
-      setCourtData((prevData) => ({
-        ...prevData,
-        [field]: selectedValue?.id,
-      }));
-  
-      if (field === "region_id") {
-        setCities([]); // Clear cities when region changes
-        setCourtData((prevData) => ({
-          ...prevData,
-          city_id: "", // Reset city when region changes
-        }));
-      }
-    };
-  
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setIsloading(false);
-  
-      const formData = new FormData();
-      Object.entries(courtData).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-  
-      try {
-        const res = await CreateCourts(formData, lang);
-        if (res) {
-          setCourtData({
-            name: "",
-            category_id: "",
-            email: "",
-            address: "",
-            website: "",
-            room_number: "",
-            region_id: "",
-            city_id: "",
-          });
-          setIsloading(true);
-  
-          reToast.success(res.message);
-        } else {
-          reToast.error(t("Failed to create Court"));
-          setIsloading(true);
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError<ErrorResponse>;
-        let errorMessage = "Something went wrong.";
-        Object.keys(courtData).forEach((field) => {
-          const fieldErrorKey = `${field}`;
-          const error = axiosError.response?.data?.errors?.[fieldErrorKey];
-          if (error) {
-            errorMessage = error[0];
-          }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsloading(false);
+
+    const formData = new FormData();
+    Object.entries(courtData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    try {
+      const res = await CreateCourts(formData, lang);
+      if (res) {
+        setCourtData({
+          name: "",
+          category_id: "",
+          email: "",
+          address: "",
+          website: "",
+          room_number: "",
+          region_id: "",
+          city_id: "",
         });
-        reToast.error(errorMessage);
+        setIsloading(true);
+
+        reToast.success(res.message);
+      } else {
+        reToast.error(t("Failed to create Court"));
         setIsloading(true);
       }
-    };
-  
-    const transformedCategories = category.map((item) => ({
-      id: item.id,
-      value: item.name,
-      label: item.name,
-    }));
-  
-    const transformedRegions = regions.map((item) => ({
-      id: item.id,
-      value: item.name,
-      label: item.name,
-    }));
-  
-    const fetchData = async () => {
-      try {
-        const categoriesData = await getCategory("courts", lang);
-        const regionsData = await getRegions(lang);
-        setCategory(categoriesData?.body?.data || []);
-        setRegions(regionsData?.body || []);
-      } catch (error) {
-        reToast.error("Failed to fetch categories or regions");
-      }
-    };
-  
-    useEffect(() => {
-      fetchData();
-    }, [flag]);
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong.";
+      Object.keys(courtData).forEach((field) => {
+        const fieldErrorKey = `${field}`;
+        const error = axiosError.response?.data?.errors?.[fieldErrorKey];
+        if (error) {
+          errorMessage = error[0];
+        }
+      });
+      reToast.error(errorMessage);
+      setIsloading(true);
+    }
+  };
+
+  const transformedCategories = category.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+
+  const transformedRegions = regions.map((item) => ({
+    id: item.id,
+    value: item.name,
+    label: item.name,
+  }));
+
+  const fetchData = async () => {
+    try {
+      const categoriesData = await getCategory("courts", lang);
+      const regionsData = await getRegions(lang);
+      setCategory(categoriesData?.body?.data || []);
+      setRegions(regionsData?.body || []);
+    } catch (error) {
+      reToast.error("Failed to fetch categories or regions");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [flag]);
   return (
     <div>
       <Card>
@@ -343,13 +343,6 @@ const Form = () => {
               transition={{ duration: 1.3 }}
               className="flex justify-center gap-3 mt-4"
             >
-              <Button
-                type="button"
-                className="w-28 border-[#dfc77d] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] !text-black"
-                variant="outline"
-              >
-                {t("Cancel")}
-              </Button>
               <Button
                 type="submit"
                 onClick={handleSubmit}

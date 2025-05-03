@@ -24,8 +24,7 @@ interface DataTableViewOptionsProps {
 export function DataTableViewOptions({ table }: DataTableViewOptionsProps) {
   // const { lang } = useParams<{ lang: string | string[] }>();
   // const [trans, setTrans] = useState<any>(null); // Adjust the type as needed
-  const {t} = useTranslate()
-
+  const { t } = useTranslate();
 
   // useEffect(() => {
   //   const fetchDictionary = async () => {
@@ -56,16 +55,21 @@ export function DataTableViewOptions({ table }: DataTableViewOptionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="ltr:ml-2 rtl:mr-2  h-8 ">
-          <SlidersHorizontal className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="ltr:ml-2 rtl:mr-2  h-8 dark:border-[#dfc77d] dark:text-[#dfc77d] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]"
+        >
+          <SlidersHorizontal className="ltr:mr-2 rtl:ml-2 h-4 w-4 " />
           {t("view")}
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className=" min-w-[150px] w-full ">
-        <DropdownMenuLabel>
-          {t("toggle columns")}
-        </DropdownMenuLabel>
+      <DropdownMenuContent
+        align="end"
+        className=" min-w-[150px] w-full text-[#fff] "
+      >
+        <DropdownMenuLabel>{t("toggle columns")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()
@@ -77,7 +81,7 @@ export function DataTableViewOptions({ table }: DataTableViewOptionsProps) {
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className="capitalize"
+                className="capitalize text-[#fff]"
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
