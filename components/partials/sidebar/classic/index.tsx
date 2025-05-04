@@ -78,8 +78,10 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const titleToApiMap: Record<string, string> = {
     Dashboard: "api.home",
     "Roles and Permission": "api.roles",
+    "New Orders": "api.orders",
     "Client List": "api.clients",
     "Case List": "api.cases",
+    "Archived Case": "api.cases",
     Lawyers: "api.lawyers",
     Tasks: "api.tasks",
     Courts: "api.courts",
@@ -92,6 +94,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Courts Categories": "api.courts::categories",
     "Cases Categories": "api.cases::categories",
     "Clients Categories": "api.clients::categories",
+    "Contact List Categories": "api",
   };
 
   const allowedKeys = new Set(
