@@ -328,7 +328,7 @@ const Form = () => {
             <Button
               type="button"
               variant="outline"
-              className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
+              className="w-28 border-[#dfc77d] dark:text-[#fff]  dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:text-[#000] text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] "
             >
               {t("Cancel")}
             </Button>

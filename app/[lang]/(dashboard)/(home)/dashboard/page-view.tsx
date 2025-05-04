@@ -1,18 +1,13 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ReportsSnapshot from "./components/reports-snapshot";
 import { useThemeStore } from "@/store";
 import { useTheme } from "next-themes";
 import { themes } from "@/config/thems";
-import DatePickerWithRange from "@/components/date-picker-with-range";
 import { useTranslate } from "@/config/useTranslation";
-import PopupMarkerMap from "../../(map)/map-react-leaflet/popup-marker-map";
 import { Docs } from "@/components/svg";
 import cardBg from "../../../../assets/service_card_bg.png";
-import { TrendingUp } from "lucide-react";
 import "./custemStyleReports.css";
-import "leaflet/dist/leaflet.css";
 import Image from "next/image";
 import CalendarPage from "./components/CalendarPage";
 import ReportsChart from "./components/reports-snapshot/reports-chart";
@@ -21,6 +16,10 @@ import { useEffect, useState } from "react";
 import { getDashBoardInfo } from "@/services/auth/auth";
 import { useParams } from "next/navigation";
 import { Auth } from "@/components/auth/Auth";
+import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { clearAuthInfo } from "@/services/utils";
+import { useAccessToken } from "@/config/accessToken";
+import { updateAxiosHeader } from "@/services/axios";
 
 interface ReportItem {
   id: number;
@@ -40,28 +39,67 @@ interface ReportItem {
     | "dark";
 }
 
-const DashboardPageView = () => {
+const PageWithAuth = () => {
   const { t } = useTranslate();
+  const [flag, setFlag] = useState(false);
+  const [data, setData] = useState<any>([]);
+  const { lang } = useParams();
+  const permissionString = localStorage.getItem("permissions");
+  const permission = permissionString ? JSON.parse(permissionString) : null;
+
+  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const accessToken = useAccessToken();
+  if (accessToken) {
+    updateAxiosHeader(accessToken);
+  }
+
   const { theme: config, setTheme: setConfig } = useThemeStore();
   const { theme: mode } = useTheme();
   const theme = themes.find((theme) => theme.name === config);
-  const [data, setData] = useState<any>([]);
   const [calenderDate, setCalenderDate] = useState<any>([]);
   const [loading, setLoading] = useState(true);
-  const { lang } = useParams();
+
+  const getServicesData = async () => {
+    try {
+      const res = await getAllRoles(lang);
+
+      const roles = Array.isArray(res?.body?.roles_and_permissions)
+        ? res.body.roles_and_permissions.filter(
+            (role: any) => role.role !== "client" && role.role !== "lawyer"
+          )
+        : [];
+
+      setAllowedRoles(["super_admin", ...roles.map((r: any) => r.role)]);
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      const status = error?.response?.status;
+
+      if (status === 401) {
+        if (message === "please login first") {
+          console.warn("User not authenticated, redirecting to login...");
+          clearAuthInfo();
+          window.location.replace("/auth/login");
+        } else if (message === "Unauthorized" || message === "غير مصرح") {
+          console.warn("User unauthorized, redirecting to 403 page...");
+          window.location.replace("/error-page/403");
+        }
+      } else {
+        console.error("An unexpected error occurred:", error);
+      }
+    }
+  };
 
   const getMessagesData = async () => {
     setLoading(true);
     const formData = new FormData();
-    const now = new Date(); // Get the current date
-    const year = now.getFullYear(); // Get the full year (e.g., 2025)
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // Get the month (0-11, so add 1) and pad with leading zero if necessary
-    const day = String(now.getDate()).padStart(2, "0"); // Get the day of the month and pad with leading zero if necessary
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
 
-    const currentDate = `${year}-${month}`; // Format as "YYYY-MM"
-    const currentDate1 = `${year}-${month}-${day}`; // Format as "YYYY-MM-DD"
+    const currentDate = `${year}-${month}`;
+    const currentDate1 = `${year}-${month}-${day}`;
     formData.append("suit_month", currentDate);
-    // formData.append("next_appointments_date", "2025-03-06");
     formData.append("next_appointments_date", currentDate1);
 
     try {
@@ -72,7 +110,7 @@ const DashboardPageView = () => {
           title: item.title,
           appointment_time: item.appointment_time,
           name: item.lawyer?.name,
-          date: new Date(item.appointment_date).toISOString().split("T")[0], // Convert string to Date and format
+          date: new Date(item.appointment_date).toISOString().split("T")[0],
         }))
       );
       setLoading(false);
@@ -81,26 +119,20 @@ const DashboardPageView = () => {
       setLoading(false);
     }
   };
-  console.log(calenderDate);
+
   useEffect(() => {
+    getServicesData();
     getMessagesData();
   }, []);
-  // Transform `suits_this_month` data for the chart
+
   const transformChartData = (suitsThisMonth: any[]) => {
     if (!suitsThisMonth || suitsThisMonth.length === 0) return [];
 
-    // Group cases by day
     const casesByDay: Record<string, number> = {};
-
     suitsThisMonth.forEach((suit) => {
-      const date = new Date(suit.created_at).toISOString().split("T")[0]; // Extract YYYY-MM-DD
-      if (casesByDay[date]) {
-        casesByDay[date]++;
-      } else {
-        casesByDay[date] = 1;
-      }
+      const date = new Date(suit.created_at).toISOString().split("T")[0];
+      casesByDay[date] = (casesByDay[date] || 0) + 1;
     });
-    // Convert to ApexCharts format
     return Object.entries(casesByDay).map(([date, count]) => ({
       x: date,
       y: count,
@@ -111,7 +143,7 @@ const DashboardPageView = () => {
     {
       id: 1,
       name: "Total Clients",
-      count: data.all_clients || 0,
+      count: data.all_clients || "0",
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       color: "primary",
@@ -120,7 +152,7 @@ const DashboardPageView = () => {
     {
       id: 2,
       name: "Total Laywer",
-      count: data.all_lawyers || 0,
+      count: data.all_lawyers || "0",
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       color: "warning",
@@ -129,7 +161,7 @@ const DashboardPageView = () => {
     {
       id: 3,
       name: "Total Case",
-      count: data.suits || 0,
+      count: data.suits || "0",
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
       href: "case",
@@ -138,7 +170,7 @@ const DashboardPageView = () => {
     {
       id: 4,
       name: "Total Task",
-      count: data.tasks || 0,
+      count: data.tasks || "0",
       href: "task",
       rate: "8.2",
       icon: <Docs className="w-10 h-10 text-primary" />,
@@ -150,33 +182,38 @@ const DashboardPageView = () => {
     theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
   })`;
 
-  return (
+  if (!allowedRoles) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  const DashboardView = () => (
     <div className="space-y-6">
       <div className="flex items-center flex-wrap justify-between gap-4">
-        <div className="text-2xl font-medium text-default-800 ">
-          {" "}
-          {t("Analytics Dashboard")}{" "}
+        <div className="text-2xl font-medium text-default-800">
+          {t("Analytics Dashboard")}
         </div>
       </div>
 
-      {/* reports area */}
-      <div className="flex flex-row justify-between items-center   ">
+      <div className="flex flex-row justify-between items-center">
         {reports.map((item) => (
           <Card
             key={item.id}
-            className={`service-card hover:bg-lawyer before:absolute before:h-[110px] before:w-[110px]   before:opacity-60 before:rounded-full before:z-[-1] before:bottom-[-73px] before:right-[-28px] lg:w-[24%] md:w-[45%] w-full p-6 relative z-10 rounded-xl overflow-hidden bg-white dark:bg-slate-800 dark:text-white`}
+            className={`service-card hover:bg-lawyer before:absolute before:h-[110px] before:w-[110px] before:opacity-60 before:rounded-full before:z-[-1] before:bottom-[-73px] before:right-[-28px] lg:w-[24%] md:w-[45%] w-full p-6 relative z-10 rounded-xl overflow-hidden bg-white dark:bg-slate-800 dark:text-white`}
           >
             <Link href={item.href}>
-              <div className="shape-icon  before:absolute before:inset-0 before:bg-[#e2e8fa] relative z-10 flex justify-center items-center w-[90px] h-[85px] leading-10 align-middle mb-7">
+              <div className="shape-icon before:absolute before:inset-0 before:bg-[#e2e8fa] relative z-10 flex justify-center items-center w-[90px] h-[85px] leading-10 align-middle mb-7">
                 <span
-                  className={`dots before:absolute  before:h-[22px] before:w-[22px]  before:top-0 before:right-[9px] before:rounded-full 
-           after:absolute   after:h-[22px] after:w-[22px]    after:bottom-[-10px] after:left-[21px] after:rounded-full `}
+                  className={`dots before:absolute before:h-[22px] before:w-[22px] before:top-0 before:right-[9px] before:rounded-full after:absolute after:h-[22px] after:w-[22px] after:bottom-[-10px] after:left-[21px] after:rounded-full`}
                 >
                   {item.icon}
                 </span>
               </div>
               <h3 className="box-title font-bold text-xl mt-[-0.32em] leading-[1.4]">
-                {t(item.name)}{" "}
+                {t(item.name)}
               </h3>
               <div
                 className={`text-lg box-title font-semibold text-${item.color} mt-1`}
@@ -188,16 +225,15 @@ const DashboardPageView = () => {
                   src={cardBg}
                   alt="bg"
                   className="w-full"
-                  layout="responsive" // You can change this to fit your needs
-                  quality={100} // Optional, you can set the quality if needed
-                />{" "}
+                  layout="responsive"
+                  quality={100}
+                />
               </div>
             </Link>
           </Card>
         ))}
       </div>
 
-      {/* Chart Section */}
       <Card>
         <CardHeader>
           <CardTitle>{t("Number of Cases This Month")}</CardTitle>
@@ -218,10 +254,9 @@ const DashboardPageView = () => {
       <CalendarPage calenderDate={calenderDate} />
     </div>
   );
+
+  const ProtectedPage = Auth({ allowedRoles })(DashboardView);
+  return <ProtectedPage />;
 };
 
-const allowedRoles = ["super_admin", "admin", "secretary"];
-
-const ProtectedComponent = Auth({ allowedRoles })(DashboardPageView);
-
-export default ProtectedComponent;
+export default PageWithAuth;

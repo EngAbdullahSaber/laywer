@@ -12,7 +12,7 @@ const checkboxVariants = cva(
     variants: {
       color: {
         default:
-          "border border-default-400 data-[state=checked]:border-primary data-[state=checked]:text-[#000] data-[state=checked]:bg-[#dfc77d]  ",
+          "border border-default-400 data-[state=checked]:border-primary data-[state=checked]:text-[#000] data-[state=checked]:dark:bg-[#dfc77d] data-[state=checked]:bg-primary  ",
         secondary:
           "border border-default-300 data-[state=checked]:bg-default-300/90 ",
 

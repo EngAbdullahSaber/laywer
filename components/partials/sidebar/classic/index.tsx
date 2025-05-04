@@ -47,7 +47,6 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
 
   const pathname = usePathname();
   const locationName = getDynamicPath(pathname);
-
   React.useEffect(() => {
     let subMenuIndex = null;
     let multiMenuIndex = null;
@@ -72,6 +71,32 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     setMultiMenu(multiMenuIndex);
   }, [locationName]);
 
+  const permissionString =
+    typeof window !== "undefined" ? localStorage.getItem("permissions") : null;
+  const permissions = permissionString ? JSON.parse(permissionString) : [];
+
+  const titleToApiMap: Record<string, string> = {
+    Dashboard: "api.home",
+    "Roles and Permission": "api.roles",
+    "Client List": "api.clients",
+    "Case List": "api.cases",
+    Lawyers: "api.lawyers",
+    Tasks: "api.tasks",
+    Courts: "api.courts",
+    Orders: "api.orders",
+    "Services Orders": "api.service::orders",
+    "Contact List": "api.contact::list",
+    Staff: "api.staffs",
+    Services: "api.services",
+    "lawyers Categories": "api.lawyers::categories",
+    "Courts Categories": "api.courts::categories",
+    "Cases Categories": "api.cases::categories",
+    "Clients Categories": "api.clients::categories",
+  };
+
+  const allowedKeys = new Set(
+    permissions?.map((p: any) => p?.parent_key_name) ?? []
+  );
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -110,15 +135,18 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
             <li key={`menu_key_${i}`}>
               {/* single menu  */}
 
-              {!item.child && !item.isHeader && (
-                <SingleMenuItem
-                  item={item}
-                  collapsed={collapsed}
-                  hovered={hovered}
-                  trans={trans}
-                  onItemClick={handleItemClick} // Add this prop
-                />
-              )}
+              {!item.child &&
+                !item.isHeader &&
+                titleToApiMap[item.title] &&
+                allowedKeys.has(titleToApiMap[item.title]) && (
+                  <SingleMenuItem
+                    item={item}
+                    collapsed={collapsed}
+                    hovered={hovered}
+                    trans={trans}
+                    onItemClick={handleItemClick}
+                  />
+                )}
 
               {/* menu label */}
               {item.isHeader && !item.child && (!collapsed || hovered) && (

@@ -20,7 +20,7 @@ const SingleMenuItem = ({
   onItemClick?: () => void; // Add this type
 }) => {
   const { badge, href, title } = item;
-
+  console.log(title);
   const pathname = usePathname();
   const locationName = getDynamicPath(pathname);
   const handleClick = (e: React.MouseEvent) => {
@@ -39,10 +39,8 @@ const SingleMenuItem = ({
             className={cn(
               "flex  gap-3 group  text-default-700 dark:text-default-950    dark:hover:bg-[#dfc77d] dark:hover:text-[#000] font-medium  text-sm capitalize px-[10px] py-3 rounded cursor-pointer hover:bg-primary hover:text-primary-foreground",
               {
-                "dark:bg-[#dfc77d] dark:text-[#000] ": isLocationMatch(
-                  href,
-                  locationName
-                ),
+                "dark:bg-[#dfc77d] bg-primary dark:text-[#000] text-[#fff] ":
+                  isLocationMatch(href, locationName),
               }
             )}
           >

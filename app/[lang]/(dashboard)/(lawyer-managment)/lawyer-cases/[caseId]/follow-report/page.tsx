@@ -693,13 +693,6 @@ const CaseFollowReport = () => {
           >
             <Button
               type="button"
-              className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
-              variant="outline"
-            >
-              {t("Cancel")}
-            </Button>
-            <Button
-              type="button"
               disabled={!loading}
               onClick={handleSubmit}
               className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
