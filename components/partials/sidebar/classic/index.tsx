@@ -94,7 +94,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Courts Categories": "api.courts::categories",
     "Cases Categories": "api.cases::categories",
     "Clients Categories": "api.clients::categories",
-    "Contact List Categories": "api",
+    "Contact List Categories": "api.cases",
   };
 
   const allowedKeys = new Set(
