@@ -3,17 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { AxiosError } from "axios";
-import { VerifyLogin } from "@/services/auth/auth";
+import { LogIn, VerifyLogin } from "@/services/auth/auth";
 import { headerConfigKeyName } from "@/services/app.config";
 import { storeTokenInLocalStorage } from "@/services/utils";
-import { changeUserData } from "@/store/Action";
+import { changeUserData, setPhoneTokens } from "@/store/Action";
 import { updateAxiosHeader } from "@/services/axios";
 import { useAccessToken } from "@/config/accessToken";
 import LayoutLoader from "../layout-loader";
@@ -44,6 +44,8 @@ const VerifyForm = ({
   const otpFields = Array.from({ length: totalOtpField }, (_, index) => index);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
+  const { lang } = useParams();
+
   const dispatch = useDispatch();
   const username = useSelector((state: RootState) => state.userName);
   const tokenOtp = useSelector((state: RootState1) => state.phoneToken);
@@ -79,8 +81,9 @@ const VerifyForm = ({
   };
 
   const handleSubmit = async () => {
-    const enteredOtp = otp.join(""); // Join OTP array into a string
+    const enteredOtp = otp.slice().reverse().join("");
     setOtp(otpArray); // Reset OTP input
+    console.log(enteredOtp);
     setLoading(false);
     try {
       // Send username and OTP to the API
@@ -140,6 +143,47 @@ const VerifyForm = ({
       setLoading(true);
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
+      const response = axiosError.response?.data;
+
+      const errors = response?.errors;
+      const message = response?.message;
+
+      if (errors) {
+        for (const field in errors) {
+          if (Object.prototype.hasOwnProperty.call(errors, field)) {
+            const errorMessage = errors[field][0];
+            toast.error(`${field}: ${errorMessage}`);
+            setLoading(true);
+          }
+        }
+      } else if (message) {
+        toast.error(
+          message == "please login first" ? t("enteredcode not valid") : null
+        ); // Show "please login first" or similar messages
+      } else {
+        toast.error("Something went wrong.");
+      }
+    }
+  };
+  const handleSubmit1 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email1 = localStorage.getItem("email");
+    const password1 = localStorage.getItem("password");
+    try {
+      const res = await LogIn(
+        {
+          email: email1,
+          device_name: email1,
+          password: password1,
+        },
+        lang
+      );
+      if (res) {
+        toast.success(res?.message);
+        dispatch(setPhoneTokens(res?.body?.verify_user_token));
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>; // Cast the error
 
       // Check if we have errors in the response
       const errors = axiosError.response?.data?.errors;
@@ -147,19 +191,17 @@ const VerifyForm = ({
         // Loop through each field in the errors object
         for (const field in errors) {
           if (Object.prototype.hasOwnProperty.call(errors, field)) {
+            // Assuming the first error in the array is the most important one
             const errorMessage = errors[field][0];
             toast.error(`${field}: ${errorMessage}`); // Display the error in a toast
-            setLoading(true);
           }
         }
       } else {
         // If no field-specific errors, display a general error message
         toast.error("Something went wrong.");
-        setLoading(true);
       }
     }
   };
-
   const isOtpComplete = otp.every((digit) => digit !== "");
   const { t } = useTranslate();
   useEffect(() => {
@@ -238,6 +280,14 @@ const VerifyForm = ({
             disabled={!isOtpComplete}
           >
             {t("Verify Now")}
+          </Button>
+          <Button
+            type="button"
+            className="w-full my-2"
+            size="lg"
+            onClick={handleSubmit1}
+          >
+            {t("Resend")}
           </Button>
         </motion.div>
       </form>

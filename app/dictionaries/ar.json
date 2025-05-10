@@ -829,6 +829,8 @@
   "cases": "القضايا",
   "clients": "العملاء",
   "home": "الرئيسية",
+  "Resend": "إعادة الإرسال",
+  "enteredcode not valid": "الرمز الذي أدخلته غير صالح",
   "Roles and Permission": "الأدارة والصلاحيات",
   "client inquiries": "تذاكر العملاء",
   "communications": "الاتصالات",

@@ -61,7 +61,8 @@ const LogInForm = () => {
         // storeTokenInLocalStorage(res?.body?.verify_user_token);
         dispatch(setUserName(email));
         dispatch(setPhoneTokens(res?.body?.verify_user_token));
-
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
         router.push("/auth/verify");
       }
     } catch (error) {
