@@ -28,7 +28,7 @@ interface RootState {
   userName: string;
 }
 interface RootState1 {
-  accessToken: string;
+  phoneToken: string;
 }
 const VerifyForm = ({
   loading,
@@ -61,7 +61,7 @@ const VerifyForm = ({
       }
     }
   };
-
+  console.log(tokenOtp);
   const handleKeyDown = (
     index: number,
     event: KeyboardEvent<HTMLInputElement>

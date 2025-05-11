@@ -136,29 +136,29 @@ const adminMenu = [
 ];
 const lawyerMenu = [
   {
-    title: "Cases",
+    title: "Lawyer Casess",
     icon: Case,
     href: "/lawyer-cases",
   },
   {
-    title: "Orders",
+    title: "Lawyer Orderss",
     icon: Appointments,
     href: "/lawyer-orders",
   },
   {
-    title: "Tasks",
+    title: "Lawyer Taskss",
     icon: Tasks,
     href: "/lawyer-tasks",
   },
   {
-    title: "Appointments",
+    title: "Lawyer Appointmentss",
     icon: Appointments,
     href: "/lawyer-appointments",
   },
 ];
 const clientMenu = [
   {
-    title: "Cases",
+    title: "Client Casess",
     icon: Case,
     href: "/client-cases",
   },
@@ -168,17 +168,17 @@ const clientMenu = [
   //   href: "/client-appointments",
   // },
   {
-    title: "Requests",
+    title: "Client Requestss",
     icon: Requests,
     href: "/client-requests",
   },
   {
-    title: "Communication",
+    title: "Client Communicationss",
     icon: ContactList,
     href: "/new-order",
   },
   {
-    title: "Services",
+    title: "Client Servicess",
     icon: ContactList,
     href: "/clients-services",
   },

@@ -11,6 +11,7 @@ import { useParams, usePathname } from "next/navigation";
 import SingleMenuItem from "./single-menu-item";
 import SubMenuHandler from "./sub-menu-handler";
 import NestedSubMenu from "../common/nested-menus";
+import { useSelector } from "react-redux";
 
 const ClassicSidebar = ({ trans }: { trans: string }) => {
   const { sidebarBg } = useSidebar();
@@ -18,9 +19,9 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
 
   const role = useRole(); // Fetch role using the custom hook
-  const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role  const { collapsed, setCollapsed } = useSidebar();
-  const menus = menusConfig?.sidebarNav?.classic || [];
+  const menusConfig = getMenusConfig(role); // Generate menusConfig based on the role
   const { collapsed, setCollapsed } = useSidebar();
+  const menus = menusConfig?.sidebarNav?.classic || [];
   const { isRtl } = useThemeStore();
   const [hovered, setHovered] = useState<boolean>(false);
   const { lang } = useParams();
@@ -30,6 +31,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
       setCollapsed(true);
     }
   };
+
   const toggleSubmenu = (i: number) => {
     if (activeSubmenu === i) {
       setActiveSubmenu(null);
@@ -37,6 +39,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
       setActiveSubmenu(i);
     }
   };
+
   const toggleMultiMenu = (subIndex: number) => {
     if (activeMultiMenu === subIndex) {
       setMultiMenu(null);
@@ -47,6 +50,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
 
   const pathname = usePathname();
   const locationName = getDynamicPath(pathname);
+
   React.useEffect(() => {
     let subMenuIndex = null;
     let multiMenuIndex = null;
@@ -71,9 +75,15 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     setMultiMenu(multiMenuIndex);
   }, [locationName]);
 
+  // Only check permissions if role is neither lawyer nor client
+  const shouldCheckPermissions = role !== "lawyer" && role !== "client";
+
   const permissionString =
-    typeof window !== "undefined" ? localStorage.getItem("permissions") : null;
+    shouldCheckPermissions && typeof window !== "undefined"
+      ? localStorage.getItem("permissions")
+      : null;
   const permissions = permissionString ? JSON.parse(permissionString) : [];
+  const username = useSelector((state) => state.user.role);
 
   const titleToApiMap: Record<string, string> = {
     Dashboard: "api.home",
@@ -84,6 +94,14 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Archived Case": "api.cases",
     Lawyers: "api.lawyers",
     Tasks: "api.tasks",
+    "Lawyer Appointmentss": "api.lawyer.appointmentss",
+    "Lawyer Orderss": "api.lawyer.orderss",
+    "Lawyer Casess": "api.lawyer.casess",
+    "Lawyer Taskss": "api.lawyer.tasks",
+    "Client Casess": "api.client.casess",
+    "Client Requestss": "api.client.requestss",
+    "Client Communicationss": "api.client.communicationss",
+    "Client Servicess": "api.client.servicess",
     Courts: "api.courts",
     Orders: "api.orders",
     "Services Orders": "api.service::orders",
@@ -97,15 +115,16 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Contact List Categories": "api.cases",
   };
 
-  const allowedKeys = new Set(
-    permissions?.map((p: any) => p?.parent_key_name) ?? []
-  );
+  const allowedKeys = shouldCheckPermissions
+    ? new Set(permissions?.map((p: any) => p?.parent_key_name) ?? [])
+    : new Set(Object.values(titleToApiMap)); // Allow all if not checking permissions
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={cn(
-        "fixed  z-[999] top-0  bg-card h-full hover:!w-[248px]  border-r  ",
+        "fixed z-[999] top-0 bg-card h-full hover:!w-[248px] border-r",
         {
           "w-[248px]": !collapsed,
           "w-[72px]": collapsed,
@@ -115,7 +134,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     >
       {sidebarBg !== "none" && (
         <div
-          className=" absolute left-0 top-0   z-[-1] w-full h-full bg-cover bg-center opacity-[0.07]"
+          className="absolute left-0 top-0 z-[-1] w-full h-full bg-cover bg-center opacity-[0.07]"
           style={{ backgroundImage: `url(${sidebarBg})` }}
         ></div>
       )}
@@ -123,21 +142,20 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
       <SidebarLogo hovered={hovered} />
 
       <ScrollArea
-        className={cn("sidebar-menu  h-[calc(100%-80px)] ", {
+        className={cn("sidebar-menu h-[calc(100%-80px)]", {
           "px-4": !collapsed || hovered,
         })}
       >
         <ul
           dir={lang == "ar" ? "rtl" : "ltr"}
-          className={cn(" space-y-1", {
-            " space-y-2 text-center": collapsed,
+          className={cn("space-y-1", {
+            "space-y-2 text-center": collapsed,
             "text-start": collapsed && hovered,
           })}
         >
           {menus.map((item, i) => (
             <li key={`menu_key_${i}`}>
-              {/* single menu  */}
-
+              {/* single menu */}
               {!item.child &&
                 !item.isHeader &&
                 titleToApiMap[item.title] &&

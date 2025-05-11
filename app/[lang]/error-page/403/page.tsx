@@ -30,9 +30,6 @@ const ErrorPage = () => {
               "The page you are looking for might have been removed had its name changed or is temporarily unavailable"
             )}
           </div>
-          <Button asChild className="mt-9  md:min-w-[300px]" size="lg">
-            <Link href="/dashboard">{t("Go to Homepage")}</Link>
-          </Button>
         </div>
       </div>
     </div>
