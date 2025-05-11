@@ -158,10 +158,10 @@ const TableData = ({ flag }: { flag: any }) => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          {/* <DeleteButton
+          <DeleteButton
             id={row.original.id}
             getServicesData={getServicesData}
-          /> */}
+          />
         </div>
       ),
     },

@@ -59,13 +59,16 @@ const Form = () => {
       }
     });
   };
+  console.log(selectedPermissions);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const uniquePermissions = Array.from(new Set([...selectedPermissions, 88]));
+
     const data = {
       name: roleName,
       dashboard_name: "super_admin",
-      permissions: selectedPermissions,
+      permissions: uniquePermissions,
     };
 
     try {

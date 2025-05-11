@@ -76,14 +76,14 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
   }, [locationName]);
 
   // Only check permissions if role is neither lawyer nor client
-  const shouldCheckPermissions = role !== "lawyer" && role !== "client";
+  const shouldCheckPermissions =
+    role !== "lawyer" && role !== "client" && role !== undefined;
 
   const permissionString =
     shouldCheckPermissions && typeof window !== "undefined"
       ? localStorage.getItem("permissions")
       : null;
   const permissions = permissionString ? JSON.parse(permissionString) : [];
-  const username = useSelector((state) => state.user.role);
 
   const titleToApiMap: Record<string, string> = {
     Dashboard: "api.home",
@@ -94,14 +94,6 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Archived Case": "api.cases",
     Lawyers: "api.lawyers",
     Tasks: "api.tasks",
-    "Lawyer Appointmentss": "api.lawyer.appointmentss",
-    "Lawyer Orderss": "api.lawyer.orderss",
-    "Lawyer Casess": "api.lawyer.casess",
-    "Lawyer Taskss": "api.lawyer.tasks",
-    "Client Casess": "api.client.casess",
-    "Client Requestss": "api.client.requestss",
-    "Client Communicationss": "api.client.communicationss",
-    "Client Servicess": "api.client.servicess",
     Courts: "api.courts",
     Orders: "api.orders",
     "Services Orders": "api.service::orders",
@@ -113,6 +105,14 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Cases Categories": "api.cases::categories",
     "Clients Categories": "api.clients::categories",
     "Contact List Categories": "api.cases",
+    "Lawyer Appointmentss": "api.lawyer.appointmentss",
+    "Lawyer Orderss": "api.lawyer.orderss",
+    "Lawyer Casess": "api.lawyer.casess",
+    "Lawyer Taskss": "api.lawyer.tasks",
+    "Client Casess": "api.client.casess",
+    "Client Requestss": "api.client.requestss",
+    "Client Communicationss": "api.client.communicationss",
+    "Client Servicess": "api.client.servicess",
   };
 
   const allowedKeys = shouldCheckPermissions

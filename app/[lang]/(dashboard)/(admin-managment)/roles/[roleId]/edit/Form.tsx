@@ -84,11 +84,12 @@ const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const uniquePermissions = Array.from(new Set([...selectedPermissions, 88]));
 
     const data = {
       name: roleName,
       dashboard_name: "super_admin",
-      permissions: selectedPermissions,
+      permissions: uniquePermissions,
     };
 
     try {
@@ -103,7 +104,7 @@ const Form = () => {
       reToast.error(axiosError.message || "Something went wrong.");
     }
   };
-
+  console.log(selectedPermissions);
   return (
     <div>
       {RolesAndpermissions.length === 0 ? (
