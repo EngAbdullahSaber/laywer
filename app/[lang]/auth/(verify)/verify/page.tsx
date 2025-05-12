@@ -61,6 +61,19 @@ const VerifyPage = () => {
               }}
             >
               ﻣﻜﺘﺐ اﻟﻤﺤﺎﻣﻲ ﻣﺤﻤﺪ ﺑﻦ ﺳﺎﻣﻲ ﺳﺎعاتي
+            </motion.p>{" "}
+            <motion.p
+              initial={{ filter: "blur(20px)", opacity: 0 }}
+              animate={{ filter: "blur(0px)", opacity: 1 }}
+              transition={{ duration: 1.2 }}
+              className="!text-[#fdd472] text-center font-extrabold mt-7 text-3xl z-50 block"
+              style={{
+                color: "#fdd472",
+                fontWeight: "800",
+                fontSize: "34px",
+              }}
+            >
+              The Law Firm of Mohammad S. Saaty
             </motion.p>
           </div>
 
