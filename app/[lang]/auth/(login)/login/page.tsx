@@ -64,7 +64,7 @@ const LoginPage = () => {
                 fontSize: "34px",
               }}
             >
-              Law Office of Mohammed bin Sami Saati
+              The Law Firm of Mohammad S. Saaty
             </motion.p>
           </div>
 

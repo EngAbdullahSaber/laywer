@@ -250,6 +250,7 @@ const VerifyForm = ({
           whileInView={{ y: 0 }}
           transition={{ duration: 1.2 }}
           className="flex flex-wrap gap-1 lg:gap-6"
+          dir="ltr"
         >
           {otpFields.map((index) => (
             <Input

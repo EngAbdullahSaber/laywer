@@ -250,49 +250,6 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
-
-    {
-      accessorKey: "Status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Status"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-            >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original.status === "pending" && "destructive") ||
-                  (row.original.status === "in_progress" && "warning") ||
-                  (row.original.status === "completed" && "success") ||
-                  "default"
-                }
-              >
-                {lang == "en"
-                  ? row.original.status == "completed"
-                    ? "Completed"
-                    : row.original.status == "in_progress"
-                    ? "In Progress"
-                    : "Pending"
-                  : row.original.status == "completed"
-                  ? "مكتملة"
-                  : row.original.status == "in_progress"
-                  ? "قيد التنفيذ"
-                  : "قيدالانتظار"}{" "}
-              </Badge>{" "}
-            </motion.span>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
   ];
   const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (
