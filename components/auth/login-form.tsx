@@ -127,7 +127,7 @@ const LogInForm = () => {
             disabled={isPending}
             type="text"
             id="email"
-            className="bg-[#e8e6dc] border-[#fdd472]"
+            className=""
             size={!isDesktop2xl ? "xl" : "lg"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -151,7 +151,7 @@ const LogInForm = () => {
               disabled={isPending}
               type={passwordType}
               id="password"
-              className="peer bg-[#e8e6dc] border-[#fdd472]"
+              className="peer "
               size={!isDesktop2xl ? "xl" : "lg"}
               placeholder=" "
               value={password}

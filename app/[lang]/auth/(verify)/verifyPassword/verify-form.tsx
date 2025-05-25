@@ -165,7 +165,7 @@ const VerifyForm = () => {
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(event) => handleKeyDown(index, event)}
               maxLength={1}
-              className="w-10 h-10 bg-[#e8e6dc] border-[#fdd472] sm:w-[60px] sm:h-16 rounded  text-center text-2xl font-medium text-default-900"
+              className="w-10 h-10  sm:w-[60px] sm:h-16 rounded  text-center text-2xl font-medium text-default-900"
               ref={(ref) => (inputRefs.current[index] = ref)}
             />
           ))}

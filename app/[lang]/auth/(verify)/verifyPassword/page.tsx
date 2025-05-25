@@ -71,7 +71,7 @@ const VerifyPage = () => {
             </motion.p>
           </div>
 
-          <div className="min-h-screen basis-full bg-[#e8e6dc] md:basis-1/2 w-full px-4 flex justify-center items-center">
+          <div className="min-h-screen basis-full  md:basis-1/2 w-full px-4 flex justify-center items-center">
             <div className="lg:w-[480px]">
               <VerfiyForm />
             </div>
