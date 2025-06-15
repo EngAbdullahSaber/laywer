@@ -131,13 +131,17 @@ const TableData = ({ flag }: { flag: any }) => {
         <div className="flex flex-row gap-2 items-center justify-center">
           {/* <Actions viewBtn={false} title={"Users Details"} row={row} /> */}
           {permission
-            .find((item: any) => item.id === 69)
-            .permissions.some((item: any) => item.id === 72) && (
+            .find((item: any) => item.id === 69 || item.id === 195)
+            .permissions.some(
+              (item: any) => item.id === 72 || item.id === 198
+            ) && (
             <UpdateCourtCategory row={row} getCategoryData={getCategoryData} />
           )}{" "}
           {permission
-            .find((item: any) => item.id === 69)
-            .permissions.some((item: any) => item.id === 73) && (
+            .find((item: any) => item.id === 69 || item.id === 195)
+            .permissions.some(
+              (item: any) => item.id === 73 || item.id === 199
+            ) && (
             <DeleteButton
               id={row.original.id}
               getCategoryData={getCategoryData}

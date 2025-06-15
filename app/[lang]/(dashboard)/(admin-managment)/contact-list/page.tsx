@@ -125,10 +125,10 @@ const PageWithAuth = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           {permission
-            .find((item: any) => item.id === 45)
-            .permissions.some((item: any) => item.id === 47) && (
-            <CreateContact setFlag={setFlag} flag={flag} />
-          )}
+            .find((item: any) => item.id === 45 || item.id === 171)
+            .permissions.some(
+              (item: any) => item.id === 47 || item.id === 173
+            ) && <CreateContact setFlag={setFlag} flag={flag} />}
         </motion.div>
       </div>
 

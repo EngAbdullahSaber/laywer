@@ -861,8 +861,24 @@
   "Edit Permissions For Roles": "تعديل اذونات الأدارة",
   "Enter Role Name": "أدخل اسم الأدارة",
   "Role Name": "اسم الأدارة",
+  "Time remaining": "الوقت المتبقى",  
+
   "Are You Sure You Want To Delete This Role?": "هل أنت متأكد أنك تريد حذف هذه الأدارة",
   "Deleting Role": "جارٍ حذف الأدارة",
+  "type": "النوع",
+  "Transaction List Details": "تفاصيل قائمة المعاملات",
+  "Transaction List": "قائمة المعاملات",
+  "Transaction": "المعاملات",
+  "transaction_date": "تاريخ المعاملة",
+  "Type": "النوع", 
+  "Select Date": "اختر التاريخ",
+  "Select Client or Enter Name": "اختر عميلًا أو أدخل الاسم",
+  "Enter Type": "أدخل النوع",
+  "Processing": "جاري المعالجة...",
+  "Attachments": "المرفقات",
+  "Create Transaction": "إنشاء معاملة",
+  "Update Transaction": "تحديث المعاملة",
+  "Create a New Transaction": "إنشاء معاملة جديدة",
   "Roles Details": "تفاصيل الأدارة"
 
 }

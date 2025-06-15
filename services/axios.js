@@ -23,7 +23,6 @@ export function updateAxiosHeader(accessToken) {
         error.response?.status === 401 &&
         error.response?.data?.message === "please login first"
       ) {
-        console.log(error.message);
         clearAuthInfo();
         window.location.replace("/auth/login");
       } else if (

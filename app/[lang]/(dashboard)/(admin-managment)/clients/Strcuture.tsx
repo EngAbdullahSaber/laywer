@@ -33,8 +33,10 @@ const Strcuture = () => {
       const permission = JSON.parse(permissionString);
       const canCreate =
         permission
-          .find((item: any) => item.id === 6)
-          ?.permissions?.some((item: any) => item.id === 8) || false;
+          .find((item: any) => item.id === 6 || item.id === 132)
+          ?.permissions?.some(
+            (item: any) => item.id === 8 || item.id === 134
+          ) || false;
       setHasCreatePermission(canCreate);
     }
   }, []);

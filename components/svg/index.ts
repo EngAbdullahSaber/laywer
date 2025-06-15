@@ -57,8 +57,7 @@ export { default as Finance } from "./home/Finance.svg";
 export { default as products } from "./home/products.svg";
 export { default as reports } from "./home/reports.svg";
 export { default as Reservation } from "./home/Reservation.svg";
-
-
+export { default as Transaction } from "./home/Transaction.svg";
 
 export { default as DSearch } from "./duel-tone/dsearch.svg";
 export { default as Session } from "./home/session.svg";

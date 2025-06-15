@@ -119,8 +119,10 @@ const TableData = () => {
           <View row={row} />
 
           {permission
-            .find((item: any) => item.id === 12)
-            .permissions.some((item: any) => item.id === 16) && (
+            .find((item: any) => item.id === 12 || item.id === 138)
+            .permissions.some(
+              (item: any) => item.id === 16 || item.id === 142
+            ) && (
             <DeleteButton getCasesData={getCasesData} id={row.original.id} />
           )}
         </div>
@@ -241,7 +243,12 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.session_date}
+              {new Date(row.original.session_date).toLocaleDateString("en-GB", {
+                weekday: "long", // "Monday"
+                year: "numeric", // "2025"
+                month: "long", // "February"
+                day: "numeric", // "14"
+              })}
             </motion.span>
           </div>
         );

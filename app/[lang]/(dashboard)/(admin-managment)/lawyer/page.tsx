@@ -123,8 +123,10 @@ const PageWithAuth = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           {permission
-            .find((item: any) => item.id === 20)
-            .permissions.some((item: any) => item.id === 22) && (
+            .find((item: any) => item.id === 20 || item.id === 146)
+            .permissions.some(
+              (item: any) => item.id === 22 || item.id === 148
+            ) && (
             <a href={"lawyer/add"}>
               <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
                 {t("Create Lawyer")}

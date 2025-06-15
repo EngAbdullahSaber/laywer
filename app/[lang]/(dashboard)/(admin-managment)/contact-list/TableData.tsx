@@ -147,13 +147,17 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
           {permission
-            .find((item: any) => item.id === 45)
-            .permissions.some((item: any) => item.id === 48) && (
+            .find((item: any) => item.id === 45 || item.id === 171)
+            .permissions.some(
+              (item: any) => item.id === 48 || item.id === 176
+            ) && (
             <UpdateContact row={row} getContactListData={getContactListData} />
           )}{" "}
           {permission
-            .find((item: any) => item.id === 45)
-            .permissions.some((item: any) => item.id === 49) && (
+            .find((item: any) => item.id === 45 || item.id === 171)
+            .permissions.some(
+              (item: any) => item.id === 49 || item.id === 175
+            ) && (
             <DeleteButton
               id={row.original.id}
               getContactListData={getContactListData}

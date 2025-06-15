@@ -87,10 +87,10 @@ const PageWithAuth = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {permission
-            .find((item: any) => item.id === 51)
-            .permissions.some((item: any) => item.id === 53) && (
-            <CreateContact flag={flag} setFlag={setFlag} />
-          )}
+            .find((item: any) => item.id === 51 || item.id === 177)
+            .permissions.some(
+              (item: any) => item.id === 53 || item.id === 179
+            ) && <CreateContact flag={flag} setFlag={setFlag} />}
         </motion.div>
       </div>
 

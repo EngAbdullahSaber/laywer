@@ -132,13 +132,17 @@ const TableData = ({ flag }: { flag: any }) => {
           {/* <Actions viewBtn={false} title={"Users Details"} row={row} /> */}
 
           {permission
-            .find((item: any) => item.id === 63)
-            .permissions.some((item: any) => item.id === 66) && (
+            .find((item: any) => item.id === 63 || item.id === 189)
+            .permissions.some(
+              (item: any) => item.id === 66 || item.id === 192
+            ) && (
             <UpdateLawyerCategory row={row} getCategoryData={getCategoryData} />
           )}
           {permission
-            .find((item: any) => item.id === 63)
-            .permissions.some((item: any) => item.id === 67) && (
+            .find((item: any) => item.id === 63 || item.id === 189)
+            .permissions.some(
+              (item: any) => item.id === 67 || item.id === 193
+            ) && (
             <DeleteButton
               id={row.original.id}
               getCategoryData={getCategoryData}

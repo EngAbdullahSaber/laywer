@@ -99,6 +99,7 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Services Orders": "api.service::orders",
     "Contact List": "api.contact::list",
     Staff: "api.staffs",
+    Transaction: "api.transactions",
     Services: "api.services",
     "lawyers Categories": "api.lawyers::categories",
     "Courts Categories": "api.courts::categories",

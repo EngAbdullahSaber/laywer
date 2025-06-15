@@ -134,13 +134,17 @@ const TableData = ({ flag }: { flag: any }) => {
           {/* <Actions viewBtn={false} title={"Users Details"} row={row} /> */}
 
           {permission
-            .find((item: any) => item.id === 81)
-            .permissions.some((item: any) => item.id === 84) && (
+            .find((item: any) => item.id === 81 || item.id === 207)
+            .permissions.some(
+              (item: any) => item.id === 84 || item.id === 210
+            ) && (
             <UpdateClientCategory row={row} getCategoryData={getCategoryData} />
           )}
           {permission
-            .find((item: any) => item.id === 81)
-            .permissions.some((item: any) => item.id === 85) && (
+            .find((item: any) => item.id === 81 || item.id === 207)
+            .permissions.some(
+              (item: any) => item.id === 85 || item.id === 211
+            ) && (
             <DeleteButton
               id={row.original.id}
               getCategoryData={getCategoryData}

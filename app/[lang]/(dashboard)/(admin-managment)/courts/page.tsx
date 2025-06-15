@@ -88,8 +88,10 @@ const PageWithAuth = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {permission
-            .find((item: any) => item.id === 33)
-            .permissions.some((item: any) => item.id === 35) && (
+            .find((item: any) => item.id === 33 || item.id === 159)
+            .permissions.some(
+              (item: any) => item.id === 35 || item.id === 161
+            ) && (
             <a href={"courts/add"}>
               <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
                 {t("Create a New Court")}

@@ -139,8 +139,10 @@ const TableData = () => {
         <div className="flex flex-row gap-2 items-center justify-center">
           <View row={row} />
           {permission
-            .find((item: any) => item.id === 27)
-            .permissions.some((item: any) => item.id === 30) && (
+            .find((item: any) => item.id === 27 || item.id === 153)
+            .permissions.some(
+              (item: any) => item.id === 30 || item.id === 156
+            ) && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -164,10 +166,10 @@ const TableData = () => {
             </TooltipProvider>
           )}
           {permission
-            .find((item: any) => item.id === 27)
-            .permissions.some((item: any) => item.id === 31) && (
-            <Delete id={row.original.id} getTasksData={getTasksData} />
-          )}
+            .find((item: any) => item.id === 27 || item.id === 153)
+            .permissions.some(
+              (item: any) => item.id === 31 || item.id === 157
+            ) && <Delete id={row.original.id} getTasksData={getTasksData} />}
         </div>
       ),
     },

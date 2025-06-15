@@ -88,8 +88,10 @@ const PageWithAuth = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {permission
-            .find((item: any) => item.id === 63)
-            .permissions.some((item: any) => item.id === 65) && (
+            .find((item: any) => item.id === 63 || item.id === 189)
+            .permissions.some(
+              (item: any) => item.id === 65 || item.id === 191
+            ) && (
             <CreateLawyerCategory
               buttonShape={true}
               setFlag={setFlag}

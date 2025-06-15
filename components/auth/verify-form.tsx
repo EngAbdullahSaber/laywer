@@ -30,6 +30,7 @@ interface RootState {
 interface RootState1 {
   phoneToken: string;
 }
+
 const VerifyForm = ({
   loading,
   setLoading,
@@ -37,9 +38,11 @@ const VerifyForm = ({
   loading: any;
   setLoading: any;
 }) => {
-  const totalOtpField = 6; // Total number of OTP fields
+  const totalOtpField = 6;
   const otpArray: string[] = Array.from({ length: totalOtpField }, () => "");
   const [otp, setOtp] = useState<string[]>(otpArray);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [isTimerActive, setIsTimerActive] = useState(true);
 
   const otpFields = Array.from({ length: totalOtpField }, (_, index) => index);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -50,6 +53,31 @@ const VerifyForm = ({
   const username = useSelector((state: RootState) => state.userName);
   const tokenOtp = useSelector((state: RootState1) => state.phoneToken);
   const accessToken = useAccessToken();
+
+  // Format time to MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  // Countdown timer effect
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isTimerActive && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      setIsTimerActive(false);
+    }
+
+    return () => clearInterval(timer);
+  }, [timeLeft, isTimerActive]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
     if (!isNaN(Number(value)) && value.length <= 1) {
@@ -61,7 +89,7 @@ const VerifyForm = ({
       }
     }
   };
-  console.log(tokenOtp);
+
   const handleKeyDown = (
     index: number,
     event: KeyboardEvent<HTMLInputElement>
@@ -82,29 +110,27 @@ const VerifyForm = ({
 
   const handleSubmit = async () => {
     const enteredOtp = otp.slice().reverse().join("");
-    setOtp(otpArray); // Reset OTP input
-    console.log(enteredOtp);
+    setOtp(otpArray);
     setLoading(false);
+
     try {
-      // Send username and OTP to the API
       const res = await VerifyLogin(
         {
           email: username,
-          code: enteredOtp, // Send OTP as a string
+          code: enteredOtp,
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenOtp}`, // Set token in the Authorization header
+            Authorization: `Bearer ${tokenOtp}`,
           },
         }
       );
+
       if (res) {
-        // Check if the response has a valid message
         if (res?.message) {
           toast.success(res.message);
         }
-        let userRole;
-        // Ensure the access_token exists before trying to store it
+
         if (res?.body?.access_token) {
           dispatch(
             changeUserData({
@@ -117,8 +143,8 @@ const VerifyForm = ({
             "permissions",
             JSON.stringify(res?.body?.user?.role_with_permission?.permissions)
           );
+
           if (res.body.user?.role) {
-            // Redirect based on role
             if (res.body.user?.role == "lawyer") {
               router.replace("/lawyer-cases");
             } else if (res.body.user?.role == "client") {
@@ -129,14 +155,10 @@ const VerifyForm = ({
           } else {
             toast.error("User role information is missing");
           }
-          userRole = res.body.user?.role;
         } else {
           toast.error("Access token missing");
           return;
         }
-
-        // Ensure the user and role information exists before using it
-        console.log(res.body.user?.role);
       } else {
         toast.error("Response is invalid or missing");
       }
@@ -159,16 +181,18 @@ const VerifyForm = ({
       } else if (message) {
         toast.error(
           message == "please login first" ? t("enteredcode not valid") : null
-        ); // Show "please login first" or similar messages
+        );
       } else {
         toast.error("Something went wrong.");
       }
     }
   };
-  const handleSubmit1 = async (e: React.FormEvent) => {
+
+  const handleResendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     const email1 = localStorage.getItem("email");
     const password1 = localStorage.getItem("password");
+
     try {
       const res = await LogIn(
         {
@@ -178,40 +202,48 @@ const VerifyForm = ({
         },
         lang
       );
+
       if (res) {
-        toast.success(res?.message);
+        toast.success("New verification code sent!");
         dispatch(setPhoneTokens(res?.body?.verify_user_token));
+        // Reset timer
+        setTimeLeft(300);
+        setIsTimerActive(true);
+        // Clear OTP fields
+        setOtp(otpArray);
+        // Focus first input
+        inputRefs.current[0]?.focus();
       }
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>; // Cast the error
-
-      // Check if we have errors in the response
+      const axiosError = error as AxiosError<ErrorResponse>;
       const errors = axiosError.response?.data?.errors;
+
       if (errors) {
-        // Loop through each field in the errors object
         for (const field in errors) {
           if (Object.prototype.hasOwnProperty.call(errors, field)) {
-            // Assuming the first error in the array is the most important one
             const errorMessage = errors[field][0];
-            toast.error(`${field}: ${errorMessage}`); // Display the error in a toast
+            toast.error(`${field}: ${errorMessage}`);
           }
         }
       } else {
-        // If no field-specific errors, display a general error message
         toast.error("Something went wrong.");
       }
     }
   };
+
   const isOtpComplete = otp.every((digit) => digit !== "");
   const { t } = useTranslate();
+
   useEffect(() => {
     if (accessToken) {
       updateAxiosHeader(accessToken);
     }
   }, [accessToken]);
+
   if (loading) {
     return <LayoutLoader />;
   }
+
   return (
     <div className="w-full md:w-[480px] py-5">
       <motion.div
@@ -244,7 +276,24 @@ const VerifyForm = ({
       >
         {t("Enter the 6 figure confirmation code sent to your email")}
       </motion.div>
-      <form className="mt-8">
+
+      {/* Timer display */}
+      <motion.div
+        initial={{ y: -50 }}
+        whileInView={{ y: 0 }}
+        transition={{ duration: 1.2 }}
+        className="mt-4 text-center text-lg font-medium"
+      >
+        {isTimerActive ? (
+          <span>
+            {t("Time remaining")}: {formatTime(timeLeft)}
+          </span>
+        ) : (
+          <span className="text-red-500">{t("Verification code expired")}</span>
+        )}
+      </motion.div>
+
+      <form className="mt-6">
         <motion.div
           initial={{ y: -50 }}
           whileInView={{ y: 0 }}
@@ -262,8 +311,9 @@ const VerifyForm = ({
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(event) => handleKeyDown(index, event)}
               maxLength={1}
-              className="w-10 h-10 sm:w-[60px]  sm:h-16 rounded text-center text-2xl font-medium text-default-900"
+              className="w-10 h-10 sm:w-[60px] sm:h-16 rounded text-center text-2xl font-medium text-default-900"
               ref={(ref) => (inputRefs.current[index] = ref)}
+              disabled={!isTimerActive}
             />
           ))}
         </motion.div>
@@ -278,7 +328,7 @@ const VerifyForm = ({
             className="w-full"
             size="lg"
             onClick={handleSubmit}
-            disabled={!isOtpComplete}
+            disabled={!isOtpComplete || !isTimerActive}
           >
             {t("Verify Now")}
           </Button>
@@ -286,9 +336,10 @@ const VerifyForm = ({
             type="button"
             className="w-full my-2"
             size="lg"
-            onClick={handleSubmit1}
+            onClick={handleResendCode}
+            variant={isTimerActive ? "outline" : "default"}
           >
-            {t("Resend")}
+            {isTimerActive ? t("Resend") : t("Request New Code")}
           </Button>
         </motion.div>
       </form>

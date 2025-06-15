@@ -15,6 +15,7 @@ import {
   Property,
   Finance,
   products,
+  Transaction,
   reports,
   Reservation,
 } from "@/components/svg";
@@ -77,6 +78,11 @@ const adminMenu = [
     title: "Courts",
     icon: Courts,
     href: "/courts",
+  },
+  {
+    title: "Transaction",
+    icon: Transaction,
+    href: "/transaction",
   },
   {
     title: "Orders",

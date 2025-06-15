@@ -1,36 +1,31 @@
 "use client";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
+
 import { ColumnDef } from "@tanstack/react-table";
+import { motion } from "framer-motion";
 import { DataTableColumnHeader } from "../../tables/advanced/components/data-table-column-header";
 import { DataTable } from "../../tables/advanced/components/data-table";
-import View from "./View";
-import Delete from "./Delete";
-import { motion } from "framer-motion";
-import Link from "next/link";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useTranslate } from "@/config/useTranslation";
+  getFilterTransaction,
+  getTransaction,
+  getTransactionPanigation,
+  SearchTransaction,
+} from "@/services/transaction/transaction";
 import { useEffect, useState } from "react";
+import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
 import useDebounce from "../../(category-mangement)/shared/useDebounce";
-import {
-  getCourts,
-  getCourtsPanigation,
-  getFilterCourts,
-  SearchCourts,
-} from "@/services/courts/courts";
+import DeleteButton from "./DeleteButton";
+import UpdateTransactionComponent from "./UpdateTransactionComponent";
+import { getCategory } from "@/services/category/category";
+import { toast as reToast } from "react-hot-toast";
+import { Badge } from "@/components/ui/badge";
 interface Task {
   id: string;
-  name?: string;
-  category?: any;
-  email?: string;
-  address?: string;
-  website?: string;
+  Categories?: string;
+  type?: string;
+  status?: string;
+  client_name?: string;
+  transaction_date?: string;
 }
 
 const TableData = ({ flag }: { flag: any }) => {
@@ -42,21 +37,22 @@ const TableData = ({ flag }: { flag: any }) => {
   const searchPalsceholder = "Searchs";
   const { lang } = useParams();
   const { t } = useTranslate();
+  const [category, setCategory] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
-  const permissionString = localStorage.getItem("permissions");
-  const permission = permissionString ? JSON.parse(permissionString) : null;
+  const permission = JSON.parse(localStorage.getItem("permissions"));
+
   const [filters, setFilters] = useState<Record<string, string>>({
     full_name: "",
-    email: "",
+    category_filter: "",
     phone: "",
   });
   const buildQueryString = (filters: { [key: string]: string }) => {
     const queryParams = Object.entries(filters)
       .filter(([key, value]) => value) // Only include filters with values
-      .map(([key, value]) => `field:${key}=${value}`) // Format as "field:key=value"
+      .map(([key, value]) => `=${value}`) // Format as "field:key=value"
       .join("&"); // Join them with "&"
 
-    return queryParams ? `?${queryParams}` : "";
+    return queryParams ? `&category_filter${queryParams}` : "";
   };
 
   const queryString = buildQueryString(filters);
@@ -72,15 +68,15 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    getCourtData();
+    getTransactionData();
     setOpen(false); // Close the sheet after applying filters
   };
 
-  const getCourtData = async () => {
+  const getTransactionData = async () => {
     setLoading(true);
     if (queryString.length > 0) {
       try {
-        const res = await getFilterCourts(queryString, lang);
+        const res = await getFilterTransaction(queryString, lang);
 
         setData(res?.body?.data || []);
         setLoading(false);
@@ -93,8 +89,8 @@ const TableData = ({ flag }: { flag: any }) => {
       try {
         const res =
           page === 1
-            ? await getCourts(lang)
-            : await getCourtsPanigation(page, lang);
+            ? await getTransaction(lang)
+            : await getTransactionPanigation(page, lang);
 
         setData(res?.body?.data || []);
         console.log(res.body.data);
@@ -111,7 +107,7 @@ const TableData = ({ flag }: { flag: any }) => {
     setLoading(true);
 
     try {
-      const res = await SearchCourts(search, lang);
+      const res = await SearchTransaction(search, lang);
 
       setData(res?.body?.data || []);
       setLoading(false);
@@ -126,48 +122,34 @@ const TableData = ({ flag }: { flag: any }) => {
     if (debouncedSearch) {
       SearchData();
     } else {
-      getCourtData();
+      getTransactionData();
     }
   }, [debouncedSearch, page, filters, flag]);
-
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex flex-row gap-2 items-center justify-center">
-          <View row={row} />
           {permission
-            .find((item: any) => item.id === 33 || item.id === 159)
+            .find((item: any) => item.parent_key_name == "api.transactions")
             .permissions.some(
-              (item: any) => item.id === 36 || item.id === 162
+              (item: any) => item.name == "حذف" || item.name == "Delete"
             ) && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="inline-block">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className=" h-7 w-7"
-                      color="secondary"
-                    >
-                      <a href={`courts/${row.original.id}/edit`}>
-                        <Icon icon="heroicons:pencil" className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p> {t("Update Court")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <DeleteButton
+              id={row.original.id}
+              getTransactionData={getTransactionData}
+            />
           )}
           {permission
-            .find((item: any) => item.id === 33 || item.id === 159)
+            .find((item: any) => item.parent_key_name == "api.transactions")
             .permissions.some(
-              (item: any) => item.id === 37 || item.id === 163
-            ) && <Delete id={row.original.id} getCourtData={getCourtData} />}
+              (item: any) => item.name == "تعديل" || item.name == "Edit"
+            ) && (
+            <UpdateTransactionComponent
+              row={row}
+              getTransactionData={getTransactionData}
+            />
+          )}
         </div>
       ),
     },
@@ -180,11 +162,10 @@ const TableData = ({ flag }: { flag: any }) => {
       enableSorting: false,
       enableHiding: false,
     },
-
     {
-      accessorKey: "Court_Name",
+      accessorKey: "client_name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Court_Name"} />
+        <DataTableColumnHeader column={column} title={"client_name"} />
       ),
       cell: ({ row }) => {
         return (
@@ -195,16 +176,39 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.name}
+              {row.original.client_name}
             </motion.span>{" "}
           </div>
         );
       },
     },
     {
-      accessorKey: "Court_Category",
+      accessorKey: "type",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Court_Category"} />
+        <DataTableColumnHeader column={column} title={"type"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original.type}
+            </motion.span>{" "}
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "Status",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Status"} />
       ),
       cell: ({ row }) => {
         return (
@@ -214,7 +218,27 @@ const TableData = ({ flag }: { flag: any }) => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              {row.original.category?.name}
+              <Badge
+                className="!text-center"
+                color={
+                  (row.original.status === "pending" && "destructive") ||
+                  (row.original.status === "in_progress" && "warning") ||
+                  (row.original.status === "completed" && "success") ||
+                  "default"
+                }
+              >
+                {lang == "en"
+                  ? row.original.status == "completed"
+                    ? "Completed"
+                    : row.original.status == "in_progress"
+                    ? "In Progress"
+                    : "Pending"
+                  : row.original.status == "completed"
+                  ? "مكتملة"
+                  : row.original.status == "in_progress"
+                  ? "قيد التنفيذ"
+                  : "قيدالانتظار"}{" "}
+              </Badge>{" "}
             </motion.span>
           </div>
         );
@@ -224,68 +248,24 @@ const TableData = ({ flag }: { flag: any }) => {
       },
     },
     {
-      accessorKey: "Email",
+      accessorKey: "transaction_date",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Email"} />
+        <DataTableColumnHeader column={column} title={"transaction_date"} />
       ),
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.email}
-            </motion.span>{" "}
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
-    {
-      accessorKey: "Address",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Address"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.address}
-            </motion.span>{" "}
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
-    {
-      accessorKey: "Court Website Link",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Court Website Link"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.a
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] text-blue-700 dark:text-[#dfc77d] truncate font-medium"
-              href={row?.original?.website}
-            >
-              رابط المحكمة
-            </motion.a>{" "}
+            <span className="max-w-[500px] truncate font-medium">
+              {new Date(row.original.transaction_date).toLocaleDateString(
+                "en-GB",
+                {
+                  weekday: "long", // "Monday"
+                  year: "numeric", // "2025"
+                  month: "long", // "February"
+                  day: "numeric", // "14"
+                }
+              )}
+            </span>
           </div>
         );
       },

@@ -343,13 +343,6 @@ const Form = () => {
             <div className="flex justify-center gap-3 mt-4">
               <Button
                 type="button"
-                variant="outline"
-                className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
-              >
-                {t("Cancel")}
-              </Button>
-              <Button
-                type="button"
                 disabled={!loading}
                 onClick={handleSubmit}
                 className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"

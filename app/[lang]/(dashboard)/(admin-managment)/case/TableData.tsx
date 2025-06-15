@@ -208,8 +208,10 @@ const TableData = () => {
           <Add id={row.original.id} />
 
           {permission
-            .find((item: any) => item.id === 12)
-            .permissions.some((item: any) => item.id === 15) && (
+            .find((item: any) => item.id === 12 || item.id === 138)
+            .permissions.some(
+              (item: any) => item.id === 15 || item.id === 141
+            ) && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
@@ -232,13 +234,15 @@ const TableData = () => {
             </TooltipProvider>
           )}
           {permission
-            .find((item: any) => item.id === 12)
-            .permissions.some((item: any) => item.id === 18) && (
-            <FileRequest id={row.original.id} />
-          )}
+            .find((item: any) => item.id === 12 || item.id === 138)
+            .permissions.some(
+              (item: any) => item.id === 18 || item.id === 144
+            ) && <FileRequest id={row.original.id} />}
           {permission
-            .find((item: any) => item.id === 12)
-            .permissions.some((item: any) => item.id === 16) && (
+            .find((item: any) => item.id === 12 || item.id === 138)
+            .permissions.some(
+              (item: any) => item.id === 16 || item.id === 142
+            ) && (
             <DeleteButton getCasesData={getCasesData} id={row.original.id} />
           )}
         </div>
@@ -352,14 +356,17 @@ const TableData = () => {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
+         <div className="flex  items-center justify-center gap-2 mx-auto">
+             <motion.span
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original.session_date}
+              transition={{ duration: 1.7 }} className="max-w-[500px] truncate font-medium">
+              {new Date(row.original.session_date).toLocaleDateString("en-GB", {
+                weekday: "long", // "Monday"
+                year: "numeric", // "2025"
+                month: "long", // "February"
+                day: "numeric", // "14"
+              })}
             </motion.span>
           </div>
         );

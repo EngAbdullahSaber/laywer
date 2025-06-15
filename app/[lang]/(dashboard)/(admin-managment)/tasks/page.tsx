@@ -86,8 +86,10 @@ const PageWithAuth = () => {
           className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
         >
           {permission
-            .find((item: any) => item.id === 27)
-            .permissions.some((item: any) => item.id === 29) && (
+            .find((item: any) => item.id === 27 || item.id === 153)
+            .permissions.some(
+              (item: any) => item.id === 29 || item.id === 155
+            ) && (
             <a href={"tasks/add"}>
               <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
                 {t("Create Task")}

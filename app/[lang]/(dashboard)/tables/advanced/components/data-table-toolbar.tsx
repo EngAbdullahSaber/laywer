@@ -46,7 +46,7 @@ export function DataTableToolbar({
           placeholder={t(searchPalsceholder)}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-8 min-w-[200px] max-w-sm  text-[#fff]"
+          className="h-8 min-w-[200px] max-w-sm  dark:text-[#fff] text-black"
         />
       ) : (
         <div></div>

@@ -302,11 +302,11 @@ const Form = () => {
       // Append each caseNumber detail to formData
       formData.append(
         `case_numbers[${index}][first_letter]`,
-        caseNumber.first_letter.value
+        caseNumber.first_letter.value.toLowerCase()
       );
       formData.append(
         `case_numbers[${index}][second_letter]`,
-        caseNumber.second_letter.value
+        caseNumber.second_letter.value.toLowerCase()
       );
       formData.append(
         `case_numbers[${index}][case_year]`,
@@ -314,8 +314,8 @@ const Form = () => {
       );
       formData.append(
         `case_numbers[${index}][case_number_id]`,
-        caseNumber.second_letter.value +
-          caseNumber.first_letter.value +
+        caseNumber.second_letter.value.toLowerCase() +
+          caseNumber.first_letter.value.toLowerCase() +
           caseNumber.case_year.slice(-2) +
           caseNumber.case_number_id
       );
@@ -479,7 +479,7 @@ const Form = () => {
                     <BasicSelect
                       menu={transformedCategories}
                       setSelectedValue={(value) => handleSelectChange(value)}
-                      selectedValue={lawyerData["category_id"]}
+                      selectedValue={lawyerData.category_id || ""}
                     />
                   </div>
                   <CreateCaseCategory
@@ -501,6 +501,7 @@ const Form = () => {
                   type="text"
                   placeholder={t("Enter Case Name")}
                   name="title"
+                  value={lawyerData.title}
                   onChange={handleInputChange}
                 />
               </motion.div>
@@ -558,6 +559,7 @@ const Form = () => {
                 <Label htmlFor="MainCaseNumber">{t("Case Number")}</Label>
                 <Input
                   type="number"
+                  value={lawyerData.main_case_number}
                   placeholder={t("Enter Case Number")}
                   name="main_case_number"
                   onChange={handleInputChange}
@@ -620,8 +622,8 @@ const Form = () => {
                       transition={{ duration: 1.5 }}
                       className="mt-2 font-semibold"
                     >
-                      {selectedValue1[index]?.value}
                       {selectedValue[index]?.value}
+                      {selectedValue1[index]?.value}
                       {caseYears[index]?.slice(-2)}
                       {numbers[index]}
                     </motion.p>
