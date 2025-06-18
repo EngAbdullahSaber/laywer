@@ -109,7 +109,7 @@ const VerifyForm = ({
   };
 
   const handleSubmit = async () => {
-    const enteredOtp = otp.slice().reverse().join("");
+    const enteredOtp = otp.slice().join("");
     setOtp(otpArray);
     setLoading(false);
 
@@ -167,23 +167,34 @@ const VerifyForm = ({
       const axiosError = error as AxiosError<ErrorResponse>;
       const response = axiosError.response?.data;
 
-      const errors = response?.errors;
       const message = response?.message;
+      const errors = response?.errors;
 
-      if (errors) {
+      // Always show fallback toast
+      if (!message && !errors) {
+        toast.error("Something went wrong.");
+        return;
+      }
+
+      // Show message
+      if (message) {
+        if (message === "please login first") {
+          toast.error(t("enteredcode not valid"));
+        } else {
+          toast.error(message);
+        }
+      }
+
+      // Show field-level errors if present
+      if (errors && typeof errors === "object") {
         for (const field in errors) {
           if (Object.prototype.hasOwnProperty.call(errors, field)) {
-            const errorMessage = errors[field][0];
-            toast.error(`${field}: ${errorMessage}`);
-            setLoading(true);
+            const errorMsg = Array.isArray(errors[field])
+              ? errors[field][0]
+              : errors[field];
+            toast.error(`${field}: ${errorMsg}`);
           }
         }
-      } else if (message) {
-        toast.error(
-          message == "please login first" ? t("enteredcode not valid") : null
-        );
-      } else {
-        toast.error("Something went wrong.");
       }
     }
   };
