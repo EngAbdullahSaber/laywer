@@ -66,7 +66,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
           <DetailItem
             label={t("category")}
-            value={casesData?.category.name || "-"}
+            value={casesData?.category?.name || "-"}
           />
         </ul>
       </>
