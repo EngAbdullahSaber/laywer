@@ -53,43 +53,44 @@ export function DataTableViewOptions({ table }: DataTableViewOptionsProps) {
   // }, [lang]); // Dependency array, re-run if lang changes
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="ltr:ml-2 rtl:mr-2  h-8 dark:border-[#dfc77d] dark:text-[#dfc77d] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]"
-        >
-          <SlidersHorizontal className="ltr:mr-2 rtl:ml-2 h-4 w-4 " />
-          {t("view")}
-        </Button>
-      </DropdownMenuTrigger>
+    // <DropdownMenu>
+    //   <DropdownMenuTrigger asChild>
+    //     <Button
+    //       variant="outline"
+    //       size="sm"
+    //       className="ltr:ml-2 rtl:mr-2  h-8 dark:border-[#dfc77d] dark:text-[#dfc77d] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]"
+    //     >
+    //       <SlidersHorizontal className="ltr:mr-2 rtl:ml-2 h-4 w-4 " />
+    //       {t("view")}
+    //     </Button>
+    //   </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        align="end"
-        className=" min-w-[150px] w-full text-[#fff] "
-      >
-        <DropdownMenuLabel>{t("toggle columns")}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {table
-          .getAllColumns()
-          .filter(
-            (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide()
-          )
-          .map((column) => {
-            return (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                className="capitalize text-[#fff]"
-                checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-              >
-                {t(column?.id?.toLocaleLowerCase())}
-              </DropdownMenuCheckboxItem>
-            );
-          })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    //   <DropdownMenuContent
+    //     align="end"
+    //     className=" min-w-[150px] w-full text-[#fff] "
+    //   >
+    //     <DropdownMenuLabel>{t("toggle columns")}</DropdownMenuLabel>
+    //     <DropdownMenuSeparator />
+    //     {table
+    //       .getAllColumns()
+    //       .filter(
+    //         (column) =>
+    //           typeof column.accessorFn !== "undefined" && column.getCanHide()
+    //       )
+    //       .map((column) => {
+    //         return (
+    //           <DropdownMenuCheckboxItem
+    //             key={column.id}
+    //             className="capitalize text-[#fff]"
+    //             checked={column.getIsVisible()}
+    //             onCheckedChange={(value) => column.toggleVisibility(!!value)}
+    //           >
+    //             {t(column?.id?.toLocaleLowerCase())}
+    //           </DropdownMenuCheckboxItem>
+    //         );
+    //       })}
+    //   </DropdownMenuContent>
+    // </DropdownMenu>
+    <></>
   );
 }
