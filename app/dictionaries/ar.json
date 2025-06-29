@@ -879,8 +879,9 @@
   "Create Transaction": "إنشاء معاملة",
   "Update Transaction": "تحديث المعاملة",
   "Create a New Transaction": "إنشاء معاملة جديدة",
-  "Roles Details": "تفاصيل الأدارة"
-
+  "Roles Details": "تفاصيل الأدارة",
+"Deleting Transaction": "جاري حذف المعاملة",
+  "Are You Sure For Delete This Transaction?": "هل أنت متأكد من حذف هذه المعاملة؟"
 }
 
 

@@ -21,6 +21,7 @@ import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { DeleteLawyer } from "@/services/lawyer/lawyer";
+import { DeleteTransaction } from "@/services/transaction/transaction";
 
 interface DeleteLawyer {
   id: string;
@@ -37,7 +38,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getTransactionData }) => {
 
   const deleteLawyerData = async () => {
     try {
-      const res = await DeleteLawyer(id, lang); // Delete user
+      const res = await DeleteTransaction(id, lang); // Delete user
       reToast.success(res.message);
       setIsDialogOpen(false); // Close the dialog after successful deletion
       getTransactionData(); // Re-fetch the user data after deletion
@@ -67,7 +68,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getTransactionData }) => {
                 </Button>{" "}
               </TooltipTrigger>
               <TooltipContent>
-                <p> {t("Deleting Employee")} </p>
+                <p> {t("Deleting Transaction")} </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -88,7 +89,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getTransactionData }) => {
               transition={{ duration: 1.2 }}
               className="mt-6 mb-4 text-destructive text-xl font-semibold"
             >
-              {t("Deleting Employee")}{" "}
+              {t("Deleting Transaction")}{" "}
             </motion.h3>
             <motion.p
               initial={{ y: -50 }}
@@ -96,7 +97,7 @@ const DeleteButton: React.FC<DeleteLawyer> = ({ id, getTransactionData }) => {
               transition={{ duration: 1.4 }}
               className="text-sm text-default-500 "
             >
-              {t("Are You Sure For Delete This Employee?")}
+              {t("Are You Sure For Delete This Transaction?")}
             </motion.p>
           </div>
           <DialogFooter className="flex flex-row gap-5 justify-center">

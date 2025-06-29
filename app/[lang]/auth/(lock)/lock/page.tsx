@@ -18,11 +18,11 @@ const LockPage = () => {
           from-primary-600 via-primary-400 to-primary-600
          "
           >
-            <Image
+            {/* <Image
               src={background}
               alt="image"
               className="absolute top-0 left-0 w-full h-full "
-            />
+            /> */}
             <div className="relative z-10 backdrop-blur bg-primary-foreground/40 py-14 px-16 2xl:py-[84px] 2xl:pl-[50px] 2xl:pr-[136px] rounded max-w-[640px]">
               <div>
                 <Button
@@ -74,7 +74,7 @@ const LockPage = () => {
             src="https://www.youtube.com/embed/8D6b3McyhhU?si=zGOlY311c21dR70j"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen 
+            allowFullScreen
           ></iframe>
         </DialogContent>
       </Dialog>

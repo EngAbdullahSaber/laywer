@@ -21,11 +21,11 @@ const LoginPage = () => {
                 "linear-gradient(180deg, #31291E 0%, #000080 100%)",
             }}
           >
-            <Image
+            {/* <Image
               src={background}
               alt="image"
               className="absolute top-0 left-0 w-full h-full "
-            />
+            /> */}
             <motion.div
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
