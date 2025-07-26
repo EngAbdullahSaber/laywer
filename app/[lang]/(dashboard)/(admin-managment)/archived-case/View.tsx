@@ -66,7 +66,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
           <DetailItem
             label={t("category")}
-            value={casesData?.category.name || "-"}
+            value={casesData?.category?.name || "-"}
           />
         </ul>
       </>
@@ -90,7 +90,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("name")} value={casesData?.name || "-"} />
           <DetailItem
             label={t("category")}
-            value={casesData?.category.name || "-"}
+            value={casesData?.category?.name || "-"}
           />
           <DetailItem
             label={t("Region")}
@@ -196,7 +196,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <DetailItem label={t("Title")} value={casesData?.title || "-"} />
           <DetailItem
             label={t("category")}
-            value={casesData?.category.name || "-"}
+            value={casesData?.category?.name || "-"}
           />
 
           <DetailItem

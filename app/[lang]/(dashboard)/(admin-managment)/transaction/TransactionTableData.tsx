@@ -28,7 +28,7 @@ interface Task {
   transaction_date?: string;
 }
 
-const TableData = ({ flag }: { flag: any }) => {
+const TransactionTableData = ({ flag }: { flag: any }) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState<string>("");
@@ -176,7 +176,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.client_name}
+              {row.original?.client_name}
             </motion.span>{" "}
           </div>
         );
@@ -196,7 +196,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.type}
+              {row.original?.type}
             </motion.span>{" "}
           </div>
         );
@@ -221,21 +221,21 @@ const TableData = ({ flag }: { flag: any }) => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.status === "pending" && "destructive") ||
-                  (row.original.status === "in_progress" && "warning") ||
-                  (row.original.status === "completed" && "success") ||
+                  (row.original?.status === "pending" && "destructive") ||
+                  (row.original?.status === "in_progress" && "warning") ||
+                  (row.original?.status === "completed" && "success") ||
                   "default"
                 }
               >
                 {lang == "en"
-                  ? row.original.status == "completed"
+                  ? row.original?.status == "completed"
                     ? "Completed"
-                    : row.original.status == "in_progress"
+                    : row.original?.status == "in_progress"
                     ? "In Progress"
                     : "Pending"
-                  : row.original.status == "completed"
+                  : row.original?.status == "completed"
                   ? "مكتملة"
-                  : row.original.status == "in_progress"
+                  : row.original?.status == "in_progress"
                   ? "قيد التنفيذ"
                   : "قيدالانتظار"}{" "}
               </Badge>{" "}
@@ -256,7 +256,7 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {new Date(row.original.transaction_date).toLocaleDateString(
+              {new Date(row.original?.transaction_date).toLocaleDateString(
                 "en-GB",
                 {
                   weekday: "long", // "Monday"
@@ -298,4 +298,4 @@ const TableData = ({ flag }: { flag: any }) => {
   );
 };
 
-export default TableData;
+export default TransactionTableData;

@@ -152,7 +152,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.requested_details}
+              {row.original?.requested_details}
             </motion.span>
           </div>
         );
@@ -172,7 +172,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.appointment_date}
+              {row.original?.appointment_date}
             </motion.span>
           </div>
         );
@@ -196,7 +196,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.appointment_time}
+              {row.original?.appointment_time}
             </motion.span>
           </div>
         );
@@ -220,7 +220,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.client?.name}
+              {row.original?.client?.name}
             </motion.span>
           </div>
         );

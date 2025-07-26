@@ -218,7 +218,7 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original.name}
+              {row.original?.name}
             </span>
           </div>
         );
@@ -232,7 +232,7 @@ const TableData = ({ flag }: { flag: any }) => {
       cell: ({ row }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
-            <span>{row.original.category?.name}</span>
+            <span>{row.original?.category?.name}</span>
           </div>
         );
       },
@@ -250,7 +250,7 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium" dir="ltr">
-              {row.original.phone}
+              {row.original?.phone}
             </span>
           </div>
         );
@@ -269,7 +269,7 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original.email}
+              {row.original?.email}
             </span>
           </div>
         );
@@ -287,7 +287,7 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original.national_id_number}
+              {row.original?.national_id_number}
             </span>
           </div>
         );
@@ -305,7 +305,7 @@ const TableData = ({ flag }: { flag: any }) => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {new Date(row.original.created_at).toLocaleDateString("en-GB", {
+              {new Date(row.original?.created_at).toLocaleDateString("en-GB", {
                 weekday: "long", // "Monday"
                 year: "numeric", // "2025"
                 month: "long", // "February"

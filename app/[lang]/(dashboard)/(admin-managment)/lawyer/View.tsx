@@ -185,7 +185,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
           <DetailItem
             label={t("Category")}
-            value={lawyerData?.category.name || "-"}
+            value={lawyerData?.category?.name || "-"}
           />
           <DetailItem
             label={t("Date Of Create Accounts")}

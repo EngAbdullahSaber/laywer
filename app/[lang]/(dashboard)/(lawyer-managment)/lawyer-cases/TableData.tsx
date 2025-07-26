@@ -219,7 +219,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.title}
+              {row.original?.title}
             </motion.span>
           </div>
         );
@@ -242,21 +242,21 @@ const TableData = ({ flag }: { flag: any }) => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.status === "pending" && "destructive") ||
-                  (row.original.status === "in_progress" && "warning") ||
-                  (row.original.status === "completed" && "success") ||
+                  (row.original?.status === "pending" && "destructive") ||
+                  (row.original?.status === "in_progress" && "warning") ||
+                  (row.original?.status === "completed" && "success") ||
                   "default"
                 }
               >
                 {lang == "en"
-                  ? row.original.status == "completed"
+                  ? row.original?.status == "completed"
                     ? "Completed"
-                    : row.original.status == "in_progress"
+                    : row.original?.status == "in_progress"
                     ? "In Progress"
                     : "Pending"
-                  : row.original.status == "completed"
+                  : row.original?.status == "completed"
                   ? "مكتملة"
-                  : row.original.status == "in_progress"
+                  : row.original?.status == "in_progress"
                   ? "قيد التنفيذ"
                   : "قيدالانتظار"}{" "}
               </Badge>{" "}
@@ -283,7 +283,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.client?.name}
+              {row.original?.client?.name}
             </motion.span>
           </div>
         );
@@ -307,7 +307,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.court?.name}
+              {row.original?.court?.name}
             </motion.span>
           </div>
         );
@@ -330,7 +330,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.main_case_number}
+              {row.original?.main_case_number}
             </motion.span>
           </div>
         );
@@ -353,7 +353,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.session_date}
+              {row.original?.session_date}
             </motion.span>{" "}
           </div>
         );

@@ -3,33 +3,25 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/react";
 import TableData from "./TableData";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { exportToExcel } from "@/config/ExportButoons";
 import { Auth } from "@/components/auth/Auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { useParams } from "next/navigation";
-import { getFile } from "@/services/cases/cases";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
-import { clearAuthInfo } from "@/services/utils";
 import { useAccessToken } from "@/config/accessToken";
 import { updateAxiosHeader } from "@/services/axios";
+import CreateTransactionComponent from "../transaction/CreateTransactionComponent";
+import TransactionTableData from "../transaction/TransactionTableData";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
   const { lang } = useParams();
-
+  const [flag, setFlag] = useState(false);
+  const permissionString = localStorage.getItem("permissions");
+  const permission = permissionString ? JSON.parse(permissionString) : null;
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
   const accessToken = useAccessToken();
   if (accessToken) {
@@ -75,38 +67,86 @@ const PageWithAuth = () => {
     return; // Or <Loading />
   }
   const ProtectedPage = Auth({ allowedRoles })(() => (
-    <div className="space-y-5">
-      <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
-        <motion.div
-          initial={{ x: 15 }}
-          whileInView={{ x: 0 }}
-          transition={{ duration: 1.7 }}
-        >
-          <div className=" text-default-900 text-2xl font-bold my-2">
-            {t("Archived Case List")}
-          </div>{" "}
-          <BreadcrumbComponent
-            header={"Archived Cases"}
-            body={"Archived Case List"}
-          />
-        </motion.div>
-        <motion.div
-          initial={{ x: -15 }}
-          whileInView={{ x: 0 }}
-          transition={{ duration: 1.7 }}
-          className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
-        ></motion.div>
-      </div>
+    <Tabs defaultValue="Answered" className="">
+      <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20 sm:h-12">
+        <TabsTrigger value="Answered">{t("Archived Cases")}</TabsTrigger>
+        <TabsTrigger value="NotAnswered">
+          {t("Quiestions Not Answered")}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="Answered">
+        <div className="space-y-5">
+          <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
+            <motion.div
+              initial={{ x: 15 }}
+              whileInView={{ x: 0 }}
+              transition={{ duration: 1.7 }}
+            >
+              <div className=" text-default-900 text-2xl font-bold my-2">
+                {t("Archived Case List")}
+              </div>{" "}
+              <BreadcrumbComponent
+                header={"Archived Cases"}
+                body={"Archived Case List"}
+              />
+            </motion.div>
+            <motion.div
+              initial={{ x: -15 }}
+              whileInView={{ x: 0 }}
+              transition={{ duration: 1.7 }}
+              className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
+            ></motion.div>
+          </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle> {t("Archived Case List Details")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TableData />
-        </CardContent>
-      </Card>
-    </div>
+          <Card>
+            <CardHeader>
+              <CardTitle> {t("Archived Case List Details")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TableData />
+            </CardContent>
+          </Card>
+        </div>{" "}
+      </TabsContent>{" "}
+      <TabsContent value="NotAnswered">
+        {" "}
+        <div className="flex sm:flex-row xs:gap-5 xs:flex-col justify-between items-center my-5">
+          <motion.div
+            initial={{ x: 15 }}
+            whileInView={{ x: 0 }}
+            transition={{ duration: 1.7 }}
+          >
+            <div className=" text-default-900 text-2xl font-bold my-2">
+              {t("Transaction List")}
+            </div>{" "}
+            <BreadcrumbComponent
+              header={"Transaction"}
+              body={"Transaction List"}
+            />
+          </motion.div>
+          <motion.div
+            initial={{ x: -15 }}
+            whileInView={{ x: 0 }}
+            transition={{ duration: 1.7 }}
+            className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
+          >
+            {permission
+              .find((item: any) => item.parent_key_name == "api.transactions")
+              .permissions.some(
+                (item: any) => item.name == "Create" || item.name == "انشاء"
+              ) && <CreateTransactionComponent flag={flag} setFlag={setFlag} />}
+          </motion.div>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle> {t("Transaction List Details")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TransactionTableData flag={flag} />
+          </CardContent>
+        </Card>
+      </TabsContent>{" "}
+    </Tabs>
   ));
   return <ProtectedPage />;
 };

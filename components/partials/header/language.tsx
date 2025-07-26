@@ -67,11 +67,7 @@ const Language = () => {
       <DropdownMenuTrigger asChild>
         <Button type="button" className="bg-transparent hover:bg-transparent">
           <span className="w-6 h-6 rounded-full me-1.5">
-            <Image
-              src={selectedLanguage ? selectedLanguage.flag : flag1}
-              alt=""
-              className="w-full h-full object-cover rounded-full"
-            />
+            {selectedLanguage.name.toUpperCase()}
           </span>
         </Button>
       </DropdownMenuTrigger>
@@ -92,13 +88,7 @@ const Language = () => {
               {" "}
               {item.name == "en" ? "English" : "العربية"}{" "}
             </span>
-            <div className="w-6 h-6 rounded-full me-1.5">
-              <Image
-                src={item.flag}
-                alt=""
-                className="w-full h-full object-cover rounded-full"
-              />
-            </div>
+            <div className="w-6 h-6 rounded-full me-1.5"></div>
             {/* {lang  == item.name && (<Check className="w-4 h-4 flex-none ltr:ml-auto rtl:mr-auto text-default-700" />)} */}
           </DropdownMenuItem>
         ))}

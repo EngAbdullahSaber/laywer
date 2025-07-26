@@ -155,7 +155,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.name}
+              {row.original?.name}
             </motion.span>
           </div>
         );
@@ -176,7 +176,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.description}
+              {row.original?.description}
             </motion.span>
           </div>
         );

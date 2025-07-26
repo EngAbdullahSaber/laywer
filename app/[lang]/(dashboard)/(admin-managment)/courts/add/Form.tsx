@@ -225,7 +225,7 @@ const Form = () => {
               </div>
 
               {/* Email */}
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -239,10 +239,10 @@ const Form = () => {
                   value={courtData.email}
                   onChange={handleInputChange}
                 />
-              </motion.div>
+              </motion.div> */}
 
               {/* Website */}
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -256,10 +256,10 @@ const Form = () => {
                   value={courtData.website}
                   onChange={handleInputChange}
                 />
-              </motion.div>
+              </motion.div> */}
 
               {/* Address */}
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.9 }}
@@ -273,7 +273,7 @@ const Form = () => {
                   value={courtData.address}
                   onChange={handleInputChange}
                 />
-              </motion.div>
+              </motion.div> */}
 
               {/* Room Number */}
               <motion.div

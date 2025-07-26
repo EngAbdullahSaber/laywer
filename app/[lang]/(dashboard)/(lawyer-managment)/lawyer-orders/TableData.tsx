@@ -199,16 +199,16 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.status === "not_replied" && "destructive") ||
-                  (row.original.status === "replied" && "success") ||
+                  (row.original?.status === "not_replied" && "destructive") ||
+                  (row.original?.status === "replied" && "success") ||
                   "default"
                 }
               >
                 {lang == "en"
-                  ? row.original.status == "replied"
+                  ? row.original?.status == "replied"
                     ? "Replied"
                     : "Not Replied"
-                  : row.original.status !== "not_replied"
+                  : row.original?.status !== "not_replied"
                   ? "تم الرد"
                   : "لم يتم الرد"}{" "}
               </Badge>{" "}
@@ -235,8 +235,8 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.created_at
-                ? new Date(row.original.created_at).toLocaleDateString("en-GB")
+              {row.original?.created_at
+                ? new Date(row.original?.created_at).toLocaleDateString("en-GB")
                 : "Date not available"}{" "}
             </motion.span>{" "}
           </div>

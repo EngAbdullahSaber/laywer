@@ -7,8 +7,8 @@
   "categories": "الفئات",
   "gender": "الجنس",
   "mobile number": "رقم الجوال ",
-    "Create Staff Category": "إنشاء فئة الموظفين",
-  "Create a New Staff Category": "إنشاء فئة موظفين جديدة",
+  "Create Staff Category": " فئة موظفين جديدة",
+  "Create a New Staff Category": " فئة موظفين جديدة",
   "email": "البريد الإلكتروني",
   "Search": "بحث",
   "Contact": "اتصال",
@@ -25,12 +25,12 @@
   "Services Orders": "طلبات الخدمات"
 ,
 "Secondary_Case_Number": "رقم القضية الفرعى", 
-"Create an Account": "إنشاء حساب",
+"Create an Account": " حساب جديد",
 "Hey, Hello 👋": "مرحبًا، أهلاً 👋",
-"Create account to start using msaatylaw dashboard": "إنشاء حساب لبدء استخدام لوحة تحكم msaatylaw",
+"Create account to start using msaatylaw dashboard": "حساب  جديد لبدء استخدام لوحة تحكم msaatylaw",
 "Registering": "جارٍ التسجيل...",
   "Services": "الخدمات",
-  "Create a New Services": "انشاء خدمة جديدة",
+  "Create a New Services": " خدمة جديدة",
   "Services Price": "سعر الخدمة",
   "Enter Price": "ادخل سعر الخدمة",  
   "Your Describtion": "وصف الخدمة",
@@ -43,11 +43,11 @@
   "services name": "اسم الخدمة",
   "Services Name": "اسم الخدمة",
   "Enter Services Name": "أدخل اسم الخدمة",
-  "Create Services": "إنشاء خدمة",
+  "Create Services": " خدمة جديدة",
   "Enter Name for Number": "ادخل قيمة الرقم ",
   "Name for Number": "قيمة الرقم",
-  "Create a New Staff": "إنشاء موظف جديد",
-  "Create Staff": "إنشاء موظف",
+  "Create a New Staff": "موظف جديد",
+  "Create Staff": "موظف جديد ",
   "Case follow-up report": "تقرير متابعة قضية",
   "Case follow-up report ": "تقرير متابعة قضية",
   "Location of the case": "مكان القضية ",
@@ -138,7 +138,7 @@
   "Update Staff Category": "تحديث فئة الموظفين",
   "Update Lawyer Category": "تحديث فئة المحامين",
   "Update Case Category": "تحديث فئة القضية",
-  "Create a New Case Category": "إنشاء فئة جديدة للقضية",
+  "Create a New Case Category": " فئة جديدة للقضية",
 
   "Lawyer": "محامي",
   "defendant": "مدعى عليه",
@@ -151,7 +151,7 @@
   "There is no appointment": "لا يوجد موعد",
   "There is an appointment": "يوجد موعد",
   "Appointment Status": "حالة الموعد",
-  "Create Report": "إنشاء تقرير",
+  "Create Report": " تقرير جديد",
   "Tasks": "المهام",
   "Lawyer Taskss": "المهام",
   "Courts": "المحاكم",
@@ -220,7 +220,7 @@
   "Deleting Client": "حذف العميل",
   "Create Client": "عميل جديد",
   "Export Excel": "تصدير Excel",
-  "Room Number": " الدائرة",
+  "Room Number": " رقم الدائرة",
   "Email Address": " البريد الإلكتروني",
   "Phone Number": "رقم الهاتف",
   "Deleting Case": "حذف القضية",
@@ -260,7 +260,7 @@
     "Enter Password": "أدخل كلمة المرور",
   "Enter Client Mobile Number": "أدخل رقم جوال العميل",
   "Client Name": "اسم العميل",
-  "Create a New Client": "إنشاء عميل جديد",
+  "Create a New Client": " عميل جديد",
 
   "error": {
     "clientNameMin": "اسم العميل يجب أن يكون على الأقل 3 أحرف.",
@@ -452,7 +452,7 @@
   "PasswordNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.",
   "PasswordSpecial": "يجب أن تحتوي كلمة المرور على حرف خاص واحد على الأقل."
   },
-  "Create New Date With Client": "إنشاء تاريخ جديد مع العميل",
+  "Create New Date With Client": " تاريخ جديد مع العميل",
   "Title": "العنوان",
   "Client Info": "بيانات العميل",
   "Enter Year of Case": "ادخل عام القضية",
@@ -480,14 +480,14 @@
 "Case Info": "معلومات القضية",
 "Lawyer Category Name": "اسم فئة المحامي",
   "Date": "التاريخ",
-  "Create Date": "إنشاء تاريخ",
+  "Create Date": " تاريخ جديد",
   "Ask Client About File": "اسأل العميل عن الملف",
   "Ask Client": "اسأل العميل",
   "Enter Title": "أدخل العنوان",
   "Select Date About Meeting": "اختر تاريخ الاجتماع",
   "Enter Title About Date": "أدخل العنوان عن التاريخ",
-"Create Case": "إنشاء قضية",
-"Create a New Case": "إنشاء قضية جديدة",
+"Create Case": " قضية جديدة",
+"Create a New Case": " قضية جديدة",
 "Client Selection": "اختيار العميل",
 "Case Category": "فئة القضية",
 "Enter User Case Name": "أدخل اسم قضية المستخدم",
@@ -539,8 +539,8 @@
 "Due Date": "تاريخ الاستحقاق",
 "Task Status": "حالة المهمة",
 "Enter Task Name": "أدخل اسم المهمة",
-"Create a New Task": "إنشاء مهمة جديدة",
-"Create Task": "إنشاء مهمة",
+"Create a New Task": " مهمة جديدة",
+"Create Task": " مهمة جديدة",
 "Task List": "قائمة المهام",
 "Enter Case Name": "أدخل اسم القضية",
 "Edit Task": "تعديل المهمة",
@@ -549,7 +549,7 @@
 "Create a New Court": "اضافة محكمة جديدة",
 "Enter Court Name": "أدخل  المحكمة",
 "Court Category Level": "تصنيف المحكمة",
-"Enter Room Number": "أدخل الدائرة ",
+"Enter Room Number": "أدخل رقم الدائرة ",
 "Enter Region": "أدخل المنطقة",
 "Region": "المنطقة",
 "Enter City": "أدخل المدينة",
@@ -558,8 +558,8 @@
 "Contact Category Detail": "تفاصيل فئة العميل",
 "Contacts": "جهات الاتصال",
 "Contact List Details": "تفاصيل قائمة الاتصال",
-"Create Contact": "إنشاء اتصال",
-"Create a New Contact": "إنشاء اتصال جديد",
+"Create Contact": " اتصال",
+"Create a New Contact": " اتصال جديد",
 "Enter User Name": "أدخل اسم المستخدم",
 "User Name": "اسم المستخدم",
 "Your phone number": "رقم هاتفك",
@@ -568,8 +568,8 @@
 "Female": "أنثى",
 "Select Gender": "اختر الجنس",
 "City": "المدينة",
-"Create Contact Category": "إنشاء فئة الاتصال",
-"Create a New Contact Category": "إنشاء فئة اتصال جديدة",
+"Create Contact Category": " فئة الاتصال جديدة",
+"Create a New Contact Category": " فئة اتصال جديدة",
 "Enter email address": "أدخل عنوان البريد الإلكتروني",
 "Description": "وصف",
 "Enter Name": "أدخل الاسم",
@@ -614,15 +614,15 @@
   "Cases Category": "فئة القضايا",
   "lawyer Category": "فئة المحامي",
   "Enter Category Name": "أدخل اسم الفئة",
-  "Create a New Lawyer Category": "إنشاء فئة محامي جديدة",
-  "Create Lawyer Category": "إنشاء فئة محامي",
-  "Create Court Category": "إنشاء فئة محكمة",
-  "Create a New Court Category": "إنشاء فئة محكمة جديدة",
-  "Create a New Cases Category": "إنشاء فئة قضايا جديدة",
+  "Create a New Lawyer Category": " فئة محامي جديدة",
+  "Create Lawyer Category": " فئة محامي جديدة",
+  "Create Court Category": " فئة محكمة جديدة",
+  "Create a New Court Category": " فئة محكمة جديدة",
+  "Create a New Cases Category": " فئة قضايا جديدة",
   "Enter Cases Name": "أدخل اسم القضية",
-  "Create Case Category": "إنشاء فئة قضية",
-  "Create a New Client Category": "إنشاء فئة عميل جديدة",
-  "Create Client Category": "إنشاء فئة عميل",
+  "Create Case Category": " فئة قضية جديدة",
+  "Create a New Client Category": " فئة عميل جديدة",
+  "Create Client Category": " فئة عميل جديدة",
   "Orders": " الطلبات من العميل",
   "Lawyer Orderss": " الطلبات من العميل",
   "Closed Cases": "القضايا المغلقة",
@@ -665,10 +665,10 @@
   "New Orders": "استفسارات العملاء",
   "Inquiries": "تذاكر",
   "services image": "صورة الخدمة ",
-  "Archived Case List": "قائمة القضايا المؤرشفة",
-  "Archived Cases": "القضايا المؤرشفة",
-  "Archived Case List Details": "تفاصيل قائمة القضايا المؤرشفة",
-  "Archived Case": "القضايا المؤرشفة",
+  "Archived Case List": "قائمة الارشيف",
+  "Archived Cases": " الارشيف",
+  "Archived Case List Details": "تفاصيل قائمة الارشيف",
+  "Archived Case": "الارشيف",
   "Send": "إرسال",
   "Create Date With Client": "تحديد موعد مع العميل",
   "New Order List": "قائمة الطلبات الجديدة",
@@ -698,14 +698,14 @@
   "Enter Contact List Category Name": "أدخل اسم فئة قائمة الاتصال",
   "Update Contact List Category": "تحديث فئة قائمة الاتصال",
   "Contact List Category": "فئة قائمة الاتصال",
-  "Create Contact List Category": "إنشاء فئة قائمة الاتصال",
+  "Create Contact List Category": " فئة قائمة الاتصال جديدة",
   "Contact Lists Category": "فئات قوائم الاتصال",
   "Contact List Category Detail": "تفاصيل فئة قائمة الاتصال",
   "Contact Lists": "قوائم الاتصال",
   "UnBlocking Laywer": "إلغاء حظر المحامي",
   "Are You Sure For UnBlock This Laywer?": "هل أنت متأكد من إلغاء حظر هذا المحامي؟",
   "Contact List Categories": "فئات قوائم الاتصال",
-  "Create a New Contact List Category": "إنشاء فئة جديدة لقائمة الاتصال",
+  "Create a New Contact List Category": " فئة جديدة لقائمة الاتصال",
   "Contact List Category Name": "اسم فئة قائمة الاتصال",
   "Description Of Contact List Category": "وصف فئة قائمة الاتصال",
   "Arabic": "العربية",
@@ -759,7 +759,7 @@
   "Claim Status": "حالة المطالبة",
   "Session Date": "تاريخ الجلسة",
   "Judgment Date": "تاريخ الحكم",
-  "Submit Date": "تاريخ التقديم",
+  "Submit Date": "تاريخ تقديم القضية",
   "Main Case Number": "رقم القضية الرئيسي",
   "Court City": "مدينة المحكمة",
   "Court Region": "منطقة المحكمة",
@@ -818,7 +818,7 @@
   "Reset Password": "إعادة تعيين كلمة المرور",
   "Confirm Password": "تأكيد كلمة المرور",
   "Enter your password to unlock the screen!": "أدخل كلمة المرور الخاصة بك لفتح الشاشة!",
-  "Create New Password": "إنشاء كلمة مرور جديدة",
+  "Create New Password": " كلمة مرور جديدة",
   "Upcoming Session Dates": "مواعيد الجلسات القادمة",
   "Resetting...": "يتم إعادة التعيين...",
   "Next Appointmet": "الموعد القادم",
@@ -848,7 +848,7 @@
   "clients categories": "فئات العملاء",
   "Roles": "الأدارة",
   "Roles List": "قائمة الأدارة",
-  "Create Roles": "إنشاء الأدارة",
+  "Create Roles": " إدارة جديدة",
   "block": "حظر",
   "meeting_time": "وقت الاجتماع",
   "Go to Homepage": "الذهاب إلى الصفحة الرئيسية",
@@ -856,7 +856,7 @@
   "Ops! Access Denied": "عذرًا! الوصول مرفوض",
   "roles name": "اسم الأدارة",
   "Update Permission For Role": "تحديث الأذونات للادارة",
-  "Create Role": "إنشاء الأدارة",
+  "Create Role": " إدارة جديدة",
   "Role Info": "معلومات الأدارة",
   "Edit Permissions For Roles": "تعديل اذونات الأدارة",
   "Enter Role Name": "أدخل اسم الأدارة",
@@ -876,9 +876,9 @@
   "Enter Type": "أدخل النوع",
   "Processing": "جاري المعالجة...",
   "Attachments": "المرفقات",
-  "Create Transaction": "إنشاء معاملة",
+  "Create Transaction": " معاملة جديدة",
   "Update Transaction": "تحديث المعاملة",
-  "Create a New Transaction": "إنشاء معاملة جديدة",
+  "Create a New Transaction": " معاملة جديدة",
   "Roles Details": "تفاصيل الأدارة",
 "Deleting Transaction": "جاري حذف المعاملة",
   "Are You Sure For Delete This Transaction?": "هل أنت متأكد من حذف هذه المعاملة؟"

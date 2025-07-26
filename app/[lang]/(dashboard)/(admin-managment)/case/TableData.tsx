@@ -271,7 +271,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.client?.name}
+              {row.original?.client?.name}
             </motion.span>
           </div>
         );
@@ -291,7 +291,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.lawyer?.name}
+              {row.original?.lawyer?.name}
             </motion.span>
           </div>
         );
@@ -314,7 +314,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.main_case_number}
+              {row.original?.main_case_number}
             </motion.span>
           </div>
         );
@@ -336,7 +336,7 @@ const TableData = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              {row.original.category?.name}
+              {row.original?.category?.name}
             </motion.span>
           </div>
         );
@@ -356,17 +356,22 @@ const TableData = () => {
       ),
       cell: ({ row }) => {
         return (
-         <div className="flex  items-center justify-center gap-2 mx-auto">
-             <motion.span
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }} className="max-w-[500px] truncate font-medium">
-              {new Date(row.original.session_date).toLocaleDateString("en-GB", {
-                weekday: "long", // "Monday"
-                year: "numeric", // "2025"
-                month: "long", // "February"
-                day: "numeric", // "14"
-              })}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {new Date(row.original?.session_date).toLocaleDateString(
+                "en-GB",
+                {
+                  weekday: "long", // "Monday"
+                  year: "numeric", // "2025"
+                  month: "long", // "February"
+                  day: "numeric", // "14"
+                }
+              )}
             </motion.span>
           </div>
         );

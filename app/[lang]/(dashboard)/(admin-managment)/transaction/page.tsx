@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslate } from "@/config/useTranslation";
-import TableData from "./TableData";
+import TableData from "./TransactionTableData";
 import CreateTransactionComponent from "./CreateTransactionComponent";
 import { motion } from "framer-motion";
 import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbComponent";

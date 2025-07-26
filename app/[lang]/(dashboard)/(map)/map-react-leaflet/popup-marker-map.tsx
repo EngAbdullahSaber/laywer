@@ -150,7 +150,7 @@ const PopupMarkerMap = ({ height = 350 }) => {
                   <span className="text-gray-900 text-sm font-small">
                     {t("Court Category")} :
                   </span>
-                  <span>{t(marker.data.CourtCategory)}</span>
+                  <span>{t(marker.data?.CourtCategory)}</span>
                 </div>
                 <div className="flex">
                   {" "}

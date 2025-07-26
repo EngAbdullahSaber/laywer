@@ -54,7 +54,7 @@ const TableData = () => {
 
   const queryString = buildQueryString(filters);
 
-  const filtersConfig:any = [];
+  const filtersConfig: any = [];
 
   const handleFilterChange = (updatedFilters: Record<string, string>) => {
     setFilters((prevFilters) => ({
@@ -77,7 +77,7 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-       
+
         setLoading(false);
       }
     } else {
@@ -92,7 +92,6 @@ const TableData = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
-       
 
         setLoading(false);
       }
@@ -109,7 +108,6 @@ const TableData = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data", error);
-    
 
       setLoading(false);
     }
@@ -155,7 +153,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.title}
+              {row.original?.title}
             </motion.span>
           </div>
         );
@@ -178,21 +176,21 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.importance_level == "high" && "destructive") ||
-                  (row.original.importance_level == "low" && "warning") ||
-                  (row.original.importance_level == "mid" && "secondary") ||
+                  (row.original?.importance_level == "high" && "destructive") ||
+                  (row.original?.importance_level == "low" && "warning") ||
+                  (row.original?.importance_level == "mid" && "secondary") ||
                   "default"
                 }
               >
                 {lang == "en"
-                  ? row.original.importance_level == "high"
+                  ? row.original?.importance_level == "high"
                     ? "Very Important"
-                    : row.original.importance_level == "mid"
+                    : row.original?.importance_level == "mid"
                     ? "Moderately Important"
                     : "Low Importance"
-                  : row.original.importance_level == "high"
+                  : row.original?.importance_level == "high"
                   ? " مهمة جدا"
-                  : row.original.importance_level == "mid"
+                  : row.original?.importance_level == "mid"
                   ? "متوسطة الاهمية"
                   : "ذات اهمية ضعيفة"}
               </Badge>
@@ -243,7 +241,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.due_date}
+              {row.original?.due_date}
             </motion.span>
           </div>
         );
@@ -291,21 +289,21 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.status === "pending" && "destructive") ||
-                  (row.original.status === "in_progress" && "warning") ||
-                  (row.original.status === "completed" && "success") ||
+                  (row.original?.status === "pending" && "destructive") ||
+                  (row.original?.status === "in_progress" && "warning") ||
+                  (row.original?.status === "completed" && "success") ||
                   "default"
                 }
               >
                 {lang == "en"
-                  ? row.original.status == "completed"
+                  ? row.original?.status == "completed"
                     ? "Completed"
-                    : row.original.status == "in_progress"
+                    : row.original?.status == "in_progress"
                     ? "In Progress"
                     : "Pending"
-                  : row.original.status == "completed"
+                  : row.original?.status == "completed"
                   ? "مكتملة"
-                  : row.original.status == "in_progress"
+                  : row.original?.status == "in_progress"
                   ? "قيد التنفيذ"
                   : "قيدالانتظار"}{" "}
               </Badge>

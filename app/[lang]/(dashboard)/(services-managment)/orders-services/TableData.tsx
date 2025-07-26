@@ -219,8 +219,8 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.created_at
-                ? new Date(row.original.created_at).toLocaleDateString("en-GB")
+              {row.original?.created_at
+                ? new Date(row.original?.created_at).toLocaleDateString("en-GB")
                 : "Date not available"}{" "}
             </motion.span>{" "}
           </div>

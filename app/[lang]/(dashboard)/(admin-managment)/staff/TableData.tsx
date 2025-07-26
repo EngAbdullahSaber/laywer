@@ -186,7 +186,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.name}
+              {row.original?.name}
             </motion.span>{" "}
           </div>
         );
@@ -207,7 +207,7 @@ const TableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.email}
+              {row.original?.email}
             </motion.span>{" "}
           </div>
         );
@@ -231,7 +231,7 @@ const TableData = ({ flag }: { flag: any }) => {
               className="max-w-[500px] truncate font-medium"
               dir="ltr"
             >
-              {row.original.phone}
+              {row.original?.phone}
             </motion.span>{" "}
           </div>
         );

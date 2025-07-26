@@ -225,7 +225,7 @@ const TableData = () => {
         return (
           <div className="flex  items-center justify-center gap-2 mx-auto">
             <motion.span className="max-w-[500px] truncate font-medium">
-              {row.original.name}
+              {row.original?.name}
             </motion.span>
           </div>
         );
@@ -246,7 +246,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.address}
+              {row.original?.address}
             </motion.span>
           </div>
         );
@@ -268,7 +268,7 @@ const TableData = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.7 }}
             >
-              {row.original.category?.name}
+              {row.original?.category?.name}
             </motion.span>
           </div>
         );
@@ -293,16 +293,16 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.status === "banned" && "destructive") ||
-                  (row.original.status === "active" && "success") ||
+                  (row.original?.status === "banned" && "destructive") ||
+                  (row.original?.status === "active" && "success") ||
                   "default"
                 }
               >
                 {lang == "ar"
-                  ? row.original.status == "active"
+                  ? row.original?.status == "active"
                     ? "نشط"
                     : "تم حظره"
-                  : row.original.status == "active"
+                  : row.original?.status == "active"
                   ? "Active"
                   : "Blocked"}{" "}
               </Badge>
@@ -329,7 +329,7 @@ const TableData = () => {
               className="max-w-[500px] truncate font-medium"
               dir="ltr"
             >
-              {row.original.phone}
+              {row.original?.phone}
             </motion.span>
           </div>
         );
@@ -353,7 +353,7 @@ const TableData = () => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original.email}
+              {row.original?.email}
             </motion.span>
           </div>
         );
