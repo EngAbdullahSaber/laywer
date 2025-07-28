@@ -66,7 +66,7 @@ const Language = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button type="button" className="bg-transparent hover:bg-transparent">
-          <span className="w-6 h-6 rounded-full me-1.5">
+          <span className="w-6 h-6 text-black dark:text-white rounded-full me-1.5">
             {selectedLanguage.name.toUpperCase()}
           </span>
         </Button>
@@ -76,7 +76,7 @@ const Language = () => {
           <DropdownMenuItem
             key={`flag-${index}`}
             className={cn(
-              ` gap-[10px] justify-end dropdown-${item.name} py-1.5 px-2 cursor-pointer dark:hover:bg-background mb-[2px] last:mb-0`,
+              ` gap-[10px] justify-end  text-black dark:text-white dropdown-${item.name} py-1.5 px-2 cursor-pointer dark:hover:bg-background mb-[2px] last:mb-0`,
               {
                 "bg-primary-100 ":
                   selectedLanguage && selectedLanguage.name === item.name,
@@ -84,7 +84,7 @@ const Language = () => {
             )}
             onClick={() => handleSelected(item.name)}
           >
-            <span className="text-sm text-default-600 capitalize  ">
+            <span className="text-sm  text-black dark:text-white  capitalize  ">
               {" "}
               {item.name == "en" ? "English" : "العربية"}{" "}
             </span>

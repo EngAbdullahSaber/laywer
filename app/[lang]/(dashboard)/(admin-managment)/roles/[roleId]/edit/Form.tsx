@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Auth } from "@/components/auth/Auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +28,7 @@ const Form = () => {
   const [roleName, setRoleName] = useState("");
   const [roleData, setRoleData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter(); // ✅ initialize router
 
   const { lang, roleId } = useParams();
   const { t } = useTranslate();
@@ -38,11 +39,7 @@ const Form = () => {
       const permissionsRes = await getAllpermissions(lang);
       setRolesAndpermissions(
         Array.isArray(permissionsRes?.body?.permissions)
-          ? permissionsRes.body.permissions.filter((permission: any) =>
-              [
-                3, 6, 12, 20, 27, 33, 39, 42, 45, 51, 57, 63, 69, 75, 81, 87,
-              ].includes(permission.id)
-            )
+          ? permissionsRes?.body?.permissions
           : []
       );
 
@@ -84,7 +81,9 @@ const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const uniquePermissions = Array.from(new Set([...selectedPermissions, 88]));
+    const uniquePermissions = Array.from(
+      new Set([...selectedPermissions, 128])
+    );
 
     const data = {
       name: roleName,
@@ -96,6 +95,7 @@ const Form = () => {
       const res = await UpdateRole(data, roleId, lang);
       if (res) {
         reToast.success(res.message);
+        router.back();
       } else {
         reToast.error(t("Failed to create role"));
       }
@@ -104,11 +104,10 @@ const Form = () => {
       reToast.error(axiosError.message || "Something went wrong.");
     }
   };
-  console.log(selectedPermissions);
   return (
     <div>
       {RolesAndpermissions.length === 0 ? (
-        <div>No permissions available.</div>
+        <div>{t("No permissions available")}</div>
       ) : (
         <form onSubmit={handleSubmit}>
           {RolesAndpermissions.map((item: any) => (
@@ -132,7 +131,7 @@ const Form = () => {
                       htmlFor={permission?.id}
                       className="text-base mx-3 dark:text-slate-200 text-muted-foreground font-normal"
                     >
-                      {permission?.name === "api.block"
+                      {permission?.name.includes("api")
                         ? t(permission?.name.split(".")[1])
                         : permission?.name}
                     </Label>

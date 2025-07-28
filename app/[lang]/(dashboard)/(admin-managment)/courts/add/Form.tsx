@@ -18,6 +18,7 @@ import InfiniteScrollSelect from "./InfiniteScrollSelect";
 import CreateCourtCategory from "../../../(category-mangement)/court-category/CreateCourtCategory";
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 interface ErrorResponse {
   errors: {
@@ -56,6 +57,7 @@ const Form = () => {
   });
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   // Fetch cities when region changes
   const fetchCitiesData = async (regionId: string, page: number = 1) => {
@@ -123,6 +125,7 @@ const Form = () => {
         setIsloading(true);
 
         reToast.success(res.message);
+        router.back();
       } else {
         reToast.error(t("Failed to create Court"));
         setIsloading(true);

@@ -15,13 +15,14 @@ import { motion } from "framer-motion";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
+import InfiniteScrollSelect from "../add/InfiniteScrollSelect";
 import { useParams } from "next/navigation";
 import { CreateTasks } from "@/services/tasks/tasks";
 import { getCasesPanigation } from "@/services/cases/cases";
 import { Auth } from "@/components/auth/Auth";
 import { getStaffPanigation } from "@/services/staff/staff";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
@@ -48,6 +49,7 @@ const Form = () => {
   const { lang } = useParams();
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LawyerData>({
@@ -144,6 +146,7 @@ const Form = () => {
         setIsloading(true);
 
         reToast.success(res.message); // Display success message
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setIsloading(true);
@@ -249,7 +252,10 @@ const Form = () => {
                     <Label htmlFor="Assigned_To">{t("Assigned To")}</Label>
                     <InfiniteScrollSelect
                       fetchData={() => fetchData(getStaffPanigation)}
-                      formatOption={formatOption}
+                      formatOption={(item) => ({
+                        value: item.id,
+                        label: `${item.name} `,
+                      })}
                       placeholder={t("Select Staff")}
                       selectedValue={lawyerData.lawyer_id}
                       setSelectedValue={(value) =>
@@ -258,16 +264,16 @@ const Form = () => {
                           lawyer_id: value?.value || "",
                         }))
                       }
-                    />{" "}
+                    />
                   </div>
-                  <Link href={"/staff"} className="w-[10%] mt-5">
+                  <a href={"/staff"} className="w-[10%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
                       height="24"
                       color="#dfc77d"
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
@@ -292,14 +298,14 @@ const Form = () => {
                       }
                     />{" "}
                   </div>
-                  <Link href={"/case"} className="w-[10%] mt-5">
+                  <a href={"/case"} className="w-[10%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
                       height="24"
                       color="#dfc77d"
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </div>
               <motion.div

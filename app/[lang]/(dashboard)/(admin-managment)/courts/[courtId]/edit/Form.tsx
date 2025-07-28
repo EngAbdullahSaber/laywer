@@ -17,11 +17,13 @@ import {
   getCities,
   getRegions,
   getSpecifiedCourts,
+  UpdateCourts,
 } from "@/services/courts/courts";
 import InfiniteScrollSelect from "../../add/InfiniteScrollSelect";
 import CreateCourtCategory from "@/app/[lang]/(dashboard)/(category-mangement)/court-category/CreateCourtCategory";
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 interface ErrorResponse {
   errors: {
@@ -32,9 +34,6 @@ interface ErrorResponse {
 interface CourtData {
   name: string;
   category_id: string;
-  email: string;
-  address: string;
-  website: string;
   room_number: string;
   region_id: string;
   city_id: string;
@@ -50,14 +49,12 @@ const Form = () => {
   const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const [regions, setRegions] = useState<any[]>([]);
   const [courtData, setCourtData] = useState<CourtData>({
     name: "",
     category_id: "",
-    email: "",
-    address: "",
-    website: "",
     room_number: "",
     region_id: "",
     city_id: "",
@@ -114,20 +111,11 @@ const Form = () => {
     });
 
     try {
-      const res = await CreateCourts(formData, lang);
+      const res = await UpdateCourts(formData, courtId, lang);
       if (res) {
-        setCourtData({
-          name: "",
-          category_id: "",
-          email: "",
-          address: "",
-          website: "",
-          room_number: "",
-          region_id: "",
-          city_id: "",
-        });
         reToast.success(res.message);
         setIsloading(true);
+        router.back();
       } else {
         reToast.error(t("Failed to create Court"));
         setIsloading(true);
@@ -144,6 +132,7 @@ const Form = () => {
       });
       reToast.error(errorMessage);
       setIsloading(true);
+      ``;
     }
   };
 
@@ -167,9 +156,6 @@ const Form = () => {
         setCourtData({
           name: lawyer.name,
           category_id: lawyer.category.id,
-          email: lawyer.email,
-          address: lawyer.address,
-          website: lawyer.website,
           room_number: lawyer.room_number,
           region_id: lawyer.city?.region_id,
           city_id: lawyer.city?.id,
@@ -253,7 +239,7 @@ const Form = () => {
               </div>
 
               {/* Email */}
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -267,10 +253,10 @@ const Form = () => {
                   value={courtData.email}
                   onChange={handleInputChange}
                 />
-              </motion.div>
+              </motion.div> */}
 
               {/* Website */}
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -284,10 +270,10 @@ const Form = () => {
                   value={courtData.website}
                   onChange={handleInputChange}
                 />
-              </motion.div>
+              </motion.div> */}
 
               {/* Address */}
-              <motion.div
+              {/* <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.9 }}
@@ -301,7 +287,7 @@ const Form = () => {
                   value={courtData.address}
                   onChange={handleInputChange}
                 />
-              </motion.div>
+              </motion.div> */}
 
               {/* Room Number */}
               <motion.div

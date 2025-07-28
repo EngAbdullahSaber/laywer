@@ -74,10 +74,11 @@ export async function getCourtsPanigation(page: any, lang: any) {
   else return false;
 }
 
-export async function UpdateCourts(queryParams: any, id: any, lang: any) {
-  let res = await api.put(`court/courts/${id}?${queryParams}`, {
+export async function UpdateCourts(data: any, id: any, lang: any) {
+  let res = await api.put(`court/courts/${id}`, data, {
     headers: {
       "Accept-Language": lang,
+      "Content-Type": "application/json",
     },
   });
   if (res) return res.data;

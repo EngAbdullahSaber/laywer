@@ -21,6 +21,7 @@ import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles"
 import { useAccessToken } from "@/config/accessToken";
 import { updateAxiosHeader } from "@/services/axios";
 import { clearAuthInfo } from "@/services/utils";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 interface ErrorResponse {
   errors: {
@@ -52,6 +53,7 @@ const Form = () => {
   });
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const { lang, lawyerId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -206,6 +208,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
+        router.back();
       } else {
         reToast.error(t("Failed to update Lawyer"));
         setLoading(true);

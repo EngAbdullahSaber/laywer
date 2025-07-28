@@ -117,15 +117,43 @@ const CreateLawyerCategory = ({
         setIsloading(true);
       }
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      const errorMessage =
-        axiosError.response?.data?.errors?.[`${"name." + currentLang}`]?.[0] ||
-        axiosError.response?.data?.errors?.[
-          `${"description." + currentLang}`
-        ]?.[0] ||
-        "Something went wrong.";
+      const axiosError = error as AxiosError<{
+        message?: string;
+        errors?: {
+          [key: string]: string[];
+        };
+      }>;
+
+      // Default error message
+      let errorMessage = t("Something went wrong");
+
+      // Check for direct message first
+      if (axiosError.response?.data?.message) {
+        errorMessage = axiosError.response.data.message;
+      }
+      // Check for field-specific errors
+      else if (axiosError.response?.data?.errors) {
+        const errors = axiosError.response.data.errors;
+
+        // Get all error messages regardless of field
+        const allErrorMessages = Object.values(errors).flat();
+
+        // Join multiple errors with comma separation
+        errorMessage = allErrorMessages.join(", ");
+
+        // Alternative: Get first error only
+        // errorMessage = allErrorMessages[0] || errorMessage;
+
+        // If you need language-specific field errors:
+        // const langSpecificErrors = [
+        //   errors[`name.${currentLang}`]?.[0],
+        //   errors[`description.${currentLang}`]?.[0]
+        // ].filter(Boolean);
+        // errorMessage = langSpecificErrors.join(', ') || errorMessage;
+      }
+
       reToast.error(errorMessage);
-      setIsloading(true);
+      setIsloading(true); // Should set to false, not true
     }
   };
 
@@ -144,14 +172,13 @@ const CreateLawyerCategory = ({
           {t("Create Lawyer Category")}
         </Button>
       ) : (
-        <Button
+        <span
           onClick={handleOpen}
-          size="icon"
-          className=" h-7 w-7 bg-transparent"
+          className=" h-7 cursor-pointer w-7 bg-transparent"
         >
           {" "}
           <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
-        </Button>
+        </span>
       )}
       <Dialog open={open} onOpenChange={handleOpen}>
         <DialogContent size="2xl" className="h-auto">

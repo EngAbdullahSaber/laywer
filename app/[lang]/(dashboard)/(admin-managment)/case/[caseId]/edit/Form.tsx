@@ -458,17 +458,14 @@ const Form = () => {
                       }
                     />
                   </div>
-                  <Link
-                    href="/clients"
-                    className="w-[8%] mt-5 flex justify-end"
-                  >
+                  <a href="/clients" className="w-[8%] mt-5 flex justify-end">
                     <Icon
                       icon="gg:add"
                       width="24"
                       height="24"
                       color="#dfc77d"
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </div>
 
@@ -495,14 +492,14 @@ const Form = () => {
                       }
                     />
                   </div>
-                  <Link href="/courts" className="w-[8%] mt-5 flex justify-end">
+                  <a href="/courts" className="w-[8%] mt-5 flex justify-end">
                     <Icon
                       icon="gg:add"
                       width="24"
                       height="24"
                       color="#dfc77d"
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </div>
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
@@ -566,9 +563,9 @@ const Form = () => {
                     }
                   />
                 </div>
-                <Link href="/lawyer" className="w-[8%] mt-5 flex justify-end">
+                <a href="/lawyer" className="w-[8%] mt-5 flex justify-end">
                   <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
-                </Link>
+                </a>
               </motion.div>
             </div>
 

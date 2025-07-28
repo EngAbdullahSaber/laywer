@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import InfiniteScrollSelect from "../../../courts/add/InfiniteScrollSelect";
+import InfiniteScrollSelect from "../../add/InfiniteScrollSelect";
 import {
   CreateTasks,
   getSpecifiedTasks,
@@ -28,6 +28,7 @@ import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles"
 import { useAccessToken } from "@/config/accessToken";
 import { updateAxiosHeader } from "@/services/axios";
 import { clearAuthInfo } from "@/services/utils";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
@@ -55,6 +56,7 @@ const Form = () => {
   const [loading, setIsloading] = useState(true); // State to control dialog visibility
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const [lawyerData, setLawyerData] = useState<LawyerData>({
     titleEn: "",
@@ -164,6 +166,7 @@ const Form = () => {
         setIsloading(true);
 
         reToast.success(res.message); // Display success message
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setIsloading(true);
@@ -281,14 +284,14 @@ const Form = () => {
                       }
                     />{" "}
                   </div>
-                  <Link href={"/lawyer"} className="w-[10%] mt-5">
+                  <a href={"/lawyer"} className="w-[10%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
                       height="24"
                       color="#dfc77d"
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">

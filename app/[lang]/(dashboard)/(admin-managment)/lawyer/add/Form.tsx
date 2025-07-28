@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useTranslate } from "@/config/useTranslation";
 import BasicSelect from "@/components/common/Select/BasicSelect";
 import { motion } from "framer-motion";
@@ -39,6 +39,7 @@ const Form = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
@@ -163,6 +164,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setLoading(true);

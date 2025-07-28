@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 interface ErrorResponse {
   errors: {
@@ -30,6 +31,7 @@ const Form = () => {
   const { lang } = useParams();
   const { t } = useTranslate();
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const getMessagesData = async () => {
     setLoading(true);
@@ -59,11 +61,12 @@ const Form = () => {
       }
     });
   };
-  console.log(selectedPermissions);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const uniquePermissions = Array.from(new Set([...selectedPermissions, 88]));
+    const uniquePermissions = Array.from(
+      new Set([...selectedPermissions, 128])
+    );
 
     const data = {
       name: roleName,
@@ -76,6 +79,7 @@ const Form = () => {
       if (res) {
         setSelectedPermissions([]);
         reToast.success(res.message);
+        router.back();
       } else {
         reToast.error(t("Failed to create role"));
       }
@@ -89,7 +93,7 @@ const Form = () => {
   return (
     <div>
       {permissions.length === 0 ? (
-        <div>No permissions available.</div>
+        <div>{t("No permissions available")}</div>
       ) : (
         <>
           <Card className="my-2">
@@ -133,7 +137,9 @@ const Form = () => {
                         htmlFor={permission?.id}
                         className="text-base mx-3 text-muted-foreground dark:text-slate-200 font-normal"
                       >
-                        {permission?.name}
+                        {permission?.name.includes("api")
+                          ? t(permission?.name.split(".")[1])
+                          : permission?.name}
                       </Label>
                     </div>
                   ))}
@@ -145,8 +151,9 @@ const Form = () => {
               <Button
                 type="submit"
                 className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                disabled={loading}
               >
-                {t("Create Role")}
+                {loading ? t("Creating...") : t("Create Role")}
               </Button>
             </div>
           </form>

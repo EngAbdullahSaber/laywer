@@ -20,6 +20,7 @@ import { CleaveInput } from "@/components/ui/cleave";
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { clearAuthInfo } from "@/services/utils";
+import { useRouter } from "next/navigation"; // ✅ App Router (new)
 
 interface ErrorResponse {
   errors: {
@@ -46,6 +47,7 @@ const Form = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData1] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
@@ -149,6 +151,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setLoading(true);
