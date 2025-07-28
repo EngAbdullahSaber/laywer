@@ -223,52 +223,54 @@ const TableData = ({ flag }: { flag: any }) => {
         return value.includes(row.getValue(id));
       },
     },
-    // {
-    //   accessorKey: "Email",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={"Email"} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex  items-center justify-center gap-2 mx-auto">
-    //         <motion.span
-    //           initial={{ opacity: 0 }}
-    //           whileInView={{ opacity: 1 }}
-    //           transition={{ duration: 1.7 }}
-    //           className="max-w-[500px] truncate font-medium"
-    //         >
-    //           {row.original?.email}
-    //         </motion.span>{" "}
-    //       </div>
-    //     );
-    //   },
-    //   filterFn: (row, id, value) => {
-    //     return value.includes(row.getValue(id));
-    //   },
-    // },
-    // {
-    //   accessorKey: "Address",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={"Address"} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex  items-center justify-center gap-2 mx-auto">
-    //         <motion.span
-    //           initial={{ opacity: 0 }}
-    //           whileInView={{ opacity: 1 }}
-    //           transition={{ duration: 1.7 }}
-    //           className="max-w-[500px] truncate font-medium"
-    //         >
-    //           {row.original.address}
-    //         </motion.span>{" "}
-    //       </div>
-    //     );
-    //   },
-    //   filterFn: (row, id, value) => {
-    //     return value.includes(row.getValue(id));
-    //   },
-    // },
+    {
+      accessorKey: "City",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"City"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {lang === "en"
+                ? row.original?.city?.name.en
+                : row.original?.city?.name.ar || "-"}
+            </motion.span>{" "}
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
+      accessorKey: "room_number",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"room_number"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {row.original?.room_number}
+            </motion.span>{" "}
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
     // {
     //   accessorKey: "Court Website Link",
     //   header: ({ column }) => (

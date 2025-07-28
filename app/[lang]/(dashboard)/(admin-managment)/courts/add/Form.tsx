@@ -9,7 +9,7 @@ import { toast as reToast } from "react-hot-toast";
 import { useTranslate } from "@/config/useTranslation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import BasicSelect from "../add/BasicSelect";
 import { AxiosError } from "axios";
 import { getCategory } from "@/services/category/category";
 import { useParams } from "next/navigation";

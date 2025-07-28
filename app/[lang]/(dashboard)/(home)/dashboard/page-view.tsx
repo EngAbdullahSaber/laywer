@@ -204,7 +204,7 @@ const PageWithAuth = () => {
             key={item.id}
             className={`service-card hover:bg-lawyer before:absolute before:h-[110px] before:w-[110px] before:opacity-60 before:rounded-full before:z-[-1] before:bottom-[-73px] before:right-[-28px] lg:w-[24%] md:w-[45%] w-full p-6 relative z-10 rounded-xl overflow-hidden bg-white dark:bg-slate-800 dark:text-white`}
           >
-            <Link href={item.href}>
+            <a href={item.href}>
               <div className="shape-icon before:absolute before:inset-0 before:bg-[#e2e8fa] relative z-10 flex justify-center items-center w-[90px] h-[85px] leading-10 align-middle mb-7">
                 <span
                   className={`dots before:absolute before:h-[22px] before:w-[22px] before:top-0 before:right-[9px] before:rounded-full after:absolute after:h-[22px] after:w-[22px] after:bottom-[-10px] after:left-[21px] after:rounded-full`}
@@ -229,7 +229,7 @@ const PageWithAuth = () => {
                   quality={100}
                 />
               </div>
-            </Link>
+            </a>
           </Card>
         ))}
       </div>

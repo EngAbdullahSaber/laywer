@@ -79,14 +79,14 @@ const CreatePasswordForm = () => {
 
   return (
     <div className="w-full">
-      <Image
+      {/* <Image
         src={Logo}
         height={56}
         width={56}
         alt="logo"
         className="w-14 h-14"
         priority={true}
-      />
+      /> */}
       <div className="2xl:mt-8 mt-6 2xl:text-3xl lg:text-2xl text-xl font-bold text-default-900">
         {t("Create New Password")}
       </div>

@@ -78,14 +78,14 @@ const RegForm = () => {
         transition={{ duration: 0.6 }}
       >
         {" "}
-        <Image
+        {/* <Image
           src={Logo}
           height={56}
           width={56}
           alt="logo"
           className="w-14 h-14"
           priority={true}
-        />
+        /> */}
       </motion.div>
       <div className="2xl:mt-8 mt-6 2xl:text-3xl text-2xl font-bold text-default-900">
         {t("Hey, Hello 👋")}

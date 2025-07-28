@@ -61,14 +61,11 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
           <DetailItem label={t("Id")} value={courtData?.id || "-"} />
           <DetailItem label={t("Name")} value={courtData?.name || "-"} />
-          <DetailItem label={t("Email")} value={courtData?.email || "-"} />
-          <DetailItem label={t("Address")} value={courtData?.address || "-"} />
           <DetailItem
             label={t("Room Number")}
             value={courtData?.room_number || "-"}
           />
 
-          <DetailItem label={t("Address")} value={courtData?.address || "-"} />
           <DetailItem
             label={t("Category")}
             value={courtData?.category?.name || "-"}
@@ -89,22 +86,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
                 : courtData?.city.name.ar || "-"
             }
           />
-          <motion.li
-            className="flex flex-row gap-6 items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <span className="text-sm text-default-900 dark:text-white font-medium w-[52%]">
-              {t("Court Website Link")}:
-            </span>
-            <a
-              href={row.original.website}
-              className="text-default-500 font-semibold w-[40%]"
-            >
-              {t("Court Website Link")}
-            </a>
-          </motion.li>
+
           <DetailItem
             label="Date Of Create"
             value={

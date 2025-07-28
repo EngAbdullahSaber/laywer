@@ -222,9 +222,9 @@ const TableData = () => {
                     color="secondary"
                   >
                     {" "}
-                    <Link href={`case/${row.original.id}/edit`}>
+                    <a href={`case/${row.original.id}/edit`}>
                       <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
-                    </Link>{" "}
+                    </a>{" "}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -397,23 +397,26 @@ const TableData = () => {
               <Badge
                 className="!text-center"
                 color={
-                  (row.original.status === "pending" && "destructive") ||
-                  (row.original.status === "in_progress" && "warning") ||
-                  (row.original.status === "completed" && "success") ||
+                  (row.original?.status === "pending" && "destructive") ||
+                  (row.original?.status === "in_progress" && "warning") ||
+                  (row.original?.status === "completed" && "success") ||
+                  (row.original?.status === "archived" && "default") ||
                   "default"
                 }
               >
                 {lang == "en"
-                  ? row.original.status == "completed"
+                  ? row.original?.status == "completed"
                     ? "Completed"
-                    : row.original.status == "in_progress"
+                    : row.original?.status == "in_progress"
                     ? "In Progress"
                     : "Pending"
-                  : row.original.status == "completed"
+                  : row.original?.status == "completed"
                   ? "مكتملة"
-                  : row.original.status == "in_progress"
+                  : row.original?.status == "in_progress"
                   ? "قيد التنفيذ"
-                  : "قيدالانتظار"}{" "}
+                  : row.original?.status == "pending"
+                  ? "قيدالانتظار"
+                  : "مؤرشفة"}{" "}
               </Badge>{" "}
             </motion.span>
           </div>

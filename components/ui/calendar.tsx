@@ -94,22 +94,33 @@ function Calendar({
             buttonVariants({ variant: "outline" }),
             "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
           ),
-          nav_button_previous: "absolute left-2",
-          nav_button_next: "absolute right-2",
+          nav_button_previous: "absolute left-2  dark:text-[#dfc77d]",
+          nav_button_next: "absolute right-2 dark:text-[#dfc77d]",
           table: "w-full border-collapse space-y-1",
           head_row: "flex",
           head_cell:
             "flex-1 text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
           row: "flex w-full gap-1 mt-2",
           cell: "flex-1 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-primary [&:has([aria-selected])]:rounded-md focus-within:relative focus-within:z-20",
-          day: "w-full h-10 rounded p-0 font-normal aria-selected:opacity-100 bg-transparent text-current hover:text-primary",
-          day_selected:
+          day: cn(
+            "w-full h-10 rounded p-0 font-normal aria-selected:opacity-100",
+            "bg-transparent text-current hover:text-primary",
+            "dark:text-[#dfc77d] dark:hover:text-[#dfc77d] dark:aria-selected:text-[#dfc77d]"
+          ),
+          day_selected: cn(
             "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-          day_today: "bg-accent text-accent-foreground",
+            "dark:bg-[#dfc77d] dark:text-gray-900 dark:hover:bg-[#dfc77d] dark:hover:text-gray-900 dark:focus:bg-[#dfc77d] dark:focus:text-gray-900"
+          ),
+          day_today: cn(
+            "bg-accent text-accent-foreground",
+            "dark:bg-[#dfc77d]/20 dark:text-[#dfc77d]"
+          ),
           day_outside: "text-muted-foreground opacity-50",
           day_disabled: "text-muted-foreground opacity-50",
-          day_range_middle:
+          day_range_middle: cn(
             "aria-selected:bg-accent aria-selected:text-accent-foreground",
+            "dark:aria-selected:bg-[#dfc77d]/20 dark:aria-selected:text-[#dfc77d]"
+          ),
           day_hidden: "invisible",
           ...classNames,
         }}
@@ -117,7 +128,7 @@ function Calendar({
           IconLeft: () => <ChevronLeft className="h-4 w-4" />,
           IconRight: () => <ChevronRight className="h-4 w-4" />,
         }}
-        selected={selectedDates} // Pass the selected dates here
+        selected={selectedDates}
         onDayHover={handleHover}
         onDayClick={handleClick}
         {...props}

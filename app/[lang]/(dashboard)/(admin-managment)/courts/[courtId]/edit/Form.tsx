@@ -8,7 +8,6 @@ import { toast as reToast } from "react-hot-toast";
 import { useTranslate } from "@/config/useTranslation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import BasicSelect from "@/app/[lang]/(dashboard)/(admin-managment)/lawyer/[lawyerId]/edit/BasicSelect";
 import { AxiosError } from "axios";
 import { getCategory } from "@/services/category/category";
 import { useParams } from "next/navigation";
@@ -24,6 +23,7 @@ import CreateCourtCategory from "@/app/[lang]/(dashboard)/(category-mangement)/c
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import BasicSelect from "../../add/BasicSelect";
 
 interface ErrorResponse {
   errors: {

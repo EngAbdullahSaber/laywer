@@ -86,14 +86,14 @@ const ForgotForm = () => {
         transition={{ duration: 0.6 }}
       >
         {" "}
-        <Image
+        {/* <Image
           src={Logo}
           height={56}
           width={56}
           alt="logo"
           className="w-14 h-14"
           priority={true}
-        />
+        /> */}
       </motion.div>
       <motion.div
         initial={{ y: -50 }}
