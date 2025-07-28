@@ -114,7 +114,7 @@ export async function SearchCases(id: any, lang: any) {
 }
 /*   archived Cases  */
 export async function getArchivedCases(lang: any) {
-  let res = await api.get(`court/cases?per_page=10&status_filter=completed`, {
+  let res = await api.get(`court/cases?per_page=10&status_filter=archived`, {
     headers: {
       "Accept-Language": lang,
     },
@@ -124,7 +124,7 @@ export async function getArchivedCases(lang: any) {
 }
 export async function SearchArchivedCases(id: any, lang: any) {
   let res = await api.get(
-    `court/cases?per_page=10&status_filter=completed&search=${id}&per_page=10`,
+    `court/cases?per_page=10&status_filter=archived&search=${id}&per_page=10`,
     {
       headers: {
         "Accept-Language": lang,
@@ -136,7 +136,7 @@ export async function SearchArchivedCases(id: any, lang: any) {
 }
 export async function getArchivedCasesPanigation(page: any, lang: any) {
   let res = await api.get(
-    `court/cases?per_page=10&status_filter=completed&page=${page}&per_page=10`,
+    `court/cases?per_page=10&status_filter=archived&page=${page}&per_page=10`,
     {
       headers: {
         "Accept-Language": lang,

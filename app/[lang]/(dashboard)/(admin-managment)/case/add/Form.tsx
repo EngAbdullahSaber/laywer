@@ -16,7 +16,7 @@ import FileUploaderMultiple from "./FileUploaderSingle";
 import { getCourtsPanigation } from "@/services/courts/courts";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { getLawyerPanigation } from "@/services/lawyer/lawyer";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
 import SelectCase from "./SelectCase";
 import { CreateCases, getCases } from "@/services/cases/cases";
@@ -82,6 +82,7 @@ const Form = () => {
   const [caseNumbers, setCaseNumbers] = useState<any[]>([]); // Store the final case numbers structure
   const [loading1, setLoading1] = useState(true);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const router = useRouter(); // ✅ initialize router
 
   const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
   const [dates, setDates] = useState({
@@ -337,6 +338,7 @@ const Form = () => {
         setLoading1(true);
 
         reToast.success(res.message); // Display success message
+        // router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setLoading1(true);
@@ -420,10 +422,7 @@ const Form = () => {
                       }
                     />
                   </div>
-                  <a
-                    href="/clients"
-                    className="w-[8%] mt-5 flex justify-end"
-                  >
+                  <a href="/clients" className="w-[8%] mt-5 flex justify-end">
                     <Icon
                       icon="gg:add"
                       width="24"

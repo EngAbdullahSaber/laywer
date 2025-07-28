@@ -71,7 +71,7 @@ const VerifyForm = () => {
   console.log(emails);
 
   const handleSubmit = async () => {
-    const enteredOtp = otp.join(""); // Join OTP array into a string
+    const enteredOtp = otp.slice().join("");
     setOtp(otpArray); // Reset OTP input
     try {
       // Send username and OTP to the API
@@ -154,6 +154,7 @@ const VerifyForm = () => {
           whileInView={{ y: 0 }}
           transition={{ duration: 1.2 }}
           className="flex flex-wrap gap-1 lg:gap-6"
+          dir="ltr"
         >
           {otpFields.map((index) => (
             <Input

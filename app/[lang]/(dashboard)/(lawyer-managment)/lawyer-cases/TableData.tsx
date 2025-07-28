@@ -245,6 +245,7 @@ const TableData = ({ flag }: { flag: any }) => {
                   (row.original?.status === "pending" && "destructive") ||
                   (row.original?.status === "in_progress" && "warning") ||
                   (row.original?.status === "completed" && "success") ||
+                  (row.original?.status === "archived" && "default") ||
                   "default"
                 }
               >
@@ -258,7 +259,9 @@ const TableData = ({ flag }: { flag: any }) => {
                   ? "مكتملة"
                   : row.original?.status == "in_progress"
                   ? "قيد التنفيذ"
-                  : "قيدالانتظار"}{" "}
+                  : row.original?.status == "pending"
+                  ? "قيدالانتظار"
+                  : "مؤرشفة"}{" "}
               </Badge>{" "}
             </motion.span>
           </div>

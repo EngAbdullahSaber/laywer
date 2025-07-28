@@ -94,3 +94,12 @@ export async function SearchCourts(id: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
+export async function ImportFile(data: any, lang: any) {
+  let res = await api.post(`court/courts/import`, data, {
+    headers: {
+      "Accept-Language": lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}

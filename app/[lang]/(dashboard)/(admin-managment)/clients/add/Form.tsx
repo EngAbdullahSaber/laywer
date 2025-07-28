@@ -30,7 +30,6 @@ interface ErrorResponse {
 interface LaywerData {
   name: string;
   phone: string;
-  password: string;
   email: string;
   category_id: string;
   national_id_number: string;
@@ -52,7 +51,6 @@ const Form = () => {
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
-    password: "",
     address: "",
     details: "",
     email: "",
@@ -112,7 +110,32 @@ const Form = () => {
       reToast.error(errorMessage); // Show error toast
     }
   };
+  const generateStrongPassword = (): string => {
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const symbols = "!@#$%^&*";
 
+    // Get one character from each required category (4 characters)
+    const requiredChars = [
+      lowercase[Math.floor(Math.random() * lowercase.length)],
+      uppercase[Math.floor(Math.random() * uppercase.length)],
+      numbers[Math.floor(Math.random() * numbers.length)],
+      symbols[Math.floor(Math.random() * symbols.length)],
+    ];
+
+    // Get 4 more random characters from any category
+    const allChars = lowercase + uppercase + numbers + symbols;
+    const randomChars = Array.from(
+      { length: 4 },
+      () => allChars[Math.floor(Math.random() * allChars.length)]
+    );
+
+    // Combine and shuffle
+    return [...requiredChars, ...randomChars]
+      .sort(() => Math.random() - 0.5)
+      .join("");
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(false);
@@ -134,6 +157,8 @@ const Form = () => {
       formData.append(`client_files[${index}]`, fileId);
     });
 
+    const strongPassword = generateStrongPassword();
+    formData.append("password", strongPassword);
     try {
       const res = await CreateClients(formData, lang); // Call API to create the lawyer
       if (res) {
@@ -141,7 +166,6 @@ const Form = () => {
         setLawyerData({
           name: "",
           phone: "",
-          password: "",
           address: "",
           email: "",
           national_id_number: "",
@@ -151,7 +175,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
-        router.back();
+        // router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setLoading(true);
@@ -207,7 +231,7 @@ const Form = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle> {t("Client List Details")}</CardTitle>
+        <CardTitle> {t("Create Client")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div>
@@ -281,16 +305,7 @@ const Form = () => {
                 placeholder={t("Enter Email Address")}
               />
             </motion.div>
-            <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
-              <Label htmlFor="password">{t("Password")}</Label>
-              <Input
-                type="password"
-                value={lawyerData.password}
-                name="password"
-                onChange={handleInputChange}
-                placeholder={t("Enter Password")}
-              />
-            </motion.div>
+
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
               <Label htmlFor="Identity Number">{t("Identity Number *")}</Label>
               <Input

@@ -27,7 +27,6 @@ interface LaywerData {
   name: string;
   phone: string;
   driving_licence_number: string;
-  password: string;
   email: string;
   address: string;
   category_id: string;
@@ -45,7 +44,6 @@ const Form = () => {
     name: "",
     phone: "",
     driving_licence_number: "",
-    password: "",
     email: "",
     address: "",
     category_id: "",
@@ -111,7 +109,32 @@ const Form = () => {
       setLoading(true);
     }
   };
+  const generateStrongPassword = (): string => {
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const symbols = "!@#$%^&*";
 
+    // Get one character from each required category (4 characters)
+    const requiredChars = [
+      lowercase[Math.floor(Math.random() * lowercase.length)],
+      uppercase[Math.floor(Math.random() * uppercase.length)],
+      numbers[Math.floor(Math.random() * numbers.length)],
+      symbols[Math.floor(Math.random() * symbols.length)],
+    ];
+
+    // Get 4 more random characters from any category
+    const allChars = lowercase + uppercase + numbers + symbols;
+    const randomChars = Array.from(
+      { length: 4 },
+      () => allChars[Math.floor(Math.random() * allChars.length)]
+    );
+
+    // Combine and shuffle
+    return [...requiredChars, ...randomChars]
+      .sort(() => Math.random() - 0.5)
+      .join("");
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(false);
@@ -140,7 +163,8 @@ const Form = () => {
         formData.append(key, value);
       }
     });
-
+    const strongPassword = generateStrongPassword();
+    formData.append("password", strongPassword);
     try {
       const res = await CreateLawyer(formData, lang); // Call API to create the lawyer
       if (res) {
@@ -345,21 +369,6 @@ const Form = () => {
                   placeholder={t("Enter Email")}
                   value={lawyerData.email}
                   name="email"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ y: -50 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.1 }}
-                className="flex flex-col gap-2 w-full sm:w-[48%]"
-              >
-                <Label htmlFor="password">{t("Password")}</Label>
-                <Input
-                  type="password"
-                  placeholder={t("Enter Password")}
-                  value={lawyerData.password}
-                  name="password"
                   onChange={handleInputChange}
                 />
               </motion.div>

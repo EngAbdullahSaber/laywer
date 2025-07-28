@@ -34,7 +34,9 @@ interface TransactionData {
   client_name: string;
   status: string;
   type: string;
+  amount: string;
   transaction_date: string;
+  transaction_name: string;
 }
 
 const Task_Status = [
@@ -62,6 +64,8 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   const [transactionData, setTransactionData] = useState<TransactionData>({
     client_name: "",
     status: "",
+    amount: "",
+    transaction_name: "",
     type: "",
     transaction_date: "",
   });
@@ -72,6 +76,8 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
         client_name: row.original.client_name,
         status: row.original.status,
         type: row.original.type,
+        amount: row.original.amount,
+        transaction_name: row.original.transaction_name,
         transaction_date: row.original.transaction_date,
       });
       // Set existing image IDs if available
@@ -252,7 +258,43 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                   selectedValue={transactionData.status}
                 />
               </motion.div>
+              {/* amount */}
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="amount">{t("Amount")}</Label>
+                <Input
+                  id="amount"
+                  name="amount"
+                  value={transactionData.amount}
+                  onChange={handleInputChange}
+                  placeholder={t("Enter Amount")}
+                  type="number"
+                />
+              </motion.div>
+              {/* transaction_name */}
 
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="transaction_name">
+                  {t("Transaction Name")}
+                </Label>
+                <Input
+                  id="transaction_name"
+                  name="transaction_name"
+                  value={transactionData.transaction_name}
+                  onChange={handleInputChange}
+                  placeholder={t("Enter Transaction Name")}
+                  type="text"
+                />
+              </motion.div>
               {/* Type */}
               <motion.div
                 initial={{ y: -30 }}

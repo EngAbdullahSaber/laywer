@@ -79,11 +79,11 @@ const adminMenu = [
     icon: Courts,
     href: "/courts",
   },
-  {
-    title: "Transaction",
-    icon: Transaction,
-    href: "/transaction",
-  },
+  // {
+  //   title: "Transaction",
+  //   icon: Transaction,
+  //   href: "/transaction",
+  // },
   {
     title: "Orders",
     icon: Reservation,

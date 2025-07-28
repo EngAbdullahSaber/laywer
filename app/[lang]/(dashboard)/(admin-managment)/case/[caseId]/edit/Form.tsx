@@ -16,7 +16,7 @@ import FileUploaderSingle from "./FileUploaderSingle";
 import { getCourtsPanigation } from "@/services/courts/courts";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { getLawyerPanigation } from "@/services/lawyer/lawyer";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import InfiniteScrollSelect from "../../../courts/add/InfiniteScrollSelect";
 import SelectCase from "./SelectCase";
 import {
@@ -66,6 +66,8 @@ const Form = () => {
   }>({
     files: [],
   });
+  const router = useRouter(); // ✅ initialize router
+
   const Case_Status: { value: string; id: string; label: string }[] = [
     { value: "claimant", id: "claimant", label: "مدعي" },
     { value: "appellant", id: "appellant", label: " مدعي عليه" },
@@ -333,88 +335,79 @@ const Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading1(false);
+    const toYMD = (date) => new Date(date).toISOString().split("T")[0];
 
-    const formData = new FormData();
+    // Prepare the request data in the correct format
+    const requestData = {
+      title: lawyerData.title,
+      client_id: lawyerData.client_id,
+      lawyer_id: lawyerData.lawyer_id,
+      court_id: lawyerData.court_id,
+      case_numbers: caseNumbers.map((caseNumber) => ({
+        first_letter: caseNumber.first_letter,
+        second_letter: caseNumber.second_letter,
+        case_year: Number(caseNumber.case_year),
+        case_number_id: caseNumber.case_number_id,
+      })),
+      claim_status: lawyerData.claim_status,
+      main_case_number: lawyerData.main_case_number,
+      receive_date: toYMD(dates.receive_date),
+      submit_date: toYMD(dates.submissionDate),
+      judgment_date: toYMD(dates.judgmentDate),
+      session_date: toYMD(dates.hearingDate),
+      details: lawyerData.details,
+      category_id: lawyerData.category_id,
+      defendants: oppositeParties,
+      files: images.files.map((file) => file.image_id), // Assuming files is an array of objects with image_id
+      follow_up_reports: [], // Add your follow up reports if needed
+      attendance_reports: [], // Add your attendance reports if needed
+    };
 
-    // Append form data
-    Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    images.files.forEach((fileId: any, index: any) => {
-      formData.append(`files[${index}]`, fileId.image_id);
-    });
-    oppositeParties.forEach((fileId, index) => {
-      formData.append(`defendants[${index}]`, fileId);
-    });
-    formData.append(`receive_date`, dates.receive_date);
-    formData.append(`session_date`, dates.hearingDate);
-    formData.append(`judgment_date`, dates.judgmentDate);
-    formData.append(`submit_date`, dates.submissionDate);
-    caseNumbers.forEach((caseNumber, index) => {
-      // Append each caseNumber detail to formData
-      formData.append(
-        `case_numbers[${index}][first_letter]`,
-        caseNumber.first_letter
-      );
-      formData.append(
-        `case_numbers[${index}][second_letter]`,
-        caseNumber.second_letter
-      );
-      formData.append(
-        `case_numbers[${index}][case_year]`,
-        caseNumber.case_year
-      );
-      formData.append(
-        `case_numbers[${index}][case_number_id]`,
-        caseNumber.case_number_id
-      );
-    });
     try {
-      const res = await UpdateCases(formData, caseId, lang); // Call API to create the lawyer
+      const res = await UpdateCases(requestData, caseId, lang);
       if (res) {
-        // Reset data after successful creation
         setLoading1(true);
-
-        reToast.success(res.message); // Display success message
+        reToast.success(res.message);
+        router.back();
       } else {
-        reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+        reToast.error(t("Failed to update Case"));
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = "Something went wrong.";
 
-      // Construct the dynamic key based on field names and the current language
+      // Handle specific field errors
       const fields = [
-        "client_id",
-        "court_id",
-        "category_id",
         "title",
+        "client_id",
         "lawyer_id",
+        "court_id",
         "case_numbers",
-        "main_case_number",
-        "files",
-        "judgment_date",
-        "submit_date",
-        "session_date",
-        "receive_date",
         "claim_status",
+        "main_case_number",
+        "receive_date",
+        "submit_date",
+        "judgment_date",
+        "session_date",
         "details",
+        "category_id",
         "defendants",
+        "files",
+        "follow_up_reports",
+        "attendance_reports",
       ];
-      let errorMessage = "Something went wrong."; // Default fallback message
 
-      // Loop through the fields to find the corresponding error message
       for (let field of fields) {
-        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const fieldErrorKey = `${field}`;
         const error = axiosError.response?.data?.errors?.[fieldErrorKey];
         if (error) {
-          errorMessage = error[0]; // Retrieve the first error message for the field
-          break; // Exit the loop once the error is found
+          errorMessage = error[0];
+          break;
         }
       }
 
-      // Show the error in a toast notification
-      reToast.error(errorMessage); // Display the error message in the toast
+      reToast.error(errorMessage);
+      setLoading1(true);
     }
   };
   return (

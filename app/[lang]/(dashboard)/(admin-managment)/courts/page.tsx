@@ -14,6 +14,9 @@ import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles"
 import { clearAuthInfo } from "@/services/utils";
 import { updateAxiosHeader } from "@/services/axios";
 import { useAccessToken } from "@/config/accessToken";
+import { ImportFile } from "@/services/courts/courts";
+import { UploadImage } from "@/services/auth/auth";
+import { toast as reToast } from "react-hot-toast";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
@@ -58,7 +61,71 @@ const PageWithAuth = () => {
       }
     }
   };
+  const getExcelFileData = async () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".xlsx,.xls,.csv";
 
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        // Show loading state
+        reToast.loading("Uploading file...");
+
+        // Upload the file
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", file);
+        const uploadRes = await UploadImage(uploadFormData, lang);
+
+        if (!uploadRes?.body?.image_id) {
+          throw new Error("Failed to upload file - no image_id returned");
+        }
+
+        // Prepare for import
+        const importFormData = new FormData();
+        importFormData.append("court_file", uploadRes.body.image_id);
+
+        reToast.loading("Processing file...");
+        const importRes = await ImportFile(importFormData, lang);
+
+        if (importRes?.body?.file) {
+          setData(importRes.body.file);
+          window.open(importRes.body.file, "_blank");
+          reToast.success("File imported successfully!");
+        } else {
+          throw new Error("No file data returned from import");
+        }
+      } catch (error) {
+        console.error("File processing error:", error);
+
+        // Dismiss any loading toasts first
+        reToast.dismiss();
+
+        // Handle different error formats
+        const errorData = error.response?.data || error;
+
+        // Main error message
+        if (errorData.message) {
+          reToast.error(errorData.message);
+        } else {
+          reToast.error("Failed to process file");
+        }
+
+        // Field-specific errors
+        if (errorData.errors) {
+          Object.entries(errorData.errors).forEach(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              messages.forEach((msg) => reToast.error(`${field}: ${msg}`));
+            }
+          });
+        }
+      }
+    };
+
+    input.click();
+  };
   useEffect(() => {
     getServicesData();
   }, []);
@@ -98,6 +165,13 @@ const PageWithAuth = () => {
               </Button>
             </a>
           )}
+          <Button
+            color="secondary"
+            variant="outline"
+            onClick={getExcelFileData}
+          >
+            {t("Import Courts")}
+          </Button>
         </motion.div>
       </div>
 

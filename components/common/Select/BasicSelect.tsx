@@ -33,7 +33,7 @@ const BasicSelect: React.FC<BasicSelectProps> = ({
           className="react-select"
           classNamePrefix="select"
           styles={styles}
-          value={getValueById(selectedValue, menu)}
+          value={getValueById(selectedValue.value, menu)}
           name="clear"
           options={menu}
           isClearable

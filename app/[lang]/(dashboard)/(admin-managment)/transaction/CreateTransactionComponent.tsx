@@ -33,7 +33,9 @@ interface TransactionData {
   client_name: string;
   status: string;
   type: string;
+  amount: string;
   transaction_date: string;
+  transaction_name: string;
 }
 
 const Task_Status = [
@@ -60,7 +62,9 @@ const CreateTransactionComponent = ({
     client_name: "",
     status: "",
     type: "",
+    amount: "",
     transaction_date: "",
+    transaction_name: "",
   });
 
   const handleDateChange = (dates: Date[]) => {
@@ -157,6 +161,8 @@ const CreateTransactionComponent = ({
           client_name: "",
           status: "",
           type: "",
+          amount: "",
+          transaction_name: "",
           transaction_date: "",
         });
         setImageIds([]);
@@ -233,6 +239,44 @@ const CreateTransactionComponent = ({
                 />
               </motion.div>
 
+              {/* amount */}
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="amount">{t("Amount")}</Label>
+                <Input
+                  id="amount"
+                  name="amount"
+                  value={transactionData.amount}
+                  onChange={handleInputChange}
+                  placeholder={t("Enter Amount")}
+                  type="number"
+                />
+              </motion.div>
+              {/* transaction_name */}
+
+              <motion.div
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex flex-col gap-2 w-full md:w-[48%]"
+              >
+                <Label htmlFor="transaction_name">
+                  {t("Transaction Name")}
+                </Label>
+                <Input
+                  id="transaction_name"
+                  name="transaction_name"
+                  value={transactionData.transaction_name}
+                  onChange={handleInputChange}
+                  placeholder={t("Enter Transaction Name")}
+                  type="text"
+                />
+              </motion.div>
+
               {/* Type */}
               <motion.div
                 initial={{ y: -30 }}
@@ -250,7 +294,6 @@ const CreateTransactionComponent = ({
                   type="text"
                 />
               </motion.div>
-
               {/* Date */}
               <motion.div
                 initial={{ y: -30, opacity: 0 }}

@@ -78,7 +78,7 @@ const CaseStatus = ({
         setIsloading(true);
 
         reToast.success(res.message); // Display success message
-        setFlags(flags);
+        setFlags(!flags);
 
         setIsDialogOpen(false); // Close the dialog after successful deletion
       } else {
@@ -112,6 +112,7 @@ const CaseStatus = ({
     { value: "pending", label: "قيدالانتظار" },
     { value: "in_progress", label: "قيد التنفيذ" },
     { value: "completed", label: "مكتملة" },
+    { value: "archived", label: "مؤرشفة" },
   ];
   const handleOpen = () => {
     setIsDialogOpen(!isDialogOpen);

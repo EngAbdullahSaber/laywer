@@ -143,7 +143,7 @@ const CreateDate = ({
           importance_level: "",
         });
         setIsloading(true);
-        setFlags(flags);
+        setFlags(!flags);
 
         reToast.success(res.message); // Display success message
         setIsDialogOpen(false); // Close the dialog after successful deletion

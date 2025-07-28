@@ -316,14 +316,14 @@ const Form = () => {
                       }
                     />{" "}
                   </div>
-                  <Link href={"/case"} className="w-[10%] mt-5">
+                  <a href={"/case"} className="w-[10%] mt-5">
                     <Icon
                       icon="gg:add"
                       width="24"
                       height="24"
                       color="#dfc77d"
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </div>
               <motion.div

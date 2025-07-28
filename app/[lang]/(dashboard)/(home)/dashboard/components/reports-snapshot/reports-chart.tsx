@@ -33,11 +33,11 @@ const ReportsChart = ({
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get the number of days in the current month
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     return Array.from({ length: daysInMonth }, (_, i) =>
       String(i + 1).padStart(2, "0")
-    ); // Format as "01", "02", ..., "31"
+    );
   };
 
   const [categories, setCategories] = useState<string[]>(getDaysInMonth());
@@ -72,23 +72,27 @@ const ReportsChart = ({
         stops: [50, 100, 0],
       },
     },
-    yaxis: getYAxisConfig(
-      `hsl(${theme?.cssVars[mode === "dark" ? "dark" : "light"].chartLabel})`
-    ),
+    yaxis: {
+      ...getYAxisConfig(
+        `hsl(${theme?.cssVars[mode === "dark" ? "dark" : "light"].chartLabel})`
+      ),
+      labels: {
+        style: {
+          colors: mode === "dark" ? "#ffffff" : "#000000", // White in dark mode, black in light
+        },
+      },
+    },
     xaxis: {
       ...getXAxisConfig(
         `hsl(${theme?.cssVars[mode === "dark" ? "dark" : "light"].chartLabel})`
       ),
-      categories: categories, // Set custom labels for the x-axis
+      categories: categories,
       labels: {
-        formatter: (value: string) => value, // Display the date as-is (e.g., "01", "02", etc.)
+        style: {
+          colors: mode === "dark" ? "#ffffff" : "#000000", // White in dark mode, black in light
+        },
+        formatter: (value: string) => value,
       },
-    },
-    padding: {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
     },
   };
 

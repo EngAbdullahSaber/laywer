@@ -70,9 +70,7 @@ const PageWithAuth = () => {
     <Tabs defaultValue="Answered" className="">
       <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20 sm:h-12">
         <TabsTrigger value="Answered">{t("Archived Cases")}</TabsTrigger>
-        <TabsTrigger value="NotAnswered">
-          {t("Quiestions Not Answered")}
-        </TabsTrigger>
+        <TabsTrigger value="NotAnswered">{t("Transaction List")}</TabsTrigger>
       </TabsList>
       <TabsContent value="Answered">
         <div className="space-y-5">
