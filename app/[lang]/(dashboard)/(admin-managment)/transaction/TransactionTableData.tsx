@@ -163,9 +163,9 @@ const TransactionTableData = ({ flag }: { flag: any }) => {
       enableHiding: false,
     },
     {
-      accessorKey: "client_name",
+      accessorKey: "transaction_participants",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"client_name"} />
+        <DataTableColumnHeader column={column} title={"transaction_participants"} />
       ),
       cell: ({ row }) => {
         return (
@@ -176,7 +176,9 @@ const TransactionTableData = ({ flag }: { flag: any }) => {
               transition={{ duration: 1.7 }}
               className="max-w-[500px] truncate font-medium"
             >
-              {row.original?.client_name}
+              {row.original?.transaction_participants
+                ?.join()
+                .replace(/,/g, " , ")}
             </motion.span>{" "}
           </div>
         );

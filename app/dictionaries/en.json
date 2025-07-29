@@ -544,6 +544,7 @@
   "Create Date": "New Date",
   "Date": "Date",
   "city": "city",
+  "transaction_participants": "transaction_participants",
   "Select Date About Meeting": "Select Date About Meeting",
   "Enter Title About Date": "Enter Title About Date",
   "Ask Client": "Ask Client",

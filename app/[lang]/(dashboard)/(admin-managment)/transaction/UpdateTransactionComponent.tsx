@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import BasicSelect from "./BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,6 +37,7 @@ interface TransactionData {
   amount: string;
   transaction_date: string;
   transaction_name: string;
+  transaction_participants: string[];
 }
 
 const Task_Status = [
@@ -64,10 +65,11 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   const [transactionData, setTransactionData] = useState<TransactionData>({
     client_name: "",
     status: "",
-    amount: "",
-    transaction_name: "",
     type: "",
+    amount: "",
     transaction_date: "",
+    transaction_name: "",
+    transaction_participants: [],
   });
 
   useEffect(() => {
@@ -79,6 +81,7 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
         amount: row.original.amount,
         transaction_name: row.original.transaction_name,
         transaction_date: row.original.transaction_date,
+        transaction_participants: row.original.transaction_participants,
       });
       // Set existing image IDs if available
       if (row.original.attachments) {
@@ -102,7 +105,32 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       status: value?.id,
     }));
   };
+  const handleAddClient = () => {
+    if (
+      transactionData.client_name &&
+      !transactionData.transaction_participants.includes(
+        transactionData.client_name
+      )
+    ) {
+      setTransactionData((prev) => ({
+        ...prev,
+        transaction_participants: [
+          ...prev.transaction_participants,
+          prev.client_name,
+        ],
+        client_name: "",
+      }));
+    }
+  };
 
+  const handleRemoveClient = (index: number) => {
+    setTransactionData((prev) => ({
+      ...prev,
+      transaction_participants: prev.transaction_participants.filter(
+        (_, i) => i !== index
+      ),
+    }));
+  };
   const handleImageChange = async (file: File) => {
     setUploading(true);
     const formData = new FormData();
@@ -234,14 +262,50 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label>{t("Client Selection")}</Label>
-                <InfiniteScrollSelect
-                  fetchData={fetchData}
-                  formatOption={formatOption}
-                  placeholder={t("Select Client or Enter Name")}
-                  selectedValue={transactionData.client_name}
-                  setSelectedValue={handleClientChange}
-                  allowFreeText={true}
-                />
+                <div className="flex gap-2">
+                  <InfiniteScrollSelect
+                    fetchData={fetchData}
+                    formatOption={formatOption}
+                    placeholder={t("Select Client or Enter Name")}
+                    selectedValue={transactionData.client_name}
+                    setSelectedValue={handleClientChange}
+                    allowFreeText={true}
+                    className="flex-1"
+                  />
+                  <span
+                    className="justify-center items-center flex cursor-pointer  p-2"
+                    onClick={handleAddClient}
+                    disabled={!transactionData.client_name}
+                  >
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </span>
+                </div>
+
+                {/* Display selected clients */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {transactionData.transaction_participants.map(
+                    (client, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center bg-gray-100 rounded-full px-3 py-1"
+                      >
+                        <span>{client}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveClient(index)}
+                          className="ml-2 text-red-500 hover:text-red-700"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )
+                  )}
+                </div>
               </motion.div>
 
               {/* Status */}

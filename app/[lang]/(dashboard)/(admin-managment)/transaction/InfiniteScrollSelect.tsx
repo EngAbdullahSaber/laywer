@@ -11,6 +11,7 @@ interface InfiniteScrollSelectProps {
   selectedValue?: string;
   setSelectedValue: (value: string) => void;
   allowFreeText?: boolean;
+  className?: string;
 }
 
 const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
@@ -21,6 +22,7 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
   selectedValue,
   setSelectedValue,
   allowFreeText = true,
+  className,
 }) => {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -63,7 +65,6 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
 
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
-    // If allowFreeText, update the selected value as user types
     if (allowFreeText) {
       setSelectedValue(newValue);
     }
@@ -92,14 +93,12 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
 
   const handleMenuClose = () => {
     setMenuIsOpen(false);
-    // If allowFreeText and input has value, ensure it's set as the selected value
     if (allowFreeText && inputValue) {
       setSelectedValue(inputValue);
     }
   };
 
   const handleBlur = () => {
-    // On blur, ensure the current input value is set as the selected value
     if (allowFreeText && inputValue) {
       setSelectedValue(inputValue);
     }
@@ -129,7 +128,7 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className={`w-full ${className}`}>
       <Select
         className="react-select-container"
         classNamePrefix="react-select"
@@ -139,29 +138,73 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
         onChange={handleChange}
         onMenuScrollToBottom={loadMore}
         isLoading={loading}
-        isClearable={isClearable}
         value={getDisplayValue()}
         placeholder={placeholder}
         onMenuOpen={handleMenuOpen}
         onMenuClose={handleMenuClose}
-        onBlur={handleBlur} // Added blur handler
+        onBlur={handleBlur}
         filterOption={createFilter({ ignoreAccents: false })}
         menuIsOpen={menuIsOpen}
         components={{
           DropdownIndicator: null,
         }}
         styles={{
-          control: (base) => ({
+          control: (base, state) => ({
             ...base,
             minHeight: "40px",
-            borderColor: "#e2e8f0",
+            backgroundColor: "hsl(var(--background))",
+            borderColor: state.isFocused
+              ? "hsl(var(--primary))"
+              : "hsl(var(--input))",
+            boxShadow: state.isFocused
+              ? "0 0 0 1px hsl(var(--primary))"
+              : "none",
             "&:hover": {
-              borderColor: "#cbd5e0",
+              borderColor: "hsl(var(--primary))",
             },
           }),
           input: (base) => ({
             ...base,
-            color: "#000",
+            color: "hsl(var(--foreground)) !important",
+          }),
+          placeholder: (base) => ({
+            ...base,
+            color: "hsl(var(--muted-foreground))",
+          }),
+          singleValue: (base, state) => ({
+            ...base,
+            color: "hsl(var(--foreground))",
+          }),
+          menu: (base) => ({
+            ...base,
+            backgroundColor: "hsl(var(--popover))",
+            borderColor: "hsl(var(--border))",
+          }),
+          option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isSelected
+              ? "hsl(var(--primary))"
+              : state.isFocused
+              ? "hsl(var(--accent))"
+              : "transparent",
+            color: state.isSelected
+              ? "hsl(var(--primary-foreground))"
+              : "hsl(var(--foreground))",
+            "&:active": {
+              backgroundColor: "hsl(var(--primary))",
+              color: "hsl(var(--primary-foreground))",
+            },
+          }),
+          clearIndicator: (base) => ({
+            ...base,
+            color: "hsl(var(--muted-foreground))",
+            "&:hover": {
+              color: "hsl(var(--foreground))",
+            },
+          }),
+          indicatorSeparator: (base) => ({
+            ...base,
+            backgroundColor: "hsl(var(--border))",
           }),
         }}
       />

@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import BasicSelect from "./BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +22,7 @@ import { getClientsPanigation } from "@/services/clients/clients";
 import { CreateTransaction } from "@/services/transaction/transaction";
 import { UploadImage } from "@/services/auth/auth";
 import FileUploaderMultiple from "./FileUploaderMultiple";
+import { Icon } from "@iconify/react";
 
 interface ErrorResponse {
   errors: {
@@ -36,10 +37,11 @@ interface TransactionData {
   amount: string;
   transaction_date: string;
   transaction_name: string;
+  transaction_participants: string[];
 }
 
 const Task_Status = [
-  { id: "pending", value: "pending", label: "قيدالانتظار" },
+  { id: "pending", value: "pending", label: "قيد الانتظار" },
   { id: "in_progress", value: "in_progress", label: "قيد التنفيذ" },
   { id: "completed", value: "completed", label: "مكتملة" },
 ];
@@ -53,8 +55,8 @@ const CreateTransactionComponent = ({
 }) => {
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
-  const [loading, setIsLoading] = useState(true);
-  const [imageIds, setImageIds] = useState<string[]>([]); // Store array of image IDs
+  const [loading, setIsLoading] = useState(false);
+  const [imageIds, setImageIds] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const { lang } = useParams();
 
@@ -65,6 +67,7 @@ const CreateTransactionComponent = ({
     amount: "",
     transaction_date: "",
     transaction_name: "",
+    transaction_participants: [],
   });
 
   const handleDateChange = (dates: Date[]) => {
@@ -73,6 +76,33 @@ const CreateTransactionComponent = ({
     setTransactionData((prev) => ({
       ...prev,
       transaction_date: formattedDate,
+    }));
+  };
+
+  const handleAddClient = () => {
+    if (
+      transactionData.client_name &&
+      !transactionData.transaction_participants.includes(
+        transactionData.client_name
+      )
+    ) {
+      setTransactionData((prev) => ({
+        ...prev,
+        transaction_participants: [
+          ...prev.transaction_participants,
+          prev.client_name,
+        ],
+        client_name: "",
+      }));
+    }
+  };
+
+  const handleRemoveClient = (index: number) => {
+    setTransactionData((prev) => ({
+      ...prev,
+      transaction_participants: prev.transaction_participants.filter(
+        (_, i) => i !== index
+      ),
     }));
   };
 
@@ -139,14 +169,20 @@ const CreateTransactionComponent = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(false);
+    setIsLoading(true);
 
     try {
       const formData = new FormData();
 
-      // Append transaction data
-      Object.entries(transactionData).forEach(([key, value]) => {
-        formData.append(key, value);
+      // Append all transaction data except participants
+      const { transaction_participants, ...restData } = transactionData;
+      Object.entries(restData).forEach(([key, value]) => {
+        if (value) formData.append(key, value);
+      });
+
+      // Append participants separately
+      transaction_participants.forEach((participant, index) => {
+        formData.append(`transaction_participants[${index}]`, participant);
       });
 
       // Append image IDs
@@ -164,13 +200,12 @@ const CreateTransactionComponent = ({
           amount: "",
           transaction_name: "",
           transaction_date: "",
+          transaction_participants: [],
         });
         setImageIds([]);
         reToast.success(res.message);
         setFlag(!flag);
         setOpen(false);
-      } else {
-        reToast.error(t("Failed to create transaction"));
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -183,7 +218,7 @@ const CreateTransactionComponent = ({
 
       reToast.error(errorMessage);
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
@@ -214,16 +249,53 @@ const CreateTransactionComponent = ({
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label>{t("Client Selection")}</Label>
-                <InfiniteScrollSelect
-                  fetchData={fetchData}
-                  formatOption={formatOption}
-                  placeholder={t("Select Client or Enter Name")}
-                  selectedValue={transactionData.client_name}
-                  setSelectedValue={handleClientChange}
-                  allowFreeText={true}
-                />
+                <div className="flex gap-2">
+                  <InfiniteScrollSelect
+                    fetchData={fetchData}
+                    formatOption={formatOption}
+                    placeholder={t("Select Client or Enter Name")}
+                    selectedValue={transactionData.client_name}
+                    setSelectedValue={handleClientChange}
+                    allowFreeText={true}
+                    className="flex-1"
+                  />
+                  <span
+                    className="justify-center items-center flex cursor-pointer  p-2"
+                    onClick={handleAddClient}
+                    disabled={!transactionData.client_name}
+                  >
+                    <Icon
+                      icon="gg:add"
+                      width="24"
+                      height="24"
+                      color="#dfc77d"
+                    />
+                  </span>
+                </div>
+
+                {/* Display selected clients */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {transactionData.transaction_participants.map(
+                    (client, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center bg-gray-100 rounded-full px-3 py-1"
+                      >
+                        <span>{client}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveClient(index)}
+                          className="ml-2 text-red-500 hover:text-red-700"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )
+                  )}
+                </div>
               </motion.div>
 
+              {/* Rest of your form fields remain the same */}
               {/* Status */}
               <motion.div
                 initial={{ y: -30 }}
@@ -256,8 +328,8 @@ const CreateTransactionComponent = ({
                   type="number"
                 />
               </motion.div>
-              {/* transaction_name */}
 
+              {/* transaction_name */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
@@ -294,6 +366,7 @@ const CreateTransactionComponent = ({
                   type="text"
                 />
               </motion.div>
+
               {/* Date */}
               <motion.div
                 initial={{ y: -30, opacity: 0 }}
@@ -345,10 +418,10 @@ const CreateTransactionComponent = ({
               </DialogClose>
               <Button
                 type="submit"
-                disabled={!loading || uploading}
+                disabled={loading || uploading}
                 className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {!loading || uploading
+                {loading || uploading
                   ? t("Processing")
                   : t("Create Transaction")}
               </Button>
