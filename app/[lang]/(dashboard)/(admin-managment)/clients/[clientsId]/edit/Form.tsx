@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import BasicSelect from "@/app/[lang]/(dashboard)/(admin-managment)/lawyer/[lawyerId]/edit/BasicSelect";
+import BasicSelect from "./BasicSelect";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";

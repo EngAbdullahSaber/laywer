@@ -72,7 +72,6 @@ const PageWithAuth = () => {
 
       try {
         // Show loading state
-        reToast.loading("Uploading file...");
 
         // Upload the file
         const uploadFormData = new FormData();
@@ -87,13 +86,11 @@ const PageWithAuth = () => {
         const importFormData = new FormData();
         importFormData.append("court_file", uploadRes.body.image_id);
 
-        reToast.loading("Processing file...");
         const importRes = await ImportFile(importFormData, lang);
 
-        if (importRes?.body?.file) {
-          setData(importRes.body.file);
-          window.open(importRes.body.file, "_blank");
-          reToast.success("File imported successfully!");
+        if (importRes) {
+          setData(importRes);
+          reToast.success(importRes.message || "File imported successfully");
         } else {
           throw new Error("No file data returned from import");
         }

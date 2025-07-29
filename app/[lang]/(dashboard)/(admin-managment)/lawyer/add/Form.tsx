@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslate } from "@/config/useTranslation";
-import BasicSelect from "@/components/common/Select/BasicSelect";
+import BasicSelect from "./BasicSelect";
 import { motion } from "framer-motion";
 import { toast as reToast } from "react-hot-toast";
 import React, { useEffect, useState } from "react";

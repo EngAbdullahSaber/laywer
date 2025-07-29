@@ -40,7 +40,7 @@ const SelectCase: React.FC<{
       <Select
         className="react-select"
         classNamePrefix="select"
-        value={getValueById(selectedValue, menu)}
+        value={getValueById(selectedValue.value, menu)}
         options={menu}
         onChange={handleChange}
         name="clear"

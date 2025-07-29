@@ -287,7 +287,7 @@ const Form = () => {
               >
                 <Label htmlFor="Room_Number">{t("Room Number")}</Label>
                 <Input
-                  type="number"
+                  type="text"
                   placeholder={t("Enter Room Number")}
                   name="room_number"
                   value={courtData.room_number}
