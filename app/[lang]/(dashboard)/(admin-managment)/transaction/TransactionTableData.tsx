@@ -165,7 +165,10 @@ const TransactionTableData = ({ flag }: { flag: any }) => {
     {
       accessorKey: "transaction_participants",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"transaction_participants"} />
+        <DataTableColumnHeader
+          column={column}
+          title={"transaction_participants"}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -280,12 +283,16 @@ const TransactionTableData = ({ flag }: { flag: any }) => {
                     ? "Completed"
                     : row.original?.status == "in_progress"
                     ? "In Progress"
-                    : "Pending"
+                    : row.original?.status == "pending"
+                    ? "Pending"
+                    : ""
                   : row.original?.status == "completed"
                   ? "مكتملة"
                   : row.original?.status == "in_progress"
                   ? "قيد التنفيذ"
-                  : "قيدالانتظار"}{" "}
+                  : row.original?.status == "pending"
+                  ? "قيدالانتظار"
+                  : ""}{" "}
               </Badge>{" "}
             </motion.span>
           </div>

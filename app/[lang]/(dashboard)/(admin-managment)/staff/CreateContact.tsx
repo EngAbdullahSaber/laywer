@@ -1,5 +1,4 @@
 "use client";
-import BasicSelect from "./BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +18,7 @@ import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { CreateStaff, getRoles } from "@/services/staff/staff";
 import { CleaveInput } from "@/components/ui/cleave";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
@@ -61,7 +61,11 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   const fetchDataCategory = async () => {
     try {
       const countriesData = await getRoles(lang);
-      setRoles(countriesData?.body?.roles_and_permissions || []);
+      setRoles(
+        countriesData?.body?.roles_and_permissions.filter(
+          (role: any) => role.role !== "client" && role.role !== "lawyer"
+        ) || []
+      );
     } catch (error) {}
   };
   const transformedRoles = roles?.map((item: any) => ({

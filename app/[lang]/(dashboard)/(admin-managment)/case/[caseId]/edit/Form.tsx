@@ -26,7 +26,7 @@ import {
   UpdateCases,
 } from "@/services/cases/cases";
 import { getCategory } from "@/services/category/category";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import CreateCaseCategory from "../../../../(category-mangement)/cases-category/CreateCaseCategory";
 import { UploadImage } from "@/services/auth/auth";
 import { AxiosError } from "axios";
@@ -339,26 +339,26 @@ const Form = () => {
 
     // Prepare the request data in the correct format
     const requestData = {
-      title: lawyerData.title,
-      client_id: lawyerData.client_id,
-      lawyer_id: lawyerData.lawyer_id,
-      court_id: lawyerData.court_id,
+      title: lawyerData?.title,
+      client_id: lawyerData?.client_id,
+      lawyer_id: lawyerData?.lawyer_id,
+      court_id: lawyerData?.court_id,
       case_numbers: caseNumbers.map((caseNumber) => ({
-        first_letter: caseNumber.first_letter,
-        second_letter: caseNumber.second_letter,
-        case_year: Number(caseNumber.case_year),
-        case_number_id: caseNumber.case_number_id,
+        first_letter: caseNumber?.first_letter,
+        second_letter: caseNumber?.second_letter,
+        case_year: Number(caseNumber?.case_year),
+        case_number_id: caseNumber?.case_number_id,
       })),
-      claim_status: lawyerData.claim_status,
-      main_case_number: lawyerData.main_case_number,
-      receive_date: toYMD(dates.receive_date),
-      submit_date: toYMD(dates.submissionDate),
-      judgment_date: toYMD(dates.judgmentDate),
-      session_date: toYMD(dates.hearingDate),
-      details: lawyerData.details,
-      category_id: lawyerData.category_id,
+      claim_status: lawyerData?.claim_status,
+      main_case_number: lawyerData?.main_case_number,
+      receive_date: toYMD(dates?.receive_date),
+      submit_date: toYMD(dates?.submissionDate),
+      judgment_date: toYMD(dates?.judgmentDate),
+      session_date: toYMD(dates?.hearingDate),
+      details: lawyerData?.details,
+      category_id: lawyerData?.category_id,
       defendants: oppositeParties,
-      files: images.files.map((file) => file.image_id), // Assuming files is an array of objects with image_id
+      files: images?.files.map((file) => file?.image_id), // Assuming files is an array of objects with image_id
       follow_up_reports: [], // Add your follow up reports if needed
       attendance_reports: [], // Add your attendance reports if needed
     };

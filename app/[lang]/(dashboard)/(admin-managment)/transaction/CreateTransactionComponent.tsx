@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

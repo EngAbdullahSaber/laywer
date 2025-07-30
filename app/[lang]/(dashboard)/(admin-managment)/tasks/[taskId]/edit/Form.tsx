@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -98,13 +98,13 @@ const Form = () => {
         const lawyer = res.body;
         console.log(lawyer);
         setLawyerData({
-          law_suit_id: lawyer.law_suit?.id,
-          importance_level: lawyer.importance_level,
-          titleEn: lawyer.title,
-          titleAr: lawyer.title,
-          lawyer_id: lawyer.lawyer?.id,
-          detailsAr: lawyer.details,
-          detailsEn: lawyer.details,
+          law_suit_id: lawyer?.law_suit?.id,
+          importance_level: lawyer?.importance_level,
+          titleEn: lawyer?.title,
+          titleAr: lawyer?.title,
+          lawyer_id: lawyer?.lawyer?.id,
+          detailsAr: lawyer?.details,
+          detailsEn: lawyer?.details,
         });
         setDates({
           due_date: lawyer.due_date,

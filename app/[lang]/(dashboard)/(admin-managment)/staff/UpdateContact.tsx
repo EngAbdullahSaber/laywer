@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -63,7 +63,11 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
   const fetchDataCategory = async () => {
     try {
       const countriesData = await getRoles(lang);
-      setRoles(countriesData?.body?.roles_and_permissions || []);
+      setRoles(
+        countriesData?.body?.roles_and_permissions.filter(
+          (role: any) => role.role !== "client" && role.role !== "lawyer"
+        ) || []
+      );
     } catch (error) {}
   };
   const transformedRoles = roles?.map((item: any) => ({
@@ -76,10 +80,10 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
     setIsloading(false);
 
     const data = {
-      name: lawyerData.name,
-      phone: lawyerData.phone,
-      email: lawyerData.email,
-      role_id: lawyerData.role_id,
+      name: lawyerData?.name,
+      phone: lawyerData?.phone,
+      email: lawyerData?.email,
+      role_id: lawyerData?.role_id,
     };
     try {
       const res = await UpdateStaff(data, row.original.id, lang); // Call API to create the lawyer
@@ -123,7 +127,6 @@ const UpdateContact: React.FC<UpdateStaffProps> = ({ row, getStaffData }) => {
       setIsloading(true);
     }
   };
-  console.log(lawyerData);
   useEffect(() => {
     if (row?.original) {
       setLawyerData({

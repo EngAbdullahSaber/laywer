@@ -1,5 +1,5 @@
 "use client";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -75,17 +75,17 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   useEffect(() => {
     if (row?.original) {
       setTransactionData({
-        client_name: row.original.client_name,
-        status: row.original.status,
-        type: row.original.type,
-        amount: row.original.amount,
-        transaction_name: row.original.transaction_name,
-        transaction_date: row.original.transaction_date,
-        transaction_participants: row.original.transaction_participants,
+        client_name: row?.original?.client_name,
+        status: row?.original?.status,
+        type: row?.original?.type,
+        amount: row?.original?.amount,
+        transaction_name: row?.original?.transaction_name,
+        transaction_date: row?.original?.transaction_date,
+        transaction_participants: row?.original?.transaction_participants,
       });
       // Set existing image IDs if available
-      if (row.original.attachments) {
-        setImageIds(row.original.attachments.map((att: any) => att.id));
+      if (row.original?.attachments) {
+        setImageIds(row?.original?.attachments.map((att: any) => att.id));
       }
     }
   }, [row]);
@@ -232,7 +232,7 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   const handleOpen = () => {
     setOpen(!open);
   };
-
+  console.log(transactionData);
   return (
     <>
       <Button

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
@@ -104,26 +104,25 @@ const Form = () => {
     try {
       const res = await getSpecifiedClient(lang, clientsId);
       if (res?.body) {
-        const lawyer = res.body;
-        console.log(res.body);
+        console.log(res.body.name);
         setLawyerData({
-          name: lawyer.name,
-          phone: lawyer.phone,
-          national_id_number: lawyer.national_id_number,
-          email: lawyer.email,
-          details: lawyer.details,
-          category_id: lawyer.category.id,
-          address: lawyer.address,
+          name: res?.body?.name,
+          phone: res?.body?.phone,
+          national_id_number: res?.body?.national_id_number,
+          email: res?.body?.email,
+          details: res?.body?.details,
+          category_id: res?.body?.category?.id,
+          address: res?.body?.address,
         });
         setImages({
-          client_files: lawyer.client_files,
+          client_files: res?.body?.client_files,
         });
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
     }
   };
-
+  console.log(lawyerData);
   // Handle select change
   const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({

@@ -23,7 +23,7 @@ import CreateCourtCategory from "@/app/[lang]/(dashboard)/(category-mangement)/c
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
-import BasicSelect from "../../add/BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 
 interface ErrorResponse {
   errors: {
@@ -154,11 +154,11 @@ const Form = () => {
       if (res?.body) {
         const lawyer = res.body;
         setCourtData({
-          name: lawyer.name,
-          category_id: lawyer.category.id,
-          room_number: lawyer.room_number,
-          region_id: lawyer.city?.region_id,
-          city_id: lawyer.city?.id,
+          name: lawyer?.name,
+          category_id: lawyer?.category.id,
+          room_number: lawyer?.room_number,
+          region_id: lawyer?.city?.region_id,
+          city_id: lawyer?.city?.id,
         });
       }
     } catch (error) {

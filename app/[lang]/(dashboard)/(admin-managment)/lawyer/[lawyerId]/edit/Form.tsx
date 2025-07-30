@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
@@ -113,19 +113,19 @@ const Form = () => {
         const lawyer = res.body["0"];
 
         setLawyerData({
-          name: lawyer.name,
-          phone: lawyer.phone,
-          driving_licence_number: lawyer.driving_licence_number,
-          email: lawyer.email,
-          address: lawyer.address,
-          category_id: lawyer.category.id,
-          status: lawyer.status,
+          name: lawyer?.name,
+          phone: lawyer?.phone,
+          driving_licence_number: lawyer?.driving_licence_number,
+          email: lawyer?.email,
+          address: lawyer?.address,
+          category_id: lawyer?.category.id,
+          status: lawyer?.status,
         });
         setImages({
-          national_id_image: lawyer.national_id_image,
-          driving_licence: lawyer.driving_licence,
-          subscription_image: lawyer.subscription_image,
-          lawyer_licence: lawyer.lawyer_licence,
+          national_id_image: lawyer?.national_id_image,
+          driving_licence: lawyer?.driving_licence,
+          subscription_image: lawyer?.subscription_image,
+          lawyer_licence: lawyer?.lawyer_licence,
         });
       }
     } catch (error) {

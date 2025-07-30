@@ -21,7 +21,7 @@ import InfiniteScrollSelect from "../../courts/add/InfiniteScrollSelect";
 import SelectCase from "./SelectCase";
 import { CreateCases, getCases } from "@/services/cases/cases";
 import { getCategory } from "@/services/category/category";
-import BasicSelect from "../../contact-list/BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import CreateCaseCategory from "../../../(category-mangement)/cases-category/CreateCaseCategory";
 import { UploadImage } from "@/services/auth/auth";
 import { AxiosError } from "axios";

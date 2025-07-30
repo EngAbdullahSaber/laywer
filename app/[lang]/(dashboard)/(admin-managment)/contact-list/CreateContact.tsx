@@ -1,5 +1,5 @@
 "use Contact List";
-import BasicSelect from "../courts/add/BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

@@ -1,5 +1,5 @@
 "use Contact List";
-import BasicSelect from "./BasicSelect";
+import BasicSelect from "@/components/common/Select/BasicSelect";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -151,10 +151,10 @@ const UpdateContact = ({
   };
   useEffect(() => {
     setContactList({
-      name: row.original.name,
-      phone: row.original.phone,
-      email: row.original.email,
-      category_id: row.original.category,
+      name: row?.original?.name,
+      phone: row?.original?.phone,
+      email: row?.original?.email,
+      category_id: row?.original?.category,
     });
   }, [row]);
   const handleOpen = () => {
