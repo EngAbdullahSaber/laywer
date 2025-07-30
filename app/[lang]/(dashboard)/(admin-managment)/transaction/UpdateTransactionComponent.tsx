@@ -75,7 +75,7 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   useEffect(() => {
     if (row?.original) {
       setTransactionData({
-        client_name: row?.original?.client_name,
+        client_name: "client",
         status: row?.original?.status,
         type: row?.original?.type,
         amount: row?.original?.amount,
@@ -192,9 +192,15 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
     try {
       const formData = new FormData();
 
-      // Append transaction data
-      Object.entries(transactionData).forEach(([key, value]) => {
-        formData.append(key, value);
+      // Append all transaction data except participants
+      const { transaction_participants, ...restData } = transactionData;
+      Object.entries(restData).forEach(([key, value]) => {
+        if (value) formData.append(key, value);
+      });
+
+      // Append participants separately
+      transaction_participants.forEach((participant, index) => {
+        formData.append(`transaction_participants[${index}]`, participant);
       });
 
       // Append image IDs
@@ -232,7 +238,6 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   const handleOpen = () => {
     setOpen(!open);
   };
-  console.log(transactionData);
   return (
     <>
       <Button
@@ -261,12 +266,12 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
-                <Label>{t("Client Selection")}</Label>
+                <Label>{t("Transaction Participant")}</Label>
                 <div className="flex gap-2">
                   <InfiniteScrollSelect
                     fetchData={fetchData}
                     formatOption={formatOption}
-                    placeholder={t("Select Client or Enter Name")}
+                    placeholder={t("Select Participant or Enter Name")}
                     selectedValue={transactionData.client_name}
                     setSelectedValue={handleClientChange}
                     allowFreeText={true}

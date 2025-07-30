@@ -147,7 +147,8 @@
   "Update Lawyer Category": "تحديث فئة المحامين",
   "Update Case Category": "تحديث فئة القضية",
   "Create a New Case Category": " فئة جديدة للقضية",
-
+  "Select Participant or Enter Name": "حدد الاطراف أو أدخل الاسم",
+  "Transaction Participant": "اطراف المعاملة",
   "Lawyer": "محامي",
   "defendant": "مدعى عليه",
   "claimant": "مدعي",

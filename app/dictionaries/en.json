@@ -543,6 +543,8 @@
   "Enter Client Category Name": "Enter Client Category Name",
   "Create Date": "New Date",
   "Date": "Date",
+  "Select Participant or Enter Name": "Select Participant or Enter Name",
+  "Transaction Participant": "Transaction Participant",
   "city": "city",
   "transaction_participants": "transaction_participants",
   "Select Date About Meeting": "Select Date About Meeting",

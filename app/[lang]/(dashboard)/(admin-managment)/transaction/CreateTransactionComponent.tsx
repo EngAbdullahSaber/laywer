@@ -248,12 +248,12 @@ const CreateTransactionComponent = ({
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
-                <Label>{t("Client Selection")}</Label>
+                <Label>{t("Transaction Participant")}</Label>
                 <div className="flex gap-2">
                   <InfiniteScrollSelect
                     fetchData={fetchData}
                     formatOption={formatOption}
-                    placeholder={t("Select Client or Enter Name")}
+                    placeholder={t("Select Participant or Enter Name")}
                     selectedValue={transactionData.client_name}
                     setSelectedValue={handleClientChange}
                     allowFreeText={true}
