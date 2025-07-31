@@ -12,8 +12,8 @@ const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
         <div className="flex flex-1 items-center gap-x-3  ">
           <Image
             src={Logo}
-            height={32}
-            width={32}
+            height={48}
+            width={64}
             alt="logo"
             className="w-16 h-12"
             priority={true}

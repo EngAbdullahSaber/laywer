@@ -69,7 +69,7 @@ const PageWithAuth = () => {
   const ProtectedPage = Auth({ allowedRoles })(() => (
     <Tabs defaultValue="Answered" className="">
       <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20 sm:h-12">
-        <TabsTrigger value="Answered">{t("Archived Cases")}</TabsTrigger>
+        <TabsTrigger value="Answered">{t("Archived Case Lists")}</TabsTrigger>
         <TabsTrigger value="NotAnswered">{t("Transaction List")}</TabsTrigger>
       </TabsList>
       <TabsContent value="Answered">
@@ -81,11 +81,11 @@ const PageWithAuth = () => {
               transition={{ duration: 1.7 }}
             >
               <div className=" text-default-900 text-2xl font-bold my-2">
-                {t("Archived Case List")}
+                {t("Archived Case Lists")}
               </div>{" "}
               <BreadcrumbComponent
                 header={"Archived Cases"}
-                body={"Archived Case List"}
+                body={"Archived Case Lists"}
               />
             </motion.div>
             <motion.div

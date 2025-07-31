@@ -334,13 +334,13 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
-                <Label htmlFor="amount">{t("Amount")}</Label>
+                <Label htmlFor="amount">{t("Number")}</Label>
                 <Input
                   id="amount"
                   name="amount"
                   value={transactionData.amount}
                   onChange={handleInputChange}
-                  placeholder={t("Enter Amount")}
+                  placeholder={t("Enter Number")}
                   type="number"
                 />
               </motion.div>
@@ -389,10 +389,10 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                 transition={{ duration: 1.7 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
-                <Label>{t("Date")}</Label>
+                <Label>{t("Filing date")}</Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder={t("Select Date")}
+                  placeholder={t("Select Filing date")}
                   value={transactionData.transaction_date || ""}
                   onChange={handleDateChange}
                   options={{
