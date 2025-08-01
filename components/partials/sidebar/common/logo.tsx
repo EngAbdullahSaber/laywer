@@ -2,22 +2,37 @@ import { websiteName } from "@/config/constants";
 import { useSidebar } from "@/store";
 import React from "react";
 import Logo from "@/public/images/auth/LawyerLogo.png";
+import Logo1 from "@/public/images/auth/LawyerLogo1.jpeg";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 const SidebarLogo = ({ hovered }: { hovered?: boolean }) => {
   const { sidebarType, setCollapsed, collapsed } = useSidebar();
+  const { theme } = useTheme();
+
   return (
     <div className="px-4 py-4 ">
       <div className=" flex items-center">
         <div className="flex flex-1 items-center gap-x-3  ">
-          <Image
-            src={Logo}
-            height={48}
-            width={64}
-            alt="logo"
-            className="w-16 h-12"
-            priority={true}
-          />{" "}
+          {theme == "dark" ? (
+            <Image
+              src={Logo}
+              height={48}
+              width={64}
+              alt="logo"
+              className="w-16 h-12"
+              priority={true}
+            />
+          ) : (
+            <Image
+              src={Logo1}
+              height={48}
+              width={48}
+              alt="logo"
+              className="w-12 h-12"
+              priority={true}
+            />
+          )}{" "}
           {/* {(!collapsed || hovered) && (
             // <div className="flex-1 block  text-xl text-primary  font-semibold">
             //   {websiteName}
