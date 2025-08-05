@@ -303,6 +303,37 @@ const TransactionTableData = ({ flag }: { flag: any }) => {
       },
     },
     {
+      accessorKey: "Attachments",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={"Attachments"} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex  items-center justify-center gap-2 mx-auto">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.7 }}
+              className="max-w-[500px] truncate font-medium"
+            >
+              {" "}
+              <a
+                href={row.original?.files[0]?.url} // Access the file URL dynamically from the `file` object
+                className="text-default-500 font-semibold w-[40%]"
+                target="_blank"
+                rel="noopener noreferrer" // Added for security when opening links
+              >
+                {t("Show File")} {/* Display the file name */}
+              </a>
+            </motion.span>{" "}
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    },
+    {
       accessorKey: "transaction_date",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={"transaction_date"} />

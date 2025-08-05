@@ -43,7 +43,7 @@ interface TransactionData {
 const Task_Status = [
   { id: "pending", value: "pending", label: "قيد الانتظار" },
   { id: "in_progress", value: "in_progress", label: "قيد التنفيذ" },
-  { id: "completed", value: "completed", label: "مكتملة" },
+  { id: "completed", value: "completed", label: "منتهية" },
 ];
 
 const CreateTransactionComponent = ({
@@ -116,7 +116,7 @@ const CreateTransactionComponent = ({
   const handleImageChange = async (file: File) => {
     setUploading(true);
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("image", file[0].file);
 
     try {
       const res = await UploadImage(formData, lang as string);
