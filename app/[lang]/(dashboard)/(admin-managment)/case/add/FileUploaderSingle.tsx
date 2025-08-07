@@ -48,7 +48,7 @@ const FileUploaderMultiple = ({
   // UseDropzone hook configuration for multiple files
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 5, // You can upload up to 5 files
-    maxSize: 2000000, // 2 MB max size for each file
+    maxSize: 100 * 1024 * 1024, // 100 MB
     accept: {
       "*/*": [], // Accept all file types
     },

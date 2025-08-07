@@ -12,6 +12,8 @@ import { AxiosError } from "axios";
 import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import imageCompression from "browser-image-compression";
+import { C } from "@fullcalendar/core/internal-common";
 
 interface ErrorResponse {
   errors: {
@@ -46,31 +48,52 @@ const FileUploaderMultiple = ({
     setFiles(existingFiles);
   }, []);
   console.log(existingFiles);
-  console.log(files);
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 5,
-    maxSize: 2000000,
+    maxSize: 100 * 1024 * 1024, // 100 MB
     accept: {
       "*/*": [],
     },
-    onDrop: (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) => ({
-        url: URL.createObjectURL(file),
-        image_name: file.name,
-        file,
-      }));
-      setFiles((prev) => [...prev, ...newFiles]);
-      onFileChange([...files, ...newFiles]);
+    onDrop: async (acceptedFiles) => {
+      const compressedFiles: FileData[] = [];
+
+      for (const file of acceptedFiles) {
+        let finalFile = file;
+
+        // Compress only if it's an image
+        if (file.type.startsWith("image/")) {
+          try {
+            const options = {
+              maxSizeMB: 1, // Target max size ~1MB
+              maxWidthOrHeight: 1920, // Resize if larger
+              useWebWorker: true,
+            };
+            finalFile = await imageCompression(file, options);
+          } catch (error) {
+            console.error("Compression failed:", error);
+          }
+        }
+
+        compressedFiles.push({
+          url: URL.createObjectURL(finalFile),
+          image_name: finalFile.name,
+          file: finalFile,
+        });
+      }
+
+      setFiles((prev) => [...prev, ...compressedFiles]);
+      onFileChange([...files, ...compressedFiles]);
     },
     onDropRejected: () => {
       toast({
         color: "destructive",
         title: "Error",
-        description: "You can only upload 5 files & maximum size of 2 MB each",
+        description:
+          "You can only upload 5 files & maximum size of 100 MB each",
       });
     },
   });
-
+  console.log(files);
   const renderFilePreview = (file: FileData) => {
     if (file.url.match(/\.(jpeg|jpg|png|gif)$/)) {
       return (

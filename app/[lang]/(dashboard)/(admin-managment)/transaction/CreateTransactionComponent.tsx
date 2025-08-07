@@ -116,6 +116,7 @@ const CreateTransactionComponent = ({
   const handleImageChange = async (file: File) => {
     setUploading(true);
     const formData = new FormData();
+    console.log(file);
     formData.append("image", file[0].file);
 
     try {

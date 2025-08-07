@@ -43,7 +43,7 @@ const ImageUploader = ({ imageType, id, onFileChange }: ImageUploaderProps) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1, // Only allow 1 file per upload
-    maxSize: 2000000, // 2 MB max size
+    maxSize: 100 * 1024 * 1024, // 100 MB
     accept: {
       "*/*": [], // Accept all file types
     },
