@@ -13,7 +13,6 @@ import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import imageCompression from "browser-image-compression";
-import { C } from "@fullcalendar/core/internal-common";
 
 interface ErrorResponse {
   errors: {
@@ -34,6 +33,9 @@ interface ImageUploaderProps {
   onFileChange: (files: FileData[]) => Promise<void>;
 }
 
+const MAX_FILE_SIZE_MB = 15; // 15MB max file size
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const FileUploaderMultiple = ({
   imageType,
   existingFiles = [],
@@ -46,15 +48,29 @@ const FileUploaderMultiple = ({
 
   useEffect(() => {
     setFiles(existingFiles);
-  }, []);
-  console.log(existingFiles);
+  }, [existingFiles]);
+
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 5,
-    maxSize: 100 * 1024 * 1024, // 100 MB
+    maxSize: MAX_FILE_SIZE_BYTES,
     accept: {
       "*/*": [],
     },
-    onDrop: async (acceptedFiles) => {
+    onDrop: async (acceptedFiles, fileRejections) => {
+      // Check for size rejections first
+      const sizeRejections = fileRejections.filter((rejection) =>
+        rejection.errors.some((e) => e.code === "file-too-large")
+      );
+
+      if (sizeRejections.length > 0) {
+        toast({
+          variant: "destructive",
+          title: "File too large",
+          description: `Maximum file size is ${MAX_FILE_SIZE_MB}MB`,
+        });
+        return;
+      }
+
       const compressedFiles: FileData[] = [];
 
       for (const file of acceptedFiles) {
@@ -81,19 +97,37 @@ const FileUploaderMultiple = ({
         });
       }
 
-      setFiles((prev) => [...prev, ...compressedFiles]);
-      onFileChange([...files, ...compressedFiles]);
-    },
-    onDropRejected: () => {
+      const updatedFiles = [...files, ...compressedFiles].slice(0, 5); // Ensure max 5 files
+      setFiles(updatedFiles);
+      await onFileChange(updatedFiles);
+
       toast({
-        color: "destructive",
-        title: "Error",
-        description:
-          "You can only upload 5 files & maximum size of 100 MB each",
+        variant: "default",
+        title: "Files added",
+        description: `${compressedFiles.length} file(s) uploaded successfully`,
       });
     },
+    onDropRejected: (fileRejections) => {
+      const hasTooManyFiles = fileRejections.some((rejection) =>
+        rejection.errors.some((e) => e.code === "too-many-files")
+      );
+
+      if (hasTooManyFiles) {
+        toast({
+          variant: "destructive",
+          title: "Too many files",
+          description: "You can upload up to 5 files at once",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Upload failed",
+          description: `Please check file types and sizes (max ${MAX_FILE_SIZE_MB}MB each)`,
+        });
+      }
+    },
   });
-  console.log(files);
+
   const renderFilePreview = (file: FileData) => {
     if (file.url.match(/\.(jpeg|jpg|png|gif)$/)) {
       return (
@@ -112,8 +146,9 @@ const FileUploaderMultiple = ({
 
   const handleRemoveFile = async (file: FileData, e: React.MouseEvent) => {
     e.stopPropagation();
-    setFiles((prev) => prev.filter((f) => f.url !== file.url));
-    onFileChange(files.filter((f) => f.url !== file.url));
+    const updatedFiles = files.filter((f) => f.url !== file.url);
+    setFiles(updatedFiles);
+    await onFileChange(updatedFiles);
 
     if (file.image_id) {
       try {
@@ -132,12 +167,12 @@ const FileUploaderMultiple = ({
   };
 
   const formatFileSize = (size: number) => {
-    const fileSizeInKB = size / 1024;
-    if (fileSizeInKB > 1024) {
-      return `${(fileSizeInKB / 1024).toFixed(2)} MB`;
-    } else {
-      return `${fileSizeInKB.toFixed(1)} KB`;
+    if (size > 1024 * 1024) {
+      return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+    } else if (size > 1024) {
+      return `${(size / 1024).toFixed(1)} KB`;
     }
+    return `${size} bytes`;
   };
 
   const fileList = files.map((file) => (
@@ -148,7 +183,9 @@ const FileUploaderMultiple = ({
       <div className="flex space-x-3 items-center">
         <div className="file-preview">{renderFilePreview(file)}</div>
         <div>
-          <div className="text-sm text-card-foreground">{file.image_name}</div>
+          <div className="text-sm text-card-foreground truncate max-w-[180px]">
+            {file.image_name}
+          </div>
           {file.file && (
             <div className="text-xs font-light text-muted-foreground">
               {formatFileSize(file.file.size)}
@@ -158,12 +195,11 @@ const FileUploaderMultiple = ({
       </div>
       <Button
         size="icon"
-        color="destructive"
         variant="outline"
-        className="border-none rounded-full"
+        className="border-none rounded-full hover:bg-destructive/10"
         onClick={(e) => handleRemoveFile(file, e)}
       >
-        <Icon icon="tabler:x" className="h-5 w-5" />
+        <Icon icon="tabler:x" className="h-5 w-5 text-destructive" />
       </Button>
     </div>
   ));
@@ -176,7 +212,6 @@ const FileUploaderMultiple = ({
           <div>
             <Button
               asChild
-              color="info"
               className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d]"
               variant="outline"
             >
@@ -194,6 +229,9 @@ const FileUploaderMultiple = ({
           <div className="mt-4 flex flex-wrap justify-between items-center w-full">
             {fileList}
           </div>
+          <p className="text-sm text-muted-foreground mt-2">
+            Maximum file size: {MAX_FILE_SIZE_MB}MB per file
+          </p>
         </div>
       )}
     </Fragment>

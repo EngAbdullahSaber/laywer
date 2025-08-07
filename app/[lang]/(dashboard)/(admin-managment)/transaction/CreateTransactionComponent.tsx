@@ -117,15 +117,15 @@ const CreateTransactionComponent = ({
     setUploading(true);
     const formData = new FormData();
     console.log(file);
-    formData.append("image", file[0].file);
+    formData.append("image", file[0]?.file);
 
     try {
       const res = await UploadImage(formData, lang as string);
       if (res?.body?.image_id) {
         setImageIds((prev) => [...prev, res.body.image_id]);
-        reToast.success(t("Image uploaded successfully"));
+        reToast.success(res?.message);
       } else {
-        reToast.error(t("Failed to upload image"));
+        reToast.error(res?.message);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -386,7 +386,7 @@ const CreateTransactionComponent = ({
                     clickOpens: true,
                     static: true,
                   }}
-                />
+                />{" "}
               </motion.div>
 
               {/* File Upload */}
@@ -397,7 +397,10 @@ const CreateTransactionComponent = ({
                 className="flex flex-col gap-2 w-full"
               >
                 <Label>{t("Attachments")}</Label>
-                <FileUploaderMultiple onFileChange={handleImageChange} />
+                <FileUploaderMultiple onFileChange={handleImageChange} />{" "}
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t("Maximum file size: 15MB")}
+                </p>
               </motion.div>
             </div>
 

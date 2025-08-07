@@ -140,9 +140,9 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       const res = await UploadImage(formData, lang as string);
       if (res?.body?.image_id) {
         setImageIds((prev) => [...prev, res.body.image_id]);
-        reToast.success(t("Image uploaded successfully"));
+        reToast.success(res?.message);
       } else {
-        reToast.error(t("Failed to upload image"));
+        reToast.error(res?.message);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
@@ -414,7 +414,10 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                 <FileUploaderMultiple
                   onFileChange={handleImageChange}
                   existingFiles={row.original.files || []}
-                />
+                />{" "}
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t("Maximum file size: 15MB")}
+                </p>
               </motion.div>
             </div>
 

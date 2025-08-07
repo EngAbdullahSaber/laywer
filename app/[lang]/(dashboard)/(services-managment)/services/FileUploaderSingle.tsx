@@ -21,51 +21,76 @@ interface ErrorResponse {
 
 interface ImageUploaderProps {
   imageType: "service_file";
-
   id: File | null;
   onFileChange: (file: File, imageType: "service_file") => Promise<void>;
 }
-// Define accepted file types (image formats and common file formats)
-const acceptedFileTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/gif",
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-];
+
+const MAX_FILE_SIZE_MB = 15; // 15MB max file size
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const FileUploaderMultiple = ({
   imageType,
   id,
   onFileChange,
 }: ImageUploaderProps) => {
-  const [files, setFiles] = useState<File[]>([]); // Keep track of multiple files
+  const [files, setFiles] = useState<File[]>([]);
   const { t } = useTranslate();
   const { lang } = useParams();
   const { toast } = useToast();
 
-  // UseDropzone hook configuration for multiple files
   const { getRootProps, getInputProps } = useDropzone({
-    maxFiles: 5, // You can upload up to 5 files
-    maxSize: 100 * 1024 * 1024, // 100 MB
+    maxFiles: 5,
+    maxSize: MAX_FILE_SIZE_BYTES,
     accept: {
-      "*/*": [], // Accept all file types
+      "*/*": [],
     },
-    onDrop: (acceptedFiles) => {
-      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]); // Add new files to the array
-      acceptedFiles.forEach((file) => onFileChange(file, imageType)); // Trigger the callback for each file
-    },
-    onDropRejected: () => {
+    onDrop: (acceptedFiles, fileRejections) => {
+      // Check for size rejections first
+      const sizeRejections = fileRejections.filter((rejection) =>
+        rejection.errors.some((e) => e.code === "file-too-large")
+      );
+
+      if (sizeRejections.length > 0) {
+        toast({
+          variant: "destructive",
+          title: t("File too large"),
+          description: t(`Maximum file size is ${MAX_FILE_SIZE_MB}MB`),
+        });
+        return;
+      }
+
+      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+      acceptedFiles.forEach((file) => onFileChange(file, imageType));
+
       toast({
-        color: "destructive",
-        title: "Error",
-        description: "You can only upload 5 files & maximum size of 2 MB each",
+        variant: "default",
+        title: t("Files added"),
+        description: t(`${acceptedFiles.length} file(s) uploaded successfully`),
       });
+    },
+    onDropRejected: (fileRejections) => {
+      const hasTooManyFiles = fileRejections.some((rejection) =>
+        rejection.errors.some((e) => e.code === "too-many-files")
+      );
+
+      if (hasTooManyFiles) {
+        toast({
+          variant: "destructive",
+          title: t("Too many files"),
+          description: t("You can upload up to 5 files at once"),
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("Upload failed"),
+          description: t(
+            `Please check file types and sizes (max ${MAX_FILE_SIZE_MB}MB each)`
+          ),
+        });
+      }
     },
   });
 
-  // Render a preview for images and generic file icons for other types
   const renderFilePreview = (file: File) => {
     if (file.type.startsWith("image")) {
       return (
@@ -82,37 +107,33 @@ const FileUploaderMultiple = ({
     }
   };
 
-  // Handle removal of individual files
   const handleRemoveFile = async (file: File, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent form submission or other event triggers
-
-    setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name)); // Remove the specific file from the state
+    e.stopPropagation();
+    setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
 
     try {
-      const res = await RemoveImage(id, lang); // Call API to remove the image (adjust if needed)
+      const res = await RemoveImage(id, lang);
       if (res) {
         reToast.success(res.message);
       } else {
-        reToast.error(t("Failed to remove image"));
+        reToast.error(t("Failed to remove file"));
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong.";
+      let errorMessage = t("Something went wrong.");
       reToast.error(errorMessage);
     }
   };
 
-  // Format file size into human-readable format (KB or MB)
   const formatFileSize = (size: number) => {
-    const fileSizeInKB = size / 1024;
-    if (fileSizeInKB > 1024) {
-      return `${(fileSizeInKB / 1024).toFixed(2)} MB`;
-    } else {
-      return `${fileSizeInKB.toFixed(1)} KB`;
+    if (size > 1024 * 1024) {
+      return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+    } else if (size > 1024) {
+      return `${(size / 1024).toFixed(1)} KB`;
     }
+    return `${size} bytes`;
   };
 
-  // Render file list with previews and remove functionality
   const fileList = files.map((file) => (
     <div
       key={file.name}
@@ -121,7 +142,9 @@ const FileUploaderMultiple = ({
       <div className="flex space-x-3 items-center">
         <div className="file-preview">{renderFilePreview(file)}</div>
         <div>
-          <div className="text-sm text-card-foreground">{file.name}</div>
+          <div className="text-sm text-card-foreground truncate max-w-[180px]">
+            {file.name}
+          </div>
           <div className="text-xs font-light text-muted-foreground">
             {formatFileSize(file.size)}
           </div>
@@ -129,46 +152,49 @@ const FileUploaderMultiple = ({
       </div>
       <Button
         size="icon"
-        color="destructive"
         variant="outline"
-        className="border-none rounded-full"
+        className="border-none rounded-full hover:bg-destructive/10"
         onClick={(e) => handleRemoveFile(file, e)}
       >
-        <Icon icon="tabler:x" className="h-5 w-5" />
+        <Icon icon="tabler:x" className="h-5 w-5 text-destructive" />
       </Button>
     </div>
   ));
 
   return (
-    <div className="flex flex-row justify-center items-center">
-      {/* Dropzone area where users can drop files or click to choose files */}
-      <div {...getRootProps({ className: "dropzone w-[50%]" })}>
-        <input {...getInputProps()} />
-        <Label>
-          <div>
-            <Button
-              asChild
-              color="info"
-              className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]  hover:text-[#000]  hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
-              variant="outline"
-            >
-              <div>
-                {t("Choose File")}
-                <Upload className="mx-2 h-4 w-4" />
-              </div>
-            </Button>
+    <div className="flex flex-col w-full">
+      <div className="flex flex-row justify-center items-center">
+        <div {...getRootProps({ className: "dropzone w-[20%]" })}>
+          <input {...getInputProps()} />
+          <Label>
+            <div>
+              <Button
+                asChild
+                className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
+                variant="outline"
+              >
+                <div>
+                  {t("Choose File")}
+                  <Upload className="mx-2 h-4 w-4" />
+                </div>
+              </Button>
+            </div>
+          </Label>
+        </div>
+
+        {files.length > 0 && (
+          <div className="w-[80%]">
+            <div className="mt-4 flex flex-wrap justify-between items-center w-full">
+              {fileList}
+            </div>
           </div>
-        </Label>
+        )}
       </div>
 
-      {/* Display the uploaded files */}
-      {files.length > 0 && (
-        <div className="w-[50%]">
-          <div className="mt-4 flex flex-wrap justify-between items-center w-full">
-            {fileList}
-          </div>
-        </div>
-      )}
+      {/* File size hint */}
+      <p className="text-sm text-muted-foreground mt-2 text-center">
+        {t("Maximum file size:")} {MAX_FILE_SIZE_MB}MB
+      </p>
     </div>
   );
 };

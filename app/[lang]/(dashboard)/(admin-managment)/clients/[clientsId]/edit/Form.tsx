@@ -122,7 +122,6 @@ const Form = () => {
       console.error("Error fetching lawyer data", error);
     }
   };
-  console.log(lawyerData);
   // Handle select change
   const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
