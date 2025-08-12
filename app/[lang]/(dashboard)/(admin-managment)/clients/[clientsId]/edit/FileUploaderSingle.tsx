@@ -138,7 +138,8 @@ const FileUploaderMultiple = ({
   return (
     <Fragment>
       <div className="mb-2 text-sm text-muted-foreground">
-        {t("الحد الأقصى لحجم الملف:")} {MAX_FILE_SIZE_MB} ميجابايت
+        (الملفات كبيرة الحجم سوف تاخذ وقت){t("الحد الأقصى لحجم الملف:")}{" "}
+        {MAX_FILE_SIZE_MB} ميجابايت
       </div>
 
       <div {...getRootProps({ className: "dropzone" })}>
