@@ -703,7 +703,13 @@
   "Send Your Message": "أرسل رسالتك",
   "Communication": "التواصل",
   "No results": "لا توجد نتائج",
-  "Enter the 6 figure confirmation code sent to your email": "أدخل رمز التأكيد المكون من 6 أرقام المرسل إلى الايميل ",
+"Enter the 6 figure confirmation code sent to your email": "أدخل رمز التأكيد المكون من 6 أرقام المرسل إلى بريدك الإلكتروني أو مجلد الرسائل غير المرغوب فيها",
+
+
+
+
+
+
   "National Id Photo": "صورة الهوية الوطنية",
   "Subscription Photo": "صورة الاشتراك",
   "Driving Licence Photo": "صورة رخصة القيادة",
@@ -850,15 +856,15 @@
   "5 file(s) uploaded successfully": "تم رفع 5 ملفات بنجاح",
     "Failed to remove file": "فشل في حذف الملف",
   "Something went wrong": "حدث خطأ ما",
-  "Maximum file size: 15MB": "الحد الأقصى لحجم الملف: 15 ميجابايت",
+  "Maximum file size: 15MB": "(الملفات كبيرة الحجم سوف تاخذ وقت)الحد الأقصى لحجم الملف: 15 ميجابايت",
 "File too large": "الملف كبير جداً",
-  "Maximum file size is 15MB": "الحد الأقصى لحجم الملف 15 ميجابايت",
+  "Maximum file size is 15MB": "(الملفات كبيرة الحجم سوف تاخذ وقت)الحد الأقصى لحجم الملف 15 ميجابايت",
   "Files added": "تمت إضافة الملفات",
   "file(s) uploaded successfully": "ملف/ملفات تم رفعها بنجاح",
   "Too many files": "عدد ملفات كبير",
   "You can upload up to 5 files at once": "يمكنك رفع حتى 5 ملفات في المرة الواحدة",
   "Upload failed": "فشل الرفع",
-  "Please check file types and sizes (max 15MB each)": "الرجاء التحقق من أنواع الملفات وأحجامها (الحد الأقصى 15 ميجابايت لكل ملف)",
+  "Please check file types and sizes (max 15MB each)": "الرجاء التحقق من أنواع الملفات وأحجامها (الملفات كبيرة الحجم سوف تاخذ وقت)",
   "Maximum file size:": "الحد الأقصى لحجم الملف:",
   "Reset Password": "إعادة تعيين كلمة المرور",
   "Confirm Password": "تأكيد كلمة المرور",

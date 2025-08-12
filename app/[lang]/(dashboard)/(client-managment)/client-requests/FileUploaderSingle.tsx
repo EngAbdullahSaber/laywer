@@ -36,7 +36,7 @@ interface ImageUploaderProps {
   ) => Promise<void>;
 }
 
-const MAX_FILE_SIZE_MB = 15; // 15MB max file size
+const MAX_FILE_SIZE_MB = 200; // 15MB max file size
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const FileUploaderMultiple = ({

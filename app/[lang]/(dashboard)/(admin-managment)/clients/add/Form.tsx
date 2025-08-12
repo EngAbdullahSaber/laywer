@@ -175,7 +175,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
-        // router.back();
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
         setLoading(true);
