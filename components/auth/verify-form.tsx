@@ -136,6 +136,7 @@ const VerifyForm = ({
             changeUserData({
               email: res.body.user.email,
               role_with_permission: res.body.user?.role,
+              roleId: res.body.user?.role_with_permission?.id,
               verify_access_token: res.body.user.verify_access_token,
             })
           );

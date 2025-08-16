@@ -22,12 +22,13 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
       if (accessToken) {
         updateAxiosHeader(accessToken);
       }
+      console.log(userData.role_with_permission);
       // Use useEffect to handle redirection based on role
       useEffect(() => {
         if (!userData) {
           // If user is not authenticated, redirect to login
           // redirect("/auth/login");
-        } else if (!allowedRoles.includes(userRole)) {
+        } else if (!allowedRoles.includes(userRole.role_with_permission)) {
           // If user role is not allowed, redirect to a "Not Authorized" page
           // redirect("/auth/login");
         }

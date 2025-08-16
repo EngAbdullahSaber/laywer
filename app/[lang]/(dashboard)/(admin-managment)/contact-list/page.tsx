@@ -23,14 +23,13 @@ import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles"
 import { clearAuthInfo } from "@/services/utils";
 import { updateAxiosHeader } from "@/services/axios";
 import { useAccessToken } from "@/config/accessToken";
+import { useAllowedRoles } from "@/config/useAllowedRoles";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
   const [flag, setFlag] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { lang } = useParams();
   const [data, setData] = useState<any>([]);
-  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
 
   const permissionString = localStorage.getItem("permissions");
   const permission = permissionString ? JSON.parse(permissionString) : null;
@@ -45,44 +44,7 @@ const PageWithAuth = () => {
     }
   };
 
-  const accessToken = useAccessToken();
-  if (accessToken) {
-    updateAxiosHeader(accessToken);
-  }
-  const getServicesData = async () => {
-    try {
-      const res = await getAllRoles(lang);
-
-      const roles = Array.isArray(res?.body?.roles_and_permissions)
-        ? res.body.roles_and_permissions.filter(
-            (role: any) => role.role !== "client" && role.role !== "lawyer"
-          )
-        : [];
-
-      setAllowedRoles(["super_admin", ...roles.map((r: any) => r.role)]);
-    } catch (error: any) {
-      const message = error?.response?.data?.message;
-      const status = error?.response?.status;
-
-      if (status === 401) {
-        // if (message === "please login first") {
-        //   console.warn("User not authenticated, redirecting to login...");
-        //   clearAuthInfo();
-        //   window.location.replace("/auth/login");
-        // } else if (message === "Unauthorized" || message === "غير مصرح") {
-        //   console.warn("User unauthorized, redirecting to 403 page...");
-        //   window.location.replace("/error-page/403");
-        // }
-      } else {
-        console.error("An unexpected error occurred:", error);
-        // You can add a fallback or show a toast here if needed
-      }
-    }
-  };
-
-  useEffect(() => {
-    getServicesData();
-  }, []);
+  const { allowedRoles, loading, error } = useAllowedRoles();
 
   // Loading state while allowedRoles is being fetched
   if (!allowedRoles) {

@@ -72,11 +72,105 @@ const Form = () => {
   }, [lang, roleId]);
 
   const handleCheckboxChange = (permissionId: number) => {
-    setSelectedPermissions((prev) =>
-      prev.includes(permissionId)
-        ? prev.filter((id) => id !== permissionId)
-        : [...prev, permissionId]
-    );
+    setSelectedPermissions((prevSelectedPermissions) => {
+      let newSelectedPermissions = [...prevSelectedPermissions];
+
+      // Define permission groups and their dependencies
+      const permissionGroups = [
+        {
+          main: [134, 135],
+          dependent: [208],
+        },
+        {
+          main: [155, 156],
+          dependent: [147, 139],
+        },
+        {
+          main: [179, 180],
+          dependent: [214],
+        },
+        {
+          main: [140, 141],
+          dependent: [133, 147, 160, 202],
+        },
+        {
+          main: [148, 149],
+          dependent: [190],
+        },
+        {
+          main: [161, 162],
+          dependent: [196],
+        },
+        {
+          main: [221, 222],
+          dependent: [133],
+        },
+      ];
+
+      // Handle all permission groups
+      for (const group of permissionGroups) {
+        // Check if the changed permission is in a main group
+        if (group.main.includes(permissionId)) {
+          if (newSelectedPermissions.includes(permissionId)) {
+            // If unchecking a main permission
+            newSelectedPermissions = newSelectedPermissions.filter(
+              (id) => id !== permissionId
+            );
+            // Only remove dependents if no main permissions are selected
+            if (!group.main.some((id) => newSelectedPermissions.includes(id))) {
+              newSelectedPermissions = newSelectedPermissions.filter(
+                (id) => !group.dependent.includes(id)
+              );
+            }
+          } else {
+            // If checking a main permission
+            newSelectedPermissions.push(permissionId);
+            // Add all dependents if not already present
+            group.dependent.forEach((depId) => {
+              if (!newSelectedPermissions.includes(depId)) {
+                newSelectedPermissions.push(depId);
+              }
+            });
+          }
+          return newSelectedPermissions;
+        }
+
+        // Check if the changed permission is in a dependent group
+        if (group.dependent.includes(permissionId)) {
+          if (newSelectedPermissions.includes(permissionId)) {
+            // If unchecking a dependent permission
+            newSelectedPermissions = newSelectedPermissions.filter(
+              (id) => id !== permissionId
+            );
+            // Also uncheck all main permissions
+            newSelectedPermissions = newSelectedPermissions.filter(
+              (id) => !group.main.includes(id)
+            );
+          } else {
+            // If checking a dependent permission
+            newSelectedPermissions.push(permissionId);
+            // Add all main permissions if not already present
+            group.main.forEach((mainId) => {
+              if (!newSelectedPermissions.includes(mainId)) {
+                newSelectedPermissions.push(mainId);
+              }
+            });
+          }
+          return newSelectedPermissions;
+        }
+      }
+
+      // Handle all other permissions normally
+      if (newSelectedPermissions.includes(permissionId)) {
+        newSelectedPermissions = newSelectedPermissions.filter(
+          (id) => id !== permissionId
+        );
+      } else {
+        newSelectedPermissions.push(permissionId);
+      }
+
+      return newSelectedPermissions;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
