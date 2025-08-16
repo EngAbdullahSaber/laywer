@@ -156,7 +156,7 @@ const Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const uniquePermissions = Array.from(
-      new Set([...selectedPermissions, 128])
+      new Set([...selectedPermissions, 128, 218])
     );
 
     const data = {

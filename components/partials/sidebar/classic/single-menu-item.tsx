@@ -20,7 +20,6 @@ const SingleMenuItem = ({
   onItemClick?: () => void; // Add this type
 }) => {
   const { badge, href, title } = item;
-  console.log(title);
   const pathname = usePathname();
   const locationName = getDynamicPath(pathname);
   const handleClick = (e: React.MouseEvent) => {

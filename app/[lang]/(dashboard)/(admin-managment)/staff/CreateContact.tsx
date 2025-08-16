@@ -28,7 +28,6 @@ interface LaywerData {
   name: string;
   email: string;
   phone: string;
-  password: string;
   role_id: string;
 }
 const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
@@ -40,7 +39,6 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
-    password: "",
     email: "",
     role_id: "",
   });
@@ -57,6 +55,32 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
       ...prevData,
       role_id: value?.id,
     }));
+  };
+  const generateStrongPassword = (): string => {
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const symbols = "!@#$%^&*";
+
+    // Get one character from each required category (4 characters)
+    const requiredChars = [
+      lowercase[Math.floor(Math.random() * lowercase.length)],
+      uppercase[Math.floor(Math.random() * uppercase.length)],
+      numbers[Math.floor(Math.random() * numbers.length)],
+      symbols[Math.floor(Math.random() * symbols.length)],
+    ];
+
+    // Get 4 more random characters from any category
+    const allChars = lowercase + uppercase + numbers + symbols;
+    const randomChars = Array.from(
+      { length: 4 },
+      () => allChars[Math.floor(Math.random() * allChars.length)]
+    );
+
+    // Combine and shuffle
+    return [...requiredChars, ...randomChars]
+      .sort(() => Math.random() - 0.5)
+      .join("");
   };
   const fetchDataCategory = async () => {
     try {
@@ -83,7 +107,8 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
+    const strongPassword = generateStrongPassword();
+    formData.append("password", strongPassword);
     try {
       const res = await CreateStaff(formData, lang); // Call API to create the lawyer
       if (res) {
@@ -92,7 +117,6 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
           name: "",
           email: "",
           phone: "",
-          password: "",
           role_id: "",
         });
 
@@ -184,22 +208,7 @@ const CreateContact = ({ setFlag, flag }: { setFlag: any; flag: any }) => {
                     onChange={handleInputChange}
                   />
                 </motion.div>
-                <motion.div
-                  initial={{ y: -30 }}
-                  whileInView={{ y: 0 }}
-                  transition={{ duration: 1.7 }}
-                  className="flex flex-col gap-2 w-[48%]"
-                >
-                  <Label htmlFor="Password">{t("Password")}</Label>
-                  <Input
-                    id="Password"
-                    type="text"
-                    placeholder={t("Enter passowrd")}
-                    name="password"
-                    value={lawyerData.password}
-                    onChange={handleInputChange}
-                  />
-                </motion.div>
+
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}

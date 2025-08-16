@@ -116,10 +116,35 @@ const ClassicSidebar = ({ trans }: { trans: string }) => {
     "Client Servicess": "api.client.servicess",
   };
 
-  const allowedKeys = shouldCheckPermissions
-    ? new Set(permissions?.map((p: any) => p?.parent_key_name) ?? [])
-    : new Set(Object.values(titleToApiMap)); // Allow all if not checking permissions
+  // Function to check if a page has "عرض الكل" permission
+  const hasViewAllPermission = (apiKey: string): boolean => {
+    if (!shouldCheckPermissions) return true; // Skip check if not needed
 
+    const permissionGroup = permissions.find(
+      (p: any) => p.parent_key_name === apiKey
+    );
+    if (!permissionGroup) return false;
+
+    return permissionGroup.permissions.some(
+      (p: any) => p.name === "عرض الكل" || p.name === "View all"
+    );
+  };
+
+  // Filter the titleToApiMap to only include pages with view all permission
+  const filteredPages = Object.entries(titleToApiMap).reduce(
+    (acc, [title, apiKey]) => {
+      if (hasViewAllPermission(apiKey)) {
+        acc[title] = apiKey;
+      }
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+
+  // Use filteredPages instead of titleToApiMap for your navigation/display logic
+  const allowedKeys = shouldCheckPermissions
+    ? new Set(Object.values(filteredPages))
+    : new Set(Object.values(titleToApiMap)); // Allow all if not checking permissions
   return (
     <div
       onMouseEnter={() => setHovered(true)}
