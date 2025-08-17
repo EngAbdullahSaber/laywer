@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -40,7 +40,7 @@ interface TransactionData {
   transaction_participants: string[];
 }
 
-const Task_Status = [
+const TRANSACTION_STATUS = [
   { id: "pending", value: "pending", label: "قيد الانتظار" },
   { id: "in_progress", value: "in_progress", label: "قيد التنفيذ" },
   { id: "completed", value: "completed", label: "منتهية" },
@@ -54,12 +54,11 @@ const CreateTransactionComponent = ({
   flag: boolean;
 }) => {
   const { t } = useTranslate();
+  const { lang } = useParams();
   const [open, setOpen] = useState(false);
   const [loading, setIsLoading] = useState(false);
-  const [imageIds, setImageIds] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
-  const { lang } = useParams();
-
+  const [images, setImages] = useState<string[]>([]);
   const [transactionData, setTransactionData] = useState<TransactionData>({
     client_name: "",
     status: "",
@@ -70,16 +69,16 @@ const CreateTransactionComponent = ({
     transaction_participants: [],
   });
 
-  const handleDateChange = (dates: Date[]) => {
+  const handleDateChange = useCallback((dates: Date[]) => {
     const date = new Date(dates[0]);
     const formattedDate = date.toISOString().split("T")[0];
     setTransactionData((prev) => ({
       ...prev,
       transaction_date: formattedDate,
     }));
-  };
+  }, []);
 
-  const handleAddClient = () => {
+  const handleAddClient = useCallback(() => {
     if (
       transactionData.client_name &&
       !transactionData.transaction_participants.includes(
@@ -95,78 +94,102 @@ const CreateTransactionComponent = ({
         client_name: "",
       }));
     }
-  };
+  }, [transactionData.client_name, transactionData.transaction_participants]);
 
-  const handleRemoveClient = (index: number) => {
+  const handleRemoveClient = useCallback((index: number) => {
     setTransactionData((prev) => ({
       ...prev,
       transaction_participants: prev.transaction_participants.filter(
         (_, i) => i !== index
       ),
     }));
-  };
+  }, []);
 
-  const handleStatusChange = (value: any) => {
+  const handleStatusChange = useCallback((value: any) => {
     setTransactionData((prev) => ({
       ...prev,
       status: value?.id,
     }));
-  };
+  }, []);
 
-  const handleImageChange = async (file: File) => {
-    setUploading(true);
-    const formData = new FormData();
-    console.log(file);
-    formData.append("image", file[0]?.file);
+  const handleImageChange = useCallback(
+    async (file: File) => {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("image", file);
 
-    try {
-      const res = await UploadImage(formData, lang as string);
-      if (res?.body?.image_id) {
-        setImageIds((prev) => [...prev, res.body.image_id]);
-        reToast.success(res?.message);
-      } else {
-        reToast.error(res?.message);
+      try {
+        const res = await UploadImage(formData, lang as string);
+        if (res?.body?.image_id) {
+          setImages((prev) => [...prev, res.body.image_id]);
+          reToast.success(res.message);
+        } else {
+          reToast.error(t("Failed to upload image"));
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError<ErrorResponse>;
+        const errorMessage = axiosError.response?.data?.errors
+          ? Object.values(axiosError.response.data.errors)[0][0]
+          : t("Something went wrong");
+        reToast.error(errorMessage);
+      } finally {
+        setUploading(false);
       }
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      const errorMessage =
-        axiosError.response?.data?.errors?.image?.[0] ||
-        t("Failed to upload image");
-      reToast.error(errorMessage);
-    } finally {
-      setUploading(false);
-    }
-  };
+    },
+    [lang, t]
+  );
 
-  const handleClientChange = (value: string) => {
+  const handleClientChange = useCallback((value: string) => {
     setTransactionData((prev) => ({
       ...prev,
       client_name: value,
     }));
-  };
+  }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setTransactionData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setTransactionData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    []
+  );
 
-  const fetchData = async (page: number = 1) => {
-    try {
-      const data = await getClientsPanigation(page, lang as string);
-      return data?.body?.data || [];
-    } catch (error) {
-      reToast.error(`Failed to fetch data: ${error}`);
-      return [];
-    }
-  };
+  const fetchClients = useCallback(
+    async (page: number = 1) => {
+      try {
+        const data = await getClientsPanigation(page, lang as string);
+        return data?.body?.data || [];
+      } catch (error) {
+        reToast.error(t("Failed to fetch clients"));
+        return [];
+      }
+    },
+    [lang, t]
+  );
 
-  const formatOption = (item: any) => ({
-    value: item.name,
-    label: item.name,
-  });
+  const formatClientOption = useCallback(
+    (item: any) => ({
+      value: item.name,
+      label: item.name,
+    }),
+    []
+  );
+
+  const resetForm = useCallback(() => {
+    setTransactionData({
+      client_name: "",
+      status: "",
+      type: "",
+      amount: "",
+      transaction_name: "",
+      transaction_date: "",
+      transaction_participants: [],
+    });
+    setImages([]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -174,49 +197,35 @@ const CreateTransactionComponent = ({
 
     try {
       const formData = new FormData();
-
-      // Append all transaction data except participants
       const { transaction_participants, ...restData } = transactionData;
+
+      // Append transaction data
       Object.entries(restData).forEach(([key, value]) => {
         if (value) formData.append(key, value);
       });
 
-      // Append participants separately
+      // Append participants
       transaction_participants.forEach((participant, index) => {
         formData.append(`transaction_participants[${index}]`, participant);
       });
 
-      // Append image IDs
-      imageIds.forEach((id, index) => {
+      // Append images
+      images.forEach((id, index) => {
         formData.append(`attachments[${index}]`, id);
       });
 
       const res = await CreateTransaction(formData, lang as string);
       if (res) {
-        // Reset form
-        setTransactionData({
-          client_name: "",
-          status: "",
-          type: "",
-          amount: "",
-          transaction_name: "",
-          transaction_date: "",
-          transaction_participants: [],
-        });
-        setImageIds([]);
         reToast.success(res.message);
+        resetForm();
         setFlag(!flag);
         setOpen(false);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = t("Something went wrong");
-
-      if (axiosError.response?.data?.errors) {
-        const firstError = Object.values(axiosError.response.data.errors)[0];
-        errorMessage = firstError[0];
-      }
-
+      const errorMessage = axiosError.response?.data?.errors
+        ? Object.values(axiosError.response.data.errors)[0][0]
+        : t("Something went wrong");
       reToast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -246,22 +255,23 @@ const CreateTransactionComponent = ({
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label>{t("Transaction Participant")}</Label>
                 <div className="flex gap-2">
                   <InfiniteScrollSelect
-                    fetchData={fetchData}
-                    formatOption={formatOption}
+                    fetchData={fetchClients}
+                    formatOption={formatClientOption}
                     placeholder={t("Select Participant or Enter Name")}
                     selectedValue={transactionData.client_name}
                     setSelectedValue={handleClientChange}
                     allowFreeText={true}
                     className="flex-1"
                   />
-                  <span
-                    className="justify-center items-center flex cursor-pointer  p-2"
+                  <button
+                    type="button"
+                    className="justify-center items-center flex cursor-pointer p-2"
                     onClick={handleAddClient}
                     disabled={!transactionData.client_name}
                   >
@@ -271,10 +281,10 @@ const CreateTransactionComponent = ({
                       height="24"
                       color="#dfc77d"
                     />
-                  </span>
+                  </button>
                 </div>
 
-                {/* Display selected clients */}
+                {/* Selected clients */}
                 <div className="flex flex-wrap gap-2 mt-2">
                   {transactionData.transaction_participants.map(
                     (client, index) => (
@@ -296,27 +306,26 @@ const CreateTransactionComponent = ({
                 </div>
               </motion.div>
 
-              {/* Rest of your form fields remain the same */}
               {/* Status */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label>{t("status")}</Label>
                 <BasicSelect
-                  menu={Task_Status}
+                  menu={TRANSACTION_STATUS}
                   setSelectedValue={handleStatusChange}
                   selectedValue={transactionData.status}
                 />
               </motion.div>
 
-              {/* amount */}
+              {/* Amount */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label htmlFor="amount">{t("Number")}</Label>
@@ -327,14 +336,15 @@ const CreateTransactionComponent = ({
                   onChange={handleInputChange}
                   placeholder={t("Enter Number")}
                   type="number"
+                  min="0"
                 />
               </motion.div>
 
-              {/* transaction_name */}
+              {/* Transaction Name */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label htmlFor="transaction_name">
@@ -347,6 +357,7 @@ const CreateTransactionComponent = ({
                   onChange={handleInputChange}
                   placeholder={t("Enter Transaction Name")}
                   type="text"
+                  required
                 />
               </motion.div>
 
@@ -354,7 +365,7 @@ const CreateTransactionComponent = ({
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label htmlFor="type">{t("Type")}</Label>
@@ -365,42 +376,44 @@ const CreateTransactionComponent = ({
                   onChange={handleInputChange}
                   placeholder={t("Enter Type")}
                   type="text"
+                  required
                 />
               </motion.div>
 
               {/* Date */}
               <motion.div
-                initial={{ y: -30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1.7 }}
+                initial={{ y: -30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full md:w-[48%]"
               >
                 <Label>{t("Filing date")}</Label>
                 <Flatpickr
                   className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
                   placeholder={t("Select Filing date")}
-                  value={transactionData.transaction_date || ""}
+                  value={transactionData.transaction_date}
                   onChange={handleDateChange}
                   options={{
                     dateFormat: "Y-m-d",
                     clickOpens: true,
                     static: true,
                   }}
-                />{" "}
+                  required
+                />
               </motion.div>
 
               {/* File Upload */}
               <motion.div
                 initial={{ y: -30 }}
                 whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
+                transition={{ duration: 0.3 }}
                 className="flex flex-col gap-2 w-full"
               >
                 <Label>{t("Attachments")}</Label>
-                <FileUploaderMultiple onFileChange={handleImageChange} />{" "}
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t("Maximum file size: 15MB")}
-                </p>
+                <FileUploaderMultiple
+                  files={images}
+                  onFileChange={handleImageChange}
+                />
               </motion.div>
             </div>
 
@@ -408,7 +421,7 @@ const CreateTransactionComponent = ({
             <motion.div
               initial={{ y: 30 }}
               whileInView={{ y: 0 }}
-              transition={{ duration: 1.7 }}
+              transition={{ duration: 0.3 }}
               className="flex justify-center gap-3 mt-6"
             >
               <DialogClose asChild>

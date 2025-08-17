@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,8 @@ import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
 import { RemoveImage } from "@/services/auth/auth";
 import { AxiosError } from "axios";
-import { toast as reToast } from "react-hot-toast";
 import { useParams } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import imageCompression from "browser-image-compression";
+import toast from "react-hot-toast";
 
 interface ErrorResponse {
   errors: {
@@ -20,17 +18,10 @@ interface ErrorResponse {
   };
 }
 
-interface FileData {
-  image_id?: number;
-  url: string;
-  image_name: string;
-  file?: File;
-}
-
 interface ImageUploaderProps {
   imageType: "files";
-  existingFiles?: FileData[];
-  onFileChange: (files: FileData[]) => Promise<void>;
+  id: File | null;
+  onFileChange: (file: File, imageType: "files") => Promise<void>;
 }
 
 const MAX_FILE_SIZE_MB = 200; // 15MB max file size
@@ -38,17 +29,12 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const FileUploaderMultiple = ({
   imageType,
-  existingFiles = [],
+  id,
   onFileChange,
 }: ImageUploaderProps) => {
-  const [files, setFiles] = useState<FileData[]>(existingFiles);
+  const [files, setFiles] = useState<File[]>([]);
   const { t } = useTranslate();
   const { lang } = useParams();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    setFiles(existingFiles);
-  }, [existingFiles]);
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 5,
@@ -56,56 +42,19 @@ const FileUploaderMultiple = ({
     accept: {
       "*/*": [],
     },
-    onDrop: async (acceptedFiles, fileRejections) => {
-      // Check for size rejections first
+    onDrop: (acceptedFiles, fileRejections) => {
+      // Check for size rejections
       const sizeRejections = fileRejections.filter((rejection) =>
         rejection.errors.some((e) => e.code === "file-too-large")
       );
 
       if (sizeRejections.length > 0) {
-        toast({
-          variant: "destructive",
-          title: "File too large",
-          description: `Maximum file size is ${MAX_FILE_SIZE_MB}MB`,
-        });
+        toast.error(t(`Maximum file size is ${MAX_FILE_SIZE_MB}MB`));
         return;
       }
 
-      const compressedFiles: FileData[] = [];
-
-      for (const file of acceptedFiles) {
-        let finalFile = file;
-
-        // Compress only if it's an image
-        if (file.type.startsWith("image/")) {
-          try {
-            const options = {
-              maxSizeMB: 1, // Target max size ~1MB
-              maxWidthOrHeight: 1920, // Resize if larger
-              useWebWorker: true,
-            };
-            finalFile = await imageCompression(file, options);
-          } catch (error) {
-            console.error("Compression failed:", error);
-          }
-        }
-
-        compressedFiles.push({
-          url: URL.createObjectURL(finalFile),
-          image_name: finalFile.name,
-          file: finalFile,
-        });
-      }
-
-      const updatedFiles = [...files, ...compressedFiles].slice(0, 5); // Ensure max 5 files
-      setFiles(updatedFiles);
-      await onFileChange(updatedFiles);
-
-      toast({
-        variant: "default",
-        title: "Files added",
-        description: `${compressedFiles.length} file(s) uploaded successfully`,
-      });
+      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+      acceptedFiles.forEach((file) => onFileChange(file, imageType));
     },
     onDropRejected: (fileRejections) => {
       const hasTooManyFiles = fileRejections.some((rejection) =>
@@ -113,29 +62,25 @@ const FileUploaderMultiple = ({
       );
 
       if (hasTooManyFiles) {
-        toast({
-          variant: "destructive",
-          title: "Too many files",
-          description: "You can upload up to 5 files at once",
-        });
+        toast.error(t("You can upload up to 5 files at once"));
       } else {
-        toast({
-          variant: "destructive",
-          title: "Upload failed",
-          description: `Please check file types and sizes (max ${MAX_FILE_SIZE_MB}MB each)`,
-        });
+        toast.error(
+          t(
+            `Please check file types and sizes (max ${MAX_FILE_SIZE_MB}MB each)`
+          )
+        );
       }
     },
   });
 
-  const renderFilePreview = (file: FileData) => {
-    if (file.url.match(/\.(jpeg|jpg|png|gif)$/)) {
+  const renderFilePreview = (file: File) => {
+    if (file.type.startsWith("image")) {
       return (
         <Image
           width={48}
           height={48}
-          alt={file.image_name}
-          src={file.url}
+          alt={file.name}
+          src={URL.createObjectURL(file)}
           className="rounded border p-0.5"
         />
       );
@@ -144,25 +89,21 @@ const FileUploaderMultiple = ({
     }
   };
 
-  const handleRemoveFile = async (file: FileData, e: React.MouseEvent) => {
+  const handleRemoveFile = async (file: File, e: React.MouseEvent) => {
     e.stopPropagation();
-    const updatedFiles = files.filter((f) => f.url !== file.url);
-    setFiles(updatedFiles);
-    await onFileChange(updatedFiles);
+    setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
 
-    if (file.image_id) {
-      try {
-        const res = await RemoveImage(file.image_id, lang);
-        if (res) {
-          reToast.success(res.message);
-        } else {
-          reToast.error(t("Failed to remove file"));
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError<ErrorResponse>;
-        let errorMessage = "Something went wrong.";
-        reToast.error(errorMessage);
+    try {
+      const res = await RemoveImage(id, lang);
+      if (res) {
+        toast.success(res.message);
+      } else {
+        toast.error(t("Failed to remove file"));
       }
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      let errorMessage = t("Something went wrong.");
+      toast.error(errorMessage);
     }
   };
 
@@ -177,26 +118,24 @@ const FileUploaderMultiple = ({
 
   const fileList = files.map((file) => (
     <div
-      key={file.url}
+      key={file.name}
       className="flex justify-between border px-3.5 py-3 my-6 w-[45%] h-24 rounded-md"
     >
       <div className="flex space-x-3 items-center">
         <div className="file-preview">{renderFilePreview(file)}</div>
         <div>
           <div className="text-sm text-card-foreground truncate max-w-[180px]">
-            {file.image_name}
+            {file.name}
           </div>
-          {file.file && (
-            <div className="text-xs font-light text-muted-foreground">
-              {formatFileSize(file.file.size)}
-            </div>
-          )}
+          <div className="text-xs font-light text-muted-foreground">
+            {formatFileSize(file.size)}
+          </div>
         </div>
       </div>
       <Button
         size="icon"
         variant="outline"
-        className="border-none rounded-full hover:bg-destructive/10"
+        className="border-none rounded-full hover:bg-destructive/10 dark:text-[#fff]"
         onClick={(e) => handleRemoveFile(file, e)}
       >
         <Icon icon="tabler:x" className="h-5 w-5 text-destructive" />
@@ -206,6 +145,10 @@ const FileUploaderMultiple = ({
 
   return (
     <Fragment>
+      <div className="mb-2 text-sm text-muted-foreground">
+        {t("Maximum file size:")} {MAX_FILE_SIZE_MB}MB
+      </div>
+
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
         <Label>
@@ -229,9 +172,6 @@ const FileUploaderMultiple = ({
           <div className="mt-4 flex flex-wrap justify-between items-center w-full">
             {fileList}
           </div>
-          <p className="text-sm text-muted-foreground mt-2">
-            Maximum file size: {MAX_FILE_SIZE_MB}MB per file
-          </p>
         </div>
       )}
     </Fragment>

@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -58,9 +58,9 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
   const [loading, setIsLoading] = useState(true);
-  const [imageIds, setImageIds] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const { lang } = useParams();
+  const [images, setImages] = useState<string[]>([]);
 
   const [transactionData, setTransactionData] = useState<TransactionData>({
     client_name: "",
@@ -84,8 +84,8 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
         transaction_participants: row?.original?.transaction_participants,
       });
       // Set existing image IDs if available
-      if (row.original?.attachments) {
-        setImageIds(row?.original?.attachments.map((att: any) => att.id));
+      if (row.original?.files) {
+        setImages(row?.original?.files?.map((att: any) => att.image_id));
       }
     }
   }, [row]);
@@ -131,29 +131,32 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       ),
     }));
   };
-  const handleImageChange = async (file: File) => {
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("image", file[0].file);
+  const handleImageChange = useCallback(
+    async (file: File) => {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("image", file);
 
-    try {
-      const res = await UploadImage(formData, lang as string);
-      if (res?.body?.image_id) {
-        setImageIds((prev) => [...prev, res.body.image_id]);
-        reToast.success(res?.message);
-      } else {
-        reToast.error(res?.message);
+      try {
+        const res = await UploadImage(formData, lang as string);
+        if (res?.body?.image_id) {
+          setImages((prev) => [...prev, res.body.image_id]);
+          reToast.success(res.message);
+        } else {
+          reToast.error(t("Failed to upload image"));
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError<ErrorResponse>;
+        const errorMessage = axiosError.response?.data?.errors
+          ? Object.values(axiosError.response.data.errors)[0][0]
+          : t("Something went wrong");
+        reToast.error(errorMessage);
+      } finally {
+        setUploading(false);
       }
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      const errorMessage =
-        axiosError.response?.data?.errors?.image?.[0] ||
-        t("Failed to upload image");
-      reToast.error(errorMessage);
-    } finally {
-      setUploading(false);
-    }
-  };
+    },
+    [lang, t]
+  );
 
   const handleClientChange = (value: string) => {
     setTransactionData((prev) => ({
@@ -204,7 +207,7 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       });
 
       // Append image IDs
-      imageIds.forEach((id, index) => {
+      images.forEach((id, index) => {
         formData.append(`attachments[${index}]`, id);
       });
 
@@ -412,12 +415,9 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
               >
                 <Label>{t("Attachments")}</Label>
                 <FileUploaderMultiple
+                  files={images}
                   onFileChange={handleImageChange}
-                  existingFiles={row.original.files || []}
-                />{" "}
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t("Maximum file size: 15MB")}
-                </p>
+                />
               </motion.div>
             </div>
 
