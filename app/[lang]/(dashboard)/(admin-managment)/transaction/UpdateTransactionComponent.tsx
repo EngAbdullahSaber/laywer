@@ -23,6 +23,7 @@ import { UpdateTransaction } from "@/services/transaction/transaction";
 import { UploadImage } from "@/services/auth/auth";
 import FileUploaderMultiple from "./FileUploaderMultiple";
 import { Icon } from "@iconify/react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ErrorResponse {
   errors: {
@@ -253,201 +254,202 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
         <Icon icon="heroicons:pencil" className="h-4 w-4" />
       </Button>
       <Dialog open={open} onOpenChange={handleOpen}>
-        <DialogContent size="2xl" className="gap-3 h-auto">
+        <DialogContent size="2xl" className="gap-3 h-[80%]">
           <DialogHeader className="p-0">
             <DialogTitle className="text-2xl font-bold text-default-700">
               {t("Update Transaction")}
             </DialogTitle>
           </DialogHeader>
-
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-row justify-between items-center gap-4 flex-wrap">
-              {/* Client Selection */}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full md:w-[48%]"
-              >
-                <Label>{t("Transaction Participant")}</Label>
-                <div className="flex gap-2">
-                  <InfiniteScrollSelect
-                    fetchData={fetchData}
-                    formatOption={formatOption}
-                    placeholder={t("Select Participant or Enter Name")}
-                    selectedValue={transactionData.client_name}
-                    setSelectedValue={handleClientChange}
-                    allowFreeText={true}
-                    className="flex-1"
-                  />
-                  <span
-                    className="justify-center items-center flex cursor-pointer  p-2"
-                    onClick={handleAddClient}
-                    disabled={!transactionData.client_name}
-                  >
-                    <Icon
-                      icon="gg:add"
-                      width="24"
-                      height="24"
-                      color="#dfc77d"
-                    />
-                  </span>
-                </div>
-
-                {/* Display selected clients */}
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {transactionData.transaction_participants.map(
-                    (client, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center bg-gray-100 rounded-full px-3 py-1"
-                      >
-                        <span>{client}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveClient(index)}
-                          className="ml-2 text-red-500 hover:text-red-700"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    )
-                  )}
-                </div>
-              </motion.div>
-
-              {/* Status */}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full md:w-[48%]"
-              >
-                <Label>{t("status")}</Label>
-                <BasicSelect
-                  menu={Task_Status}
-                  setSelectedValue={handleStatusChange}
-                  selectedValue={transactionData.status}
-                />
-              </motion.div>
-              {/* amount */}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full md:w-[48%]"
-              >
-                <Label htmlFor="amount">{t("Number")}</Label>
-                <Input
-                  id="amount"
-                  name="amount"
-                  value={transactionData.amount}
-                  onChange={handleInputChange}
-                  placeholder={t("Enter Number")}
-                  type="number"
-                />
-              </motion.div>
-              {/* transaction_name */}
-
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full md:w-[48%]"
-              >
-                <Label htmlFor="transaction_name">
-                  {t("Transaction Name")}
-                </Label>
-                <Input
-                  id="transaction_name"
-                  name="transaction_name"
-                  value={transactionData.transaction_name}
-                  onChange={handleInputChange}
-                  placeholder={t("Enter Transaction Name")}
-                  type="text"
-                />
-              </motion.div>
-              {/* Type */}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full md:w-[48%]"
-              >
-                <Label htmlFor="type">{t("Type")}</Label>
-                <Input
-                  id="type"
-                  name="type"
-                  value={transactionData.type}
-                  onChange={handleInputChange}
-                  placeholder={t("Enter Type")}
-                  type="text"
-                />
-              </motion.div>
-
-              {/* Date */}
-              <motion.div
-                initial={{ y: -30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full md:w-[48%]"
-              >
-                <Label>{t("Filing date")}</Label>
-                <Flatpickr
-                  className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
-                  placeholder={t("Select Filing date")}
-                  value={transactionData.transaction_date || ""}
-                  onChange={handleDateChange}
-                  options={{
-                    dateFormat: "Y-m-d",
-                    clickOpens: true,
-                    static: true,
-                  }}
-                />
-              </motion.div>
-
-              {/* File Upload */}
-              <motion.div
-                initial={{ y: -30 }}
-                whileInView={{ y: 0 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full"
-              >
-                <Label>{t("Attachments")}</Label>
-                <FileUploaderMultiple
-                  files={images}
-                  onFileChange={handleImageChange}
-                />
-              </motion.div>
-            </div>
-
-            {/* Form Actions */}
-            <motion.div
-              initial={{ y: 30 }}
-              whileInView={{ y: 0 }}
-              transition={{ duration: 1.7 }}
-              className="flex justify-center gap-3 mt-6"
-            >
-              <DialogClose asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
+          <ScrollArea>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-row justify-between items-center gap-4 flex-wrap">
+                {/* Client Selection */}
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full md:w-[48%]"
                 >
-                  {t("Cancel")}
-                </Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                disabled={!loading || uploading}
-                className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                  <Label>{t("Transaction Participant")}</Label>
+                  <div className="flex gap-2">
+                    <InfiniteScrollSelect
+                      fetchData={fetchData}
+                      formatOption={formatOption}
+                      placeholder={t("Select Participant or Enter Name")}
+                      selectedValue={transactionData.client_name}
+                      setSelectedValue={handleClientChange}
+                      allowFreeText={true}
+                      className="flex-1"
+                    />
+                    <span
+                      className="justify-center items-center flex cursor-pointer  p-2"
+                      onClick={handleAddClient}
+                      disabled={!transactionData.client_name}
+                    >
+                      <Icon
+                        icon="gg:add"
+                        width="24"
+                        height="24"
+                        color="#dfc77d"
+                      />
+                    </span>
+                  </div>
+
+                  {/* Display selected clients */}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {transactionData.transaction_participants.map(
+                      (client, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center bg-gray-100 rounded-full px-3 py-1"
+                        >
+                          <span>{client}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveClient(index)}
+                            className="ml-2 text-red-500 hover:text-red-700"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </motion.div>
+
+                {/* Status */}
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full md:w-[48%]"
+                >
+                  <Label>{t("status")}</Label>
+                  <BasicSelect
+                    menu={Task_Status}
+                    setSelectedValue={handleStatusChange}
+                    selectedValue={transactionData.status}
+                  />
+                </motion.div>
+                {/* amount */}
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full md:w-[48%]"
+                >
+                  <Label htmlFor="amount">{t("Number")}</Label>
+                  <Input
+                    id="amount"
+                    name="amount"
+                    value={transactionData.amount}
+                    onChange={handleInputChange}
+                    placeholder={t("Enter Number")}
+                    type="number"
+                  />
+                </motion.div>
+                {/* transaction_name */}
+
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full md:w-[48%]"
+                >
+                  <Label htmlFor="transaction_name">
+                    {t("Transaction Name")}
+                  </Label>
+                  <Input
+                    id="transaction_name"
+                    name="transaction_name"
+                    value={transactionData.transaction_name}
+                    onChange={handleInputChange}
+                    placeholder={t("Enter Transaction Name")}
+                    type="text"
+                  />
+                </motion.div>
+                {/* Type */}
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full md:w-[48%]"
+                >
+                  <Label htmlFor="type">{t("Type")}</Label>
+                  <Input
+                    id="type"
+                    name="type"
+                    value={transactionData.type}
+                    onChange={handleInputChange}
+                    placeholder={t("Enter Type")}
+                    type="text"
+                  />
+                </motion.div>
+
+                {/* Date */}
+                <motion.div
+                  initial={{ y: -30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full md:w-[48%]"
+                >
+                  <Label>{t("Filing date")}</Label>
+                  <Flatpickr
+                    className="w-full bg-background border border-default-200 focus:border-primary focus:outline-none h-10 rounded-md px-2 placeholder:text-default-600"
+                    placeholder={t("Select Filing date")}
+                    value={transactionData.transaction_date || ""}
+                    onChange={handleDateChange}
+                    options={{
+                      dateFormat: "Y-m-d",
+                      clickOpens: true,
+                      static: true,
+                    }}
+                  />
+                </motion.div>
+
+                {/* File Upload */}
+                <motion.div
+                  initial={{ y: -30 }}
+                  whileInView={{ y: 0 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full"
+                >
+                  <Label>{t("Attachments")}</Label>
+                  <FileUploaderMultiple
+                    files={images}
+                    onFileChange={handleImageChange}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Form Actions */}
+              <motion.div
+                initial={{ y: 30 }}
+                whileInView={{ y: 0 }}
+                transition={{ duration: 1.7 }}
+                className="flex justify-center gap-3 mt-6"
               >
-                {!loading || uploading
-                  ? t("Processing")
-                  : t("Update Transaction")}
-              </Button>
-            </motion.div>
-          </form>
+                <DialogClose asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
+                  >
+                    {t("Cancel")}
+                  </Button>
+                </DialogClose>
+                <Button
+                  type="submit"
+                  disabled={!loading || uploading}
+                  className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                >
+                  {!loading || uploading
+                    ? t("Processing")
+                    : t("Update Transaction")}
+                </Button>
+              </motion.div>
+            </form>{" "}
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </>
