@@ -14,7 +14,7 @@ import { getCategory } from "@/services/category/category";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { CreateClients } from "@/services/clients/clients";
-import { UploadImage } from "@/services/auth/auth";
+import { RemoveImage, UploadImage } from "@/services/auth/auth";
 import CreateClientCategory from "../../../(category-mangement)/client-category/CreateClientCategory";
 import { CleaveInput } from "@/components/ui/cleave";
 import { Auth } from "@/components/auth/Auth";
@@ -57,11 +57,8 @@ const Form = () => {
     national_id_number: "",
     category_id: "",
   });
-  const [images, setImages] = useState<{
-    client_files: string[]; // Array of file IDs instead of a single file ID
-  }>({
-    client_files: [],
-  });
+  const [fileIds, setFileIds] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
   // Handle input change
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -81,35 +78,45 @@ const Form = () => {
     }));
   };
 
-  const handleImageChange = async (
-    file: File,
-    imageType: keyof typeof images
-  ) => {
-    setLoading(false);
-
-    const formData = new FormData();
-    formData.append("image", file);
+  const handleFilesChange = async (files: File[], fileType: string) => {
+    setIsUploading(true);
 
     try {
-      const res = await UploadImage(formData, lang); // Call API to upload the image
-      if (res) {
-        // Append the image ID to the array of file IDs
-        setImages((prevState) => ({
-          ...prevState,
-          client_files: [...prevState.client_files, res.body.image_id],
-        }));
-        setLoading(true);
+      // Upload each file sequentially to avoid overloading the server
+      const newFileIds: string[] = [];
 
-        reToast.success(res.message); // Show success toast
-      } else {
-        reToast.error(t("Failed to upload image")); // Show failure toast
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const res = await UploadImage(formData, lang);
+        if (res && res.body && res.body.image_id) {
+          newFileIds.push(res.body.image_id);
+          reToast.success(`${file.name} uploaded successfully`);
+        } else {
+          reToast.error(`Failed to upload ${file.name}`);
+        }
       }
+
+      setFileIds((prev) => [...prev, ...newFileIds]);
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
-      reToast.error(errorMessage); // Show error toast
+      console.error("Error uploading files:", error);
+      reToast.error(t("Failed to upload files"));
+    } finally {
+      setIsUploading(false);
     }
   };
+
+  const handleFileRemove = async (fileId: string, fileType: string) => {
+    try {
+      await RemoveImage(fileId, lang);
+      setFileIds((prev) => prev.filter((id) => id !== fileId));
+    } catch (error) {
+      console.error("Error removing file:", error);
+      throw error; // Re-throw to be handled by the component
+    }
+  };
+
   const generateStrongPassword = (): string => {
     const lowercase = "abcdefghijklmnopqrstuvwxyz";
     const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -142,18 +149,20 @@ const Form = () => {
 
     const formData = new FormData();
 
-    // Append form data
+    // ✅ Append form data (skip null/empty values)
     Object.entries(lawyerData).forEach(([key, value]) => {
-      if (key == "phone") {
-        formData.append(key, value.replace("+", ""));
-      } else if (key == "national_id_number") {
-        formData.append(key, Number(value));
+      if (value === null || value === undefined || value === "") return; // skip empty
+
+      if (key === "phone") {
+        formData.append(key, String(value).replace("+", ""));
+      } else if (key === "national_id_number") {
+        formData.append(key, String(Number(value))); // ensure it's string
       } else {
-        formData.append(key, value);
+        formData.append(key, value as string | Blob);
       }
     });
 
-    images.client_files.forEach((fileId, index) => {
+    fileIds.forEach((fileId, index) => {
       formData.append(`client_files[${index}]`, fileId);
     });
 
@@ -225,6 +234,7 @@ const Form = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {}
   };
+  console.log(fileIds);
   useEffect(() => {
     fetchData();
   }, [flag]);
@@ -320,9 +330,18 @@ const Form = () => {
             <motion.p className="my-4 font-bold">{t("Upload Files")}</motion.p>
             <motion.div className="flex flex-col gap-2 w-full">
               <FileUploaderMultiple
-                imageType="client_files"
-                id={images.client_files}
-                onFileChange={handleImageChange}
+                fileType="client_files"
+                fileIds={fileIds}
+                onFilesChange={handleFilesChange}
+                onFileRemove={handleFileRemove}
+                maxFiles={15}
+                maxSizeMB={200}
+                compressImages={true}
+                compressionOptions={{
+                  maxSizeMB: 1,
+                  maxWidthOrHeight: 1920,
+                  quality: 0.8,
+                }}
               />
             </motion.div>
             <motion.hr className="my-3 w-full" />

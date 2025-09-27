@@ -59,6 +59,7 @@ const adminMenu = [
     icon: Case,
     href: "/case",
   },
+
   {
     title: "Archived Case",
     icon: Property,

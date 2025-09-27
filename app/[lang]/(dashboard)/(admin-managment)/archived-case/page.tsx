@@ -8,14 +8,26 @@ import BreadcrumbComponent from "../../(category-mangement)/shared/BreadcrumbCom
 import { motion } from "framer-motion";
 import { Auth } from "@/components/auth/Auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@iconify/react";
+import { exportToExcel } from "@/config/ExportButoons";
+
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { useAccessToken } from "@/config/accessToken";
 import { updateAxiosHeader } from "@/services/axios";
 import CreateTransactionComponent from "../transaction/CreateTransactionComponent";
 import TransactionTableData from "../transaction/TransactionTableData";
 import { useAllowedRoles } from "@/config/useAllowedRoles";
+import { getFile } from "@/services/archieved-cases/archieved-cases";
 
 const PageWithAuth = () => {
   const { t } = useTranslate();
@@ -24,11 +36,23 @@ const PageWithAuth = () => {
   const permissionString = localStorage.getItem("permissions");
   const permission = permissionString ? JSON.parse(permissionString) : null;
   const { allowedRoles, loading, error } = useAllowedRoles();
+  const [data, setData] = useState<any>([]);
 
   // Loading state while allowedRoles is being fetched
   if (!allowedRoles) {
     return; // Or <Loading />
   }
+  const getExcelFileData = async () => {
+    try {
+      const res = await getFile(lang);
+
+      setData(res?.body?.file || []);
+      window.open(res?.body?.file, "_blank");
+      console.log(res?.body?.file);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
   const ProtectedPage = Auth({ allowedRoles })(() => (
     <Tabs defaultValue="Answered" className="">
       <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20 sm:h-12">
@@ -44,30 +68,55 @@ const PageWithAuth = () => {
               transition={{ duration: 1.7 }}
             >
               <div className=" text-default-900 text-2xl font-bold my-2">
-                {t("Archived Case Lists")}
+                {t("Case List")}
               </div>{" "}
-              <BreadcrumbComponent
-                header={"Archived Cases"}
-                body={"Archived Case Lists"}
-              />
+              <BreadcrumbComponent header={"Cases"} body={"Case List"} />
             </motion.div>
             <motion.div
               initial={{ x: -15 }}
               whileInView={{ x: 0 }}
               transition={{ duration: 1.7 }}
               className="flex sm:flex-row  xs:flex-col gap-[10px] justify-between items-center"
-            ></motion.div>
+            >
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button color="secondary" variant="outline">
+                    <Icon icon="lets-icons:export" className="h-5 w-5" />
+                    {t("Export Excel")}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[196px]" align="start">
+                  <DropdownMenuItem onClick={exportToExcel}>
+                    {t("Current Page")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={getExcelFileData}>
+                    {t("All Data")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {permission
+                ?.find((item: any) => item.id === 12 || item.id === 138)
+                ?.permissions.some(
+                  (item: any) => item.id === 14 || item.id === 140
+                ) && (
+                <a href={"cases-archieved/add"}>
+                  <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
+                    {t("Create Case")}
+                  </Button>
+                </a>
+              )}
+            </motion.div>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle> {t("Archived Case List Details")}</CardTitle>
+              <CardTitle> {t("Case List Details")}</CardTitle>
             </CardHeader>
             <CardContent>
               <TableData />
             </CardContent>
           </Card>
-        </div>{" "}
+        </div>
       </TabsContent>{" "}
       <TabsContent value="NotAnswered">
         {" "}

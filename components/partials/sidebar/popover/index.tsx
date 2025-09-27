@@ -12,7 +12,7 @@ import NestedSubMenu from "../common/nested-menus";
 import { useSidebar, useThemeStore } from "@/store";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const PopoverSidebar = ({ trans }: { trans: string }) => {
   const { collapsed, sidebarBg } = useSidebar();
@@ -23,6 +23,7 @@ const PopoverSidebar = ({ trans }: { trans: string }) => {
   const menus = menusConfig?.sidebarNav?.classic || [];
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeMultiMenu, setMultiMenu] = useState<number | null>(null);
+  const { lang } = useParams();
 
   const toggleSubmenu = (i: number) => {
     if (activeSubmenu === i) {

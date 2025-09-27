@@ -28,11 +28,11 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3 }}
   >
-    <span className="text-sm text-default-900 font-medium w-[40%]">
+    <span className="text-sm dark:text-white text-default-900 font-medium w-[40%]">
       {label}:
     </span>
     <span className="text-default-500 dark:text-white font-semibold w-[55%]">
-      {value}
+      {value || "-"}
     </span>
   </motion.li>
 );
@@ -46,7 +46,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   const { lang } = useParams();
 
   const renderLawyerData = () => {
-    const casesData = row?.original?.lawyer;
+    const lawyerName = row?.original?.lawyer_name;
 
     return (
       <>
@@ -59,21 +59,14 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           {t("Lawyer Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
-          <DetailItem label={t("name")} value={casesData?.name || "-"} />
-          <DetailItem label={t("email")} value={casesData?.email || "-"} />
-          <DetailItem label={t("address")} value={casesData?.address || "-"} />
-          <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
-          <DetailItem
-            label={t("category")}
-            value={casesData?.category?.name || "-"}
-          />
+          <DetailItem label={t("Name")} value={lawyerName} />
         </ul>
       </>
     );
   };
+
   const renderCourtsData = () => {
-    const casesData = row?.original?.court;
+    const courtName = row?.original?.court_name;
 
     return (
       <>
@@ -86,53 +79,16 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           {t("Court Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
-          <DetailItem label={t("name")} value={casesData?.name || "-"} />
-          <DetailItem
-            label={t("category")}
-            value={casesData?.category?.name || "-"}
-          />
-          <DetailItem
-            label={t("Region")}
-            value={
-              lang == "en"
-                ? casesData?.region?.name.en
-                : casesData?.region?.name.ar || "-"
-            }
-          />
-          <DetailItem
-            label={t("City")}
-            value={
-              lang == "en"
-                ? casesData?.city?.name.en
-                : casesData?.city?.name.ar || "-"
-            }
-          />{" "}
-          <DetailItem label={t("address")} value={casesData?.address || "-"} />
-          <DetailItem
-            label={t("room_number")}
-            value={casesData?.room_number || "-"}
-          />
-          <DetailItem
-            label={t("Date Of Create")}
-            value={
-              new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
-            }
-          />
-          <DetailItem
-            label={t("Date Of Update")}
-            value={
-              new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
-            }
-          />
+          <DetailItem label={t("Name")} value={courtName} />
         </ul>
       </>
     );
   };
+
   const renderCaseFilesData = () => {
-    const lawyerData = row?.original?.files;
-    // If lawyerData is not an array or is empty, return a fallback message
-    if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
+    const files = row?.original?.files || [];
+
+    if (!Array.isArray(files) || files.length === 0) {
       return (
         <>
           <motion.h3
@@ -141,7 +97,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            {t("Client Files")}
+            {t("Case Files")}
           </motion.h3>
           <p className="text-gray-500 dark:text-white mt-2">
             {t("No Files found")}
@@ -152,8 +108,16 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
     return (
       <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Case Files")}
+        </motion.h3>
         <div className="space-y-4 mt-5">
-          {lawyerData.map((file, index) => (
+          {files.map((file, index) => (
             <motion.li
               key={index}
               initial={{ opacity: 0 }}
@@ -162,15 +126,15 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
               className="flex flex-row gap-6 items-center"
             >
               <span className="text-sm text-default-900 font-medium w-[52%]">
-                {t("Client Files")}:
+                {t("File")} {index + 1}:
               </span>
               <a
-                href={file.url} // Access the file URL dynamically from the `file` object
+                href={file.url || file}
                 className="text-default-500 font-semibold w-[40%]"
                 target="_blank"
-                rel="noopener noreferrer" // Added for security when opening links
+                rel="noopener noreferrer"
               >
-                {t("Show File")} {/* Display the file name */}
+                {t("View File")}
               </a>
             </motion.li>
           ))}
@@ -178,7 +142,8 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
       </>
     );
   };
-  const renderCasaesData = () => {
+
+  const renderCasesData = () => {
     const casesData = row?.original;
 
     return (
@@ -189,69 +154,61 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {t("Cases Info")}
+          {t("Case Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
-          <DetailItem label={t("Title")} value={casesData?.title || "-"} />
+          <DetailItem label={t("ID")} value={casesData?.id} />
+          <DetailItem label={t("Title")} value={casesData?.title} />
+          <DetailItem label={t("Category")} value={casesData?.category} />
           <DetailItem
-            label={t("category")}
-            value={casesData?.category?.name || "-"}
-          />
-
-          <DetailItem
-            label={t("main_case_number")}
-            value={casesData?.main_case_number || "-"}
+            label={t("Main Case Number")}
+            value={casesData?.main_case_number}
           />
           <DetailItem
-            label={t("receive_date")}
-            value={casesData?.receive_date || "-"}
-          />
-          <DetailItem
-            label={t("submit_date")}
-            value={casesData?.submit_date || "-"}
-          />
-          <DetailItem
-            label={t("judgment_date")}
-            value={casesData?.judgment_date || "-"}
-          />
-          <DetailItem
-            label={t("session_date")}
-            value={casesData?.session_date || "-"}
-          />
-
-          <DetailItem
-            label={t("status")}
+            label={t("Receive Date")}
             value={
-              lang == "en"
-                ? casesData?.status == "completed"
-                  ? "Completed"
-                  : casesData?.status == "in_progress"
-                  ? "In Progress"
-                  : "Pending"
-                : casesData?.status == "completed"
-                ? "مكتملة"
-                : casesData?.status == "in_progress"
-                ? "قيد التنفيذ"
-                : "قيدالانتظار"
+              casesData?.receive_date
+                ? new Date(casesData.receive_date).toLocaleDateString("en-GB")
+                : "-"
             }
           />
           <DetailItem
-            label={t("claim_status")}
+            label={t("Submit Date")}
             value={
-              casesData?.claim_status == "claimant"
-                ? t("claimant")
-                : t("defendant") || "-"
+              casesData?.submit_date
+                ? new Date(casesData.submit_date).toLocaleDateString("en-GB")
+                : "-"
             }
           />
-          <DetailItem label={t("details")} value={casesData?.details || "-"} />
+          <DetailItem
+            label={t("Judgment Date")}
+            value={
+              casesData?.judgment_date
+                ? new Date(casesData.judgment_date).toLocaleDateString("en-GB")
+                : "-"
+            }
+          />
+          <DetailItem
+            label={t("Session Date")}
+            value={
+              casesData?.session_date
+                ? new Date(casesData.session_date).toLocaleDateString("en-GB")
+                : "-"
+            }
+          />
+          <DetailItem
+            label={t("Status")}
+            value={casesData?.claim_status || "-"}
+          />
+          <DetailItem label={t("Details")} value={casesData?.details} />
         </ul>
         {renderCaseFilesData()}
       </>
     );
   };
+
   const renderClientsData = () => {
-    const casesData = row?.original?.client;
+    const clientName = row?.original?.client_name;
 
     return (
       <>
@@ -264,36 +221,51 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           {t("Client Info")}
         </motion.h3>
         <ul className="md:grid grid-cols-2 !mt-5 gap-2 space-y-2 md:space-y-0">
-          <DetailItem label={t("Id")} value={casesData?.id || "-"} />
-          <DetailItem label={t("name")} value={casesData?.name || "-"} />
-          <DetailItem label={t("email")} value={casesData?.email || "-"} />
-          <DetailItem label={t("phone")} value={casesData?.phone || "-"} />
-          <DetailItem
-            label={t("client_type")}
-            value={
-              casesData?.client_type == "company"
-                ? t("company")
-                : t("individual") || "-"
-            }
-          />
-          <DetailItem label={t("address")} value={casesData?.address || "-"} />
-
-          <DetailItem
-            label={t("Date Of Create")}
-            value={
-              new Date(casesData?.created_at).toLocaleDateString("en-GB") || "-"
-            }
-          />
-          <DetailItem
-            label={t("Date Of Update")}
-            value={
-              new Date(casesData?.updated_at).toLocaleDateString("en-GB") || "-"
-            }
-          />
+          <DetailItem label={t("Name")} value={clientName} />
         </ul>
       </>
     );
   };
+
+  const renderDefendantsData = () => {
+    const defendants = row?.original?.defendants || [];
+
+    if (defendants.length === 0) {
+      return null;
+    }
+
+    return (
+      <>
+        <motion.h3
+          className="font-semibold text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t("Defendants")}
+        </motion.h3>
+        <ul className="!mt-5 space-y-2">
+          {defendants.map((defendant: string, index: number) => (
+            <motion.li
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              className="flex flex-row gap-6 items-center"
+            >
+              <span className="text-sm text-default-900 font-medium w-[40%]">
+                {t("defendant")} {index + 1}:
+              </span>
+              <span className="text-default-500 font-semibold w-[55%]">
+                {defendant}
+              </span>
+            </motion.li>
+          ))}
+        </ul>
+      </>
+    );
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -312,21 +284,25 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
         className="max-w-[736px]"
       >
         <SheetHeader>
-          <SheetTitle>{t("Cases Details")}</SheetTitle>
+          <SheetTitle>{t("Case Details")}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[100%]">
           <div className="py-6">
-            {renderCasaesData()}
+            {renderCasesData()}
             <hr className="my-8" />
             {renderClientsData()}
             <hr className="my-8" />
             {renderLawyerData()}
             <hr className="my-8" />
             {renderCourtsData()}
+            <hr className="my-8" />
+            {renderDefendantsData()}
           </div>
         </ScrollArea>
         <SheetFooter>
-          <SheetClose asChild>footer content</SheetClose>
+          <SheetClose asChild>
+            <Button variant="outline">{t("Close")}</Button>
+          </SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>

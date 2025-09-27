@@ -21,6 +21,7 @@ import { useParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { toast as reToast } from "react-hot-toast";
 import { DeleteCases } from "@/services/cases/cases";
+import { DeleteArchievedCases } from "@/services/archieved-cases/archieved-cases";
 
 interface IDeleteContact {
   id: string;
@@ -37,7 +38,7 @@ const DeleteButton: React.FC<IDeleteContact> = ({ id, getCasesData }) => {
 
   const handleDelete = async () => {
     try {
-      const res = await DeleteCases(id, lang); // Delete user
+      const res = await DeleteArchievedCases(id, lang); // Delete user
       reToast.success(res.message);
       setIsDialogOpen(false); // Close the dialog after successful deletion
       getCasesData(); // Re-fetch the user data after deletion
@@ -64,7 +65,7 @@ const DeleteButton: React.FC<IDeleteContact> = ({ id, getCasesData }) => {
               </Button>{" "}
             </TooltipTrigger>
             <TooltipContent>
-              <p> {t("Deleting Case")} </p>
+              <p> {t("Deleting Archieved Case")} </p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -92,7 +93,7 @@ const DeleteButton: React.FC<IDeleteContact> = ({ id, getCasesData }) => {
             transition={{ duration: 1.4 }}
             className="text-sm text-default-500 "
           >
-            {t("Are You Sure For Delete This Case?")}
+            {t("Are You Sure For Delete This Archieved Case?")}
           </motion.p>
         </div>
         <DialogFooter className="flex flex-row gap-5 justify-center">

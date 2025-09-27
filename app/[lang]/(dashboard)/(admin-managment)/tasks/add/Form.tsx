@@ -118,14 +118,32 @@ const Form = () => {
     e.preventDefault();
     setIsloading(false);
 
-    const data = {
+    // ✅ Utility to remove empty/null/undefined values (deep clean)
+    const cleanObject = (obj: any) => {
+      if (Array.isArray(obj)) {
+        return obj
+          .map((v) => cleanObject(v))
+          .filter((v) => v !== null && v !== undefined && v !== "");
+      } else if (obj !== null && typeof obj === "object") {
+        return Object.entries(obj).reduce((acc, [key, value]) => {
+          const cleaned = cleanObject(value);
+          if (cleaned !== null && cleaned !== undefined && cleaned !== "") {
+            acc[key] = cleaned;
+          }
+          return acc;
+        }, {} as any);
+      }
+      return obj;
+    };
+
+    const data = cleanObject({
       title: { en: lawyerData.titleEn, ar: lawyerData.titleAr },
       details: { en: lawyerData.detailsEn, ar: lawyerData.detailsAr },
       lawyer_id: lawyerData.lawyer_id,
       importance_level: lawyerData.importance_level,
       due_date: dates.due_date,
       law_suit_id: lawyerData.law_suit_id,
-    };
+    });
 
     try {
       const res = await CreateTasks(data, lang); // Call API to create the lawyer
