@@ -20,13 +20,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import FileUploaderMultiple from "./FileUploaderSingle";
 import { useState } from "react";
 import { UploadImage } from "@/services/auth/auth";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { ReplyOnLawyer } from "@/services/client-request/client-requests";
+import FileUploaderMultiple from "../../(admin-managment)/clients/add/FileUploaderSingle";
 // Update the schema to validate date properly
 interface ErrorResponse {
   errors: {
@@ -49,6 +49,7 @@ const FileRequest = ({
   const { lang } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [loading, setLoading] = useState(true);
+  const [fileIds, setFileIds] = useState<string[]>([]);
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     title: "",
@@ -107,10 +108,9 @@ const FileRequest = ({
       formData.append(key, value);
     });
 
-    images.reply_files.forEach((fileId, index) => {
+    fileIds.forEach((fileId, index) => {
       formData.append(`reply_files[${index}]`, fileId);
     });
-
     try {
       const res = await ReplyOnLawyer(lang, id, formData); // Call API to create the lawyer
       if (res) {
@@ -197,10 +197,18 @@ const FileRequest = ({
                 className="flex flex-col gap-2 "
               >
                 <FileUploaderMultiple
-                  imageType="reply_files"
-                  id={images.reply_files}
-                  onFileChange={handleImageChange}
-                />{" "}
+                  fileType="reply_files"
+                  fileIds={fileIds}
+                  setFileIds={setFileIds}
+                  maxFiles={15}
+                  maxSizeMB={200}
+                  compressImages={true}
+                  compressionOptions={{
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    quality: 0.8,
+                  }}
+                />
               </motion.div>
             </div>
 

@@ -61,6 +61,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "system.msaatylaw.com", // Add this line
       },
+      {
+        protocol: "https",
+        hostname: "s3.eu-central-003.backblazeb2.com", // ✅ Add Backblaze B2
+      },
     ],
   },
 };

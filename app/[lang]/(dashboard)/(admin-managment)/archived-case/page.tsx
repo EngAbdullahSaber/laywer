@@ -99,7 +99,7 @@ const PageWithAuth = () => {
                 ?.permissions.some(
                   (item: any) => item.id === 14 || item.id === 140
                 ) && (
-                <a href={"cases-archieved/add"}>
+                <a href={"archived-case/add"}>
                   <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
                     {t("Create Case")}
                   </Button>

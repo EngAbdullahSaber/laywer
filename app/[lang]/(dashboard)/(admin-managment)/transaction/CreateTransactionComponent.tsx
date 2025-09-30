@@ -21,9 +21,9 @@ import InfiniteScrollSelect from "./InfiniteScrollSelect";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { CreateTransaction } from "@/services/transaction/transaction";
 import { UploadImage } from "@/services/auth/auth";
-import FileUploaderMultiple from "./FileUploaderMultiple";
 import { Icon } from "@iconify/react";
 import { ScrollArea } from "../../../../../components/ui/scroll-area";
+import FileUploaderMultiple from "../clients/add/FileUploaderSingle";
 
 interface ErrorResponse {
   errors: {
@@ -69,6 +69,7 @@ const CreateTransactionComponent = ({
     transaction_name: "",
     transaction_participants: [],
   });
+  const [fileIds, setFileIds] = useState<string[]>([]);
 
   const handleDateChange = useCallback((dates: Date[]) => {
     const date = new Date(dates[0]);
@@ -112,33 +113,6 @@ const CreateTransactionComponent = ({
       status: value?.id,
     }));
   }, []);
-
-  const handleImageChange = useCallback(
-    async (file: File) => {
-      setUploading(true);
-      const formData = new FormData();
-      formData.append("image", file);
-
-      try {
-        const res = await UploadImage(formData, lang as string);
-        if (res?.body?.image_id) {
-          setImages((prev) => [...prev, res.body.image_id]);
-          reToast.success(res.message);
-        } else {
-          reToast.error(t("Failed to upload image"));
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError<ErrorResponse>;
-        const errorMessage = axiosError.response?.data?.errors
-          ? Object.values(axiosError.response.data.errors)[0][0]
-          : t("Something went wrong");
-        reToast.error(errorMessage);
-      } finally {
-        setUploading(false);
-      }
-    },
-    [lang, t]
-  );
 
   const handleClientChange = useCallback((value: string) => {
     setTransactionData((prev) => ({
@@ -209,10 +183,8 @@ const CreateTransactionComponent = ({
       transaction_participants.forEach((participant, index) => {
         formData.append(`transaction_participants[${index}]`, participant);
       });
-
-      // Append images
-      images.forEach((id, index) => {
-        formData.append(`attachments[${index}]`, id);
+      fileIds.forEach((fileId, index) => {
+        formData.append(`attachments[${index}]`, fileId);
       });
 
       const res = await CreateTransaction(formData, lang as string);
@@ -412,8 +384,17 @@ const CreateTransactionComponent = ({
                 >
                   <Label>{t("Attachments")}</Label>
                   <FileUploaderMultiple
-                    files={images}
-                    onFileChange={handleImageChange}
+                    fileType="transaction_files"
+                    fileIds={fileIds}
+                    setFileIds={setFileIds}
+                    maxFiles={15}
+                    maxSizeMB={200}
+                    compressImages={true}
+                    compressionOptions={{
+                      maxSizeMB: 1,
+                      maxWidthOrHeight: 1920,
+                      quality: 0.8,
+                    }}
                   />
                 </motion.div>
               </div>

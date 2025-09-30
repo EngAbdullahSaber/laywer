@@ -221,7 +221,7 @@ const TableData = () => {
                       color="secondary"
                     >
                       {" "}
-                      <a href={`cases-archieved/${row.original.id}/edit`}>
+                      <a href={`archived-case/${row.original.id}/edit`}>
                         <Icon icon="heroicons:pencil" className="h-4 w-4" />{" "}
                       </a>{" "}
                     </Button>

@@ -27,6 +27,8 @@ import { UploadImage } from "@/services/auth/auth";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { AskClient } from "@/services/cases/cases";
+import FileUploaderMultiple from "../clients/add/FileUploaderSingle";
+import { ScrollArea } from "@/components/ui/scroll-area";
 // Update the schema to validate date properly
 interface ErrorResponse {
   errors: {
@@ -47,7 +49,7 @@ const FileRequest = ({ id }: { id: any }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     title: "",
-    requested_data: "",
+    requested_data: "ask client request",
     details: "",
     law_suit_id: id,
   });
@@ -56,6 +58,8 @@ const FileRequest = ({ id }: { id: any }) => {
   }>({
     order_files: [],
   });
+  const [fileIds, setFileIds] = useState<string[]>([]);
+
   // Handle Flatpickr change event and set value in react-hook-form
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,38 +71,6 @@ const FileRequest = ({ id }: { id: any }) => {
     }));
   };
 
-  const handleImageChange = async (
-    file: File,
-    imageType: keyof typeof images
-  ) => {
-    setIsloading(false);
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await UploadImage(formData, lang); // Call API to upload the image
-      if (res) {
-        // Append the image ID to the array of file IDs
-        setImages((prevState) => ({
-          ...prevState,
-          reply_files: [...prevState.order_files, res.body.image_id],
-        }));
-        setIsloading(true);
-
-        reToast.success(res.message); // Show success toast
-      } else {
-        setIsloading(true);
-
-        reToast.error(t("Failed to upload image")); // Show failure toast
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
-      reToast.error(errorMessage); // Show error toast
-      setIsloading(true);
-    }
-  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsloading(false);
@@ -106,13 +78,16 @@ const FileRequest = ({ id }: { id: any }) => {
 
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (value !== null && value !== undefined && value !== "") {
+        formData.append(key, value);
+      }
     });
 
-    images.order_files.forEach((fileId, index) => {
-      formData.append(`order_files[${index}]`, fileId);
+    fileIds.forEach((fileId, index) => {
+      if (fileId !== null && fileId !== undefined && fileId !== []) {
+        formData.append(`order_files[${index}]`, fileId.toString());
+      }
     });
-    formData.append(`requested_data`, lawyerData.details);
 
     try {
       const res = await AskClient(formData, lang); // Call API to create the lawyer
@@ -120,7 +95,7 @@ const FileRequest = ({ id }: { id: any }) => {
         // Reset data after successful creation
         setLawyerData({
           title: "",
-          requested_data: "",
+          requested_data: "ask client request",
           details: "",
           law_suit_id: id,
         });
@@ -180,83 +155,93 @@ const FileRequest = ({ id }: { id: any }) => {
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent size="md" className="gap-3 h-auto ">
+      <DialogContent size="md" className="gap-3 h-[80%] ">
         <DialogHeader className="p-0">
           <DialogTitle className="text-lg font-semibold text-default-700 ">
             {t("Ask Client About File")}
           </DialogTitle>
         </DialogHeader>
-        <div className="h-auto">
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-              <motion.div
-                initial={{ y: -30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2"
-              >
-                <Label htmlFor="Title">{t("Title")}</Label>
-                <Input
-                  type="text"
-                  placeholder={t("Enter Title")}
-                  name="title"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ y: -30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2"
-              >
-                <Label htmlFor="Description">{t("Description")}</Label>
-                <Textarea
-                  placeholder={t("Type Here")}
-                  rows={3}
-                  name="details"
-                  onChange={handleInputChange}
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1.7 }}
-                className="flex flex-col gap-2 w-full"
-              >
-                <FileUploaderSingle
-                  imageType="order_files"
-                  id={images.order_files}
-                  onFileChange={handleImageChange}
-                />{" "}
-              </motion.div>
-            </div>
-
-            {/* Submit Button inside form */}
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="flex justify-center gap-3 mt-4"
-            >
-              <DialogClose asChild>
-                <Button
-                  type="button"
-                  className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]  hover:text-[#000]  hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
-                  variant="outline"
+        <ScrollArea>
+          <div className="h-[80%]">
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+                <motion.div
+                  initial={{ y: -30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2"
                 >
-                  {t("Cancel")}
-                </Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                disabled={!loading}
-                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                  <Label htmlFor="Title">{t("Title")}</Label>
+                  <Input
+                    type="text"
+                    placeholder={t("Enter Title")}
+                    name="title"
+                    onChange={handleInputChange}
+                  />
+                </motion.div>
+                <motion.div
+                  initial={{ y: -30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2"
+                >
+                  <Label htmlFor="Description">{t("Description")}</Label>
+                  <Textarea
+                    placeholder={t("Type Here")}
+                    rows={3}
+                    name="details"
+                    onChange={handleInputChange}
+                  />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1.7 }}
+                  className="flex flex-col gap-2 w-full"
+                >
+                  <FileUploaderMultiple
+                    fileType="case_files"
+                    fileIds={fileIds}
+                    setFileIds={setFileIds}
+                    maxFiles={15}
+                    maxSizeMB={200}
+                    compressImages={true}
+                    compressionOptions={{
+                      maxSizeMB: 1,
+                      maxWidthOrHeight: 1920,
+                      quality: 0.8,
+                    }}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Submit Button inside form */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.7 }}
+                className="flex justify-center gap-3 mt-4"
               >
-                {!loading ? t("Loading") : t("Ask Client")}
-              </Button>
-            </motion.div>
-          </form>
-        </div>
+                <DialogClose asChild>
+                  <Button
+                    type="button"
+                    className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]  hover:text-[#000]  hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
+                    variant="outline"
+                  >
+                    {t("Cancel")}
+                  </Button>
+                </DialogClose>
+                <Button
+                  type="submit"
+                  disabled={!loading}
+                  className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                >
+                  {!loading ? t("Loading") : t("Ask Client")}
+                </Button>
+              </motion.div>
+            </form>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

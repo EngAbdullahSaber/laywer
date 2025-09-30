@@ -321,7 +321,9 @@ const Form = () => {
 
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (value !== null && value !== undefined && value !== "") {
+        formData.append(key, value);
+      }
     });
 
     fileIds.forEach((fileId, index) => {
@@ -474,7 +476,6 @@ const Form = () => {
                   </a>
                 </motion.div>
               </div>
-
               {/* Court Selection */}
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
                 <motion.div
@@ -516,7 +517,6 @@ const Form = () => {
                   />
                 </motion.div>
               </div>
-
               <div className="flex flex-col gap-2 my-2 w-full sm:w-[48%]">
                 <motion.div
                   initial={{ y: -30 }}
@@ -540,7 +540,6 @@ const Form = () => {
                   />
                 </motion.div>
               </div>
-
               {/* Case Name */}
               <motion.div
                 initial={{ y: -30 }}
@@ -558,7 +557,7 @@ const Form = () => {
                   onChange={handleInputChange}
                 />
               </motion.div>
-
+              []
               {/* Lawyer Selection */}
               <motion.div
                 initial={{ y: -30 }}
@@ -753,8 +752,7 @@ const Form = () => {
                 <FileUploaderMultiple
                   fileType="case_files"
                   fileIds={fileIds}
-                  onFilesChange={handleFilesChange}
-                  onFileRemove={handleFileRemove}
+                  setFileIds={setFileIds}
                   maxFiles={15}
                   maxSizeMB={200}
                   compressImages={true}

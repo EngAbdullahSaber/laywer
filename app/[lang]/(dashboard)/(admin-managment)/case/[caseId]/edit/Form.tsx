@@ -12,7 +12,6 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FileUploaderSingle from "./FileUploaderSingle";
 import { getCourtsPanigation } from "@/services/courts/courts";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { getLawyerPanigation } from "@/services/lawyer/lawyer";
@@ -32,6 +31,7 @@ import { UploadImage } from "@/services/auth/auth";
 import { AxiosError } from "axios";
 import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
+import FileUploaderMultiple from "../../../clients/[clientsId]/edit/FileUploaderMultiple";
 
 interface LawyerData {
   client_id: string;
@@ -89,6 +89,8 @@ const Form = () => {
   const [loading1, setLoading1] = useState(true);
   const [oppositeParties, setOppositeParties] = useState<string[]>([""]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
+  const [fileIds, setFileIds] = useState<number[]>([]);
+  const [existingFiles, setExistingFiles] = useState<any[]>([]);
 
   const [dates, setDates] = useState({
     receive_date: "",
@@ -217,7 +219,6 @@ const Form = () => {
   };
   const handleIncrement = (index: number) => {
     setSecondaryCaseNumber(secondaryCaseNumber + 1);
-    console.log(index);
     const updatedNumbers = [...numbers];
     updatedNumbers[index + 1] =
       data + index < 10
@@ -265,7 +266,6 @@ const Form = () => {
       const res = await getSpecifiedCases(lang, caseId);
       if (res?.body) {
         const lawyer = res.body;
-        console.log(lawyer);
         setLawyerData({
           category_id: lawyer.category?.id,
           claim_status: lawyer.claim_status,
@@ -298,9 +298,7 @@ const Form = () => {
         setSelectedValue(firstLetters);
         const years = lawyer.case_numbers.map((item: any) => item.case_year);
 
-        setImages({
-          files: lawyer.files,
-        });
+        setExistingFiles(lawyer.files);
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
@@ -336,7 +334,6 @@ const Form = () => {
     e.preventDefault();
     setLoading1(false);
     const toYMD = (date) => new Date(date).toISOString().split("T")[0];
-
     // Prepare the request data in the correct format
     const requestData = {
       title: lawyerData?.title,
@@ -358,7 +355,7 @@ const Form = () => {
       details: lawyerData?.details,
       category_id: lawyerData?.category_id,
       defendants: oppositeParties,
-      files: images?.files.map((file) => file?.image_id), // Assuming files is an array of objects with image_id
+      files: fileIds, // Assuming files is an array of objects with image_id
       follow_up_reports: [], // Add your follow up reports if needed
       attendance_reports: [], // Add your attendance reports if needed
     };
@@ -709,11 +706,14 @@ const Form = () => {
               className="flex flex-col gap-2 w-full"
             >
               <Label>
-                <FileUploaderSingle
-                  imageType="files"
-                  id={images.files}
-                  onFileChange={handleImageChange}
-                />{" "}
+                <FileUploaderMultiple
+                  fileType="client_files"
+                  fileIds={fileIds}
+                  setFileIds={setFileIds}
+                  existingFiles={existingFiles}
+                  maxFiles={5}
+                  maxSizeMB={200}
+                />
               </Label>
             </motion.div>
 

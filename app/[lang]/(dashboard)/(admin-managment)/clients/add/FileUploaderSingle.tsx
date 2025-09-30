@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Upload, Loader2, X } from "lucide-react";
 import { useTranslate } from "@/config/useTranslation";
-import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { api } from "@/services/axios";
 
@@ -17,13 +16,13 @@ interface FileProgress {
   progress: number;
   error?: string;
   fileUrl?: string;
+  mediaId?: number;
 }
 
 interface FileUploaderMultipleProps {
   fileType: string;
-  fileIds: string[];
-  onFilesChange: (files: File[], fileType: string) => Promise<void>;
-  onFileRemove: (fileId: string, fileType: string) => Promise<void>;
+  fileIds: number[];
+  setFileIds: (ids: number[]) => Promise<void>;
   maxFiles?: number;
   maxSizeMB?: number;
   accept?: Record<string, string[]>;
@@ -32,8 +31,7 @@ interface FileUploaderMultipleProps {
 const FileUploaderMultiple = ({
   fileType,
   fileIds,
-  onFilesChange,
-  onFileRemove,
+  setFileIds,
   maxFiles = 15,
   maxSizeMB = 200,
   accept = { "*/*": [] },
@@ -41,7 +39,6 @@ const FileUploaderMultiple = ({
   const [fileProgresses, setFileProgresses] = useState<FileProgress[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const { t } = useTranslate();
-  const { lang } = useParams();
   const abortControllers = useRef<Map<string, AbortController>>(new Map());
 
   const MAX_FILE_SIZE_BYTES = maxSizeMB * 1024 * 1024;
@@ -57,31 +54,29 @@ const FileUploaderMultiple = ({
     return data;
   };
 
-  // ✅ Store file metadata (using form-data like curl)
   const storeFileMetadata = async (fileData: {
     file_url: string;
     file_name: string;
     collection_name: string;
     mime_type: string;
     size: number;
-  }): Promise<void> => {
-    // Create FormData object to match curl --form
+  }): Promise<{ media_id: number }> => {
     const formData = new FormData();
-
     formData.append("file_url", fileData.file_url);
     formData.append("file_name", fileData.file_name);
     formData.append("collection_name", fileData.collection_name);
     formData.append("mime_type", fileData.mime_type);
     formData.append("size", fileData.size.toString());
 
-    await api.post("/user/b2/store-meta", formData, {
+    const response = await api.post("/user/b2/store-meta", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Accept: "application/json",
-        // Authorization header will be automatically added by your api instance
       },
     });
+
+    return response.data;
   };
+
   const uploadFileToS3 = async (
     file: File,
     uploadUrl: string,
@@ -89,13 +84,6 @@ const FileUploaderMultiple = ({
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-
-      console.log("Uploading file as binary data:", {
-        name: file.name,
-        type: file.type,
-        size: file.size + " bytes",
-        uploadUrl: uploadUrl,
-      });
 
       xhr.upload.addEventListener("progress", (event) => {
         if (event.lengthComputable && onProgress) {
@@ -106,10 +94,7 @@ const FileUploaderMultiple = ({
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-          console.log("Upload response status:", xhr.status, xhr.statusText);
-
           if (xhr.status >= 200 && xhr.status < 300) {
-            console.log("Binary upload successful");
             resolve();
           } else {
             reject(
@@ -123,64 +108,49 @@ const FileUploaderMultiple = ({
         reject(new Error("Network error occurred"));
       };
 
-      // Use PUT method
       xhr.open("PUT", uploadUrl, true);
-
-      // Try without Content-Type first
       xhr.send(file);
     });
   };
-  // Main upload function
+
   const uploadFile = async (
     file: File,
     fileId: string,
     onProgress?: (progress: number) => void,
     signal?: AbortSignal
-  ): Promise<{ file: File; fileUrl: string }> => {
-    try {
-      // Step 1: Get presigned URL - FIXED: Use fileType instead of file.type
-      const presignedData = await getPresignedUrl(file.name, fileType);
+  ): Promise<{ mediaId: number }> => {
+    // Step 1: Get presigned URL
+    const presignedData = await getPresignedUrl(file.name, fileType);
 
-      if (signal?.aborted) {
-        throw new DOMException("تم إلغاء الرفع", "AbortError");
-      }
-
-      // Step 2: Upload to S3 using PUT request
-      await uploadFileToS3(file, presignedData.upload_url, onProgress);
-
-      if (signal?.aborted) {
-        throw new DOMException("تم إلغاء الرفع", "AbortError");
-      }
-
-      // Step 3: Store file metadata
-      await storeFileMetadata({
-        file_url: presignedData.file_url,
-        file_name: file.name,
-        collection_name: fileType,
-        mime_type: file.type,
-        size: file.size,
-      });
-      return {
-        file,
-        fileUrl: presignedData.file_url,
-      };
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        throw error;
-      }
-      throw new Error(
-        `Upload failed: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+    if (signal?.aborted) {
+      throw new DOMException("تم إلغاء الرفع", "AbortError");
     }
+
+    // Step 2: Upload to S3
+    await uploadFileToS3(file, presignedData.upload_url, onProgress);
+
+    if (signal?.aborted) {
+      throw new DOMException("تم إلغاء الرفع", "AbortError");
+    }
+
+    // Step 3: Store file metadata and get media_id
+    const metaResponse = await storeFileMetadata({
+      file_url: presignedData.file_url,
+      file_name: file.name,
+      collection_name: fileType,
+      mime_type: file.type,
+      size: file.size,
+    });
+
+    return {
+      mediaId: metaResponse.media_id,
+    };
   };
 
-  // Process files in parallel
   const processFilesInParallel = async (
     files: File[],
     newFileProgresses: FileProgress[]
-  ): Promise<File[]> => {
+  ): Promise<number[]> => {
     const uploadPromises = files.map(async (file, index) => {
       const fileId = newFileProgresses[index].id;
       const abortController = new AbortController();
@@ -215,20 +185,18 @@ const FileUploaderMultiple = ({
                   ...fp,
                   status: "completed",
                   progress: 100,
-                  fileUrl: result.fileUrl,
+                  mediaId: result.mediaId,
                 }
               : fp
           )
         );
 
-        return result.file;
+        return result.mediaId;
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") {
-          console.log(`تم إلغاء الرفع لـ ${file.name}`);
           setFileProgresses((prev) => prev.filter((fp) => fp.id !== fileId));
           throw error;
         } else {
-          console.error("Error uploading file:", error);
           setFileProgresses((prev) =>
             prev.map((fp) =>
               fp.id === fileId
@@ -247,26 +215,16 @@ const FileUploaderMultiple = ({
       }
     });
 
-    try {
-      const results = await Promise.allSettled(uploadPromises);
-      const successfulFiles: File[] = [];
+    const results = await Promise.allSettled(uploadPromises);
+    const successfulMediaIds: number[] = [];
 
-      results.forEach((result, index) => {
-        if (result.status === "fulfilled") {
-          successfulFiles.push(result.value);
-        } else {
-          console.error(
-            `Failed to upload file: ${files[index].name}`,
-            result.reason
-          );
-        }
-      });
+    results.forEach((result) => {
+      if (result.status === "fulfilled") {
+        successfulMediaIds.push(result.value);
+      }
+    });
 
-      return successfulFiles;
-    } catch (error) {
-      console.error("Error in parallel processing:", error);
-      return [];
-    }
+    return successfulMediaIds;
   };
 
   const onDrop = useCallback(
@@ -313,13 +271,15 @@ const FileUploaderMultiple = ({
       setFileProgresses((prev) => [...prev, ...newFileProgresses]);
 
       try {
-        const uploadedFiles = await processFilesInParallel(
+        const successfulMediaIds = await processFilesInParallel(
           acceptedFiles,
           newFileProgresses
         );
 
-        if (uploadedFiles.length > 0) {
-          await onFilesChange(uploadedFiles, fileType);
+        if (successfulMediaIds.length > 0) {
+          // Add new media IDs to parent fileIds
+          const updatedFileIds = [...fileIds, ...successfulMediaIds];
+          await setFileIds(updatedFileIds);
           toast.success(t("تم رفع الملفات بنجاح"));
         } else {
           toast.error(t("فشل رفع جميع الملفات"));
@@ -331,7 +291,7 @@ const FileUploaderMultiple = ({
         setIsProcessing(false);
       }
     },
-    [fileProgresses.length, maxFiles, onFilesChange, fileType, t, maxSizeMB]
+    [fileProgresses.length, maxFiles, fileIds, setFileIds, t, maxSizeMB]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -371,27 +331,27 @@ const FileUploaderMultiple = ({
     }
   };
 
-  const handleRemoveFile = async (
-    fileId: string,
-    fileIndex: number,
-    e: React.MouseEvent
-  ) => {
+  const handleRemoveFile = async (fileId: string, e: React.MouseEvent) => {
     e.stopPropagation();
 
     const fileProgress = fileProgresses.find((fp) => fp.id === fileId);
     if (!fileProgress) return;
 
+    // If uploading, abort the upload
     if (fileProgress.status === "uploading") {
       const controller = abortControllers.current.get(fileId);
       if (controller) {
         controller.abort();
       }
-      return;
     }
 
-    if (fileIndex < fileIds.length) {
+    // If completed and has mediaId, remove from parent fileIds
+    if (fileProgress.status === "completed" && fileProgress.mediaId) {
       try {
-        await onFileRemove(fileIds[fileIndex], fileType);
+        const updatedFileIds = fileIds.filter(
+          (id) => id !== fileProgress.mediaId
+        );
+        await setFileIds(updatedFileIds);
         toast.success(t("تم إزالة الملف بنجاح"));
       } catch (error) {
         console.error("Error removing file:", error);
@@ -400,6 +360,7 @@ const FileUploaderMultiple = ({
       }
     }
 
+    // Remove from local state
     setFileProgresses((prev) => prev.filter((fp) => fp.id !== fileId));
   };
 
@@ -410,10 +371,6 @@ const FileUploaderMultiple = ({
       return `${(size / 1024).toFixed(1)} كيلوبايت`;
     }
     return `${size} بايت`;
-  };
-
-  const getFileExtension = (fileName: string) => {
-    return fileName.split(".").pop()?.toUpperCase() || "ملف";
   };
 
   const getStatusColor = (status: string) => {
@@ -499,9 +456,6 @@ const FileUploaderMultiple = ({
                 ? t("تم الوصول إلى الحد الأقصى للملفات")
                 : t("اسحب وأسقط الملفات أو انقر للتصفح")}
             </span>
-            <span className="text-sm text-muted-foreground">
-              {t("يدعم أنواع ملفات مختلفة")}
-            </span>
           </div>
           <Button
             type="button"
@@ -520,7 +474,7 @@ const FileUploaderMultiple = ({
             {t("الملفات")} ({fileProgresses.length}/{maxFiles})
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {fileProgresses.map((fileProgress, index) => (
+            {fileProgresses.map((fileProgress) => (
               <div
                 key={fileProgress.id}
                 className="flex items-center justify-between border rounded-md p-3 gap-3 hover:bg-muted/50 transition-colors"
@@ -538,9 +492,6 @@ const FileUploaderMultiple = ({
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{formatFileSize(fileProgress.file.size)}</span>
-                      <span className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                        {getFileExtension(fileProgress.file.name)}
-                      </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       {getStatusIcon(fileProgress.status)}
@@ -560,24 +511,15 @@ const FileUploaderMultiple = ({
                             />
                           </div>
                           <span className="text-xs text-muted-foreground">
-                            {fileProgress.progress}%
+                            {Math.round(fileProgress.progress)}%
                           </span>
                         </div>
                       )}
-                      {fileProgress.error && (
-                        <span className="text-xs text-red-500 truncate">
-                          {fileProgress.error}
+                      {fileProgress.mediaId && (
+                        <span className="text-xs text-blue-500">
+                          ID: {fileProgress.mediaId}
                         </span>
                       )}
-                      {fileProgress.fileUrl &&
-                        fileProgress.status === "completed" && (
-                          <span
-                            className="text-xs text-green-500 truncate"
-                            title={fileProgress.fileUrl}
-                          >
-                            ✓ تم التخزين
-                          </span>
-                        )}
                     </div>
                   </div>
                 </div>
@@ -585,7 +527,7 @@ const FileUploaderMultiple = ({
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 flex-shrink-0"
-                  onClick={(e) => handleRemoveFile(fileProgress.id, index, e)}
+                  onClick={(e) => handleRemoveFile(fileProgress.id, e)}
                 >
                   <X className="h-4 w-4" />
                 </Button>

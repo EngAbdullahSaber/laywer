@@ -69,52 +69,12 @@ const Form = () => {
       [name]: value,
     }));
   };
-
   // Handle select change
   const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
     }));
-  };
-
-  const handleFilesChange = async (files: File[], fileType: string) => {
-    setIsUploading(true);
-
-    try {
-      // Upload each file sequentially to avoid overloading the server
-      const newFileIds: string[] = [];
-
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append("image", file);
-
-        const res = await UploadImage(formData, lang);
-        if (res && res.body && res.body.image_id) {
-          newFileIds.push(res.body.image_id);
-          reToast.success(`${file.name} uploaded successfully`);
-        } else {
-          reToast.error(`Failed to upload ${file.name}`);
-        }
-      }
-
-      setFileIds((prev) => [...prev, ...newFileIds]);
-    } catch (error) {
-      console.error("Error uploading files:", error);
-      reToast.error(t("Failed to upload files"));
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleFileRemove = async (fileId: string, fileType: string) => {
-    try {
-      await RemoveImage(fileId, lang);
-      setFileIds((prev) => prev.filter((id) => id !== fileId));
-    } catch (error) {
-      console.error("Error removing file:", error);
-      throw error; // Re-throw to be handled by the component
-    }
   };
 
   const generateStrongPassword = (): string => {
@@ -332,8 +292,7 @@ const Form = () => {
               <FileUploaderMultiple
                 fileType="client_files"
                 fileIds={fileIds}
-                onFilesChange={handleFilesChange}
-                onFileRemove={handleFileRemove}
+                setFileIds={setFileIds}
                 maxFiles={15}
                 maxSizeMB={200}
                 compressImages={true}

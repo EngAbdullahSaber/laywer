@@ -21,9 +21,9 @@ import InfiniteScrollSelect from "./InfiniteScrollSelect";
 import { getClientsPanigation } from "@/services/clients/clients";
 import { UpdateTransaction } from "@/services/transaction/transaction";
 import { UploadImage } from "@/services/auth/auth";
-import FileUploaderMultiple from "./FileUploaderMultiple";
 import { Icon } from "@iconify/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import FileUploaderMultiple from "../clients/[clientsId]/edit/FileUploaderMultiple";
 
 interface ErrorResponse {
   errors: {
@@ -62,7 +62,8 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
   const [uploading, setUploading] = useState(false);
   const { lang } = useParams();
   const [images, setImages] = useState<string[]>([]);
-
+  const [fileIds, setFileIds] = useState<number[]>([]);
+  const [existingFiles, setExistingFiles] = useState<any[]>([]);
   const [transactionData, setTransactionData] = useState<TransactionData>({
     client_name: "",
     status: "",
@@ -87,6 +88,7 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       // Set existing image IDs if available
       if (row.original?.files) {
         setImages(row?.original?.files?.map((att: any) => att.image_id));
+        setExistingFiles(row?.original?.files || []);
       }
     }
   }, [row]);
@@ -132,32 +134,6 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       ),
     }));
   };
-  const handleImageChange = useCallback(
-    async (file: File) => {
-      setUploading(true);
-      const formData = new FormData();
-      formData.append("image", file);
-
-      try {
-        const res = await UploadImage(formData, lang as string);
-        if (res?.body?.image_id) {
-          setImages((prev) => [...prev, res.body.image_id]);
-          reToast.success(res.message);
-        } else {
-          reToast.error(t("Failed to upload image"));
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError<ErrorResponse>;
-        const errorMessage = axiosError.response?.data?.errors
-          ? Object.values(axiosError.response.data.errors)[0][0]
-          : t("Something went wrong");
-        reToast.error(errorMessage);
-      } finally {
-        setUploading(false);
-      }
-    },
-    [lang, t]
-  );
 
   const handleClientChange = (value: string) => {
     setTransactionData((prev) => ({
@@ -208,10 +184,10 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
       });
 
       // Append image IDs
-      images.forEach((id, index) => {
-        formData.append(`attachments[${index}]`, id);
-      });
 
+      fileIds.forEach((fileId, index) => {
+        formData.append(`attachments[${index}]`, fileId);
+      });
       const res = await UpdateTransaction(
         formData,
         row.original.id,
@@ -416,8 +392,12 @@ const UpdateTransactionComponent: React.FC<UpdateTransactionProps> = ({
                 >
                   <Label>{t("Attachments")}</Label>
                   <FileUploaderMultiple
-                    files={images}
-                    onFileChange={handleImageChange}
+                    fileType="transaction_files"
+                    fileIds={fileIds}
+                    setFileIds={setFileIds}
+                    existingFiles={existingFiles}
+                    maxFiles={5}
+                    maxSizeMB={200}
                   />
                 </motion.div>
               </div>

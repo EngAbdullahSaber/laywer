@@ -9,24 +9,14 @@ import BasicSelect from "@/components/common/Select/BasicSelect";
 import { motion } from "framer-motion";
 import { toast as reToast } from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ImageUploader from "./ImageUploader";
 import CreateLawyerCategory from "../../../(category-mangement)/lawyer-category/CreateLawyerCategory";
 import { getCategory } from "@/services/category/category";
 import { AxiosError } from "axios";
 import { CreateLawyer } from "@/services/lawyer/lawyer";
-import { UploadImage } from "@/services/auth/auth";
 import { CleaveInput } from "@/components/ui/cleave";
-import { Auth } from "@/components/auth/Auth";
-import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import FileUploaderSingle from "./ImageUploader";
 
 interface ErrorResponse {
   errors: {
@@ -34,7 +24,7 @@ interface ErrorResponse {
   };
 }
 
-interface LaywerData {
+interface LawyerData {
   name: string;
   phone: string;
   driving_licence_number: string;
@@ -70,14 +60,14 @@ const FormContentWithAnimations = React.memo(
     lawyerData,
     handleInputChange,
     handleSelectChange,
-    handleImageChange,
+    handleFileIdChange,
     handleSubmit,
     loading,
     t,
     transformedCategories,
     setFlag,
     flag,
-    images,
+    fileIds,
   }: any) => (
     <div>
       <Card>
@@ -85,7 +75,6 @@ const FormContentWithAnimations = React.memo(
           <CardTitle>{t("Create a New Lawyer")}</CardTitle>
         </CardHeader>
         <ScrollArea>
-          {" "}
           <CardContent>
             <motion.div
               variants={staggerChildren}
@@ -155,7 +144,7 @@ const FormContentWithAnimations = React.memo(
                       </Label>
                       <BasicSelect
                         menu={transformedCategories}
-                        setSelectedValue={(value) => handleSelectChange(value)}
+                        setSelectedValue={handleSelectChange}
                         selectedValue={lawyerData["category_id"]}
                       />
                     </div>
@@ -205,10 +194,14 @@ const FormContentWithAnimations = React.memo(
                   className="flex flex-col gap-2 w-full sm:w-[48%]"
                 >
                   <Label>{t("Licensing photo")}</Label>
-                  <ImageUploader
-                    imageType="driving_licence"
-                    id={images.driving_licence}
-                    onFileChange={handleImageChange}
+                  <FileUploaderSingle
+                    fileType="driving_licence"
+                    fileId={fileIds.driving_licence}
+                    setFileId={(id) =>
+                      handleFileIdChange(id, "driving_licence")
+                    }
+                    maxSizeMB={10}
+                    accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
                 <motion.div
@@ -216,10 +209,12 @@ const FormContentWithAnimations = React.memo(
                   className="flex flex-col gap-2 w-full sm:w-[48%]"
                 >
                   <Label>{t("licence photo")}</Label>
-                  <ImageUploader
-                    imageType="lawyer_licence"
-                    id={images.lawyer_licence}
-                    onFileChange={handleImageChange}
+                  <FileUploaderSingle
+                    fileType="lawyer_licence"
+                    fileId={fileIds.lawyer_licence}
+                    setFileId={(id) => handleFileIdChange(id, "lawyer_licence")}
+                    maxSizeMB={10}
+                    accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
                 <motion.div
@@ -227,10 +222,14 @@ const FormContentWithAnimations = React.memo(
                   className="flex flex-col gap-2 w-full sm:w-[48%]"
                 >
                   <Label>{t("Membership photo")}</Label>
-                  <ImageUploader
-                    imageType="subscription_image"
-                    id={images.subscription_image}
-                    onFileChange={handleImageChange}
+                  <FileUploaderSingle
+                    fileType="subscription_image"
+                    fileId={fileIds.subscription_image}
+                    setFileId={(id) =>
+                      handleFileIdChange(id, "subscription_image")
+                    }
+                    maxSizeMB={10}
+                    accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
                 <motion.div
@@ -238,10 +237,14 @@ const FormContentWithAnimations = React.memo(
                   className="flex flex-col gap-2 w-full sm:w-[48%]"
                 >
                   <Label>{t("ID photo")}</Label>
-                  <ImageUploader
-                    imageType="national_id_image"
-                    id={images.national_id_image}
-                    onFileChange={handleImageChange}
+                  <FileUploaderSingle
+                    fileType="national_id_image"
+                    fileId={fileIds.national_id_image}
+                    setFileId={(id) =>
+                      handleFileIdChange(id, "national_id_image")
+                    }
+                    maxSizeMB={10}
+                    accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
               </div>
@@ -255,7 +258,7 @@ const FormContentWithAnimations = React.memo(
                   onClick={handleSubmit}
                   className="w-32 !bg-[#dfc77d] px-2 hover:!bg-[#fef0be] text-black"
                 >
-                  {!loading ? t("Loading") : t("Create Lawyer")}
+                  {loading ? t("Create Lawyer") : t("Loading")}
                 </Button>
               </motion.div>
             </motion.div>
@@ -274,17 +277,17 @@ const FormContentWithoutAnimations = React.memo(
     lawyerData,
     handleInputChange,
     handleSelectChange,
-    handleImageChange,
+    handleFileIdChange,
     handleSubmit,
     loading,
     t,
     transformedCategories,
     setFlag,
     flag,
-    images,
+    fileIds,
   }: any) => (
     <div>
-      <Card>
+      <Card className="shadow-none">
         <CardHeader>
           <CardTitle>{t("Create a New Lawyer")}</CardTitle>
         </CardHeader>
@@ -338,7 +341,7 @@ const FormContentWithoutAnimations = React.memo(
                     </Label>
                     <BasicSelect
                       menu={transformedCategories}
-                      setSelectedValue={(value) => handleSelectChange(value)}
+                      setSelectedValue={handleSelectChange}
                       selectedValue={lawyerData["category_id"]}
                     />
                   </div>
@@ -377,34 +380,46 @@ const FormContentWithoutAnimations = React.memo(
             <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between items-center gap-4">
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
                 <Label>{t("Licensing photo")}</Label>
-                <ImageUploader
-                  imageType="driving_licence"
-                  id={images.driving_licence}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="driving_licence"
+                  fileId={fileIds.driving_licence}
+                  setFileId={(id) => handleFileIdChange(id, "driving_licence")}
+                  maxSizeMB={10}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
                 <Label>{t("licence photo")}</Label>
-                <ImageUploader
-                  imageType="lawyer_licence"
-                  id={images.lawyer_licence}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="lawyer_licence"
+                  fileId={fileIds.lawyer_licence}
+                  setFileId={(id) => handleFileIdChange(id, "lawyer_licence")}
+                  maxSizeMB={10}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
                 <Label>{t("Membership photo")}</Label>
-                <ImageUploader
-                  imageType="subscription_image"
-                  id={images.subscription_image}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="subscription_image"
+                  fileId={fileIds.subscription_image}
+                  setFileId={(id) =>
+                    handleFileIdChange(id, "subscription_image")
+                  }
+                  maxSizeMB={10}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
                 <Label>{t("ID photo")}</Label>
-                <ImageUploader
-                  imageType="national_id_image"
-                  id={images.national_id_image}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="national_id_image"
+                  fileId={fileIds.national_id_image}
+                  setFileId={(id) =>
+                    handleFileIdChange(id, "national_id_image")
+                  }
+                  maxSizeMB={10}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>
             </div>
@@ -415,7 +430,7 @@ const FormContentWithoutAnimations = React.memo(
                 onClick={handleSubmit}
                 className="w-32 !bg-[#dfc77d] px-2 hover:!bg-[#fef0be] text-black"
               >
-                {!loading ? t("Loading") : t("Create Lawyer")}
+                {loading ? t("Create Lawyer") : t("Loading")}
               </Button>
             </div>
           </div>
@@ -435,11 +450,9 @@ const LawyerForm = ({
   const [category, setCategory] = useState<any[]>([]);
   const [flag, setFlag] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any>([]);
-  const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
   const router = useRouter();
 
-  const [lawyerData, setLawyerData] = useState<LaywerData>({
+  const [lawyerData, setLawyerData] = useState<LawyerData>({
     name: "",
     phone: "",
     driving_licence_number: "",
@@ -453,11 +466,11 @@ const LawyerForm = ({
   const { t } = useTranslate();
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [images, setImages] = useState<{
-    lawyer_licence: File | null;
-    driving_licence: File | null;
-    national_id_image: File | null;
-    subscription_image: File | null;
+  const [fileIds, setFileIds] = useState<{
+    lawyer_licence: number | null;
+    driving_licence: number | null;
+    national_id_image: number | null;
+    subscription_image: number | null;
   }>({
     lawyer_licence: null,
     driving_licence: null,
@@ -485,33 +498,15 @@ const LawyerForm = ({
     }));
   }, []);
 
-  const handleImageChange = useCallback(
-    async (file: File, imageType: keyof typeof images) => {
-      setLoading(false);
-      const formData = new FormData();
-      formData.append("image", file);
-      try {
-        const res = await UploadImage(formData, lang); // Call API to create the lawyer
-        if (res) {
-          // Reset data after successful creation
-          setImages((prevState) => ({
-            ...prevState,
-            [imageType]: res.body.image_id,
-          }));
-          reToast.success(res.message); // Display success message
-          setLoading(true);
-        } else {
-          reToast.error(t("Failed to create upload image")); // Show a fallback failure message
-          setLoading(true);
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError<ErrorResponse>;
-        let errorMessage = "Something went wrong."; // Default fallback message
-        reToast.error(errorMessage); // Display the error message in the toast
-        setLoading(true);
-      }
+  // Handle file ID change
+  const handleFileIdChange = useCallback(
+    async (fileId: number | null, fileType: keyof typeof fileIds) => {
+      setFileIds((prev) => ({
+        ...prev,
+        [fileType]: fileId,
+      }));
     },
-    [lang, t]
+    []
   );
 
   const generateStrongPassword = useCallback((): string => {
@@ -548,32 +543,40 @@ const LawyerForm = ({
 
       const formData = new FormData();
 
-      // Append images if they exist
-      if (images.national_id_image) {
-        formData.append("national_id_image", images.national_id_image);
+      // Append file IDs if they exist
+      if (fileIds.national_id_image) {
+        formData.append(
+          "national_id_image",
+          fileIds.national_id_image.toString()
+        );
       }
-      if (images.driving_licence) {
-        formData.append("driving_licence", images.driving_licence);
+      if (fileIds.driving_licence) {
+        formData.append("driving_licence", fileIds.driving_licence.toString());
       }
-      if (images.subscription_image) {
-        formData.append("subscription_image", images.subscription_image);
+      if (fileIds.subscription_image) {
+        formData.append(
+          "subscription_image",
+          fileIds.subscription_image.toString()
+        );
       }
-      if (images.lawyer_licence) {
-        formData.append("lawyer_licence", images.lawyer_licence);
+      if (fileIds.lawyer_licence) {
+        formData.append("lawyer_licence", fileIds.lawyer_licence.toString());
       }
 
       // Append form data
       Object.entries(lawyerData).forEach(([key, value]) => {
-        if (key == "phone") {
+        if (key === "phone") {
           formData.append(key, value.replace("+", ""));
         } else {
           formData.append(key, value);
         }
       });
+
       const strongPassword = generateStrongPassword();
       formData.append("password", strongPassword);
+
       try {
-        const res = await CreateLawyer(formData, lang); // Call API to create the lawyer
+        const res = await CreateLawyer(formData, lang);
         if (res) {
           // Reset data after successful creation
           setLawyerData({
@@ -585,7 +588,7 @@ const LawyerForm = ({
             category_id: "",
             status: "active",
           });
-          setImages({
+          setFileIds({
             lawyer_licence: null,
             driving_licence: null,
             national_id_image: null,
@@ -593,7 +596,7 @@ const LawyerForm = ({
           });
           setLoading(true);
 
-          reToast.success(res.message); // Display success message
+          reToast.success(res.message);
 
           // Call onSuccess callback if provided
           if (onSuccess) {
@@ -607,13 +610,12 @@ const LawyerForm = ({
             router.back();
           }
         } else {
-          reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
+          reToast.error(t("Failed to create Lawyer"));
           setLoading(true);
         }
       } catch (error) {
         const axiosError = error as AxiosError<ErrorResponse>;
 
-        // Construct the dynamic key based on field names and the current language
         const fields = [
           "name",
           "phone",
@@ -628,25 +630,23 @@ const LawyerForm = ({
           "subscription_image",
         ];
 
-        let errorMessage = "Something went wrong."; // Default fallback message
+        let errorMessage = "Something went wrong.";
 
-        // Loop through the fields to find the corresponding error message
         for (let field of fields) {
-          const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+          const fieldErrorKey = `${field}`;
           const error = axiosError.response?.data?.errors?.[fieldErrorKey];
           if (error) {
-            errorMessage = error[0]; // Retrieve the first error message for the field
-            break; // Exit the loop once the error is found
+            errorMessage = error[0];
+            break;
           }
         }
 
-        // Show the error in a toast notification
-        reToast.error(errorMessage); // Display the error message in the toast
+        reToast.error(errorMessage);
         setLoading(true);
       }
     },
     [
-      images,
+      fileIds,
       lawyerData,
       generateStrongPassword,
       lang,
@@ -667,7 +667,9 @@ const LawyerForm = ({
     try {
       const countriesData = await getCategory("lawyer", lang);
       setCategory(countriesData?.body?.data || []);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   }, [lang]);
 
   useEffect(() => {
@@ -688,14 +690,14 @@ const LawyerForm = ({
             lawyerData={lawyerData}
             handleInputChange={handleInputChange}
             handleSelectChange={handleSelectChange}
-            handleImageChange={handleImageChange}
+            handleFileIdChange={handleFileIdChange}
             handleSubmit={handleSubmit}
             loading={loading}
             t={t}
             transformedCategories={transformedCategories}
             setFlag={setFlag}
             flag={flag}
-            images={images}
+            fileIds={fileIds}
           />
         </DialogContent>
       </Dialog>
@@ -708,14 +710,14 @@ const LawyerForm = ({
       lawyerData={lawyerData}
       handleInputChange={handleInputChange}
       handleSelectChange={handleSelectChange}
-      handleImageChange={handleImageChange}
+      handleFileIdChange={handleFileIdChange}
       handleSubmit={handleSubmit}
       loading={loading}
       t={t}
       transformedCategories={transformedCategories}
       setFlag={setFlag}
       flag={flag}
-      images={images}
+      fileIds={fileIds}
     />
   );
 };

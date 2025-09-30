@@ -6,8 +6,6 @@ import { useTranslate } from "@/config/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { motion } from "framer-motion";
-import FileUploaderMultiple from "./FileUploaderSingle";
 import { useParams } from "next/navigation";
 import { getCategory } from "@/services/category/category";
 import { toast as reToast } from "react-hot-toast";
@@ -16,10 +14,9 @@ import { getSpecifiedClient, UpdateClients } from "@/services/clients/clients";
 import { UploadImage } from "@/services/auth/auth";
 import CreateClientCategory from "@/app/[lang]/(dashboard)/(category-mangement)/client-category/CreateClientCategory";
 import { CleaveInput } from "@/components/ui/cleave";
-import { Auth } from "@/components/auth/Auth";
-import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
-import { clearAuthInfo } from "@/services/utils";
+
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import FileUploaderMultiple from "./FileUploaderMultiple";
 
 interface ErrorResponse {
   errors: {
@@ -53,11 +50,8 @@ const Form = () => {
     category_id: "",
     address: "",
   });
-  const [images, setImages] = useState<{
-    client_files: any; // Array of file IDs instead of a single file ID
-  }>({
-    client_files: [],
-  });
+  const [fileIds, setFileIds] = useState<number[]>([]);
+  const [existingFiles, setExistingFiles] = useState<any[]>([]);
   // Handle input change
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -78,22 +72,10 @@ const Form = () => {
         params.append(key, value);
       }
     });
-
     // Append images separately as form data for file uploads
-    if (Array.isArray(images.client_files) && images.client_files.length > 0) {
-      images.client_files.forEach((fileId, index) => {
-        if (
-          images.client_files &&
-          typeof images.client_files == "object" &&
-          images.client_files.image_id
-        ) {
-          params.append(
-            `client_files[${index}]`,
-            images.client_files[index].image_id
-          );
-        } else {
-          params.append(`client_files[${index}]`, fileId.image_id);
-        }
+    if (Array.isArray(fileIds) && fileIds.length > 0) {
+      fileIds.forEach((id, index) => {
+        params.append(`client_files[${index}]`, id.toString());
       });
     }
 
@@ -114,50 +96,19 @@ const Form = () => {
           category_id: res?.body?.category?.id,
           address: res?.body?.address,
         });
-        setImages({
-          client_files: res?.body?.client_files,
-        });
+        setExistingFiles(res?.body?.client_files);
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
     }
   };
+
   // Handle select change
   const handleSelectChange = (value: any) => {
     setLawyerData((prevData) => ({
       ...prevData,
       category_id: value?.id,
     }));
-  };
-
-  const handleImageChange = async (
-    file: File,
-    imageType: keyof typeof images
-  ) => {
-    setLoading(false);
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await UploadImage(formData, lang); // Call API to upload the image
-      if (res) {
-        // Append the image ID to the array of file IDs
-        setImages((prevState) => ({
-          ...prevState,
-          client_files: [...prevState.client_files, res.body.image_id],
-        }));
-        setLoading(true);
-
-        reToast.success(res.message); // Show success toast
-      } else {
-        reToast.error(t("Failed to upload image")); // Show failure toast
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
-      reToast.error(errorMessage); // Show error toast
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -172,7 +123,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
-        router.back();
+        // router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
       }
@@ -323,9 +274,12 @@ const Form = () => {
               <p className="my-4 font-bold">{t("Upload Files")}</p>
               <div className="flex flex-col gap-2 w-full">
                 <FileUploaderMultiple
-                  imageType="client_files"
-                  id={images.client_files}
-                  onFileChange={handleImageChange}
+                  fileType="client_files"
+                  fileIds={fileIds}
+                  setFileIds={setFileIds}
+                  existingFiles={existingFiles}
+                  maxFiles={5}
+                  maxSizeMB={200}
                 />
               </div>
               <hr className="my-3 w-full" />

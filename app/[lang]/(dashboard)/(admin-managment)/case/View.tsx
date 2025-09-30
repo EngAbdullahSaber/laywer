@@ -205,19 +205,31 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           />
           <DetailItem
             label={t("receive_date")}
-            value={casesData?.receive_date || "-"}
+            value={
+              new Date(casesData?.receive_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
           <DetailItem
             label={t("submit_date")}
-            value={casesData?.submit_date || "-"}
+            value={
+              new Date(casesData?.submit_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
           <DetailItem
             label={t("judgment_date")}
-            value={casesData?.judgment_date || "-"}
+            value={
+              new Date(casesData?.judgment_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
           <DetailItem
             label={t("session_date")}
-            value={casesData?.session_date || "-"}
+            value={
+              new Date(casesData?.session_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
 
           <DetailItem

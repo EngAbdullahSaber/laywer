@@ -613,8 +613,7 @@ const Form = () => {
               <FileUploaderMultiple
                 fileType="case_files"
                 fileIds={fileIds}
-                onFilesChange={handleFilesChange}
-                onFileRemove={handleFileRemove}
+                setFileIds={setFileIds}
                 maxFiles={15}
                 maxSizeMB={200}
                 compressImages={true}

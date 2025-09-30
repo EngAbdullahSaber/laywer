@@ -20,6 +20,7 @@ import {
   getSpecifiedArchievedCases,
   UpdateArchievedCases,
 } from "@/services/archieved-cases/archieved-cases";
+import FileUploaderMultiple from "../../../clients/[clientsId]/edit/FileUploaderMultiple";
 
 interface LawyerData {
   client_name: string;
@@ -55,6 +56,8 @@ const Form = () => {
     files: [],
   });
   const router = useRouter(); // ✅ initialize router
+  const [fileIds, setFileIds] = useState<number[]>([]);
+  const [existingFiles, setExistingFiles] = useState<any[]>([]);
 
   const Case_Status: { value: string; id: string; label: string }[] = [
     { value: "claimant", id: "claimant", label: "مدعي" },
@@ -181,10 +184,7 @@ const Form = () => {
           hearingDate: lawyer?.session_date,
         });
         setOppositeParties(lawyer?.defendants);
-
-        setImages({
-          files: lawyer.files,
-        });
+        setExistingFiles(lawyer.files);
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
@@ -216,7 +216,7 @@ const Form = () => {
       details: lawyerData?.details,
       categorcategoryy_id: lawyerData?.category,
       defendants: oppositeParties,
-      files: images?.files.map((file) => file?.image_id), // Assuming files is an array of objects with image_id
+      files: fileIds, // Assuming files is an array of objects with image_id
       follow_up_reports: [], // Add your follow up reports if needed
       attendance_reports: [], // Add your attendance reports if needed
     };
@@ -432,11 +432,14 @@ const Form = () => {
               className="flex flex-col gap-2 w-full"
             >
               <Label>
-                <FileUploaderSingle
-                  imageType="files"
-                  id={images.files}
-                  onFileChange={handleImageChange}
-                />{" "}
+                <FileUploaderMultiple
+                  fileType="client_files"
+                  fileIds={fileIds}
+                  setFileIds={setFileIds}
+                  existingFiles={existingFiles}
+                  maxFiles={5}
+                  maxSizeMB={200}
+                />
               </Label>
             </motion.div>
 

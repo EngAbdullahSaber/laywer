@@ -188,9 +188,7 @@ const FormContentWithAnimations = React.memo(
                     formatOption={formatCityOption}
                     placeholder={t("Search or Select a City")}
                     selectedValue={courtData.city_id}
-                    setSelectedValue={(value) =>
-                      handleCitySelectChange(value)
-                    }
+                    setSelectedValue={(value) => handleCitySelectChange(value)}
                   />
                 </motion.div>
               )}
@@ -238,7 +236,7 @@ const FormContentWithoutAnimations = React.memo(
     flag,
   }: any) => (
     <div>
-      <Card>
+      <Card className="shadow-none">
         <CardHeader>
           <CardTitle>{t("Create Court")}</CardTitle>
         </CardHeader>
@@ -317,9 +315,7 @@ const FormContentWithoutAnimations = React.memo(
                     formatOption={formatCityOption}
                     placeholder={t("Search or Select a City")}
                     selectedValue={courtData.city_id}
-                    setSelectedValue={(value) =>
-                      handleCitySelectChange(value)
-                    }
+                    setSelectedValue={(value) => handleCitySelectChange(value)}
                   />
                 </div>
               )}
@@ -528,9 +524,7 @@ const CourtForm = ({
           )}
         </DialogTrigger>
         <DialogContent className="min-w-[800px] h-auto overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{t("Create a New Court")}</DialogTitle>
-          </DialogHeader>
+          <DialogHeader></DialogHeader>
           <FormContentWithoutAnimations
             courtData={courtData}
             handleInputChange={handleInputChange}

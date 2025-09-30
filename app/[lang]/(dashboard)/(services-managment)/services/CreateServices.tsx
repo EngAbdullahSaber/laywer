@@ -19,24 +19,26 @@ import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast as reToast } from "react-hot-toast";
 import { AxiosError } from "axios";
-import { UploadImage } from "@/services/auth/auth";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useParams } from "next/navigation";
 import { CreateServices } from "@/services/services/services";
-import FileUploaderMultiple from "./FileUploaderSingle";
+import FileUploaderSingle from "../../(admin-managment)/lawyer/add/ImageUploader";
+
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
   };
 }
-interface LaywerData {
+
+interface ServiceData {
   titleEn: string;
   titleAr: string;
   descriptionEn: string;
   descriptionAr: string;
   price: string;
 }
-const CreateLawyerCategory = ({
+
+const CreateServicesComponent = ({
   buttonShape,
   setFlag,
   flag,
@@ -47,56 +49,40 @@ const CreateLawyerCategory = ({
 }) => {
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
-  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+  const [loading, setLoading] = useState(true);
 
-  const [lawyerData, setLawyerData] = useState<LaywerData>({
+  const [serviceData, setServiceData] = useState<ServiceData>({
     titleEn: "",
     titleAr: "",
     descriptionAr: "",
     descriptionEn: "",
     price: "",
   });
+
   const { lang } = useParams();
-  const [images, setImages] = useState<{
-    service_file: File | null;
+
+  const [fileIds, setFileIds] = useState<{
+    services_image: number | null;
   }>({
-    service_file: null,
+    services_image: null,
   });
 
-  const handleImageChange = async (
-    file: File,
-    imageType: keyof typeof images
-  ) => {
-    setIsloading(false);
-
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await UploadImage(formData, lang); // Call API to create the lawyer
-      if (res) {
-        setImages((prevState) => ({
-          ...prevState,
-          [imageType]: res.body.image_id,
-        }));
-        reToast.success(res.message); // Display success message
-        setIsloading(true);
-      } else {
-        reToast.error(t("Failed to create upload image")); // Show a fallback failure message
-        setIsloading(true);
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
-      reToast.error(errorMessage); // Display the error message in the toast
-      setIsloading(true);
-    }
-  };
+  // Handle file ID change
+  const handleFileIdChange = useCallback(
+    (fileId: number | null, fileType: keyof typeof fileIds) => {
+      setFileIds((prev) => ({
+        ...prev,
+        [fileType]: fileId,
+      }));
+    },
+    []
+  );
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setLawyerData((prevData) => ({
+    setServiceData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -104,44 +90,46 @@ const CreateLawyerCategory = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
+    setLoading(false);
 
     const data = {
       title: {
-        en: lawyerData.titleEn,
-        ar: lawyerData.titleAr,
+        en: serviceData.titleEn,
+        ar: serviceData.titleAr,
       },
       description: {
-        en: lawyerData.descriptionEn,
-        ar: lawyerData.descriptionAr,
+        en: serviceData.descriptionEn,
+        ar: serviceData.descriptionAr,
       },
-      price: lawyerData.price,
-      service_file: images.service_file,
+      price: serviceData.price,
+      service_file: fileIds.services_image, // Use the file ID directly
     };
+
     try {
-      const res = await CreateServices(data, lang); // Call API to create the lawyer
+      const res = await CreateServices(data, lang);
       if (res) {
         // Reset data after successful creation
-        setLawyerData({
+        setServiceData({
           titleEn: "",
           titleAr: "",
           descriptionAr: "",
           descriptionEn: "",
           price: "",
         });
-        setImages({
-          service_file: null,
+        setFileIds({
+          services_image: null,
         });
-        reToast.success(res.message); // Display success message
+        reToast.success(res.message);
         setFlag(!flag);
-        setOpen(false); // Close the modal after success
+        setOpen(false);
+        setLoading(true);
       } else {
-        reToast.error(t("Failed to create services")); // Show a fallback failure message
+        reToast.error(t("Failed to create services"));
+        setLoading(true);
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
 
-      // Construct the dynamic key based on field names and the current language
       const fields = [
         "title.ar",
         "title.en",
@@ -151,37 +139,35 @@ const CreateLawyerCategory = ({
         "price",
       ];
 
-      let errorMessage = "Something went wrong."; // Default fallback message
+      let errorMessage = "Something went wrong.";
 
-      // Loop through the fields to find the corresponding error message
       for (let field of fields) {
-        const fieldErrorKey = `${field}`; // Construct key like "name.en" or "name.ar"
+        const fieldErrorKey = `${field}`;
         const error = axiosError.response?.data?.errors?.[fieldErrorKey];
         if (error) {
-          errorMessage = error[0]; // Retrieve the first error message for the field
-          break; // Exit the loop once the error is found
+          errorMessage = error[0];
+          break;
         }
       }
 
-      // Show the error in a toast notification
-      reToast.error(errorMessage); // Display the error message in the toast
+      reToast.error(errorMessage);
+      setLoading(true);
     }
   };
 
   const handleOpen = () => {
     setOpen(!open);
   };
+
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {buttonShape ? (
-          <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-            {" "}
+          <Button className="!bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
             {t("Create Services")}
           </Button>
         ) : (
-          <Button size="icon" className=" h-7 w-7 bg-transparent">
-            {" "}
+          <Button size="icon" className="h-7 w-7 bg-transparent">
             <Icon icon="gg:add" width="24" height="24" color="#dfc77d" />
           </Button>
         )}
@@ -194,7 +180,6 @@ const CreateLawyerCategory = ({
         </DialogHeader>
         <div>
           <form onSubmit={handleSubmit}>
-            {" "}
             <ScrollArea className="h-full">
               <Tabs
                 defaultValue={lang == "en" ? "English" : "Arabic"}
@@ -205,18 +190,18 @@ const CreateLawyerCategory = ({
                   <TabsTrigger value="Arabic">{t("Arabic")}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="Arabic">
-                  <div className="sm:grid grid-cols-2   sm:gap-5 space-y-4 sm:space-y-0">
+                  <div className="sm:grid grid-cols-2 sm:gap-5 space-y-4 sm:space-y-0">
                     <motion.div
                       initial={{ y: -20 }}
                       whileInView={{ y: 0 }}
                       transition={{ duration: 1.7 }}
                       className="flex flex-col gap-2"
                     >
-                      <Label htmlFor="Name">{t("Services Name")}</Label>
+                      <Label htmlFor="titleAr">{t("Services Name")}</Label>
                       <Input
-                        id="Name"
+                        id="titleAr"
                         type="text"
-                        value={lawyerData.titleAr}
+                        value={serviceData.titleAr}
                         placeholder={t("Enter Services Name")}
                         name="titleAr"
                         onChange={handleInputChange}
@@ -228,34 +213,34 @@ const CreateLawyerCategory = ({
                       transition={{ duration: 1.7 }}
                       className="flex flex-col gap-2"
                     >
-                      <Label htmlFor="Price">{t("Price")}</Label>
+                      <Label htmlFor="price">{t("Price")}</Label>
                       <Input
-                        id="Price"
+                        id="price"
                         type="number"
-                        value={lawyerData.price}
+                        value={serviceData.price}
                         placeholder={t("Enter Price")}
                         name="price"
                         onChange={handleInputChange}
                       />
                     </motion.div>
                   </div>
-                  <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
+                  <div className="sm:grid sm:gap-5 space-y-4 sm:space-y-0 mt-4">
                     <motion.div
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       transition={{ duration: 1.7 }}
                       className="flex flex-col gap-2"
                     >
-                      <Label htmlFor="Description">
+                      <Label htmlFor="descriptionAr">
                         {t("Services Description")}
                       </Label>
                       <Textarea
-                        id="Description"
+                        id="descriptionAr"
                         placeholder={t("Type Here")}
-                        value={lawyerData.descriptionAr}
+                        value={serviceData.descriptionAr}
                         rows={3}
                         name="descriptionAr"
-                        onChange={(e) => handleInputChange(e)}
+                        onChange={handleInputChange}
                       />
                     </motion.div>
                     <motion.div
@@ -265,53 +250,73 @@ const CreateLawyerCategory = ({
                       className="flex flex-col gap-2"
                     >
                       <Label>{t("services image")}</Label>
-                      <FileUploaderMultiple
-                        imageType="service_file"
-                        id={images.service_file}
-                        onFileChange={handleImageChange}
+                      <FileUploaderSingle
+                        fileType="services_image"
+                        fileId={fileIds.services_image}
+                        setFileId={(id) =>
+                          handleFileIdChange(id, "services_image")
+                        }
+                        maxSizeMB={10}
+                        accept={{
+                          "image/*": [".png", ".jpg", ".jpeg", ".pdf"],
+                        }}
                       />
                     </motion.div>
                   </div>
                 </TabsContent>
                 <TabsContent value="English">
-                  {" "}
-                  <div className="sm:grid   sm:gap-5 space-y-4 sm:space-y-0">
+                  <div className="sm:grid sm:gap-5 space-y-4 sm:space-y-0">
                     <motion.div
                       initial={{ y: -20 }}
                       whileInView={{ y: 0 }}
                       transition={{ duration: 1.7 }}
                       className="flex flex-col gap-2"
                     >
-                      <Label htmlFor="Name">{t("Services Name")}</Label>
+                      <Label htmlFor="titleEn">{t("Services Name")}</Label>
                       <Input
-                        id="Name"
+                        id="titleEn"
                         type="text"
                         placeholder={t("Enter Services Name")}
-                        value={lawyerData.titleEn}
+                        value={serviceData.titleEn}
                         name="titleEn"
                         onChange={handleInputChange}
                       />
                     </motion.div>
-
+                    <motion.div
+                      initial={{ y: -20 }}
+                      whileInView={{ y: 0 }}
+                      transition={{ duration: 1.7 }}
+                      className="flex flex-col gap-2"
+                    >
+                      <Label htmlFor="priceEn">{t("Price")}</Label>
+                      <Input
+                        id="priceEn"
+                        type="number"
+                        value={serviceData.price}
+                        placeholder={t("Enter Price")}
+                        name="price"
+                        onChange={handleInputChange}
+                      />
+                    </motion.div>
                     <motion.div
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       transition={{ duration: 1.7 }}
                       className="flex flex-col gap-2"
                     >
-                      <Label htmlFor="Description">
+                      <Label htmlFor="descriptionEn">
                         {t("Services Description")}
                       </Label>
                       <Textarea
-                        value={lawyerData.descriptionEn}
-                        id="Description"
+                        value={serviceData.descriptionEn}
+                        id="descriptionEn"
                         placeholder={t("Type Here")}
                         rows={3}
                         name="descriptionEn"
-                        onChange={(e) => handleInputChange(e)}
+                        onChange={handleInputChange}
                       />
                     </motion.div>
-                  </div>{" "}
+                  </div>
                 </TabsContent>
               </Tabs>
             </ScrollArea>
@@ -319,12 +324,12 @@ const CreateLawyerCategory = ({
               initial={{ y: 20 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1.7 }}
-              className=" flex justify-center gap-3 mt-4"
+              className="flex justify-center gap-3 mt-4"
             >
               <DialogClose asChild>
                 <Button
                   type="button"
-                  className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000]  hover:text-[#000]  hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
+                  className="w-28 border-[#dfc77d] dark:text-[#fff] dark:hover:bg-[#dfc77d] dark:hover:text-[#000] hover:text-[#000] hover:!bg-[#dfc77d] hover:!border-[#dfc77d] text-black"
                   variant="outline"
                 >
                   {t("Cancel")}
@@ -333,9 +338,9 @@ const CreateLawyerCategory = ({
               <Button
                 type="submit"
                 disabled={!loading}
-                className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
+                className="w-28 !bg-[#dfc77d] hover:!bg-[#fef0be] text-black"
               >
-                {!loading ? t("Loading") : t("Create Services")}
+                {loading ? t("Create Services") : t("Loading")}
               </Button>
             </motion.div>
           </form>
@@ -345,4 +350,4 @@ const CreateLawyerCategory = ({
   );
 };
 
-export default CreateLawyerCategory;
+export default CreateServicesComponent;
