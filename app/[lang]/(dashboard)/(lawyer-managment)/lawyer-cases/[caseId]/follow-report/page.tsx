@@ -12,11 +12,12 @@ import { CleaveInput } from "@/components/ui/cleave";
 import ControlledRadio from "./ControlledRadio";
 import { getSpecifiedCases } from "@/services/cases/cases";
 import { useParams } from "next/navigation";
-import { UploadImage } from "@/services/auth/auth";
+import { api } from "@/services/axios";
 import { AxiosError } from "axios";
 import { toast as reToast } from "react-hot-toast";
 import { Auth } from "@/components/auth/Auth";
 import { UpdateCases } from "@/services/lawyer-cases/lawyer-cases";
+import html2pdf from "html2pdf.js";
 
 interface ErrorResponse {
   errors: {
@@ -26,7 +27,7 @@ interface ErrorResponse {
 }
 
 const CaseFollowReport = () => {
-  const [selected, setSelected] = useState("There is no appointment");
+  const [selected, setSelected] = useState("لا يوجد موعد");
   const [caseName, setCaseName] = useState("");
   const [caseLocation, setCaseLocation] = useState("");
   const [caseNumber, setCaseNumber] = useState("");
@@ -42,28 +43,168 @@ const CaseFollowReport = () => {
   const [whatShouldBeDone, setWhatShouldBeDone] = useState("");
   const [fileId, setFileId] = useState("");
   const [data, setData] = useState<any>([]);
-  const [loading, setIsloading] = useState(true); // State to control dialog visibility
+  const [loading, setIsloading] = useState(true);
 
   const { lang, caseId } = useParams();
 
   const getCasesData = async () => {
     try {
       const res = await getSpecifiedCases(lang, caseId);
-
       setData(res?.body || []);
       setCaseName(res?.body?.title);
       setCaseNumber(res?.body?.main_case_number);
-
       setPlaintiffName(res?.body?.client?.name);
-
       setDefendantName(res?.body?.defendants);
     } catch (error) {
       console.error("Error fetching data", error);
     }
   };
+
+  const getPresignedUrl = async (
+    fileName: string,
+    fileType: string
+  ): Promise<{ upload_url: string; file_url: string; upload_id: string }> => {
+    const { data } = await api.post("/user/b2/presigned-url", {
+      file_name: fileName,
+      file_type: fileType,
+    });
+    return data;
+  };
+
+  const storeFileMetadata = async (fileData: {
+    file_url: string;
+    file_name: string;
+    collection_name: string;
+    mime_type: string;
+    size: number;
+  }): Promise<{ media_id: number }> => {
+    const formData = new FormData();
+    formData.append("file_url", fileData.file_url);
+    formData.append("file_name", fileData.file_name);
+    formData.append("collection_name", fileData.collection_name);
+    formData.append("mime_type", fileData.mime_type);
+    formData.append("size", fileData.size.toString());
+
+    const response = await api.post("/user/b2/store-meta", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  };
+
+  const uploadToS3 = async (
+    file: File,
+    uploadUrl: string
+  ): Promise<Response> => {
+    return await fetch(uploadUrl, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+  };
+
+  // Function to convert HTML to PDF and return as Blob
+  const convertHtmlToPdf = async (htmlContent: string): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      // Create a temporary div to hold the HTML content
+      const element = document.createElement("div");
+      element.innerHTML = htmlContent;
+      element.style.position = "absolute";
+      element.style.left = "-9999px";
+      document.body.appendChild(element);
+
+      const options = {
+        margin: [10, 10, 10, 10],
+        filename: "case-follow-up-report.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "portrait",
+        },
+      };
+
+      html2pdf()
+        .set(options)
+        .from(element)
+        .toPdf()
+        .get("pdf")
+        .then((pdf) => {
+          const pdfBlob = pdf.output("blob");
+          document.body.removeChild(element);
+          resolve(pdfBlob);
+        })
+        .catch((error) => {
+          document.body.removeChild(element);
+          reject(error);
+        });
+    });
+  };
+
+  // Alternative method using html2canvas and jsPDF directly (more reliable)
+  const convertHtmlToPdfAlternative = async (
+    htmlContent: string
+  ): Promise<Blob> => {
+    const element = document.createElement("div");
+    element.innerHTML = htmlContent;
+    element.style.position = "absolute";
+    element.style.left = "-9999px";
+    document.body.appendChild(element);
+
+    try {
+      // Dynamically import html2canvas and jspdf
+      const html2canvas = (await import("html2canvas")).default;
+      const { jsPDF } = await import("jspdf");
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.98);
+
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const pdfBlob = pdf.output("blob");
+      document.body.removeChild(element);
+      return pdfBlob;
+    } catch (error) {
+      document.body.removeChild(element);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     getCasesData();
   }, [caseId]);
+
   const Days = [
     { value: "السبت", label: "السبت" },
     { value: " الاحد", label: " الاحد" },
@@ -197,12 +338,11 @@ const CaseFollowReport = () => {
           .details-section p {
             margin: 5px 0;
             font-size: 20px;
-
           }
   
           /* Make the last div take full width */
           .details-section div:last-child {
-            grid-column: 1 / -1; /* Span across all columns */
+            grid-column: 1 / -1;
           }
   
           footer {
@@ -210,8 +350,7 @@ const CaseFollowReport = () => {
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
             color: var(--font-color);
-                        box-shadow: 0 4px 6px rgb(0 0 0 / 39%);
-
+            box-shadow: 0 4px 6px rgb(0 0 0 / 39%);
             font-size: 12pt;
             position: relative;
             z-index: 2;
@@ -243,7 +382,7 @@ const CaseFollowReport = () => {
             height: 100%;
             object-fit: cover;
             z-index: 1;
-            opacity: 0.2; /* Adjust opacity for better readability */
+            opacity: 0.2;
           }
         </style>
       </head>
@@ -316,99 +455,107 @@ const CaseFollowReport = () => {
       </body>
       </html>
     `;
+
     setIsloading(false);
 
-    // Create a temporary div to hold the HTML content
-    const element = document.createElement("div");
-    element.innerHTML = htmlContent;
-    // Create a Blob from the HTML content
-    const blob = new Blob([htmlContent], { type: "text/html" });
-
-    // Create a File object from the Blob
-    const file = new File([blob], "case-follow-up-report.html", {
-      type: "text/html",
-    });
-
-    // Prepare FormData for the API request
-    const formData = new FormData();
-    formData.append("image", file); // Append the file to FormData
-
     try {
-      // Upload the file
-      const uploadResponse = await UploadImage(formData, lang); // Ensure UploadImage is an async function
+      // Convert HTML to PDF
+      const pdfBlob = await convertHtmlToPdfAlternative(htmlContent);
 
-      if (uploadResponse) {
-        // Handle the response
-        const fileId = uploadResponse.body.image_id; // Get the uploaded file ID
-        setFileId(fileId); // Update state with the file ID
+      // Create a File object from the PDF Blob
+      const pdfFile = new File([pdfBlob], "case-follow-up-report.pdf", {
+        type: "application/pdf",
+      });
 
-        // Prepare FormData for updating the case
-        const updateFormData = { follow_up_reports: [fileId] };
-        console.log(updateFormData);
-        // Update the case with the file ID
-        const updateResponse = await UpdateCases(updateFormData, caseId, lang);
+      // Step 1: Get presigned URL for PDF
+      const presignedResponse = await getPresignedUrl(
+        "case-follow-up-report.pdf",
+        "application/pdf"
+      );
 
-        if (updateResponse?.body) {
-          reToast.success(updateResponse.message); // Show success toast  setWhatShouldBeDone("");
-          setFollowUpProcedures("");
-          setNextDay("");
-          setNextTime("");
-          setNextDate("");
-          setCurrentDay("");
-          setCurrentTime("");
-          setCurrentDate("");
-          setDefendantName("");
-          setPlaintiffName("");
-          setCaseLocation("");
-          setCaseName("");
-          setCaseNumber("");
-          setSelected("");
-          setIsloading(true);
-        } else {
-          reToast.error(t("Failed to update case")); // Show failure toast
-          setIsloading(true);
-        }
+      if (!presignedResponse?.upload_url) {
+        throw new Error("Failed to get presigned URL");
+      }
+
+      const { upload_url: presignedUrl, file_url: fileUrl } = presignedResponse;
+
+      // Step 2: Upload PDF to S3 using the presigned URL
+      const s3UploadResponse = await uploadToS3(pdfFile, presignedUrl);
+
+      if (!s3UploadResponse.ok) {
+        throw new Error("Failed to upload PDF to S3");
+      }
+
+      // Step 3: Store file metadata and get media_id
+      const metadataResponse = await storeFileMetadata({
+        file_url: fileUrl,
+        file_name: "case-follow-up-report.pdf",
+        collection_name: "case-follow-up-reports",
+        mime_type: "application/pdf",
+        size: pdfFile.size,
+      });
+
+      if (!metadataResponse?.media_id) {
+        throw new Error("Failed to store file metadata");
+      }
+
+      const fileId = metadataResponse.media_id;
+      setFileId(fileId);
+
+      // Prepare FormData for updating the case
+      const updateFormData = { follow_up_reports: [fileId] };
+      console.log(updateFormData);
+
+      // Update the case with the file ID
+      const updateResponse = await UpdateCases(updateFormData, caseId, lang);
+
+      if (updateResponse?.body) {
+        reToast.success(updateResponse.message);
+        // Reset all form fields
+        setWhatShouldBeDone("");
+        setFollowUpProcedures("");
+        setNextDay("");
+        setNextTime("");
+        setNextDate("");
+        setCurrentDay("");
+        setCurrentTime("");
+        setCurrentDate("");
+        setDefendantName("");
+        setPlaintiffName("");
+        setCaseLocation("");
+        setCaseName("");
+        setCaseNumber("");
+        setSelected("");
+        setIsloading(true);
+
+        // Download the PDF for user
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "case-follow-up-report.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       } else {
-        reToast.error(t("Failed to upload file")); // Show failure toast
+        reToast.error(t("Failed to update case"));
         setIsloading(true);
       }
     } catch (error) {
-      // Handle errors that occur during the API call
       const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
+      let errorMessage = "Something went wrong.";
 
-      // Check for specific error codes or messages
       if (axiosError.response?.data?.message) {
         errorMessage = axiosError.response.data.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
       }
 
-      reToast.error(errorMessage); // Show error toast
+      reToast.error(errorMessage);
       setIsloading(true);
     }
-
-    // Download the HTML file
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "case-follow-up-report.html";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    // html2pdf()
-    //   .set({
-    //     margin: [10, 10, 10, 10], // Set margins
-    //     filename: "case-follow-up-report.pdf", // Set the filename
-    //     image: { type: "jpeg", quality: 0.98 }, // Set image quality
-    //     html2canvas: { scale: 2 }, // Set scale for better quality
-    //     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // Set PDF format
-    //   })
-    //   .from(element)
-    //   .save();
-
-    // // Clean up the temporary div
-    // element.remove();
   };
+
   const convertTo24Hour = (time12h: any) => {
     let [hours, minutes] = time12h.split(":");
     let ampm = time12h.slice(-2).toLowerCase();

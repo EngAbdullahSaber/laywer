@@ -33,10 +33,10 @@ const DetailItem = ({
     animate={{ opacity: 1 }}
     transition={{ duration: transitionDuration }}
   >
-    <span className="text-sm text-default-900 font-medium w-[52%]">
+    <span className="text-sm text-default-900 font-medium w-[42%]">
       {label}:
     </span>
-    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+    <span className="text-default-500 dark:text-white font-semibold w-[66%]">
       {value}
     </span>
   </motion.li>

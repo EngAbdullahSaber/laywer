@@ -53,11 +53,7 @@ const FileRequest = ({ id }: { id: any }) => {
     details: "",
     law_suit_id: id,
   });
-  const [images, setImages] = useState<{
-    order_files: string[]; // Array of file IDs instead of a single file ID
-  }>({
-    order_files: [],
-  });
+ 
   const [fileIds, setFileIds] = useState<string[]>([]);
 
   // Handle Flatpickr change event and set value in react-hook-form

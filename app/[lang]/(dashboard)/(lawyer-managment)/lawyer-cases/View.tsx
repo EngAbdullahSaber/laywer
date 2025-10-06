@@ -28,10 +28,10 @@ const DetailItem: React.FC<{ label: string; value: string | number }> = ({
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3 }}
   >
-    <span className="text-sm text-default-900 font-medium w-[52%]">
+    <span className="text-sm text-default-900 font-medium w-[32%]">
       {label}:
     </span>
-    <span className="text-default-500 dark:text-white font-semibold w-[40%]">
+    <span className="text-default-500 dark:text-white font-semibold w-[66%]">
       {value}
     </span>
   </motion.li>
@@ -179,19 +179,31 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           />
           <DetailItem
             label={t("receive_date")}
-            value={casesData?.receive_date || "-"}
+            value={
+              new Date(casesData?.receive_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
           <DetailItem
             label={t("submit_date")}
-            value={casesData?.submit_date || "-"}
+            value={
+              new Date(casesData?.submit_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
           <DetailItem
             label={t("judgment_date")}
-            value={casesData?.judgment_date || "-"}
+            value={
+              new Date(casesData?.judgment_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
           <DetailItem
             label={t("session_date")}
-            value={casesData?.session_date || "-"}
+            value={
+              new Date(casesData?.session_date).toLocaleDateString("en-GB") ||
+              "-"
+            }
           />
 
           <DetailItem label={t("status")} value={casesData?.status || "-"} />

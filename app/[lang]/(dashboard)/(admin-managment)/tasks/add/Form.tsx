@@ -23,6 +23,7 @@ import { Auth } from "@/components/auth/Auth";
 import { getStaffPanigation } from "@/services/staff/staff";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import { getLawyerPanigation } from "@/services/lawyer/lawyer";
 
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
@@ -269,7 +270,7 @@ const Form = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Assigned_To">{t("Assigned To")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchData(getStaffPanigation)}
+                      fetchData={() => fetchData(getLawyerPanigation)}
                       formatOption={(item) => ({
                         value: item.id,
                         label: `${item.name} `,

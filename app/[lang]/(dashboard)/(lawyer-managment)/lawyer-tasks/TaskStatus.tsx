@@ -100,10 +100,10 @@ const TaskStatus = ({
       setIsloading(true);
     }
   };
-  const Task_Status: { value: string; label: string }[] = [
-    { value: "pending", label: "قيدالانتظار" },
-    { value: "in_progress", label: "قيد التنفيذ" },
-    { value: "completed", label: "مكتملة" },
+  const Task_Status: { id: string; value: string; label: string }[] = [
+    { id: "pending", value: "pending", label: "قيدالانتظار" },
+    { id: "in_progress", value: "in_progress", label: "قيد التنفيذ" },
+    { id: "completed", value: "completed", label: "مكتملة" },
   ];
   const handleOpen = () => {
     setIsDialogOpen(!isDialogOpen);

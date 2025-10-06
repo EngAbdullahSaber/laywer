@@ -8,27 +8,25 @@ import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { toast as reToast } from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ImageUploader from "./ImageUploader";
 import { AxiosError } from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { UpdateLawyer, getSpecifiedLawyer } from "@/services/lawyer/lawyer";
 import { getCategory } from "@/services/category/category";
-import { UploadImage } from "@/services/auth/auth";
 import CreateLawyerCategory from "@/app/[lang]/(dashboard)/(category-mangement)/lawyer-category/CreateLawyerCategory";
 import { CleaveInput } from "@/components/ui/cleave";
-import { Auth } from "@/components/auth/Auth";
-import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
-import { useAccessToken } from "@/config/accessToken";
-import { updateAxiosHeader } from "@/services/axios";
-import { clearAuthInfo } from "@/services/utils";
-import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import { useRouter } from "next/navigation";
+import FileUploaderSingle from "./FileUploaderSingle";
 
 interface ErrorResponse {
   errors: {
     [key: string]: string[];
   };
 }
-
+interface ExistingFile {
+  image_id: number;
+  url: string;
+  image_name: string;
+}
 interface LaywerData {
   name: string;
   phone: string;
@@ -38,10 +36,10 @@ interface LaywerData {
   category_id: string;
   status: string;
 }
+
 const Form = () => {
   const [category, setCategory] = useState<any[]>([]);
   const [flag, setFlag] = useState(false);
-
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
     phone: "",
@@ -53,22 +51,76 @@ const Form = () => {
   });
   const [data, setData] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
-  const router = useRouter(); // ✅ initialize router
+  const router = useRouter();
 
   const { lang, lawyerId } = useParams();
   const [loading, setLoading] = useState(true);
 
-  const [images, setImages] = useState<{
-    lawyer_licence: File | null;
-    driving_licence: File | null;
-    national_id_image: File | null;
-    subscription_image: File | null;
-  }>({
-    lawyer_licence: null,
-    driving_licence: null,
-    national_id_image: null,
-    subscription_image: null,
-  });
+  // File states - use arrays as expected by FileUploaderSingle
+  const [fileIdsDrivingLicence, setFileIdsDrivingLicence] = useState<number[]>(
+    []
+  );
+  const [existingFilesDrivingLicence, setExistingFilesDrivingLicence] =
+    useState<ExistingFile[]>([]);
+
+  const [fileIdsLawyerLicence, setFileIdsLawyerLicence] = useState<number[]>(
+    []
+  );
+  const [existingFilesLawyerLicence, setExistingFilesLawyerLicence] = useState<
+    ExistingFile[]
+  >([]);
+
+  const [fileIdsSubscriptionImage, setFileIdsSubscriptionImage] = useState<
+    number[]
+  >([]);
+  const [existingFilesSubscriptionImage, setExistingFilesSubscriptionImage] =
+    useState<ExistingFile[]>([]);
+
+  const [fileIdsNationalIdImage, setFileIdsNationalIdImage] = useState<
+    number[]
+  >([]);
+  const [existingFilesNationalIdImage, setExistingFilesNationalIdImage] =
+    useState<ExistingFile[]>([]);
+
+  // Helper function to create file setters that sync both fileIds and existingFiles
+  const createFileSetters = (fileType: keyof typeof fileIds) => {
+    const setters = {
+      driving_licence: {
+        setFileIds: setFileIdsDrivingLicence,
+        setExistingFiles: setExistingFilesDrivingLicence,
+      },
+      lawyer_licence: {
+        setFileIds: setFileIdsLawyerLicence,
+        setExistingFiles: setExistingFilesLawyerLicence,
+      },
+      subscription_image: {
+        setFileIds: setFileIdsSubscriptionImage,
+        setExistingFiles: setExistingFilesSubscriptionImage,
+      },
+      national_id_image: {
+        setFileIds: setFileIdsNationalIdImage,
+        setExistingFiles: setExistingFilesNationalIdImage,
+      },
+    };
+
+    return {
+      setFileIds: (ids: number[]) => {
+        setters[fileType].setFileIds(ids);
+        // When fileIds change, also update existingFiles to reflect the new state
+        if (ids.length > 0) {
+          // Create a dummy existing file object for the new file
+          const newExistingFile: ExistingFile = {
+            image_id: ids[0],
+            url: "", // This will be empty for new files until we have the actual URL
+            image_name: `uploaded-file-${ids[0]}`,
+          };
+          setters[fileType].setExistingFiles([newExistingFile]);
+        } else {
+          setters[fileType].setExistingFiles([]);
+        }
+      },
+    };
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -84,24 +136,26 @@ const Form = () => {
     // Iterate over all lawyerData fields to dynamically create query params
     Object.entries(lawyerData).forEach(([key, value]) => {
       if (value && value !== "") {
-        // Handle the name and description fields dynamically for localization
-
         params.append(key, value);
       }
     });
 
-    // Append images separately as form data for file uploads
-    if (images.national_id_image && typeof images.national_id_image != "object")
-      params.append("national_id_image", images.national_id_image);
-    if (images.driving_licence && typeof images.driving_licence != "object")
-      params.append("driving_licence", images.driving_licence);
-    if (
-      images.subscription_image &&
-      typeof images.subscription_image != "object"
-    )
-      params.append("subscription_image", images.subscription_image);
-    if (images.lawyer_licence && typeof images.lawyer_licence != "object")
-      params.append("lawyer_licence", images.lawyer_licence);
+    // Append images - take the first ID from each array
+    if (fileIdsNationalIdImage.length > 0) {
+      params.append("national_id_image", fileIdsNationalIdImage[0].toString());
+    }
+    if (fileIdsDrivingLicence.length > 0) {
+      params.append("driving_licence", fileIdsDrivingLicence[0].toString());
+    }
+    if (fileIdsSubscriptionImage.length > 0) {
+      params.append(
+        "subscription_image",
+        fileIdsSubscriptionImage[0].toString()
+      );
+    }
+    if (fileIdsLawyerLicence.length > 0) {
+      params.append("lawyer_licence", fileIdsLawyerLicence[0].toString());
+    }
 
     return params.toString();
   };
@@ -121,12 +175,42 @@ const Form = () => {
           category_id: lawyer?.category.id,
           status: lawyer?.status,
         });
-        setImages({
-          national_id_image: lawyer?.national_id_image,
-          driving_licence: lawyer?.driving_licence,
-          subscription_image: lawyer?.subscription_image,
-          lawyer_licence: lawyer?.lawyer_licence,
-        });
+
+        // Store the full file objects from API response as arrays
+        setExistingFilesNationalIdImage(
+          lawyer?.national_id_image ? [lawyer.national_id_image] : []
+        );
+        setExistingFilesSubscriptionImage(
+          lawyer?.subscription_image ? [lawyer.subscription_image] : []
+        );
+        setExistingFilesLawyerLicence(
+          lawyer?.lawyer_licence ? [lawyer.lawyer_licence] : []
+        );
+        setExistingFilesDrivingLicence(
+          lawyer?.driving_licence ? [lawyer.driving_licence] : []
+        );
+
+        // Set file IDs
+        setFileIdsNationalIdImage(
+          lawyer?.national_id_image?.image_id
+            ? [lawyer.national_id_image.image_id]
+            : []
+        );
+        setFileIdsSubscriptionImage(
+          lawyer?.subscription_image?.image_id
+            ? [lawyer.subscription_image.image_id]
+            : []
+        );
+        setFileIdsLawyerLicence(
+          lawyer?.lawyer_licence?.image_id
+            ? [lawyer.lawyer_licence.image_id]
+            : []
+        );
+        setFileIdsDrivingLicence(
+          lawyer?.driving_licence?.image_id
+            ? [lawyer.driving_licence.image_id]
+            : []
+        );
       }
     } catch (error) {
       console.error("Error fetching lawyer data", error);
@@ -140,74 +224,44 @@ const Form = () => {
     }));
   };
 
-  const handleImageChange = async (
-    file: File,
-    imageType: keyof typeof images
-  ) => {
-    setLoading(false);
-
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const res = await UploadImage(formData, lang); // Call API to create the lawyer
-      if (res) {
-        // Reset data after successful creation
-        console.log(res.body.image_id);
-        setImages((prevState) => ({
-          ...prevState,
-          [imageType]: res.body.image_id,
-        }));
-        setLoading(true);
-
-        reToast.success(res.message); // Display success message
-      } else {
-        reToast.error(t("Failed to create upload image")); // Show a fallback failure message
-        setLoading(true);
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-
-      // Construct the dynamic key based on field names and the current language
-
-      let errorMessage = "Something went wrong."; // Default fallback message
-
-      // Loop through the fields to find the corresponding error message
-
-      // Show the error in a toast notification
-      reToast.error(errorMessage); // Display the error message in the toast
-      setLoading(true);
-    }
-  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(false);
 
     const formData = new FormData();
     const queryParams = buildQueryParams();
-    // Append images if they exist
-    if (images.national_id_image && typeof images.national_id_image != "object")
-      formData.append("national_id_image", images.national_id_image);
-    if (images.driving_licence && typeof images.driving_licence != "object")
-      formData.append("driving_licence", images.driving_licence);
-    if (
-      images.subscription_image &&
-      typeof images.subscription_image != "object"
-    )
-      formData.append("subscription_image", images.subscription_image);
-    if (images.lawyer_licence && typeof images.lawyer_licence != "object")
-      formData.append("lawyer_licence", images.lawyer_licence);
 
     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
+    // Append images - take the first ID from each array
+    if (fileIdsNationalIdImage.length > 0) {
+      formData.append(
+        "national_id_image",
+        fileIdsNationalIdImage[0].toString()
+      );
+    }
+    if (fileIdsDrivingLicence.length > 0) {
+      formData.append("driving_licence", fileIdsDrivingLicence[0].toString());
+    }
+    if (fileIdsSubscriptionImage.length > 0) {
+      formData.append(
+        "subscription_image",
+        fileIdsSubscriptionImage[0].toString()
+      );
+    }
+    if (fileIdsLawyerLicence.length > 0) {
+      formData.append("lawyer_licence", fileIdsLawyerLicence[0].toString());
+    }
+
     try {
-      const res = await UpdateLawyer(queryParams, lawyerId, lang); // Call API to create the lawyer
+      const res = await UpdateLawyer(queryParams, lawyerId, lang);
       if (res) {
         setLoading(true);
-
-        reToast.success(res.message); // Display success message
+        reToast.success(res.message);
+        // Refresh data to get updated file URLs
         router.back();
       } else {
         reToast.error(t("Failed to update Lawyer"));
@@ -215,7 +269,7 @@ const Form = () => {
       }
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
-      let errorMessage = "Something went wrong."; // Default fallback message
+      let errorMessage = "Something went wrong.";
 
       const fields = [
         "name",
@@ -230,16 +284,15 @@ const Form = () => {
         "subscription_image",
       ];
 
-      // Loop through the fields to find the corresponding error message
       for (let field of fields) {
         const error = axiosError.response?.data?.errors?.[field];
         if (error) {
-          errorMessage = error[0]; // Retrieve the first error message for the field
+          errorMessage = error[0];
           break;
         }
       }
 
-      reToast.error(errorMessage); // Display the error message in the toast
+      reToast.error(errorMessage);
       setLoading(true);
     }
   };
@@ -257,13 +310,13 @@ const Form = () => {
     } catch (error) {}
   };
 
-  // On mount, fetch data
   useEffect(() => {
     getLawyerData();
     fetchData();
   }, [lang, lawyerId, flag]);
 
   const { t } = useTranslate();
+
   return (
     <div>
       <Card>
@@ -339,7 +392,6 @@ const Form = () => {
                 />
               </motion.div>
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
-                {" "}
                 <motion.div
                   initial={{ y: -50 }}
                   whileInView={{ y: 0 }}
@@ -350,7 +402,6 @@ const Form = () => {
                     <Label htmlFor="Court_Category">
                       {t("Lawyer Category")}
                     </Label>
-                    {/* <BasicSelect name="CourtCategory" menu={Lawyer_Category} /> */}
                     <BasicSelect
                       menu={transformedCategories}
                       setSelectedValue={(value) => handleSelectChange(value)}
@@ -365,7 +416,7 @@ const Form = () => {
                     />
                   </div>
                 </motion.div>
-              </div>{" "}
+              </div>
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -396,20 +447,20 @@ const Form = () => {
                   onChange={handleInputChange}
                 />
               </motion.div>
-            </div>{" "}
+            </div>
             <motion.hr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.1 }}
               className="my-3"
-            />{" "}
+            />
             <motion.p
               initial={{ y: -30 }}
               whileInView={{ y: 0 }}
               transition={{ duration: 1.2 }}
               className="my-4 font-bold"
             >
-              {t("Upload Filess")}
+              {t("Upload Files")}
             </motion.p>
             <div className="flex flex-row  flex-wrap sm:flex-nowrap justify-between items-center  gap-4">
               <motion.div
@@ -419,13 +470,17 @@ const Form = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("Licensing photo")}</Label>
-
-                <ImageUploader
-                  imageType="driving_licence"
-                  id={images.driving_licence}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="driving_licence"
+                  fileIds={fileIdsDrivingLicence}
+                  setFileIds={createFileSetters("driving_licence").setFileIds}
+                  existingFiles={existingFilesDrivingLicence}
+                  maxFiles={1}
+                  maxSizeMB={100}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </motion.div>
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -433,12 +488,17 @@ const Form = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("licence photo")}</Label>
-                <ImageUploader
-                  imageType="lawyer_licence"
-                  id={images.lawyer_licence}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="lawyer_licence"
+                  fileIds={fileIdsLawyerLicence}
+                  setFileIds={createFileSetters("lawyer_licence").setFileIds}
+                  existingFiles={existingFilesLawyerLicence}
+                  maxFiles={1}
+                  maxSizeMB={100}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </motion.div>
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -446,13 +506,19 @@ const Form = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("Membership photo")}</Label>
-
-                <ImageUploader
-                  imageType="subscription_image"
-                  id={images.subscription_image}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="subscription_image"
+                  fileIds={fileIdsSubscriptionImage}
+                  setFileIds={
+                    createFileSetters("subscription_image").setFileIds
+                  }
+                  existingFiles={existingFilesSubscriptionImage}
+                  maxFiles={1}
+                  maxSizeMB={100}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </motion.div>
+
               <motion.div
                 initial={{ y: -50 }}
                 whileInView={{ y: 0 }}
@@ -460,11 +526,14 @@ const Form = () => {
                 className="flex flex-col gap-2 w-full sm:w-[48%]"
               >
                 <Label>{t("ID photo")}</Label>
-
-                <ImageUploader
-                  imageType="national_id_image"
-                  id={images.national_id_image}
-                  onFileChange={handleImageChange}
+                <FileUploaderSingle
+                  fileType="national_id_image"
+                  fileIds={fileIdsNationalIdImage}
+                  setFileIds={createFileSetters("national_id_image").setFileIds}
+                  existingFiles={existingFilesNationalIdImage}
+                  maxFiles={1}
+                  maxSizeMB={100}
+                  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </motion.div>
             </div>

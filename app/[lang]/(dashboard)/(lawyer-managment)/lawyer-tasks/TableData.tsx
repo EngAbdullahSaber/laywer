@@ -177,8 +177,8 @@ const TableData = () => {
                 className="!text-center"
                 color={
                   (row.original?.importance_level == "high" && "destructive") ||
-                  (row.original?.importance_level == "low" && "warning") ||
-                  (row.original?.importance_level == "mid" && "secondary") ||
+                  (row.original?.importance_level == "low" && "secondary") ||
+                  (row.original?.importance_level == "mid" && "warning") ||
                   "default"
                 }
               >

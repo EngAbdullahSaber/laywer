@@ -10,7 +10,7 @@ export async function getArchievedCases(lang: any) {
   else return false;
 }
 export async function getFile(lang: any) {
-  let res = await api.get(`court/cases/export/export_xls`, {
+  let res = await api.get(`user/archived-lawsuits/export/export_xls`, {
     headers: {
       "Accept-Language": lang,
     },

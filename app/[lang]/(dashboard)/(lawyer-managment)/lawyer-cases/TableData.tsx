@@ -342,29 +342,29 @@ const TableData = ({ flag }: { flag: any }) => {
         return value.includes(row.getValue(id));
       },
     },
-    {
-      accessorKey: "Key_Dates",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Key_Dates"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-              className="max-w-[500px] truncate font-medium"
-            >
-              {row.original?.session_date}
-            </motion.span>{" "}
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
+    // {
+    //   accessorKey: "Key_Dates",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={"Key_Dates"} />
+    //   ),
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex  items-center justify-center gap-2 mx-auto">
+    //         <motion.span
+    //           initial={{ opacity: 0 }}
+    //           whileInView={{ opacity: 1 }}
+    //           transition={{ duration: 1.7 }}
+    //           className="max-w-[500px] truncate font-medium"
+    //         >
+    //           {row.original?.session_date}
+    //         </motion.span>{" "}
+    //       </div>
+    //     );
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return value.includes(row.getValue(id));
+    //   },
+    // },
   ];
   const isPaginationDisabled = data.length < 10 || data.length === 0;
   return (

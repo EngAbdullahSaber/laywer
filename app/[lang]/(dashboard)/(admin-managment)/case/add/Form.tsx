@@ -375,6 +375,7 @@ const Form = () => {
           category_id: "",
         });
         reToast.success(res.message);
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category"));
       }
@@ -557,7 +558,6 @@ const Form = () => {
                   onChange={handleInputChange}
                 />
               </motion.div>
-              []
               {/* Lawyer Selection */}
               <motion.div
                 initial={{ y: -30 }}

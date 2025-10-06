@@ -29,6 +29,7 @@ import { useAccessToken } from "@/config/accessToken";
 import { updateAxiosHeader } from "@/services/axios";
 import { clearAuthInfo } from "@/services/utils";
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import { getLawyerPanigation } from "@/services/lawyer/lawyer";
 
 const Importance_Level: { id: string; value: string; label: string }[] = [
   { id: "high", value: "high", label: "مهمة جدا" },
@@ -272,7 +273,7 @@ const Form = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Assigned_To">{t("Assigned To")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchData(getStaffPanigation)}
+                      fetchData={() => fetchData(getLawyerPanigation)}
                       formatOption={formatOption}
                       placeholder={t("Select Staff")}
                       selectedValue={lawyerData.lawyer_id}
