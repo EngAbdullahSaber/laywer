@@ -86,7 +86,7 @@ const Form = () => {
     try {
       const res = await getSpecifiedClient(lang, clientsId);
       if (res?.body) {
-         setLawyerData({
+        setLawyerData({
           name: res?.body?.name,
           phone: res?.body?.phone,
           national_id_number: res?.body?.national_id_number,
@@ -122,7 +122,7 @@ const Form = () => {
         setLoading(true);
 
         reToast.success(res.message); // Display success message
-        // router.back();
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category")); // Show a fallback failure message
       }
