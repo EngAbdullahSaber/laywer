@@ -209,9 +209,7 @@ const FileUploaderSingle = ({
       if (acceptedFiles.length === 0) return;
 
       const file = acceptedFiles[0]; // Take only the first file
-
-      console.log('📤 Starting file upload:', file.name);
-      console.log('📋 Current fileIds before replacement:', fileIds);
+ 
 
       // Clear ALL existing files when new file is dropped (replacement behavior)
       setFileProgresses([]);
@@ -252,8 +250,7 @@ const FileUploaderSingle = ({
           controller.signal
         );
 
-        console.log('✅ File upload completed, new mediaId:', mediaId);
-        
+         
         setFileProgresses((prev) =>
           prev.map((p) =>
             p.id === newFileProgress.id
@@ -264,8 +261,7 @@ const FileUploaderSingle = ({
 
         // REPLACE all file IDs with the new single ID
         setFileIds([mediaId]);
-        console.log('🔄 File IDs after replacement:', [mediaId]);
-
+ 
       } catch (e) {
         console.error('❌ File upload failed:', e);
         setFileProgresses((prev) =>
@@ -298,8 +294,7 @@ const FileUploaderSingle = ({
 
   // ✅ Remove file
   const handleRemoveFile = (fileId: string, mediaId?: number) => {
-    console.log('🗑️ Removing file:', fileId, 'mediaId:', mediaId);
-    
+     
     // Cancel upload if in progress
     const controller = abortControllers.current.get(fileId);
     if (controller) {
@@ -313,8 +308,7 @@ const FileUploaderSingle = ({
     if (mediaId) {
       // Clear ALL file IDs
       setFileIds([]);
-      console.log('🔄 File IDs after removal:', []);
-    }
+     }
   };
 
   // ✅ File Icon Renderer

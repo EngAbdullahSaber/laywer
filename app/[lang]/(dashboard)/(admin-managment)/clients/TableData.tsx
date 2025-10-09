@@ -97,8 +97,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-    console.log("Filters submitted:", filters);
-    getClientData();
+     getClientData();
     setOpen(false); // Close the sheet after applying filters
   };
 
@@ -123,8 +122,7 @@ const TableData = ({ flag }: { flag: any }) => {
             : await getClientsPanigation(page, lang);
 
         setData(res?.body?.data || []);
-        console.log(res.body.data);
-        setLoading(false);
+         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
 

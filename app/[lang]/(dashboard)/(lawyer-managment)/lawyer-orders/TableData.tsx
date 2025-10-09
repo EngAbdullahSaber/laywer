@@ -89,7 +89,6 @@ const TableData = () => {
             : await getOrdersFromClientsPanigation(page, lang);
 
         setData(res?.body?.data || []);
-        console.log(res.body.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);

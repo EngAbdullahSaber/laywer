@@ -58,8 +58,7 @@ const PageWithAuth = () => {
   if (!allowedRoles) {
     return null; // Or a loading component
   }
-  console.log(notReplyedMessages);
-  console.log(replyedMessages);
+ 
   const ProtectedPage = Auth({ allowedRoles })(() => (
     <Tabs defaultValue="Answered" className="">
       <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-20 sm:h-12">

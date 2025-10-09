@@ -15,8 +15,7 @@ import { Icon } from "@iconify/react";
 import { useTranslate } from "@/config/useTranslation";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import styles from  './style.module.css'
-
+import styles from "./style.module.css";
 
 const ViewMore = ({ data, title }: any) => {
   const { t } = useTranslate();
@@ -34,8 +33,7 @@ const ViewMore = ({ data, title }: any) => {
     for (let i = 0; i < entries.length; i += chunkSize) {
       chunks.push(entries.slice(i, i + chunkSize));
     }
-    // console.log(chunks);
-    // Render chunks
+
     return chunks.map((chunk, index) => (
       <div
         key={index}
@@ -50,7 +48,9 @@ const ViewMore = ({ data, title }: any) => {
               {" "}
               {t(`${key.toLowerCase()}`)}
             </span>
-            <span className={`text-default-500  sm:text-center sm:mx-auto ${styles.wordWrap}`}>
+            <span
+              className={`text-default-500  sm:text-center sm:mx-auto ${styles.wordWrap}`}
+            >
               {" "}
               {key == "planogramPhoto" ||
               key == "merchandiserPhoto" ||
@@ -98,7 +98,7 @@ const ViewMore = ({ data, title }: any) => {
           className="max-w-[736px]"
         >
           <SheetHeader>
-            <SheetTitle>{t('detailsLocation')}</SheetTitle>
+            <SheetTitle>{t("detailsLocation")}</SheetTitle>
           </SheetHeader>
           <div className="py-6">{renderOriginalData(originalData)}</div>
           <SheetFooter>
@@ -117,7 +117,13 @@ const ViewMore = ({ data, title }: any) => {
               <SheetTitle>{t('Image Preview')}</SheetTitle>
             </SheetHeader> */}
             <div className="flex items-center justify-center py-6">
-              <Image src={showImg} alt="Popup Image" width={500} height={500} className=" w-full h-full rounded-lg" />
+              <Image
+                src={showImg}
+                alt="Popup Image"
+                width={500}
+                height={500}
+                className=" w-full h-full rounded-lg"
+              />
             </div>
           </SheetContent>
         </Sheet>

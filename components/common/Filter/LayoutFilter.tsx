@@ -55,8 +55,7 @@ export function LayoutFilter({
     setOpen(!open);
   };
   // Conditional rendering logic is handled properly
-  console.log(open);
-  return filtersConfig.length > 0 ? (
+   return filtersConfig.length > 0 ? (
     <>
       <Button
         variant="outline"

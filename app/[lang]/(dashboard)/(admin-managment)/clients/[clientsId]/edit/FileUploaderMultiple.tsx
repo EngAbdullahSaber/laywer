@@ -58,8 +58,7 @@ const FileUploaderMultiple = ({
   const MAX_FILE_SIZE_BYTES = maxSizeMB * 1024 * 1024;
   // ✅ Detect type from extension
   const getFileTypeFromExtension = (fileName: string): string => {
-    console.log(fileName);
-    const ext = fileName.split(".").pop()?.toLowerCase() || "";
+     const ext = fileName.split(".").pop()?.toLowerCase() || "";
     if (["jpg", "jpeg", "png", "gif", "webp", "bmp", "svg"].includes(ext))
       return "image";
     if (["mp4", "mov", "avi", "mkv", "webm"].includes(ext)) return "video";
@@ -85,8 +84,7 @@ const FileUploaderMultiple = ({
     };
     return iconMap[fileType] || "tabler:file-description";
   };
-  console.log(existingFiles);
-  // ✅ Initialize with existing files
+   // ✅ Initialize with existing files
   useEffect(() => {
     if (!existingFiles || existingFiles.length === 0) {
       setFileProgresses([]);

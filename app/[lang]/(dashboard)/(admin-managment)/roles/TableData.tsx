@@ -100,8 +100,7 @@ const TableData = ({ flag }: { flag: any }) => {
             (role: any) => role.role !== "client" && role.role !== "lawyer"
           ) || []
         );
-        console.log(res.body);
-        setLoading(false);
+         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
 

@@ -1,9 +1,7 @@
 import { useState } from "react";
 
-export const hookRetaailers = ()=>{
-
-
-	const [selectedLanguage, setSelectedLanguage] = useState("English");
+export const hookRetaailers = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
 
   // State to store form data for both languages
   const [formData, setFormData] = useState<any>({
@@ -12,9 +10,9 @@ export const hookRetaailers = ()=>{
   });
 
   // Handler for updating input fields
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData((prevData:any) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       [selectedLanguage]: {
         ...prevData[selectedLanguage],
@@ -24,11 +22,10 @@ export const hookRetaailers = ()=>{
   };
 
   // Handler for updating radio status
-  const handleStatusChange = (status:any) => {
-    setFormData((prevData:any) => ({
+  const handleStatusChange = (status: any) => {
+    setFormData((prevData: any) => ({
       ...prevData,
-      [selectedLanguage]: {  ...prevData[selectedLanguage], status,
-      },
+      [selectedLanguage]: { ...prevData[selectedLanguage], status },
     }));
   };
 
@@ -38,9 +35,14 @@ export const hookRetaailers = ()=>{
       English: formData.English,
       Arabic: formData.Arabic,
     };
-    console.log("Submitting data to backend:", payload);
   };
 
-
-  return {formData , setSelectedLanguage , selectedLanguage , handleInputChange , handleStatusChange , handleSubmit }
-}
+  return {
+    formData,
+    setSelectedLanguage,
+    selectedLanguage,
+    handleInputChange,
+    handleStatusChange,
+    handleSubmit,
+  };
+};

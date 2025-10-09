@@ -194,8 +194,7 @@ const Form = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {}
   };
-  console.log(fileIds);
-  useEffect(() => {
+   useEffect(() => {
     fetchData();
   }, [flag]);
   return (

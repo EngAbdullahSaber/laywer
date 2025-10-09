@@ -311,7 +311,7 @@ const Form = () => {
           category: "",
         });
         reToast.success(res.message);
-        // router.back();
+        router.back();
       } else {
         reToast.error(t("Failed to create Case Category"));
       }

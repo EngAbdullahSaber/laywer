@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -45,7 +44,10 @@ const tagsColorMap: { [key: string]: string } = {
 };
 const themeColors = ["primary", "success", "info", "warning", "destructive"];
 
-const AssignTags = ({ task, taskId }: {
+const AssignTags = ({
+  task,
+  taskId,
+}: {
   task: TaskType;
   taskId: TaskType["id"];
 }) => {
@@ -87,9 +89,7 @@ const AssignTags = ({ task, taskId }: {
 
     try {
       await updateTaskAction(taskId, newVal);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleTagSubmission = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -112,9 +112,7 @@ const AssignTags = ({ task, taskId }: {
       await updateTaskAction(taskId, newVal);
       closePopover();
       setNewTagName("");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

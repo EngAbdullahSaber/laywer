@@ -180,8 +180,7 @@ const Form = () => {
       reToast.error(errorMessage);
     }
   };
-  console.log(permissions);
-  return (
+   return (
     <div>
       {permissions.length === 0 ? (
         <div>{t("No permissions available")}</div>

@@ -394,47 +394,6 @@ const TableData = () => {
         return value.includes(row.getValue(id));
       },
     },
-    {
-      accessorKey: "claim_status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Claim Status"} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="flex items-center justify-center gap-2 mx-auto">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.7 }}
-            >
-              <Badge
-                className="!text-center"
-                color={
-                  (row.original?.claim_status === "معلق" && "destructive") ||
-                  (row.original?.claim_status === "قيد النظر" && "warning") ||
-                  (row.original?.claim_status === "مغلق" && "success") ||
-                  (row.original?.claim_status === "جديد" && "default") ||
-                  "default"
-                }
-              >
-                {lang == "en"
-                  ? row.original?.claim_status == "مغلق"
-                    ? "Closed"
-                    : row.original?.claim_status == "قيد النظر"
-                    ? "Under Review"
-                    : row.original?.claim_status == "معلق"
-                    ? "Pending"
-                    : "New"
-                  : row.original?.claim_status}{" "}
-              </Badge>{" "}
-            </motion.span>
-          </div>
-        );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    },
   ];
 
   const isPaginationDisabled =

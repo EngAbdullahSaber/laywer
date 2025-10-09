@@ -52,15 +52,13 @@ const CreateDate = ({
 
   const handleTimeChange = (e) => {
     setTime(e.target.value);
-    console.log("Selected Time:", e.target.value);
-
+ 
     // Format the time
     const formattedTime = format(
       parse(e.target.value, "HH:mm", new Date()),
       "h:mm a"
     );
-    console.log("Formatted Time:", formattedTime);
-  };
+   };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

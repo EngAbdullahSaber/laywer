@@ -46,8 +46,7 @@ const PageWithAuth = () => {
 
       setData(res?.body?.file || []);
       window.open(res?.body?.file, "_blank");
-      console.log(res?.body?.file);
-    } catch (error) {
+     } catch (error) {
       console.error("Error fetching data", error);
     }
   };

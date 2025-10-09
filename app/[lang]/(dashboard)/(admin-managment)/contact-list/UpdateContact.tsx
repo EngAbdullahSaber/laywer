@@ -89,8 +89,7 @@ const UpdateContact = ({
       category_id: value?.id,
     }));
   };
-  console.log(contactList.category_id);
-  const handleSubmit = async (e: React.FormEvent) => {
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsloading(false);
 

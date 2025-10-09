@@ -48,8 +48,7 @@ const TaskItem = ({ subtask, handlerSubSheet }: {
 
       await updateSubTaskAction(id, newData);
     } catch (error) {
-      console.log(error);
-    }
+     }
     setIsDone(!isDone);
   };
 

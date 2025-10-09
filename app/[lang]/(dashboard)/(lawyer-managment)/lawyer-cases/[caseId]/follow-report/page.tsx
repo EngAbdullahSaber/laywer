@@ -504,8 +504,7 @@ const CaseFollowReport = () => {
 
       // Prepare FormData for updating the case
       const updateFormData = { follow_up_reports: [fileId] };
-      console.log(updateFormData);
-
+ 
       // Update the case with the file ID
       const updateResponse = await UpdateCases(updateFormData, caseId, lang);
 

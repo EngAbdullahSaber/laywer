@@ -32,8 +32,7 @@ const Edit = ({ data, title }: any) => {
     for (let i = 0; i < entries.length; i += chunkSize) {
       chunks.push(entries.slice(i, i + chunkSize));
     }
-    console.log(chunks);
-    // Render chunks
+     // Render chunks
     return chunks.map((chunk, index) => (
       <div
         key={index}

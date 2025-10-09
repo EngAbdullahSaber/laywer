@@ -22,7 +22,6 @@ export const Auth = ({ allowedRoles }: AuthProps) => {
       if (accessToken) {
         updateAxiosHeader(accessToken);
       }
-      console.log(userData.role_with_permission);
       // Use useEffect to handle redirection based on role
       useEffect(() => {
         if (!userData) {

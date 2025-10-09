@@ -71,8 +71,7 @@ const Form = () => {
       return [];
     }
   };
-  console.log(courtData);
-  // Format city options for the select component
+   // Format city options for the select component
   const formatCityOption = (city: any) => ({
     value: city.id,
     label: city.name,

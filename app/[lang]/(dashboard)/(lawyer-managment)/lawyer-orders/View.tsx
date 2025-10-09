@@ -68,8 +68,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
   const renderAppointementData = () => {
     const lawyerData = row?.original;
-
-    return (
+     return (
       <>
         <motion.h3
           className="font-semibold text-lg"
@@ -177,14 +176,35 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
           <span className="text-sm text-default-900 font-medium w-[52%]">
             {t("Client file")}:
           </span>
-          <a
-            href={lawyerData?.files?.url} // Access the file URL dynamically from the `file` object
-            className="text-default-500 dark:text-white font-semibold w-[40%]"
-            target="_blank"
-            rel="noopener noreferrer" // Added for security when opening links
-          >
-            {t("Show File")} {/* Display the file name */}
-          </a>
+
+          {/* Check if files array exists and has at least one file */}
+
+          <div className="flex flex-col gap-2 w-[40%]">
+            {row?.original?.files.map((file, index) => (
+              <a
+                key={file.image_id || index}
+                href={file.url}
+                className="text-default-500 dark:text-white font-semibold hover:text-blue-600 transition-colors duration-200 flex items-center gap-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                {file.image_name || t("Show File")}
+              </a>
+            ))}
+          </div>
         </motion.p>
       </>
     );

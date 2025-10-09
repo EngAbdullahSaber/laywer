@@ -185,8 +185,7 @@ export const useUploadService = (): UseUploadServiceReturn => {
         break;
 
       default:
-        console.log("Unknown service worker message:", type);
-    }
+     }
   };
 
   // Add upload task

@@ -30,7 +30,6 @@ const MobileSidebar = ({
       setMobileMenu(true);
     }
   };
-  console.log(collapsed);
 
   const toggleSubmenu = (i: number) => {
     if (activeSubmenu === i) {
@@ -48,7 +47,6 @@ const MobileSidebar = ({
     }
   };
   const locationName = usePathname();
-  console.log(mobileMenu);
   React.useEffect(() => {
     let subMenuIndex = null;
     let multiMenuIndex = null;

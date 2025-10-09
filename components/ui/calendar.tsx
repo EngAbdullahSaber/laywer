@@ -53,7 +53,6 @@ function Calendar({
     const selectedItems = selected.filter(
       (item) => new Date(item.date).toDateString() === date.toDateString()
     );
-    console.log(selectedItems);
     if (selectedItems.length > 0) {
       // If there are selected items, return each title as a separate line
       return selectedItems.map((item, index) => (
@@ -75,7 +74,6 @@ function Calendar({
       setHoveredDate(null); // Clear hovered date
     }, 5000); // 30 seconds
   };
-  console.log(showPopup);
   // Convert selected dates (from props.selected) into Date objects
   const selectedDates = selected.map((item) => new Date(item.date));
 

@@ -7,9 +7,7 @@ import { postCommentAction } from "@/action/project-action";
 import avatar from "@/public/images/avatar/avatar-7.jpg";
 import { SendHorizontal } from "lucide-react";
 import { type Task as TaskType } from "@/app/api/tasks/data";
-const CommentFooter = ({ taskId }: {
-  taskId?: TaskType["id"];
-}) => {
+const CommentFooter = ({ taskId }: { taskId?: TaskType["id"] }) => {
   const [message, setMessage] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -33,9 +31,7 @@ const CommentFooter = ({ taskId }: {
     try {
       await postCommentAction(newMessage as any);
       setMessage("");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

@@ -86,8 +86,7 @@ const Form = () => {
     try {
       const res = await getSpecifiedClient(lang, clientsId);
       if (res?.body) {
-        console.log(res.body.name);
-        setLawyerData({
+         setLawyerData({
           name: res?.body?.name,
           phone: res?.body?.phone,
           national_id_number: res?.body?.national_id_number,

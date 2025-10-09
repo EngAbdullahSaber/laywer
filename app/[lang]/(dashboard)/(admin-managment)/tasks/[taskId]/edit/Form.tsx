@@ -97,8 +97,7 @@ const Form = () => {
       const res = await getSpecifiedTasks(lang, taskId);
       if (res?.body) {
         const lawyer = res.body;
-        console.log(lawyer);
-        setLawyerData({
+         setLawyerData({
           law_suit_id: lawyer?.law_suit?.id,
           importance_level: lawyer?.importance_level,
           titleEn: lawyer?.title,

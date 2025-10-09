@@ -104,8 +104,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   };
   const renderCaseFilesData = () => {
     const lawyerData = row?.original?.files;
-    console.log(typeof lawyerData);
-    // If lawyerData is not an array or is empty, return a fallback message
+     // If lawyerData is not an array or is empty, return a fallback message
     if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
       return (
         <>
@@ -260,8 +259,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
 
   const renderCaseAttendFilesData = () => {
     const lawyerData = row?.original?.attendance_reports;
-    console.log(typeof lawyerData);
-    // If lawyerData is not an array or is empty, return a fallback message
+     // If lawyerData is not an array or is empty, return a fallback message
     if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
       return (
         <>
@@ -310,8 +308,7 @@ const ViewMore: React.FC<ViewUserData> = ({ row }) => {
   };
   const renderCaseFollowFilesData = () => {
     const lawyerData = row?.original?.follow_up_reports;
-    console.log(typeof lawyerData);
-    // If lawyerData is not an array or is empty, return a fallback message
+     // If lawyerData is not an array or is empty, return a fallback message
     if (!Array.isArray(lawyerData) || lawyerData.length === 0) {
       return (
         <>

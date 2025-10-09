@@ -68,8 +68,7 @@ const VerifyForm = () => {
       inputRefs.current[index + 1]?.focus();
     }
   };
-  console.log(emails);
-
+ 
   const handleSubmit = async () => {
     const enteredOtp = otp.slice().join("");
     setOtp(otpArray); // Reset OTP input

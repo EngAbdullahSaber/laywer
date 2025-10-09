@@ -10,8 +10,7 @@ import LogInForm from "@/components/auth/login-form";
 import Logo from "@/public/images/auth/LawyerLogo.png";
 import RegForm from "./reg-form";
 const LoginPage = () => {
-  console.log(logo);
-  const [openVideo, setOpenVideo] = useState<boolean>(false);
+   const [openVideo, setOpenVideo] = useState<boolean>(false);
   return (
     <Fragment>
       <div className="min-h-screen bg-background  flex items-center  overflow-hidden w-full">

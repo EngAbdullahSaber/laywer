@@ -160,8 +160,7 @@ const TaskBoard = ({ boards, tasks, subTasks, comments }: TaskBoardProps) => {
     })
   );
   const onDragOver = (event: DragOverEvent) => {
-    console.log("ami k");
-  };
+   };
   return (
     <>
       {boards?.length > 0 ? (

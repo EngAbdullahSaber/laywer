@@ -33,8 +33,7 @@ const SelectCase: React.FC<{
     const selectedItem = list.find((item) => item.label.toLowerCase() == id);
     return selectedItem || null; // Returns the entire object or null if not found
   };
-  console.log(selectedValue);
-  console.log(menu);
+
   return (
     <div>
       <Select

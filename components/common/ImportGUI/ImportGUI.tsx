@@ -70,8 +70,7 @@ export default function ImportFileModal({ title }: any) {
           {/* <Button
             className='flex gap-[5px] items-center '
             onClick={() => {
-              console.log('Imported files:', files);
-              closeModal();
+               closeModal();
             }}
             color='primary'>
             <svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' stroke-linecap='round' strokeLinejoin='round' className='lucide lucide-download'>
@@ -84,8 +83,7 @@ export default function ImportFileModal({ title }: any) {
 
           <Button
             onClick={() => {
-              console.log('Download sample');
-            }}
+             }}
             color='primary'
             className='flex gap-[5px] items-center '
             variant='outline'>

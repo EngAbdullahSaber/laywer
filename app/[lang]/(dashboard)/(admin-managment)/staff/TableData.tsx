@@ -110,8 +110,7 @@ const TableData = ({ flag }: { flag: any }) => {
             : await getStaffPanigation(page, lang);
 
         setData(res?.body?.data || []);
-        console.log(res.body.data);
-        setLoading(false);
+         setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
 

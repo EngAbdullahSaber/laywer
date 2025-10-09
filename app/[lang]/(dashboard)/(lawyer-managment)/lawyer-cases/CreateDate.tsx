@@ -122,8 +122,7 @@ const CreateDate = ({
     setIsloading(false);
 
     const formData = new FormData();
-    console.log(typeof lawyerData.appointment_date);
-    // Append form data
+     // Append form data
     Object.entries(lawyerData).forEach(([key, value]) => {
       formData.append(key, value);
     });

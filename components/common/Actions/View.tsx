@@ -32,7 +32,6 @@ const ViewMore = ({ data, title }: any) => {
     for (let i = 0; i < entries.length; i += chunkSize) {
       chunks.push(entries.slice(i, i + chunkSize));
     }
-    console.log(chunks);
     // Render chunks
     return chunks.map((chunk, index) => (
       <div
@@ -113,7 +112,13 @@ const ViewMore = ({ data, title }: any) => {
               <SheetTitle>{t('Image Preview')}</SheetTitle>
             </SheetHeader> */}
             <div className="flex items-center justify-center py-6">
-              <Image src={showImg} alt="Popup Image" width={500} height={500} className=" w-full h-full rounded-lg" />
+              <Image
+                src={showImg}
+                alt="Popup Image"
+                width={500}
+                height={500}
+                className=" w-full h-full rounded-lg"
+              />
             </div>
           </SheetContent>
         </Sheet>

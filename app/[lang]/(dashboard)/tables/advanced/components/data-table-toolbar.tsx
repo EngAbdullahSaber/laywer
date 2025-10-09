@@ -37,8 +37,7 @@ export function DataTableToolbar({
   setSearch,
 }: DataTableToolbarProps) {
   const { t } = useTranslate();
-  console.log(open);
-
+ 
   return (
     <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
       {searchPalsceholder ? (

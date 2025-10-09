@@ -44,23 +44,41 @@ const Create = ({
 
       if (field.type === "input") {
         if (field.name === "email") {
-          schema[`${field.name}_en`] = yup.string().required(`${t(field.name)} ${suffix} `).email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
-          schema[`${field.name}_ar`] = yup.string().required(`${t(field.name)} ${suffix} `).email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
-        }
-        else if (field.name === "phone number") {
-          const phoneRegex = /^\+?[0-9]{10,15}$/    // Adjust regex to match your phone number format
-          schema[`${field.name}_en`] = yup .string() .required(`${t(field.name)} ${suffix} `) .matches(phoneRegex, `${t(field.name)} ${t("mustBeAValidPhone")}`);
-          schema[`${field.name}_ar`] = yup .string() .required(`${t(field.name)} ${suffix} `) .matches(phoneRegex, `${t(field.name)} ${t("mustBeAValidPhone")}`);
-        }
-        else {
-          schema[`${field.name}_en`] = yup.string().required(`${t(field.name)} ${suffix} ` );  
-          schema[`${field.name}_ar`] = yup.string().required(`${t(field.name)} ${suffix}  ` );  
+          schema[`${field.name}_en`] = yup
+            .string()
+            .required(`${t(field.name)} ${suffix} `)
+            .email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
+          schema[`${field.name}_ar`] = yup
+            .string()
+            .required(`${t(field.name)} ${suffix} `)
+            .email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
+        } else if (field.name === "phone number") {
+          const phoneRegex = /^\+?[0-9]{10,15}$/; // Adjust regex to match your phone number format
+          schema[`${field.name}_en`] = yup
+            .string()
+            .required(`${t(field.name)} ${suffix} `)
+            .matches(phoneRegex, `${t(field.name)} ${t("mustBeAValidPhone")}`);
+          schema[`${field.name}_ar`] = yup
+            .string()
+            .required(`${t(field.name)} ${suffix} `)
+            .matches(phoneRegex, `${t(field.name)} ${t("mustBeAValidPhone")}`);
+        } else {
+          schema[`${field.name}_en`] = yup
+            .string()
+            .required(`${t(field.name)} ${suffix} `);
+          schema[`${field.name}_ar`] = yup
+            .string()
+            .required(`${t(field.name)} ${suffix}  `);
         }
       } else if (field.type === "select") {
-        
-          schema[`${field.name}_en`] = yup.string().required(`${t(field.name)} ${suffix} `).email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
-          schema[`${field.name}_ar`] = yup.string().required(`${t(field.name)} ${suffix} `).email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
-        
+        schema[`${field.name}_en`] = yup
+          .string()
+          .required(`${t(field.name)} ${suffix} `)
+          .email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
+        schema[`${field.name}_ar`] = yup
+          .string()
+          .required(`${t(field.name)} ${suffix} `)
+          .email(`${t(field.name)} ${t("mustBeAValidEmail")}`);
       } else if (field.type === "textarea") {
         schema[`${field.name}`] = yup
           .string()
@@ -74,7 +92,12 @@ const Create = ({
     }, {})
   );
 
-  const { control, handleSubmit, formState: { errors },setValue } = useForm({ mode : "onChange" , resolver: yupResolver(validationSchema) });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({ mode: "onChange", resolver: yupResolver(validationSchema) });
 
   const [errorAr, seterrorAr] = useState<string>();
   const [errorEn, seterrorEn] = useState<string>();
@@ -86,7 +109,6 @@ const Create = ({
   }, [errors]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
     seterrorAr("");
     seterrorEn("");
   };
@@ -216,52 +238,158 @@ const renderField = (
   const [picker, setPicker] = useState<Date>(new Date());
 
   switch (field.type) {
-    case 'input': return (
-        <div className='w-full relative flex flex-col gap-2 mb-[20px] ' key={field.name}>
-          <Label className='capitalize' >{t(field.name.toLowerCase())}</Label>
-          <Controller name={field.name+`_${switchLang}`} control={control} render={({ field: inputProps }) => <Input className='placeholder:capitalize'  type='text' placeholder={field.name == "phone number" ? "+966 12 345 6789" : t(field.name.toLowerCase())} {...inputProps} />} />
-          {errors[`${field.name}_${switchLang}`] && <p className={`text-red-500 absolute leading-[15px] capitalize-first ${lang == "ar" ? "right-0" : "left-0"} top-[100%]  text-[12px]`}>{errors[`${field.name}_${switchLang}`].message}</p>}
+    case "input":
+      return (
+        <div
+          className="w-full relative flex flex-col gap-2 mb-[20px] "
+          key={field.name}
+        >
+          <Label className="capitalize">{t(field.name.toLowerCase())}</Label>
+          <Controller
+            name={field.name + `_${switchLang}`}
+            control={control}
+            render={({ field: inputProps }) => (
+              <Input
+                className="placeholder:capitalize"
+                type="text"
+                placeholder={
+                  field.name == "phone number"
+                    ? "+966 12 345 6789"
+                    : t(field.name.toLowerCase())
+                }
+                {...inputProps}
+              />
+            )}
+          />
+          {errors[`${field.name}_${switchLang}`] && (
+            <p
+              className={`text-red-500 absolute leading-[15px] capitalize-first ${
+                lang == "ar" ? "right-0" : "left-0"
+              } top-[100%]  text-[12px]`}
+            >
+              {errors[`${field.name}_${switchLang}`].message}
+            </p>
+          )}
         </div>
       );
-      case 'textarea': return (
-        <div className='w-full relative flex flex-col gap-2 mb-[20px] ' key={field.name}>
-          <Label className='capitalize' >{t(field.name.toLowerCase())}</Label>
-          <Controller name={field.name+`_${switchLang}`} control={control} render={({ field: inputProps }) => <Input className='placeholder:capitalize'  type='text' placeholder={field.name == "phone number" ? "+966 12 345 6789" : t(field.name.toLowerCase())} {...inputProps} />} />
-          {errors[`${field.name}_${switchLang}`] && <p className={`text-red-500 absolute leading-[15px] capitalize-first ${lang == "ar" ? "right-0" : "left-0"} top-[100%]  text-[12px]`}>{errors[`${field.name}_${switchLang}`].message}</p>}
+    case "textarea":
+      return (
+        <div
+          className="w-full relative flex flex-col gap-2 mb-[20px] "
+          key={field.name}
+        >
+          <Label className="capitalize">{t(field.name.toLowerCase())}</Label>
+          <Controller
+            name={field.name + `_${switchLang}`}
+            control={control}
+            render={({ field: inputProps }) => (
+              <Input
+                className="placeholder:capitalize"
+                type="text"
+                placeholder={
+                  field.name == "phone number"
+                    ? "+966 12 345 6789"
+                    : t(field.name.toLowerCase())
+                }
+                {...inputProps}
+              />
+            )}
+          />
+          {errors[`${field.name}_${switchLang}`] && (
+            <p
+              className={`text-red-500 absolute leading-[15px] capitalize-first ${
+                lang == "ar" ? "right-0" : "left-0"
+              } top-[100%]  text-[12px]`}
+            >
+              {errors[`${field.name}_${switchLang}`].message}
+            </p>
+          )}
         </div>
       );
-    case 'select': return (
-        <div className='w-full flex relative flex-col gap-2 mb-[20px]' key={field.name}>
-          <Controller name={field.name} control={control} render={({ field: selectProps }) => (
-            <Select place={t(field.name)} label={t(field.name)}  data={field?.data}   setValue={setValue}   keyData={field.name}   />
-            )} />
-          {errors[`${field.name}`] && <p className={`text-red-500 capitalize-first absolute ${lang == "ar" ? "right-0" : "left-0"} top-[100%]  text-[12px]`}>{errors[`${field.name}`].message}</p>}
+    case "select":
+      return (
+        <div
+          className="w-full flex relative flex-col gap-2 mb-[20px]"
+          key={field.name}
+        >
+          <Controller
+            name={field.name}
+            control={control}
+            render={({ field: selectProps }) => (
+              <Select
+                place={t(field.name)}
+                label={t(field.name)}
+                data={field?.data}
+                setValue={setValue}
+                keyData={field.name}
+              />
+            )}
+          />
+          {errors[`${field.name}`] && (
+            <p
+              className={`text-red-500 capitalize-first absolute ${
+                lang == "ar" ? "right-0" : "left-0"
+              } top-[100%]  text-[12px]`}
+            >
+              {errors[`${field.name}`].message}
+            </p>
+          )}
         </div>
       );
-    case 'date': return (
-      <div className="flex flex-col gap-2 w-full   mt-[-20px] max-md:mt-0 ">
-      <Label className='capitalize-first' > {t(field.name)} </Label>
-      <div  className='relative' >
-        <div className=' absolute left-[10px] top-[50%] translate-y-[-50%] ' > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#878b94" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> </div>
-        
-        <Flatpickr
-        onClick={(e) => e.stopPropagation()}
-        options={{
-          appendTo: document.body, // Avoid DOM conflicts; ensure proper rendering
-          static: true, // Keeps the calendar inline (if possible)
-          clickOpens: true, // Ensure the calendar remains interactive
-        }}
-        onClose={() => {
-          document.querySelector('.modal-class')?.classList.remove('disable-focus-trap');
-        }}
-          className=" border border-default-300  !text-[#878b94] font-[300] capitalize-first  pl-[30px] w-full cursor-pointer h-[36px]  focus:border-[#2684ff] focus:outline-none rounded-[4px] px-2 placeholder:text-default-600"
-          placeholder= {t(field.name)}
-          value={picker}
-          onChange={(e: any) => {    setPicker(e[0]|| null) , setValue(field.name , e[0] || null); }}
-          id="default-picker"
-        />
-      </div>
-    </div>
+    case "date":
+      return (
+        <div className="flex flex-col gap-2 w-full   mt-[-20px] max-md:mt-0 ">
+          <Label className="capitalize-first"> {t(field.name)} </Label>
+          <div className="relative">
+            <div className=" absolute left-[10px] top-[50%] translate-y-[-50%] ">
+              {" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#878b94"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-calendar-days"
+              >
+                <path d="M8 2v4" />
+                <path d="M16 2v4" />
+                <rect width="18" height="18" x="3" y="4" rx="2" />
+                <path d="M3 10h18" />
+                <path d="M8 14h.01" />
+                <path d="M12 14h.01" />
+                <path d="M16 14h.01" />
+                <path d="M8 18h.01" />
+                <path d="M12 18h.01" />
+                <path d="M16 18h.01" />
+              </svg>{" "}
+            </div>
+
+            <Flatpickr
+              onClick={(e) => e.stopPropagation()}
+              options={{
+                appendTo: document.body, // Avoid DOM conflicts; ensure proper rendering
+                static: true, // Keeps the calendar inline (if possible)
+                clickOpens: true, // Ensure the calendar remains interactive
+              }}
+              onClose={() => {
+                document
+                  .querySelector(".modal-class")
+                  ?.classList.remove("disable-focus-trap");
+              }}
+              className=" border border-default-300  !text-[#878b94] font-[300] capitalize-first  pl-[30px] w-full cursor-pointer h-[36px]  focus:border-[#2684ff] focus:outline-none rounded-[4px] px-2 placeholder:text-default-600"
+              placeholder={t(field.name)}
+              value={picker}
+              onChange={(e: any) => {
+                setPicker(e[0] || null), setValue(field.name, e[0] || null);
+              }}
+              id="default-picker"
+            />
+          </div>
+        </div>
       );
 
     case "radio":
