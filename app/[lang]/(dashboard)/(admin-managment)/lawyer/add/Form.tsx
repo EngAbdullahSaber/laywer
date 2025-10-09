@@ -200,7 +200,7 @@ const FormContentWithAnimations = React.memo(
                     setFileId={(id) =>
                       handleFileIdChange(id, "driving_licence")
                     }
-                    maxSizeMB={10}
+                    maxSizeMB={100}
                     accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
@@ -213,7 +213,7 @@ const FormContentWithAnimations = React.memo(
                     fileType="lawyer_licence"
                     fileId={fileIds.lawyer_licence}
                     setFileId={(id) => handleFileIdChange(id, "lawyer_licence")}
-                    maxSizeMB={10}
+                    maxSizeMB={100}
                     accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
@@ -228,7 +228,7 @@ const FormContentWithAnimations = React.memo(
                     setFileId={(id) =>
                       handleFileIdChange(id, "subscription_image")
                     }
-                    maxSizeMB={10}
+                    maxSizeMB={100}
                     accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
@@ -243,7 +243,7 @@ const FormContentWithAnimations = React.memo(
                     setFileId={(id) =>
                       handleFileIdChange(id, "national_id_image")
                     }
-                    maxSizeMB={10}
+                    maxSizeMB={100}
                     accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                   />
                 </motion.div>
@@ -384,7 +384,7 @@ const FormContentWithoutAnimations = React.memo(
                   fileType="driving_licence"
                   fileId={fileIds.driving_licence}
                   setFileId={(id) => handleFileIdChange(id, "driving_licence")}
-                  maxSizeMB={10}
+                  maxSizeMB={100}
                   accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>
@@ -394,7 +394,7 @@ const FormContentWithoutAnimations = React.memo(
                   fileType="lawyer_licence"
                   fileId={fileIds.lawyer_licence}
                   setFileId={(id) => handleFileIdChange(id, "lawyer_licence")}
-                  maxSizeMB={10}
+                  maxSizeMB={100}
                   accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>
@@ -418,7 +418,7 @@ const FormContentWithoutAnimations = React.memo(
                   setFileId={(id) =>
                     handleFileIdChange(id, "national_id_image")
                   }
-                  maxSizeMB={10}
+                  maxSizeMB={100}
                   accept={{ "image/*": [".png", ".jpg", ".jpeg", ".pdf"] }}
                 />
               </div>

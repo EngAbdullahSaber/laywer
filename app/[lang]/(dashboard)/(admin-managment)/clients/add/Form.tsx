@@ -194,7 +194,7 @@ const Form = () => {
       setCategory(countriesData?.body?.data || []);
     } catch (error) {}
   };
-   useEffect(() => {
+  useEffect(() => {
     fetchData();
   }, [flag]);
   return (
@@ -305,7 +305,7 @@ const Form = () => {
             <motion.hr className="my-3 w-full" />
             <motion.p className="my-4 font-bold">{t("Details")}</motion.p>
             <motion.div className="flex flex-col gap-2 w-[100%]">
-              <Label htmlFor="Details">{t("Details *")}</Label>
+              <Label htmlFor="Details">{t("Details")}</Label>
               <Textarea
                 placeholder={t("Enter Details")}
                 value={lawyerData.details}

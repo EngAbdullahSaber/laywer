@@ -48,7 +48,7 @@ const PageWithAuth = () => {
 
       setData(res?.body?.file || []);
       window.open(res?.body?.file, "_blank");
-     } catch (error) {
+    } catch (error) {
       console.error("Error fetching data", error);
     }
   };
@@ -67,9 +67,12 @@ const PageWithAuth = () => {
               transition={{ duration: 1.7 }}
             >
               <div className=" text-default-900 text-2xl font-bold my-2">
-                {t("Case List")}
+                {t("Archieved Cases List")}
               </div>{" "}
-              <BreadcrumbComponent header={"Cases"} body={"Case List"} />
+              <BreadcrumbComponent
+                header={"Cases"}
+                body={"Archieved Cases List"}
+              />
             </motion.div>
             <motion.div
               initial={{ x: -15 }}
@@ -100,7 +103,7 @@ const PageWithAuth = () => {
                 ) && (
                 <a href={"archived-case/add"}>
                   <Button className=" !bg-[#dfc77d] hover:!bg-[#fef0be] text-black">
-                    {t("Create Case")}
+                    {t("Create Archieved Case")}
                   </Button>
                 </a>
               )}
@@ -109,7 +112,7 @@ const PageWithAuth = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle> {t("Case List Details")}</CardTitle>
+              <CardTitle> {t("Archieved Cases List Details")}</CardTitle>
             </CardHeader>
             <CardContent>
               <TableData />
