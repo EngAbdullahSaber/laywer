@@ -29,6 +29,7 @@ import { useParams } from "next/navigation";
 import DeleteButton from "./Delete";
 import { getCategory } from "@/services/category/category";
 import Add from "./Add";
+import CaseStatus from "./CaseStatus";
 
 interface Task {
   id: string;
@@ -46,6 +47,8 @@ const TableData = () => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
+  const [flags, setFlags] = useState(true);
+
   const [page, setPage] = useState<number>(1);
   const debouncedSearch = useDebounce(search, 1000); // 300ms debounce time
   const searchPalsceholder = "Searchs";
@@ -197,7 +200,7 @@ const TableData = () => {
       getCasesData();
       fetchData();
     }
-  }, [debouncedSearch, page, filters]);
+  }, [debouncedSearch, page, flags, filters]);
   const columns: ColumnDef<Task>[] = [
     {
       id: "actions",
@@ -210,7 +213,7 @@ const TableData = () => {
           {permission
             .find((item: any) => item.id === 12 || item.id === 138)
             .permissions.some(
-              (item: any) => item.id === 15 || item.id === 141
+              (item: any) => item.id === 15 || item.id === 141,
             ) && (
             <TooltipProvider>
               <Tooltip>
@@ -236,15 +239,16 @@ const TableData = () => {
           {permission
             .find((item: any) => item.id === 12 || item.id === 138)
             .permissions.some(
-              (item: any) => item.id === 18 || item.id === 144
+              (item: any) => item.id === 18 || item.id === 144,
             ) && <FileRequest id={row.original.id} />}
           {permission
             .find((item: any) => item.id === 12 || item.id === 138)
             .permissions.some(
-              (item: any) => item.id === 16 || item.id === 142
+              (item: any) => item.id === 16 || item.id === 142,
             ) && (
             <DeleteButton getCasesData={getCasesData} id={row.original.id} />
           )}
+          <CaseStatus flags={flags} setFlags={setFlags} id={row.original.id} />
         </div>
       ),
     },
@@ -370,7 +374,7 @@ const TableData = () => {
                   year: "numeric", // "2025"
                   month: "long", // "February"
                   day: "numeric", // "14"
-                }
+                },
               )}
             </motion.span>
           </div>
@@ -408,15 +412,15 @@ const TableData = () => {
                   ? row.original?.status == "completed"
                     ? "Completed"
                     : row.original?.status == "in_progress"
-                    ? "In Progress"
-                    : "Pending"
+                      ? "In Progress"
+                      : "Pending"
                   : row.original?.status == "completed"
-                  ? "مكتملة"
-                  : row.original?.status == "in_progress"
-                  ? "قيد التنفيذ"
-                  : row.original?.status == "pending"
-                  ? "قيدالانتظار"
-                  : "مؤرشفة"}{" "}
+                    ? "مكتملة"
+                    : row.original?.status == "in_progress"
+                      ? "قيد التنفيذ"
+                      : row.original?.status == "pending"
+                        ? "قيدالانتظار"
+                        : "مؤرشفة"}{" "}
               </Badge>{" "}
             </motion.span>
           </div>
