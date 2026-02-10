@@ -127,7 +127,7 @@ const Form = () => {
       const { name, value } = e.target;
       setLawyerData((prev) => ({ ...prev, [name]: value }));
     },
-    []
+    [],
   );
 
   const handleFilesChange = async (files: File[], fileType: string) => {
@@ -193,7 +193,7 @@ const Form = () => {
         return newParties;
       });
     },
-    []
+    [],
   );
 
   const addOppositePartyField = useCallback(() => {
@@ -206,7 +206,7 @@ const Form = () => {
         setOppositeParties((prev) => prev.filter((_, i) => i !== index));
       }
     },
-    [oppositeParties.length]
+    [oppositeParties.length],
   );
 
   const fetchData = useCallback(
@@ -219,7 +219,7 @@ const Form = () => {
         return [];
       }
     },
-    [lang]
+    [lang],
   );
 
   const handleIncrement = useCallback(
@@ -232,14 +232,14 @@ const Form = () => {
           newNumber < 10
             ? "000" + newNumber
             : newNumber < 100
-            ? "00" + newNumber
-            : newNumber < 1000
-            ? "0" + newNumber
-            : newNumber;
+              ? "00" + newNumber
+              : newNumber < 1000
+                ? "0" + newNumber
+                : newNumber;
         return updatedNumbers;
       });
     },
-    [data]
+    [data],
   );
 
   const handleDecrement = useCallback((index: number) => {
@@ -279,7 +279,7 @@ const Form = () => {
       value: item.id,
       label: item.name,
     }),
-    []
+    [],
   );
 
   const transformedCategories = category.map((item) => ({
@@ -342,22 +342,22 @@ const Form = () => {
     caseNumbers.forEach((caseNumber, index) => {
       formData.append(
         `case_numbers[${index}][first_letter]`,
-        caseNumber.first_letter.value.toLowerCase()
+        caseNumber.first_letter.value.toLowerCase(),
       );
       formData.append(
         `case_numbers[${index}][second_letter]`,
-        caseNumber.second_letter.value.toLowerCase()
+        caseNumber.second_letter.value.toLowerCase(),
       );
       formData.append(
         `case_numbers[${index}][case_year]`,
-        caseNumber.case_year
+        caseNumber.case_year,
       );
       formData.append(
         `case_numbers[${index}][case_number_id]`,
         caseNumber.second_letter.value.toLowerCase() +
           caseNumber.first_letter.value.toLowerCase() +
           caseNumber.case_year.slice(-2) +
-          caseNumber.case_number_id
+          caseNumber.case_number_id,
       );
     });
 
@@ -414,16 +414,16 @@ const Form = () => {
     }
   };
   const fetchClients = useCallback(
-    () => fetchData(getClientsPanigation),
-    [fetchData]
+    (page: number) => fetchData(getClientsPanigation, page),
+    [fetchData],
   );
   const fetchCourts = useCallback(
-    () => fetchData(getCourtsPanigation),
-    [fetchData]
+    (page: number) => fetchData(getCourtsPanigation, page),
+    [fetchData],
   );
   const fetchLawyers = useCallback(
-    () => fetchData(getLawyerPanigation),
-    [fetchData]
+    (page: number) => fetchData(getLawyerPanigation, page),
+    [fetchData],
   );
   return (
     <div>

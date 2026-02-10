@@ -125,7 +125,7 @@ const Form = () => {
 
   // Handle input changes for lawyerData
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setLawyerData((prev) => ({ ...prev, [name]: value }));
@@ -138,7 +138,7 @@ const Form = () => {
   };
   const handleImageChange = async (
     file: File,
-    imageType: keyof typeof images
+    imageType: keyof typeof images,
   ) => {
     setLoading1(false);
 
@@ -224,10 +224,10 @@ const Form = () => {
       data + index < 10
         ? "000" + (data + index + 1)
         : data + index < 100
-        ? "00" + (data + index + 1)
-        : data + index < 1000
-        ? "0" + (data + index + 1)
-        : data + index; // Increment the number at the specific index
+          ? "00" + (data + index + 1)
+          : data + index < 1000
+            ? "0" + (data + index + 1)
+            : data + index; // Increment the number at the specific index
 
     setNumbers(updatedNumbers);
   };
@@ -285,15 +285,15 @@ const Form = () => {
         setOppositeParties(lawyer.defendants);
         setCaseNumbers(lawyer.case_numbers);
         const caseNumbers = lawyer.case_numbers.map(
-          (item: any) => item.case_number_id
+          (item: any) => item.case_number_id,
         );
         setNumbers(caseNumbers);
         const secondLetters = lawyer.case_numbers.map(
-          (item: any) => item.second_letter
+          (item: any) => item.second_letter,
         );
         setSelectedValue1(secondLetters);
         const firstLetters = lawyer.case_numbers.map(
-          (item: any) => item.first_letter
+          (item: any) => item.first_letter,
         );
         setSelectedValue(firstLetters);
         const years = lawyer.case_numbers.map((item: any) => item.case_year);
@@ -436,7 +436,9 @@ const Form = () => {
                   <div className="!w-[87%]">
                     <Label htmlFor="Client">{t("Client Selection")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchData(getClientsPanigation)}
+                      fetchData={(page: number) =>
+                        fetchData(getClientsPanigation, page)
+                      }
                       formatOption={formatOption}
                       placeholder={t("Select Client")}
                       selectedValue={lawyerData.client_id}
@@ -470,7 +472,9 @@ const Form = () => {
                   <div className="!w-[87%]">
                     <Label htmlFor="Court">{t("Court Selection")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchData(getCourtsPanigation)}
+                      fetchData={(page: number) =>
+                        fetchData(getCourtsPanigation, page)
+                      }
                       formatOption={formatOption}
                       placeholder={t("Select Court")}
                       selectedValue={lawyerData.court_id}
@@ -541,7 +545,9 @@ const Form = () => {
                 <div className="!w-[87%]">
                   <Label htmlFor="category">{t("Lawyer Selection")}</Label>
                   <InfiniteScrollSelect
-                    fetchData={() => fetchData(getLawyerPanigation)}
+                    fetchData={(page: number) =>
+                      fetchData(getLawyerPanigation, page)
+                    }
                     formatOption={formatOption}
                     placeholder={t("Select Lawyer")}
                     selectedValue={lawyerData.lawyer_id}

@@ -47,7 +47,7 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
             setItems((prevItems) => {
               const uniqueNewData = newData.filter(
                 (newItem) =>
-                  !prevItems.some((prevItem) => prevItem.id === newItem.id)
+                  !prevItems.some((prevItem) => prevItem.id === newItem.id),
               );
               return [...prevItems, ...uniqueNewData];
             });
@@ -59,7 +59,7 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
         setLoading(false);
       }
     },
-    [fetchData]
+    [fetchData],
   );
 
   // Load initial data or refresh when refreshTrigger changes

@@ -98,7 +98,7 @@ const Form = () => {
   };
   // Handle input changes for lawyerData
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setLawyerData((prev) => ({ ...prev, [name]: value }));
@@ -270,7 +270,9 @@ const Form = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Assigned_To">{t("Assigned To")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchData(getLawyerPanigation)}
+                      fetchData={(page: number) =>
+                        fetchData(getLawyerPanigation, page)
+                      }
                       formatOption={(item) => ({
                         value: item.id,
                         label: `${item.name} `,
@@ -305,7 +307,9 @@ const Form = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Case_Name">{t("Casess")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={() => fetchCasesData(getCasesPanigation)}
+                      fetchData={(page: number) =>
+                        fetchCasesData(getCasesPanigation, page)
+                      }
                       formatOption={casesFormatOption}
                       placeholder={t("Select Case")}
                       selectedValue={lawyerData.law_suit_id}

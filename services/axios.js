@@ -30,7 +30,7 @@ export function updateAxiosHeader(accessToken) {
           error.response?.data?.message === "Unauthorized") ||
         error.response?.data?.message === "غير مصرح"
       ) {
-        window.location.replace("/error-page/403");
+        // window.location.replace("/error-page/403");
       } else {
       }
       return Promise.reject(error);
