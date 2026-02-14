@@ -292,13 +292,26 @@ const Form = () => {
               </RadioGroup>
             </motion.div>
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
-              <Label htmlFor="Identity Number">{t("Identity Number *")}</Label>
+              <Label htmlFor="Identity Number">
+                {" "}
+                {lawyerData.identifier_type == 1
+                  ? t("Identity Number *")
+                  : lawyerData.identifier_type == 2
+                    ? t("Iqama Number")
+                    : t("Passport Number")}
+              </Label>
               <Input
                 value={lawyerData.national_id_number}
                 type="text"
                 name="national_id_number"
                 onChange={handleInputChange}
-                placeholder={t("Enter Identity Number")}
+                placeholder={
+                  lawyerData.identifier_type == 1
+                    ? t("Enter Identity Number")
+                    : lawyerData.identifier_type == 2
+                      ? t("Enter Iqama Number")
+                      : t("Enter Passport Number")
+                }
               />
             </motion.div>{" "}
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
