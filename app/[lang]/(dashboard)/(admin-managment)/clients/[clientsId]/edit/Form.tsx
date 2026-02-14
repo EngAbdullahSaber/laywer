@@ -16,6 +16,7 @@ import CreateClientCategory from "@/app/[lang]/(dashboard)/(category-mangement)/
 import { CleaveInput } from "@/components/ui/cleave";
 
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import FileUploaderMultiple from "./FileUploaderMultiple";
 
 interface ErrorResponse {
@@ -30,6 +31,7 @@ interface LaywerData {
   address: string;
   category_id: string;
   national_id_number: string;
+  identifier_type: string;
   details: string;
 }
 const Form = () => {
@@ -47,6 +49,7 @@ const Form = () => {
     details: "",
     email: "",
     national_id_number: "",
+    identifier_type: "1",
     category_id: "",
     address: "",
   });
@@ -54,7 +57,7 @@ const Form = () => {
   const [existingFiles, setExistingFiles] = useState<any[]>([]);
   // Handle input change
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
@@ -68,10 +71,21 @@ const Form = () => {
     // Iterate over all lawyerData fields to dynamically create query params
     Object.entries(lawyerData).forEach(([key, value]) => {
       if (value && value !== "") {
-        // Handle the name and description fields dynamically for localization
-        params.append(key, value);
+        if (key === "phone") {
+          params.append(key, String(value).replace("+", ""));
+        } else if (key === "national_id_number") {
+          params.append(key, String(value));
+          params.append("identifier_value", String(value));
+        } else {
+          params.append(key, value as string);
+        }
       }
     });
+
+    if (!lawyerData.identifier_type) {
+      params.append("identifier_type", "1");
+    }
+
     // Append images separately as form data for file uploads
     if (Array.isArray(fileIds) && fileIds.length > 0) {
       fileIds.forEach((id, index) => {
@@ -90,6 +104,7 @@ const Form = () => {
           name: res?.body?.name,
           phone: res?.body?.phone,
           national_id_number: res?.body?.national_id_number,
+          identifier_type: res?.body?.identifier_type?.toString() || "1",
           email: res?.body?.email,
           details: res?.body?.details,
           category_id: res?.body?.category?.id,
@@ -246,15 +261,28 @@ const Form = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-2 w-full sm:w-[48%]">
-                <Label htmlFor="Email">{t("Email Address")}</Label>
-                <Input
-                  type="text"
-                  value={lawyerData.email}
-                  name="email"
-                  onChange={handleInputChange}
-                  placeholder={t("Enter Email Address")}
-                />
+              <div className="flex flex-col gap-3 w-full sm:w-[48%]">
+                <Label>{t("Identifier Type")}</Label>
+                <RadioGroup
+                  value={lawyerData.identifier_type}
+                  onValueChange={(value) =>
+                    setLawyerData((prev) => ({
+                      ...prev,
+                      identifier_type: value,
+                    }))
+                  }
+                  className="flex flex-row gap-4"
+                >
+                  <RadioGroupItem value="1" id="id_number">
+                    {t("ID Number")}
+                  </RadioGroupItem>
+                  <RadioGroupItem value="2" id="iqama">
+                    {t("Iqama")}
+                  </RadioGroupItem>
+                  <RadioGroupItem value="3" id="passport">
+                    {t("Passport")}
+                  </RadioGroupItem>
+                </RadioGroup>
               </div>
 
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
@@ -267,6 +295,16 @@ const Form = () => {
                   value={lawyerData.national_id_number}
                   onChange={handleInputChange}
                   placeholder={t("Enter Identity Number")}
+                />
+              </div>
+              <div className="flex flex-col gap-2 w-full sm:w-[48%]">
+                <Label htmlFor="Email">{t("Email Address")}</Label>
+                <Input
+                  type="text"
+                  value={lawyerData.email}
+                  name="email"
+                  onChange={handleInputChange}
+                  placeholder={t("Enter Email Address")}
                 />
               </div>
               <hr className="my-3 w-full" />

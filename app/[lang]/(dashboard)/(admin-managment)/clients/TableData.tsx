@@ -97,7 +97,7 @@ const TableData = ({ flag }: { flag: any }) => {
 
   const handleFilterSubmit = () => {
     // Perform filtering logic here
-     getClientData();
+    getClientData();
     setOpen(false); // Close the sheet after applying filters
   };
 
@@ -122,7 +122,7 @@ const TableData = ({ flag }: { flag: any }) => {
             : await getClientsPanigation(page, lang);
 
         setData(res?.body?.data || []);
-         setLoading(false);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data", error);
 
@@ -163,7 +163,7 @@ const TableData = ({ flag }: { flag: any }) => {
           {permission
             .find((item: any) => item.id === 6 || item.id === 132)
             .permissions.some(
-              (item: any) => item.id === 9 || item.id === 135
+              (item: any) => item.id === 9 || item.id === 135,
             ) && (
             <TooltipProvider>
               <Tooltip>
@@ -190,7 +190,7 @@ const TableData = ({ flag }: { flag: any }) => {
           {permission
             .find((item: any) => item.id === 6 || item.id === 132)
             .permissions.some(
-              (item: any) => item.id === 10 || item.id === 136
+              (item: any) => item.id === 10 || item.id === 136,
             ) && (
             <DeleteButton getClientData={getClientData} id={row.original.id} />
           )}{" "}
@@ -282,11 +282,20 @@ const TableData = ({ flag }: { flag: any }) => {
         <DataTableColumnHeader column={column} title={"national_id_number"} />
       ),
       cell: ({ row }) => {
+        const item = row.original as any;
+        const idValue = item?.identifier_value || item?.national_id_number;
+        const typeLabel = item?.identifier_type_label;
+
         return (
-          <div className="flex  items-center justify-center gap-2 mx-auto">
+          <div className="flex flex-col items-center justify-center gap-1 mx-auto">
             <span className="max-w-[500px] truncate font-medium">
-              {row.original?.national_id_number}
+              {idValue}
             </span>
+            {typeLabel && (
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                {t(typeLabel)}
+              </span>
+            )}
           </div>
         );
       },

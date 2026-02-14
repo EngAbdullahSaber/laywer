@@ -21,6 +21,7 @@ import { Auth } from "@/components/auth/Auth";
 import { getAllRoles } from "@/services/permissionsAndRoles/permissionsAndRoles";
 import { clearAuthInfo } from "@/services/utils";
 import { useRouter } from "next/navigation"; // ✅ App Router (new)
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface ErrorResponse {
   errors: {
@@ -33,6 +34,7 @@ interface LaywerData {
   email: string;
   category_id: string;
   national_id_number: string;
+  identifier_type: string;
   address: string;
   details: string;
 }
@@ -54,6 +56,7 @@ const Form = () => {
     address: "",
     details: "",
     email: "",
+    identifier_type: "1",
     national_id_number: "",
     category_id: "",
   });
@@ -61,7 +64,7 @@ const Form = () => {
   const [isUploading, setIsUploading] = useState(false);
   // Handle input change
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setLawyerData((prevData) => ({
@@ -95,7 +98,7 @@ const Form = () => {
     const allChars = lowercase + uppercase + numbers + symbols;
     const randomChars = Array.from(
       { length: 4 },
-      () => allChars[Math.floor(Math.random() * allChars.length)]
+      () => allChars[Math.floor(Math.random() * allChars.length)],
     );
 
     // Combine and shuffle
@@ -116,11 +119,16 @@ const Form = () => {
       if (key === "phone") {
         formData.append(key, String(value).replace("+", ""));
       } else if (key === "national_id_number") {
-        formData.append(key, String(Number(value))); // ensure it's string
+        formData.append(key, String(value));
+        formData.append("identifier_value", String(value));
       } else {
         formData.append(key, value as string | Blob);
       }
     });
+
+    if (!lawyerData.identifier_type) {
+      formData.append("identifier_type", "1");
+    }
 
     fileIds.forEach((fileId, index) => {
       formData.append(`client_files[${index}]`, fileId);
@@ -138,6 +146,7 @@ const Form = () => {
           address: "",
           email: "",
           national_id_number: "",
+          identifier_type: "1",
           category_id: "",
           details: "",
         });
@@ -216,7 +225,6 @@ const Form = () => {
                 placeholder={t("Enter Client Name")}
               />
             </motion.div>
-
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
               <Label htmlFor="phone">{t("Mobile Number")}</Label>
               <CleaveInput
@@ -263,18 +271,26 @@ const Form = () => {
                 placeholder={t("Enter Client Address")}
               />
             </motion.div>
-
-            <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
-              <Label htmlFor="Email">{t("Email Address")}</Label>
-              <Input
-                type="text"
-                value={lawyerData.email}
-                name="email"
-                onChange={handleInputChange}
-                placeholder={t("Enter Email Address")}
-              />
+            <motion.div className="flex flex-col gap-3 w-full sm:w-[48%]">
+              <Label>{t("Identifier Type")}</Label>
+              <RadioGroup
+                value={lawyerData.identifier_type}
+                onValueChange={(value) =>
+                  setLawyerData((prev) => ({ ...prev, identifier_type: value }))
+                }
+                className="flex flex-row gap-4"
+              >
+                <RadioGroupItem value="1" id="id_number">
+                  {t("ID Number")}
+                </RadioGroupItem>
+                <RadioGroupItem value="2" id="iqama">
+                  {t("Iqama")}
+                </RadioGroupItem>
+                <RadioGroupItem value="3" id="passport">
+                  {t("Passport")}
+                </RadioGroupItem>
+              </RadioGroup>
             </motion.div>
-
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
               <Label htmlFor="Identity Number">{t("Identity Number *")}</Label>
               <Input
@@ -283,6 +299,16 @@ const Form = () => {
                 name="national_id_number"
                 onChange={handleInputChange}
                 placeholder={t("Enter Identity Number")}
+              />
+            </motion.div>{" "}
+            <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
+              <Label htmlFor="Email">{t("Email Address")}</Label>
+              <Input
+                type="text"
+                value={lawyerData.email}
+                name="email"
+                onChange={handleInputChange}
+                placeholder={t("Enter Email Address")}
               />
             </motion.div>
             <motion.hr className="my-3 w-full" />
