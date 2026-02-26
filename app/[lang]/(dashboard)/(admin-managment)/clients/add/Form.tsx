@@ -1,6 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 import BasicSelect from "@/components/common/Select/BasicSelect";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
@@ -40,6 +42,7 @@ interface LaywerData {
 }
 // Zod validation schema
 
+
 const Form = () => {
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
@@ -49,6 +52,8 @@ const Form = () => {
   const [data, setData1] = useState<any>([]);
   const [allowedRoles, setAllowedRoles] = useState<string[] | null>(null);
   const router = useRouter(); // ✅ initialize router
+  const [countryCode, setCountryCode] = useState("+966");
+
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
@@ -227,22 +232,19 @@ const Form = () => {
             </motion.div>
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
               <Label htmlFor="phone">{t("Mobile Number")}</Label>
-              <CleaveInput
+              <PhoneInput
                 id="phone"
-                options={{
-                  prefix: "+966",
-                  delimiter: " ",
-                  blocks: [4, 2, 3, 4],
-                  numericOnly: true,
-                  uppercase: true,
-                }}
-                type="tel"
-                value={lawyerData.phone}
                 name="phone"
+                value={lawyerData.phone}
                 onChange={handleInputChange}
+                countryCode={countryCode}
+                onCountryCodeChange={setCountryCode}
+
                 placeholder={t("Enter Client Mobile Number")}
               />
             </motion.div>
+
+
             <motion.div className="flex flex-row gap-2 my-2 w-full sm:w-[48%]">
               <div className="!w-[87%]" style={{ width: "87%" }}>
                 {" "}
@@ -293,10 +295,9 @@ const Form = () => {
             </motion.div>
             <motion.div className="flex flex-col gap-2 w-full sm:w-[48%]">
               <Label htmlFor="Identity Number">
-                {" "}
-                {lawyerData.identifier_type == 1
+                 {lawyerData.identifier_type == "1"
                   ? t("Identity Number *")
-                  : lawyerData.identifier_type == 2
+                  : lawyerData.identifier_type == "2"
                     ? t("Iqama Number")
                     : t("Passport Number")}
               </Label>
@@ -306,9 +307,9 @@ const Form = () => {
                 name="national_id_number"
                 onChange={handleInputChange}
                 placeholder={
-                  lawyerData.identifier_type == 1
+                  lawyerData.identifier_type == "1"
                     ? t("Enter Identity Number")
-                    : lawyerData.identifier_type == 2
+                    : lawyerData.identifier_type == "2"
                       ? t("Enter Iqama Number")
                       : t("Enter Passport Number")
                 }

@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 import BasicSelect from "@/components/common/Select/BasicSelect";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslate } from "@/config/useTranslation";
@@ -34,7 +36,10 @@ interface LaywerData {
   identifier_type: string;
   details: string;
 }
+
+
 const Form = () => {
+
   const { t } = useTranslate();
   const [category, setCategory] = useState<any[]>([]);
   const { lang, clientsId } = useParams();
@@ -42,6 +47,8 @@ const Form = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>([]);
   const router = useRouter(); // ✅ initialize router
+  const [countryCode, setCountryCode] = useState("+966");
+
 
   const [lawyerData, setLawyerData] = useState<LaywerData>({
     name: "",
@@ -100,9 +107,18 @@ const Form = () => {
     try {
       const res = await getSpecifiedClient(lang, clientsId);
       if (res?.body) {
+        const phone = res?.body?.phone || "";
+        const countryCodes = ["+966", "+20", "+971", "+965", "+968", "+973", "+974", "+962", "+961", "+212"];
+        const foundCode = countryCodes.find((c) =>
+          phone.startsWith(c.replace("+", "")),
+        );
+        if (foundCode) {
+          setCountryCode(foundCode);
+        }
+
         setLawyerData({
           name: res?.body?.name,
-          phone: res?.body?.phone,
+          phone: phone.startsWith("+") ? phone : `+${phone}`,
           national_id_number: res?.body?.national_id_number,
           identifier_type: res?.body?.identifier_type?.toString() || "1",
           email: res?.body?.email,
@@ -110,6 +126,7 @@ const Form = () => {
           category_id: res?.body?.category?.id,
           address: res?.body?.address,
         });
+
         setExistingFiles(res?.body?.client_files);
       }
     } catch (error) {
@@ -212,26 +229,19 @@ const Form = () => {
 
               <div className="flex flex-col gap-2 w-full sm:w-[48%]">
                 <Label htmlFor="phone">{t("Mobile Number")}</Label>
-                <CleaveInput
+                <PhoneInput
                   id="phone"
-                  options={{
-                    prefix: "+966",
-                    delimiter: " ",
-                    blocks: [4, 2, 3, 4],
-                    numericOnly: true,
-                    uppercase: true,
-                  }}
-                  type="tel"
                   name="phone"
-                  value={
-                    lawyerData.phone.startsWith("+966")
-                      ? lawyerData.phone
-                      : `+966 ${lawyerData.phone.replace(/^966/, "")}`
-                  }
+                  value={lawyerData.phone}
                   onChange={handleInputChange}
+                  countryCode={countryCode}
+                  onCountryCodeChange={setCountryCode}
+
                   placeholder={t("Enter Client Mobile Number")}
                 />
               </div>
+
+
               <div className="flex flex-row gap-2 my-2 w-full sm:w-[48%]">
                 <div className="!w-[87%]" style={{ width: "87%" }}>
                   {" "}
