@@ -63,14 +63,30 @@ export async function DeleteLawyer(id: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
-export async function getLawyerPanigation(page: any, lang: any) {
-  let res = await api.get(`user/lawyers?page=${page}&per_page=10`, {
-    headers: {
-      "Accept-Language": lang,
-    },
-  });
-  if (res) return res.data;
-  else return false;
+export async function getLawyerPanigation(page: any, lang: any, search: string = "") {
+  try {
+    let res;
+    
+    if (search) {
+      res = await api.get(`user/lawyers?page=${page}&per_page=10&search=${search}`, {
+        headers: {
+          "Accept-Language": lang,
+        },
+      });
+    } else {
+      res = await api.get(`user/lawyers?page=${page}&per_page=10`, {
+        headers: {
+          "Accept-Language": lang,
+        },
+      });
+    }
+    
+    if (res && res.data) return res.data;
+    return false;
+  } catch (error) {
+    console.error("Error fetching lawyers:", error);
+    return false;
+  }
 }
 
 export async function UpdateLawyer(queryParams: any, id: any, lang: any) {

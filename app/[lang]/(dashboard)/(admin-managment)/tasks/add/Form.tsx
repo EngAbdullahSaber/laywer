@@ -76,9 +76,9 @@ const Form = () => {
     value: item.id,
     label: item.title,
   });
-  const fetchData = async (service: Function, page: number = 1) => {
+  const fetchData = async (service: Function, page: number = 1, searchTerm: string = "") => {
     try {
-      const data = await service(page, lang);
+      const data = await service(page, lang, searchTerm);
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
@@ -86,9 +86,9 @@ const Form = () => {
       return [];
     }
   };
-  const fetchCasesData = async (service: Function, page: number = 1) => {
+  const fetchCasesData = async (service: Function, page: number = 1, searchTerm: string = "") => {
     try {
-      const data = await service(page, lang);
+      const data = await service(page, lang, searchTerm);
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
@@ -270,8 +270,8 @@ const Form = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Assigned_To">{t("Assigned To")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={(page: number) =>
-                        fetchData(getLawyerPanigation, page)
+                      fetchData={(page: number, term: string) =>
+                        fetchData(getLawyerPanigation, page, term)
                       }
                       formatOption={(item) => ({
                         value: item.id,
@@ -307,8 +307,8 @@ const Form = () => {
                   <div className="!w-[85%]" style={{ width: "85%" }}>
                     <Label htmlFor="Case_Name">{t("Casess")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={(page: number) =>
-                        fetchCasesData(getCasesPanigation, page)
+                      fetchData={(page: number, term: string) =>
+                        fetchCasesData(getCasesPanigation, page, term)
                       }
                       formatOption={casesFormatOption}
                       placeholder={t("Select Case")}

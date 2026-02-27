@@ -207,9 +207,9 @@ const Form = () => {
   };
 
   // Fetch data for infinite scroll select components
-  const fetchData = async (service: Function, page: number = 1) => {
+  const fetchData = async (service: Function, page: number = 1, searchTerm: string = "") => {
     try {
-      const data = await service(page, lang);
+      const data = await service(page, lang, searchTerm);
       return data?.body?.data || [];
     } catch (error) {
       reToast.error(`Failed to fetch data: ${error}`);
@@ -436,8 +436,8 @@ const Form = () => {
                   <div className="!w-[87%]">
                     <Label htmlFor="Client">{t("Client Selection")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={(page: number) =>
-                        fetchData(getClientsPanigation, page)
+                      fetchData={(page: number, term: string) =>
+                        fetchData(getClientsPanigation, page, term)
                       }
                       formatOption={formatOption}
                       placeholder={t("Select Client")}
@@ -472,8 +472,8 @@ const Form = () => {
                   <div className="!w-[87%]">
                     <Label htmlFor="Court">{t("Court Selection")}</Label>
                     <InfiniteScrollSelect
-                      fetchData={(page: number) =>
-                        fetchData(getCourtsPanigation, page)
+                      fetchData={(page: number, term: string) =>
+                        fetchData(getCourtsPanigation, page, term)
                       }
                       formatOption={formatOption}
                       placeholder={t("Select Court")}
@@ -545,8 +545,8 @@ const Form = () => {
                 <div className="!w-[87%]">
                   <Label htmlFor="category">{t("Lawyer Selection")}</Label>
                   <InfiniteScrollSelect
-                    fetchData={(page: number) =>
-                      fetchData(getLawyerPanigation, page)
+                    fetchData={(page: number, term: string) =>
+                      fetchData(getLawyerPanigation, page, term)
                     }
                     formatOption={formatOption}
                     placeholder={t("Select Lawyer")}

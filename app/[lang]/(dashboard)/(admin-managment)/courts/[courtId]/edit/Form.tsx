@@ -61,9 +61,9 @@ const Form = () => {
   });
 
   // Fetch cities when region changes
-  const fetchCitiesData = async (regionId: string, page: number = 1) => {
+  const fetchCitiesData = async (regionId: string, page: number = 1, searchTerm: string = "") => {
     try {
-      const citiesData = await getCities(regionId, lang);
+      const citiesData = await getCities(regionId, lang, searchTerm);
       return citiesData?.body?.data || [];
     } catch (error) {
       reToast.error("Failed to fetch cities");
@@ -332,8 +332,8 @@ const Form = () => {
                 >
                   <Label htmlFor="City">{t("City")}</Label>
                   <InfiniteScrollSelect
-                    fetchData={(page) =>
-                      fetchCitiesData(courtData.region_id, page)
+                    fetchData={(page, searchTerm) =>
+                      fetchCitiesData(courtData.region_id, page, searchTerm)
                     }
                     formatOption={formatCityOption}
                     placeholder={t("Search or Select a City")}

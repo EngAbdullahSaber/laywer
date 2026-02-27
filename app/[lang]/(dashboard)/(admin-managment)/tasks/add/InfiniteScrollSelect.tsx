@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Select, { SingleValue, MultiValue } from "react-select";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import Select from "react-select";
 
 interface InfiniteScrollSelectProps {
-  fetchData: (page: number) => Promise<any[]>; // Function to fetch data
+  fetchData: (page: number, searchTerm: string) => Promise<any[]>; // Updated: now accepts searchTerm
   formatOption: (item: any) => { value: any; label: string }; // Function to format options
   placeholder?: string; // Placeholder text
   isClearable?: boolean; // Whether the select is clearable
@@ -24,6 +24,10 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const lastLoadedSearchTerm = useRef<string | null>(null);
+  const loadCount = useRef(0);
 
   // Filter function to remove items with dashboard_name === "client"
   const filterClientItems = (data: any[]) => {
@@ -33,55 +37,87 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
   };
 
   // Fetch data from the API
-  const loadData = async (page: number) => {
+  const loadData = useCallback(async (pageNum: number, reset: boolean = false, term: string = "") => {
     setLoading(true);
+    const currentLoadId = ++loadCount.current;
+
     try {
-      const newData = await fetchData(page);
+      const newData = await fetchData(pageNum, term);
+      
+      if (currentLoadId !== loadCount.current) return;
+
       const filteredData = filterClientItems(newData);
 
-      // Check if there's no more data
-      if (filteredData.length === 0) {
+      if (filteredData.length === 0 && newData.length === 0) {
+        if (reset) setItems([]);
         setHasMore(false);
       } else {
-        // Filter out duplicates before appending new data
-        setItems((prevItems) => {
-          const uniqueNewData = filteredData.filter(
-            (newItem) => !prevItems.some((prevItem) => prevItem.id === newItem.id)
-          );
-          return [...prevItems, ...uniqueNewData];
-        });
+        if (reset) {
+          setItems(filteredData);
+        } else {
+          setItems((prevItems) => {
+            const uniqueNewData = filteredData.filter(
+              (newItem) => !prevItems.some((prevItem) => prevItem.id === newItem.id)
+            );
+            return [...prevItems, ...uniqueNewData];
+          });
+        }
+        setHasMore(newData.length >= 10);
       }
+      lastLoadedSearchTerm.current = term;
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false);
+      if (currentLoadId === loadCount.current) {
+        setLoading(false);
+      }
     }
-  };
+  }, [fetchData]);
 
-  // Load initial data
+  // Handle initial load
   useEffect(() => {
-    loadData(page);
-  }, [page]);
+    setItems([]);
+    setPage(1);
+    setHasMore(true);
+    setSearchTerm("");
+    lastLoadedSearchTerm.current = null;
+    loadData(1, true, "");
+  }, [loadData]);
+
+  // Debounced search effect
+  useEffect(() => {
+    if (lastLoadedSearchTerm.current === null && searchTerm === "") return;
+
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm !== lastLoadedSearchTerm.current) {
+        if (searchTerm.length >= 3 || searchTerm.length === 0) {
+          setPage(1);
+          setHasMore(true);
+          loadData(1, true, searchTerm);
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, loadData]);
 
   // Load more data when scrolling
   const loadMore = () => {
     if (!loading && hasMore) {
-      setPage((prevPage) => prevPage + 1);
+      const nextPage = page + 1;
+      setPage(nextPage);
+      loadData(nextPage, false, searchTerm);
     }
   };
 
   // Handle input change for search
   const handleInputChange = (newValue: string) => {
-    if (newValue.length > 2) {
-      // Reset items and page when searching
-      setItems([]);
-      setPage(1);
-      setHasMore(true);
-    }
+    setSearchTerm(newValue);
   };
 
   // Get the selected value by ID
   const getValueById = (id: string, list: any[]) => {
+    if (!id) return null;
     const selectedItem = list.find((item) => item.value == id);
     return selectedItem || null;
   };
@@ -102,6 +138,7 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
         value={getValueById(selectedValue, options)}
         onChange={(selectedOption) => setSelectedValue?.(selectedOption)}
         placeholder={placeholder}
+        filterOption={() => true}
       />
     </div>
   );

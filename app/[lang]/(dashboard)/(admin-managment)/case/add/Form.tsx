@@ -210,9 +210,9 @@ const Form = () => {
   );
 
   const fetchData = useCallback(
-    async (service: Function, page: number = 1) => {
+    async (service: Function, page: number = 1, searchTerm: string = "") => {
       try {
-        const data = await service(page, lang);
+        const data = await service(page, lang, searchTerm);
         return data?.body?.data || [];
       } catch (error) {
         reToast.error(`Failed to fetch data: ${error}`);
@@ -414,15 +414,15 @@ const Form = () => {
     }
   };
   const fetchClients = useCallback(
-    (page: number) => fetchData(getClientsPanigation, page),
+    (page: number, term?: string) => fetchData(getClientsPanigation, page, term),
     [fetchData],
   );
   const fetchCourts = useCallback(
-    (page: number) => fetchData(getCourtsPanigation, page),
+    (page: number, term?: string) => fetchData(getCourtsPanigation, page, term),
     [fetchData],
   );
   const fetchLawyers = useCallback(
-    (page: number) => fetchData(getLawyerPanigation, page),
+    (page: number, term?: string) => fetchData(getLawyerPanigation, page, term),
     [fetchData],
   );
   return (

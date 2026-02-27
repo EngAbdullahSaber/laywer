@@ -370,9 +370,9 @@ const CourtForm = ({
 
   // Fetch cities when region changes
   const fetchCitiesData = useCallback(
-    async (regionId: string, page: number = 1) => {
+    async (regionId: string, page: number = 1, searchTerm: string = "") => {
       try {
-        const citiesData = await getCities(regionId, lang);
+        const citiesData = await getCities(regionId, lang, searchTerm);
         return citiesData?.body?.data || [];
       } catch (error) {
         reToast.error("Failed to fetch cities");
