@@ -27,6 +27,8 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  // Track the selected option object to ensure it's displayed even if not in the current items list
+  const [selectedOptionObj, setSelectedOptionObj] = useState<any>(null);
   
   // Use a ref to track the latest search term that was actually loaded
   const lastLoadedSearchTerm = useRef<string | null>(null);
@@ -113,21 +115,49 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
     }
   };
 
-  // Handle input change for search
-  const handleInputChange = (newValue: string) => {
-    setSearchTerm(newValue);
-    // We no longer trigger loadData here directly; the useEffect handles it with debouncing
-  };
-
-  // Get the selected value by ID
-  const getValueById = (id: string, list: any[]) => {
-    if (!id) return null;
-    const selectedItem = list.find((item) => item.value == id);
-    return selectedItem || null;
-  };
-
   // Format options for react-select
   const options = items.map(formatOption);
+
+  // Sync selectedOptionObj with selectedValue and current options
+  useEffect(() => {
+    if (selectedValue) {
+      if (!selectedOptionObj || selectedOptionObj.value !== selectedValue) {
+        const found = options.find((opt) => opt.value == selectedValue);
+        if (found) {
+          setSelectedOptionObj(found);
+        }
+      }
+    } else {
+      setSelectedOptionObj(null);
+    }
+  }, [selectedValue, options, selectedOptionObj]);
+
+  // Handle input change for search
+  const handleInputChange = (newValue: string, actionMeta: any) => {
+    // Only update search term if the user actually typed
+    if (actionMeta.action === "input-change") {
+      setSearchTerm(newValue);
+    } else if (actionMeta.action === "clear") {
+      // When clicking the clear (close) icon in the input
+      setSearchTerm("");
+      setPage(1);
+      setHasMore(true);
+      loadData(1, true, "");
+    }
+  };
+
+  const handleChange = (selectedOption: any) => {
+    setSelectedOptionObj(selectedOption);
+    setSelectedValue?.(selectedOption);
+    
+    // If clearing the selection, also reset the list to default
+    if (!selectedOption) {
+      setSearchTerm("");
+      setPage(1);
+      setHasMore(true);
+      loadData(1, true, "");
+    }
+  };
 
   return (
     <div>
@@ -139,8 +169,8 @@ const InfiniteScrollSelect: React.FC<InfiniteScrollSelectProps> = ({
         onMenuScrollToBottom={loadMore}
         isLoading={loading}
         isClearable={isClearable}
-        value={getValueById(selectedValue, options)}
-        onChange={(selectedOption) => setSelectedValue?.(selectedOption)}
+        value={selectedOptionObj}
+        onChange={handleChange}
         placeholder={placeholder}
         menuShouldScrollIntoView={false}
         filterOption={() => true} // Disable client-side filtering to let server-side results show
